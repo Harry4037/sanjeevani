@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class UsersController extends Controller {
@@ -40,12 +41,21 @@ class UsersController extends Controller {
      * @return pages
      */
     public function usersList(Request $request) {
-        try {           
-            $users = $this->user->all();
-            $i=0;
-            $usersArray=[];
-            foreach ($users as $user){
-                $usersArray[$i]['name'] = $user->firstName.' '.$user->lastName;
+        try {
+            $offset = $request->get('start') ? $request->get('start') : 0;
+            $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
+
+            $searchstring = implode(",", ['firstName', 'emailId', 'mobileNumber']);
+            $query = $this->user->query();
+            if ($searchKeyword) {
+                $query->where("firstName", "LIKE", "%$searchKeyword%")->orWhere("emailId", "LIKE", "%$searchKeyword%");
+            }
+            $users = $query->get();
+            $i = 0;
+            $usersArray = [];
+            foreach ($users as $user) {
+                $usersArray[$i]['name'] = $user->firstName . ' ' . $user->lastName;
                 $usersArray[$i]['email'] = $user->emailId;
                 $usersArray[$i]['mobileno'] = $user->mobileNumber;
                 $usersArray[$i]['action'] = '';
