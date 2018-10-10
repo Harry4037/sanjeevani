@@ -24,9 +24,6 @@ class LoginController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
-        $this->middleware('adminGuest')->except('logout');
-    }
 
     /**
      * Get the guard to be used during authentication.
@@ -43,7 +40,9 @@ class LoginController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function showLoginForm() {
-
+        if (Auth::check()) {
+            return redirect('/admin/dashboard');
+        }
         return view('admin.login');
     }
 
@@ -55,7 +54,8 @@ class LoginController extends Controller {
      */
     public function validateLogin(Request $request) {
         $this->validate($request, [
-            'emailId' => 'required|string|email'
+            'emailId' => 'required|string|email',
+            'password' => 'required|string',
         ]);
     }
 
@@ -66,16 +66,6 @@ class LoginController extends Controller {
      */
     public function username() {
         return 'emailId';
-    }
-
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function credentials(Request $request) {
-        return $request->only($this->username());
     }
 
     /**
@@ -102,6 +92,18 @@ class LoginController extends Controller {
 
         $this->incrementLoginAttempts($request);
         return $this->sendFailedLoginResponse($request);
+    }
+
+    /**
+     * Logout user
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
+    public function logout(Request $request) {
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        return redirect()->route('admin.login');
     }
 
 }

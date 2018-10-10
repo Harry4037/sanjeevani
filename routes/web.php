@@ -23,3 +23,17 @@ Route::namespace("Admin")->prefix('admin')->group(function() {
 //    Route::post('password/email', 'ForgetController@sendResetLinkEmail')->name('admin.password.email');
 //   Route::post('password/reset', 'ResetPasswordController@reset')->name('password.reset');
 });
+
+
+Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(function() {
+    /**
+     * Dashboard & Profile routes
+     */
+    Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
+    
+    /**
+     * Users Management
+     */
+    Route::get('/users', 'UsersController@index')->name('admin.users.index');
+    Route::get('/users-list','UsersController@usersList')->name('admin.users.list');
+});

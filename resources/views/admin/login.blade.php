@@ -70,7 +70,7 @@
     $(document).ready(function () {
         $("#login-form").validate({
             rules: {
-                email: {
+                emailId: {
                     required: true,
                     email: true
                 },
