@@ -15,10 +15,10 @@ class CreateCountryMasterTable extends Migration
     {
         Schema::create('country_master', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('conutry');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
+            $table->string('conutry')->nullable();
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
+            $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
         });
     }

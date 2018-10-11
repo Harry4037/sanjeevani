@@ -15,12 +15,12 @@ class CreateCityMasterTable extends Migration
     {
         Schema::create('city_master', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('city');
-            $table->string('stateId');
-            $table->string('countryId');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
+            $table->string('city')->nullable();
+            $table->string('state_id')->nullable();
+            $table->string('country_id')->nullable();
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
+            $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
         });
     }

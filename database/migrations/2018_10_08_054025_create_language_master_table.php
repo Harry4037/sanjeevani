@@ -15,11 +15,11 @@ class CreateLanguageMasterTable extends Migration
     {
         Schema::create('language_master', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('language');
-            $table->string('languageCode');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
+            $table->string('language')->nullable();
+            $table->string('language_code')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->tinyInteger('is_active')->nullable();
             $table->timestamps();
         });
     }

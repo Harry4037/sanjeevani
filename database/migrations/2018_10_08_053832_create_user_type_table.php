@@ -15,11 +15,11 @@ class CreateUserTypeTable extends Migration
     {
         Schema::create('user_type', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('userTypeValue');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
-            $table->bigInteger('domainId');
+            $table->string('user_type_value')->nullable();
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
+            $table->tinyInteger('is_active')->default(1);
+            $table->bigInteger('domain_id')->default(0);
             $table->timestamps();
         });
     }

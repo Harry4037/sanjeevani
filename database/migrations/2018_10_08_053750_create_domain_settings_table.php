@@ -15,11 +15,12 @@ class CreateDomainSettingsTable extends Migration
     {
         Schema::create('domain_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('domainName');
-            $table->string('domainUrl');
-            $table->bigInteger('languageId');
-            $table->string('createdBy');
-            $table->string('updatedBy');
+            $table->string('domain_name')->nullable();
+            $table->string('domain_url')->nullable();
+            $table->bigInteger('language_id')->default(0);
+            $table->string('encryption_key')->nullable();
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
             $table->tinyInteger('isActive');
             $table->timestamps();
         });

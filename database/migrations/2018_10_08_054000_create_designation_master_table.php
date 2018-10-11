@@ -15,11 +15,11 @@ class CreateDesignationMasterTable extends Migration
     {
         Schema::create('designation_master', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('designation');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
-            $table->bigInteger('domainId');
+            $table->string('designation')->nullable();
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
+            $table->tinyInteger('is_active')->default(1);
+            $table->bigInteger('domain_id')->default(0);
             $table->timestamps();
         });
     }

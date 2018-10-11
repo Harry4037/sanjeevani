@@ -15,12 +15,11 @@ class CreateUserAdditionalInfoTable extends Migration
     {
         Schema::create('user_additional_info', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('uderId');
-            $table->string('encryptionKey');
-            $table->string('password');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('iaActive');
+            $table->bigInteger('user_id')->default(0);
+            $table->string('password')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
         });
     }

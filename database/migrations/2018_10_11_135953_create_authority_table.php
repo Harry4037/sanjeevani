@@ -4,19 +4,17 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDepartmentMasterTable extends Migration
-{
+class CreateAuthorityTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('department_master', function (Blueprint $table) {
+    public function up() {
+        Schema::create('authority', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('department')->nullable();
-            $table->bigInteger('parent_id')->default(0);
+            $table->string('authority_name')->nullable();
             $table->string('created_by')->default(0);
             $table->string('updated_by')->default(0);
             $table->tinyInteger('is_active')->default(1);
@@ -30,8 +28,8 @@ class CreateDepartmentMasterTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::dropIfExists('department_master');
+    public function down() {
+        Schema::dropIfExists('authority');
     }
+
 }

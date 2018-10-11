@@ -15,11 +15,11 @@ class CreateStateMasterTable extends Migration
     {
         Schema::create('state_master', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('state');
-            $table->bigInteger('countryId');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
+            $table->string('state')->nullable();
+            $table->bigInteger('countryId')->nullable();
+            $table->string('createdBy')->default(0);
+            $table->string('updatedBy')->default(0);
+            $table->tinyInteger('isActive')->default(1);
             $table->timestamps();
         });
     }

@@ -15,12 +15,12 @@ class CreateSalutationMasterTable extends Migration
     {
         Schema::create('salutation_master', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('salutationName');
-            $table->string('salutationCode');
-            $table->string('createdBy');
-            $table->string('updatedBy');
-            $table->tinyInteger('isActive');
-            $table->bigInteger('domainId');
+            $table->string('salutation_name')->nullable();
+            $table->string('salutation_code')->nullable();
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
+            $table->tinyInteger('is_active')->default(1);
+            $table->bigInteger('domain_id')->default(0);
             $table->timestamps();
         });
     }
