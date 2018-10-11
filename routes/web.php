@@ -36,4 +36,6 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
      */
     Route::get('/users', 'UsersController@index')->name('admin.users.index');
     Route::get('/users-list','UsersController@usersList')->name('admin.users.list');
+    Route::post('/user-status','UsersController@updateUserStatus')->name('admin.users.status');
+    Route::get('/user/detail/{id}','UsersController@viewUser')->name('admin.users.detail');
 });

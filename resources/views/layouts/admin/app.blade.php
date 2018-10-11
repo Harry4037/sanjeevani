@@ -15,9 +15,16 @@
         <link href="{{ asset("vendors/font-awesome/css/font-awesome.min.css") }}" rel="stylesheet">
         <!-- NProgress -->
         <link href="{{ asset("vendors/nprogress/nprogress.css") }}" rel="stylesheet">
-        <!-- bootstrap-daterangepicker -->
-        <link href="{{ asset("vendors/bootstrap-daterangepicker/daterangepicker.css") }}" rel="stylesheet">
+        
         <link href="{{ asset("css/admin/custom.css") }}" rel="stylesheet">
+        
+        @isset($css)
+        @foreach($css as $cs)
+        <link href="{{ asset($cs) }}" rel="stylesheet">
+        @endforeach
+        @endisset
+
+
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script>
             var site_url = "{{ url('/admin') }}";
@@ -57,21 +64,22 @@
         <script src="{{ asset("vendors/Chart.js/dist/Chart.min.js") }}"></script>
         <!-- jQuery Sparklines -->
         <script src="{{ asset("vendors/jquery-sparkline/dist/jquery.sparkline.min.js") }}"></script>
-        <!-- Flot -->
+        
+<!--         Flot 
         <script src="{{ asset("vendors/Flot/jquery.flot.js") }}"></script>
         <script src="{{ asset("vendors/Flot/jquery.flot.pie.js") }}"></script>
         <script src="{{ asset("vendors/Flot/jquery.flot.time.js") }}"></script>
         <script src="{{ asset("vendors/Flot/jquery.flot.stack.js") }}"></script>
         <script src="{{ asset("vendors/Flot/jquery.flot.resize.js") }}"></script>
-        <!-- Flot plugins -->
+         Flot plugins 
         <script src="{{ asset("vendors/flot.orderbars/js/jquery.flot.orderBars.js") }}"></script>
         <script src="{{ asset("vendors/flot-spline/js/jquery.flot.spline.min.js") }}"></script>
         <script src="{{ asset("vendors/flot.curvedlines/curvedLines.js") }}"></script>
-        <!-- DateJS -->
+         DateJS 
         <script src="{{ asset("vendors/DateJS/build/date.js") }}"></script>
-        <!-- bootstrap-daterangepicker -->
+         bootstrap-daterangepicker 
         <script src="{{ asset("vendors/moment/min/moment.min.js") }}"></script>
-        <script src="{{ asset("vendors/bootstrap-daterangepicker/daterangepicker.js") }}"></script>
+        <script src="{{ asset("vendors/bootstrap-daterangepicker/daterangepicker.js") }}"></script>-->
 
         @yield('footer-script')
 

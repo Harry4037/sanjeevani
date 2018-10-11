@@ -6,6 +6,8 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
+                <div style="display: none;" class="alert msg" role="alert">
+                </div>
                 <h2>Users</h2>
                 <div class="clearfix"></div>
             </div>
@@ -17,6 +19,7 @@
                             <th>Name</th>
                             <th>EmailAddress</th>
                             <th>PhoneNo.</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>

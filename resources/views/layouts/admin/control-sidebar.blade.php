@@ -2,10 +2,13 @@
     <div class="menu_section">
         <h3>Navigation</h3>
         <ul class="nav side-menu">
+            <li>
+                <a href="{{ route('admin.dashboard') }}"><i class="fa fa-users"></i> Dashboard</a>
+            </li>
             <li><a><i class="fa fa-users"></i> User Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('admin.users.index') }}">Users</a></li>
-                    <li><a href="index2.html">Staff</a></li>
+                    <li><a href="#">Staff</a></li>
                     <!--<li><a href="index3.html">Dashboard3</a></li>-->
                 </ul>
             </li>
