@@ -25,7 +25,7 @@ $(document).ready(function () {
                 sortable: false,
                 render: function (data, type, row, meta) {
                     var url = row['view-deatil'];
-                    return "<a class='btn btn-round btn-info' href='"+url+"'>view</>";
+                    return "<a class='btn btn-info' href='"+url+"'>view</>";
                 }
             },
         ]

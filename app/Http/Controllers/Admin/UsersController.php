@@ -50,7 +50,7 @@ class UsersController extends Controller {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
-            
+
             $query = $this->user->query();
             if ($searchKeyword) {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
@@ -59,11 +59,11 @@ class UsersController extends Controller {
             $i = 0;
             $usersArray = [];
             foreach ($users as $user) {
-                $usersArray[$i]['name'] = $user->firstName . ' ' . $user->lastName;
-                $usersArray[$i]['email'] = $user->emailId;
-                $usersArray[$i]['mobileno'] = $user->mobileNumber;
-                $checked_status = $user->isActive ? "checked" : '';
-                $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->isActive . " " . $checked_status . "><span class='slider round'></span></label>";
+                $usersArray[$i]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$i]['email'] = $user->email_id;
+                $usersArray[$i]['mobileno'] = $user->mobile_number;
+                $checked_status = $user->is_active ? "checked" : '';
+                $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $usersArray[$i]['view-deatil'] = route('admin.users.detail', ['id' => $user->id]);
                 $i++;
             }
@@ -105,6 +105,10 @@ class UsersController extends Controller {
         } catch (Exception $ex) {
             dd($e);
         }
+    }
+
+    public function addUser(Request $request) {
+        return view('admin.users.add-user');
     }
 
 }

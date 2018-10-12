@@ -29,12 +29,12 @@ class CreateUsersTable extends Migration {
             $table->bigInteger('city_id')->default(0);
             $table->bigInteger('language_id')->default(0);
             $table->string('screen_name')->nullable();
-            $table->dateTime('date_of_joining')->useCurrent();
+            $table->dateTime('date_of_joining')->nullable();
             $table->string('authority_id')->default(0);
-            $table->dateTime('date_of_birth')->useCurrent();
+            $table->dateTime('date_of_birth')->nullable();
             $table->tinyInteger('is_user_loked')->default(0);
             $table->string('profile_pic_path')->nullable();
-            $table->integer('mobile_number')->nullable();
+            $table->string('mobile_number')->nullable();
             $table->string('other_contact_number')->nullable();
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();
@@ -49,6 +49,7 @@ class CreateUsersTable extends Migration {
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('remember_token')->nullable();
+            $table->string('otp')->nullable();
             $table->string('createdBy')->default(0);
             $table->string('updatedBy')->default(0);
             $table->timestamps();

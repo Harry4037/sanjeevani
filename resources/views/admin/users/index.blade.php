@@ -9,6 +9,9 @@
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
                 <h2>Users</h2>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="{{ route('admin.users.add') }}">Add User</a>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
