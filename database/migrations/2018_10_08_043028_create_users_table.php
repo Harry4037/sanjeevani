@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration {
             $table->bigIncrements('id');
             $table->bigInteger('salutation_id')->default(0);
             $table->string('user_name')->nullable();
+            $table->string('password')->nullable();
             $table->string('first_name')->nullable();
             $table->string('mid_name')->nullable();
             $table->string('last_name')->nullable();
@@ -47,6 +48,7 @@ class CreateUsersTable extends Migration {
             $table->bigInteger('user_id_RA')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
+            $table->string('remember_token')->nullable();
             $table->string('createdBy')->default(0);
             $table->string('updatedBy')->default(0);
             $table->timestamps();

@@ -13,7 +13,7 @@
             </div>
             <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>{{ auth()->user()->firstName }}</h2>
+                <h2>{{ auth('admin')->user()->firstName }}</h2>
             </div>
         </div>
         <!-- /menu profile quick info -->
@@ -37,7 +37,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('img/img.jpg')}}" alt="">{{ auth()->user()->firstName }}
+                        <img src="{{ asset('img/img.jpg')}}" alt="">{{ auth('admin')->user()->firstName }}
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">

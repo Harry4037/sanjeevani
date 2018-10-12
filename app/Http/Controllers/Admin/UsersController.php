@@ -50,11 +50,10 @@ class UsersController extends Controller {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
-
-            $searchstring = implode(",", ['firstName', 'emailId', 'mobileNumber']);
+            
             $query = $this->user->query();
             if ($searchKeyword) {
-                $query->where("firstName", "LIKE", "%$searchKeyword%")->orWhere("emailId", "LIKE", "%$searchKeyword%")->orWhere("mobileNumber", "LIKE", "%$searchKeyword%");
+                $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
             $users = $query->get();
             $i = 0;

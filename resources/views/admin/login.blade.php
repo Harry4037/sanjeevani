@@ -9,7 +9,7 @@
             <h1>Admin Login</h1>
             @include('errors.errors-and-messages')
             <div class="form-group">
-                <input type="text" class="form-control"  name="emailId" placeholder="Email*"  />
+                <input type="text" class="form-control"  name="email_id" placeholder="Email*"  />
             </div>
             <div class="form-group">
                 <input type="password" class="form-control"  placeholder="Password*" name="password" />
@@ -70,7 +70,7 @@
     $(document).ready(function () {
         $("#login-form").validate({
             rules: {
-                emailId: {
+                email_id: {
                     required: true,
                     email: true
                 },

@@ -54,7 +54,7 @@ class LoginController extends Controller {
      */
     public function validateLogin(Request $request) {
         $this->validate($request, [
-            'emailId' => 'required|string|email',
+            'email_id' => 'required|string|email',
             'password' => 'required|string',
         ]);
     }
@@ -65,7 +65,7 @@ class LoginController extends Controller {
      * @return string
      */
     public function username() {
-        return 'emailId';
+        return 'email_id';
     }
 
     /**
@@ -84,10 +84,12 @@ class LoginController extends Controller {
             return $this->sendLockoutResponse($request);
         }
 
-        $user = User::where('emailId', $request->get('emailId'))->first();
-        if ($user) {
-            Auth::login($user);
-            return redirect($this->redirectTo);
+//        $user = User::where('email_id', $request->get('email_id'))->first();
+        if ($this->attemptLogin($request)) {
+//            dd(Auth::guard('admin')->user());
+//            Auth::login($user);
+//            return redirect($this->redirectTo);
+            return $this->sendLoginResponse($request);
         }
 
         $this->incrementLoginAttempts($request);
