@@ -1,0 +1,18 @@
+For creating api doc
+====================
+
+apidoc -i app/Http/Controllers/Api/ -o /home/flexsin/Desktop/appdoc
+
+vps server
+----------
+rohit
+3=VyEtxt04IU
+Sharma@9206
+
+
+mysql
+-----
+https://148.72.207.90:2087/cpsess6958247390/3rdparty/phpMyAdmin/index.php
+
+167595420
+Sharma@9206

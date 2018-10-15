@@ -55,6 +55,7 @@ class UsersController extends Controller {
             if ($searchKeyword) {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
+            $query->where("user_type_id","!=", 1);
             $users = $query->get();
             $i = 0;
             $usersArray = [];
@@ -86,7 +87,7 @@ class UsersController extends Controller {
         try {
             if ($request->isMethod('post')) {
                 $user = $this->user->findOrFail($request->record_id);
-                $user->isActive = $request->status;
+                $user->is_active = $request->status;
                 if ($user->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
                 }

@@ -38,6 +38,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".user_status", function () {
+        
         var record_id = this.id;
         var th = $(this);
         var status = th.attr('data-status');

@@ -54,11 +54,10 @@ class AuthController extends Controller {
                         'data' => []
             ]);
         } else {
-            return response()->json([
-                        'status' => false,
-                        'message' => "Mobile number already registered with us.",
-                        'data' => []
-            ]);
+            $response['success'] = false;
+            $response['message'] = "Your mobile number is already registered.";
+            $response['data'] = [];
+            return $this->jsonData($response);
         }
     }
 
@@ -126,7 +125,7 @@ class AuthController extends Controller {
       "token_type": "Bearer",
       "expires_at": "2018-10-19 07:18:18"
       }
-    }
+      }
      *  @apiVersion 1.0.0
      */
     public function login(Request $request) {
@@ -173,15 +172,33 @@ class AuthController extends Controller {
         ]);
     }
 
+    /**
+     * @apiDescription This api can be use to logout user
+     * parameter as their arguments.Please check the curl example for better explanation
+     * @api {get} /api/logout Logout User
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName logoutUser
+     * @apiGroup User
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String}   message Success message
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *
+     * {
+      "status": true,
+      "message": "User successfully logged out.",
+      "data": []
+      }
+     *  @apiVersion 1.0.0
+     */
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
-                    'message' => 'Successfully logged out'
+            'success' => True,
+            'message' => 'User successfully logged out.',
+            'data' => []
         ]);
-    }
-
-    public function user(Request $request) {
-        return response()->json($request->user());
     }
 
 }
