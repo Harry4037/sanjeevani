@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration {
             $table->string('first_name')->nullable();
             $table->string('mid_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('booking_id')->nullable();
             $table->enum('gender', ['M', 'F'])->nullable();
             $table->string('email_id')->nullable();
             $table->string('alternate_email_id')->nullable();
@@ -34,6 +35,10 @@ class CreateUsersTable extends Migration {
             $table->dateTime('date_of_birth')->nullable();
             $table->tinyInteger('is_user_loked')->default(0);
             $table->string('profile_pic_path')->nullable();
+            $table->string('aadhar_id')->nullable();
+            $table->string('voter_id')->nullable();
+            $table->dateTime('check_in_date')->nullable();
+            $table->dateTime('check_out_date')->nullable();
             $table->string('mobile_number')->nullable();
             $table->string('other_contact_number')->nullable();
             $table->string('address1')->nullable();

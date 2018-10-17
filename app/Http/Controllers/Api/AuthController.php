@@ -12,25 +12,42 @@ use Carbon\Carbon;
 class AuthController extends Controller {
 
     /**
-     * @apiDescription This api can be use to send OTP
-     * parameter as their arguments.Please check the curl example for better explanation
      * @api {post} /api/send-otp  Send OTP
-     * @apiName send otp
-     * @apiGroup User
-     *
-     * @apiParam {mobile_number} string Users mobile number.
-     *
+     * @apiName PostSendOtp
+     * @apiGroup Auth
+     * 
+     * @apiParam {String} mobile_number User unique mobile number.
+     * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String}   message for the User.
      * @apiSuccess {JSON}   data blank array.
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-      "status": true,
-      "message": "OTP send successfully.",
-      "data": []
-      }
-     *  @apiVersion 1.0.0
+     *  "status": true,
+     *  "message": "OTP send successfully.",
+     *  "data": []
+     * }
+     * 
+     * @apiError MobileNumberMissing The mobile number of the User was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Mobile number missing.",
+     *  "data": []
+     * }
+     * 
+     * @apiError MobileNumberRegistered The mobile number of the User was already registered.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Your mobile number is already registered.",
+     *  "data": []
+     * }
+     * 
      */
     public function signup(Request $request) {
         if (!$request->mobile_number) {
@@ -62,18 +79,16 @@ class AuthController extends Controller {
     }
 
     /**
-     * @apiDescription This api can be use to verify OTP
-     * parameter as their arguments.Please check the curl example for better explanation
-     * @api {post} /api/verify-otp  verify OTP
-     * @apiName verify otp
-     * @apiGroup User
+     * @api {post} /api/verify-otp  Verify OTP
+     * @apiName PostVerifyOtp
+     * @apiGroup Auth
      *
-     * @apiParam {string} mobile_number Users mobile number.
-     * @apiParam {string} otp OTP.
+     * @apiParam {String} mobile_number Users mobile number.
+     * @apiParam {String} otp OTP.
      *
      * @apiSuccess {String} success true 
      * @apiSuccess {String}   message OTP verified successfully.
-     * @apiSuccess {JSON}   data user detail.
+     * @apiSuccess {JSON}   data User detail with unique token.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -126,7 +141,34 @@ class AuthController extends Controller {
       "expires_at": "2018-10-19 07:18:18"
       }
       }
-     *  @apiVersion 1.0.0
+     *  
+     * @apiError MobileNumberMissing The mobile number of the User was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Mobile number missing.",
+     *  "data": []
+     * }
+     * 
+     * @apiError OTPMissing The OTP was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "OTP missing.",
+     *  "data": []
+     * }
+     * 
+     * @apiError IncorrectOTP The OTP was incorrect.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Incorrect OTP.",
+     *  "data": []
+     * }
+     * 
      */
     public function login(Request $request) {
         if (!$request->mobile_number) {
@@ -173,31 +215,30 @@ class AuthController extends Controller {
     }
 
     /**
-     * @apiDescription This api can be use to logout user
-     * parameter as their arguments.Please check the curl example for better explanation
      * @api {get} /api/logout Logout User
      * @apiHeader {String} Authorization Users unique access-token.
-     * @apiName logoutUser
-     * @apiGroup User
+     * @apiName GetLogoutUser
+     * @apiGroup Auth
      * 
      * @apiSuccess {String} success true 
-     * @apiSuccess {String}   message Success message
+     * @apiSuccess {String}  message Success message
+     * @apiSuccess {JSON}  data blank array.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *
      * {
-      "status": true,
-      "message": "User successfully logged out.",
-      "data": []
-      }
-     *  @apiVersion 1.0.0
+     *   "status": true,
+     *   "message": "User successfully logged out.",
+     *   "data": []
+     * }
+     * 
      */
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
-            'success' => True,
-            'message' => 'User successfully logged out.',
-            'data' => []
+                    'success' => True,
+                    'message' => 'User successfully logged out.',
+                    'data' => []
         ]);
     }
 

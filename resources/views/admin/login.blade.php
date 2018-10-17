@@ -26,7 +26,7 @@
                 <br />
 
                 <div>
-                    <h1><i class="fa fa-anchor"></i> Sanjeev</h1>
+                    <h1><i class="fa fa-anchor"></i> Sanjeevani</h1>
                     <p>©2018 All Rights Reserved. Sanjeev.</p>
                 </div>
             </div>
@@ -37,13 +37,12 @@
 <!-- Forget Password -->
 <div id="register" class="animate form registration_form">
     <section class="login_content">
-        <form method="POST" action="#" id="forget-form">
+        <form method="POST" action="{{ route('admin.password.email') }}" id="forget-form">
             {{ csrf_field() }}
             <h1>Forget Password</h1>
 
-
             <div class="form-group">
-                <input name="email" type="email" class="form-control" placeholder="Email" />
+                <input name="email_id" type="email" class="form-control" placeholder="Email" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-success submit" >
@@ -58,8 +57,8 @@
                 <br />
 
                 <div>
-                    <h1><i class="fa fa-anchor"></i> Sanjeev</h1>
-                    <p>©2018 All Rights Reserved. Sanjeev.</p>
+                    <h1><i class="fa fa-anchor"></i> Sanjeevani</h1>
+                    <p>©2018 All Rights Reserved. Sanjeevani.</p>
                 </div>
             </div>
         </form>

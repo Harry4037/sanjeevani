@@ -16,19 +16,8 @@ use Illuminate\Http\Request;
 Route::namespace("Api")->group(function () {
     Route::post('send-otp', 'AuthController@signup');
     Route::post('verify-otp', 'AuthController@login');
-    Route::post('check-in', 'UserController@checkIn');
     Route::middleware('auth:api')->group(function () {
         Route::get('logout', 'AuthController@logout');
-        
+        Route::post('check-in', 'UserController@checkIn');
     });
 });
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
-//Route::namespace("Api")->group(function() {
-//    
-//    Route::post('/send-otp', 'LoginController@sendOtp')->name('user.sendotp');
-//
-//});
