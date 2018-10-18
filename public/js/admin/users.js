@@ -25,7 +25,7 @@ $(document).ready(function () {
                 sortable: false,
                 render: function (data, type, row, meta) {
                     var url = row['view-deatil'];
-                    return "<a class='btn btn-info' href='"+url+"'>view</>";
+                    return "<a class='btn btn-info' href='" + url + "'>view</>";
                 }
             },
         ]
@@ -38,7 +38,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".user_status", function () {
-        
+
         var record_id = this.id;
         var th = $(this);
         var status = th.attr('data-status');
@@ -64,4 +64,28 @@ $(document).ready(function () {
         });
 
     });
+
+    $('#check_in').daterangepicker({
+        singleDatePicker: true,
+        singleClasses: "picker_1"
+    }, function (start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+    });
+
+    $('#check_out').daterangepicker({
+        singleDatePicker: true,
+        singleClasses: "picker_1"
+    }, function (start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+    });
+
+    $(document).on("click", "#add_more_member", function () {
+        var member_html = "<div class='form-group'><label class='control-label col-md-3 col-sm-3 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-2'><input type='text' class='form-control' name='person_name[]'>"
+                + "</div><label class='control-label col-md-2 col-sm-2 col-xs-2'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-2'>"
+                + "<input type='text' class='form-control' name='person_age[]'>"
+                + "</div></div>";
+        $("#member_div").append(member_html);
+    });
+    
+    
 });

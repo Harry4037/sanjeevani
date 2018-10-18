@@ -55,7 +55,7 @@ class UsersController extends Controller {
             if ($searchKeyword) {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
-            $query->where("user_type_id","!=", 1);
+            $query->where("user_type_id", "!=", 1);
             $users = $query->get();
             $i = 0;
             $usersArray = [];
@@ -109,7 +109,16 @@ class UsersController extends Controller {
     }
 
     public function addUser(Request $request) {
-        return view('admin.users.add-user');
+        $css = [
+            'vendors/bootstrap-daterangepicker/daterangepicker.css',
+        ];
+        $js = [
+            'vendors/moment/min/moment.min.js',
+            'vendors/bootstrap-daterangepicker/daterangepicker.js',
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+            'js/admin/users.js'
+        ];
+        return view('admin.users.add-user', ['js' => $js, 'css' => $css]);
     }
 
 }
