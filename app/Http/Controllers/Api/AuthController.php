@@ -17,6 +17,7 @@ class AuthController extends Controller {
      * @apiGroup Auth
      * 
      * @apiParam {String} mobile_number User unique mobile number.
+     * @apiParam {String} user_type User type (Customer => 3 or Staff member => 2).
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String}   message for the User.
@@ -57,7 +58,18 @@ class AuthController extends Controller {
                         'data' => []
             ]);
         }
-        $userExist = User::where("mobile_number", $request->mobile_number)->first();
+
+        if (!$request->user_type) {
+            return response()->json([
+                        'status' => false,
+                        'message' => "User type missing.",
+                        'data' => []
+            ]);
+        }
+        
+        $userExist = User::where("mobile_number", $request->mobile_number)
+        ->where("user_type_id", $request->user_type)
+        ->first();
         if (!$userExist) {
             $user = new User([
                 'mobile_number' => $request->mobile_number,
