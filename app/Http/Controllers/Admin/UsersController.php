@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Routing\Route;
+use Carbon\Carbon;
+use App\Models\UserFamilyMembers;
 
 class UsersController extends Controller {
 
@@ -109,6 +111,54 @@ class UsersController extends Controller {
     }
 
     public function addUser(Request $request) {
+
+        if ($request->isMethod("post")) {
+            $userExist = User::where("mobile_number", $request->mobile_number)
+                    ->where("user_type_id", 3)
+                    ->first();
+            if ($userExist) {
+                return redirect()->route('admin.users.add')->with('error', 'User already exists with thin mobile number');
+            } else {
+                $name = explode(" ", $request->user_name);
+
+                $user = $this->user;
+                $user->user_type_id = 3;
+                $user->booking_source_name = $request->booking_source_name;
+                $user->booking_id = $request->booking_source_id;
+                $user->user_name = $request->user_name;
+                $user->first_name = isset($name[0]) ? $name[0] : '';
+                $user->last_name = isset($name[1]) ? $name[1] : '';
+                $user->mobile_number = $request->mobile_number;
+                $user->email_id = $request->email_id;
+                $check_in_date = Carbon::parse($request->check_in);
+                $user->check_in_date = $check_in_date->format('Y-m-d');
+                $check_out_date = Carbon::parse($request->check_out);
+                $user->check_out_date = $check_out_date->format('Y-m-d');
+                $user->resort_id = $request->resort_id;
+                $user->total_room = $request->total_room;
+                $user->package_detail_id = $request->package_detail_id;
+                $user->created_by = 1;
+                $user->updated_by = 1;
+
+                if ($user->save()) {
+                    if($request->person_name && $request->person_age){
+                        $i=0;
+                        foreach ($request->person_name as $person_name){
+                            $familyMember = new UserFamilyMembers();
+                            $familyMember->user_id = $user->id;
+                            $familyMember->name = $person_name;
+                            $familyMember->age = $request->person_age[$i];
+                            $familyMember->created_by = 1;
+                            $familyMember->updated_by = 1;
+                            $familyMember->save();
+                            $i++;
+                        }
+                    }
+                    return redirect()->route('admin.users.add')->with('status', 'User has been added successfully');
+                }
+            }
+        }
+
         $css = [
             'vendors/bootstrap-daterangepicker/daterangepicker.css',
         ];
@@ -118,6 +168,7 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'js/admin/users.js'
         ];
+
         return view('admin.users.add-user', ['js' => $js, 'css' => $css]);
     }
 

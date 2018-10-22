@@ -20,7 +20,11 @@ class CreateUsersTable extends Migration {
             $table->string('first_name')->nullable();
             $table->string('mid_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('booking_source_name')->nullable();
             $table->string('booking_id')->nullable();
+            $table->bigInteger('resort_id')->default(0);
+            $table->string('total_room')->nullable();
+            $table->bigInteger('package_detail_id')->default(0);
             $table->enum('gender', ['M', 'F'])->nullable();
             $table->string('email_id')->nullable();
             $table->string('alternate_email_id')->nullable();
@@ -55,8 +59,8 @@ class CreateUsersTable extends Migration {
             $table->bigInteger('domain_id')->default(0);
             $table->string('remember_token')->nullable();
             $table->string('otp')->nullable();
-            $table->string('createdBy')->default(0);
-            $table->string('updatedBy')->default(0);
+            $table->string('created_by')->default(0);
+            $table->string('updated_by')->default(0);
             $table->timestamps();
         });
     }

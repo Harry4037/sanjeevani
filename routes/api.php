@@ -16,10 +16,16 @@ use Illuminate\Http\Request;
 Route::namespace("Api")->group(function () {
     Route::post('send-otp', 'AuthController@signup');
     Route::post('verify-otp', 'AuthController@login');
-    Route::get('banners', 'UserController@banners');
+    Route::post('forget-password', 'UserController@forgetPassword');
+    Route::get('services-list', 'ServiceController@serviceListing');
+    
     Route::middleware('auth:api')->group(function () {
         Route::get('logout', 'AuthController@logout');
         Route::post('check-in', 'UserController@checkIn');
+        Route::get('home', 'HomeController@home');
         Route::post('update-profile', 'UserController@updateProfile');
+        Route::post('change-password', 'UserController@changesPassword');
+        Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
+        
     });
 });

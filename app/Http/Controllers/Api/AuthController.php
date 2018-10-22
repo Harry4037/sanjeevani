@@ -28,7 +28,7 @@ class AuthController extends Controller {
      * {
      *  "status": true,
      *  "message": "OTP send successfully.",
-     *  "data": []
+     *  "data": {}
      * }
      * 
      * @apiError MobileNumberMissing The mobile number of the User was missing.
@@ -37,17 +37,9 @@ class AuthController extends Controller {
      * {
      *  "status": false,
      *  "message": "Mobile number missing.",
-     *  "data": []
+     *  "data": {}
      * }
      * 
-     * @apiError MobileNumberRegistered The mobile number of the User was already registered.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *  "status": false,
-     *  "message": "Your mobile number is already registered.",
-     *  "data": []
-     * }
      * 
      */
     public function signup(Request $request) {
@@ -55,7 +47,7 @@ class AuthController extends Controller {
             return response()->json([
                         'status' => false,
                         'message' => "Mobile number missing",
-                        'data' => []
+                        'data' => (object)[]
             ]);
         }
 
@@ -63,16 +55,17 @@ class AuthController extends Controller {
             return response()->json([
                         'status' => false,
                         'message' => "User type missing.",
-                        'data' => []
+                        'data' => (object)[]
             ]);
         }
-        
+
         $userExist = User::where("mobile_number", $request->mobile_number)
-        ->where("user_type_id", $request->user_type)
-        ->first();
+                ->where("user_type_id", $request->user_type)
+                ->first();
         if (!$userExist) {
             $user = new User([
                 'mobile_number' => $request->mobile_number,
+                'user_type_id' => $request->user_type,
                 'otp' => 9999,
                 'password' => bcrypt(9999)
             ]);
@@ -80,12 +73,15 @@ class AuthController extends Controller {
             return response()->json([
                         'status' => true,
                         'message' => "OTP send successfully.",
-                        'data' => []
+                        'data' => (object)[]
             ]);
         } else {
-            $response['success'] = false;
-            $response['message'] = "Your mobile number is already registered.";
-            $response['data'] = [];
+            $userExist->otp = 9999;
+            $userExist->password = bcrypt(9999);
+            $userExist->save();
+            $response['success'] = true;
+            $response['message'] = "OTP send successfully.";
+            $response['data'] = (object)[];
             return $this->jsonData($response);
         }
     }
@@ -160,7 +156,7 @@ class AuthController extends Controller {
      * {
      *  "status": false,
      *  "message": "Mobile number missing.",
-     *  "data": []
+     *  "data": {}
      * }
      * 
      * @apiError OTPMissing The OTP was missing.
@@ -169,7 +165,16 @@ class AuthController extends Controller {
      * {
      *  "status": false,
      *  "message": "OTP missing.",
-     *  "data": []
+     *  "data": {}
+     * }
+     * 
+     * @apiError UserTypeMissing The User Type was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User type missing.",
+     *  "data": {}
      * }
      * 
      * @apiError IncorrectOTP The OTP was incorrect.
@@ -178,7 +183,7 @@ class AuthController extends Controller {
      * {
      *  "status": false,
      *  "message": "Incorrect OTP.",
-     *  "data": []
+     *  "data": {}
      * }
      * 
      */
@@ -187,18 +192,26 @@ class AuthController extends Controller {
             return response()->json([
                         'status' => false,
                         'message' => "Mobile number missing.",
-                        'data' => []
+                        'data' => (object)[]
             ]);
         }
         if (!$request->otp) {
             return response()->json([
                         'status' => false,
                         'message' => "OTP missing.",
-                        'data' => []
+                        'data' => (object)[]
+            ]);
+        }
+        if (!$request->user_type) {
+            return response()->json([
+                        'status' => false,
+                        'message' => "User type missing.",
+                        'data' => (object)[]
             ]);
         }
 
         $credentials = [
+            'user_type_id' => $request->user_type,
             'mobile_number' => $request->mobile_number,
             'password' => $request->otp
         ];
@@ -206,7 +219,7 @@ class AuthController extends Controller {
             return response()->json([
                         'status' => false,
                         'message' => "Incorrect OTP.",
-                        'data' => []
+                        'data' => (object)[]
             ]);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -250,7 +263,7 @@ class AuthController extends Controller {
         return response()->json([
                     'success' => True,
                     'message' => 'User successfully logged out.',
-                    'data' => []
+                    'data' => (object)[]
         ]);
     }
 

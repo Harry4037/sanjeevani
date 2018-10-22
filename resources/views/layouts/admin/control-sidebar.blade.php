@@ -12,6 +12,12 @@
                     <!--<li><a href="index3.html">Dashboard3</a></li>-->
                 </ul>
             </li>
+            <li>
+                <a href="{{ route('admin.banner.index') }}"><i class="fa fa-flag-checkered"></i> Banner Management</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i> Services Management</a>
+            </li>
         </ul>
     </div>
 </div>

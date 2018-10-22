@@ -67,7 +67,7 @@ $(document).ready(function () {
 
     $('#check_in').daterangepicker({
         singleDatePicker: true,
-        singleClasses: "picker_1"
+        singleClasses: "picker_1",
     }, function (start, end, label) {
         console.log(start.toISOString(), end.toISOString(), label);
     });
@@ -87,5 +87,38 @@ $(document).ready(function () {
         $("#member_div").append(member_html);
     });
     
-    
+    $("#addUserForm").validate({
+        rules: {
+            booking_source_name: {
+                required: true
+            },
+            booking_source_id: {
+                required: true
+            },
+            user_name: {
+                required: true
+            },
+            mobile_number: {
+                required: true
+            },
+            email_id: {
+                required: true
+            },
+            check_in: {
+                required: true
+            },
+            check_out: {
+                required: true
+            },
+            resort_id: {
+                required: true
+            },
+            total_room: {
+                required: true
+            },
+            package_detail_id: {
+                required: true
+            }
+        }
+    });
 });

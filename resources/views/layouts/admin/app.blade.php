@@ -64,6 +64,7 @@
         <script src="{{ asset("vendors/Chart.js/dist/Chart.min.js") }}"></script>
         <!-- jQuery Sparklines -->
         <script src="{{ asset("vendors/jquery-sparkline/dist/jquery.sparkline.min.js") }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>  
         
 <!--         Flot 
         <script src="{{ asset("vendors/Flot/jquery.flot.js") }}"></script>

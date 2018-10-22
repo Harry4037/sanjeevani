@@ -4,6 +4,7 @@
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
+        @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
                 <h2>Check In User </h2>
@@ -11,8 +12,9 @@
             </div>
             <div class="x_content">
                 <br>
-                <form class="form-horizontal form-label-left">
-
+                
+                <form class="form-horizontal form-label-left" action="{{ route('admin.users.add') }}" method="post" id="addUserForm">
+                    @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -40,18 +42,18 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Email Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number">
+                            <input type="text" class="form-control" placeholder="Customer Email Address" name="email_id" id="email_id">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In Date</label>
                         <div class="col-md-2 col-sm-2 col-xs-2">
-                            <input type="text" class="form-control has-feedback-left" id="check_in" >
+                            <input type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                         <label class="control-label col-md-2 col-sm-2 col-xs-2">Check Out Date</label>
                         <div class="col-md-2 col-sm-2 col-xs-2">
-                            <input type="text" class="form-control has-feedback-left" id="check_out" >
+                            <input type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -65,7 +67,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Type</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_type_id" id="resort_type_id">
@@ -74,7 +76,7 @@
                                 <option value="2">Type 2</option>
                             </select>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">No. of room</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -91,7 +93,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="package_detail" id="package_detail">
+                            <select class="form-control" name="package_detail_id" id="package_detail_id">
                                 <option value="">Choose option</option>
                                 <option value="1">Package 1</option>
                                 <option value="2">Package 2</option>
@@ -126,7 +128,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <button type="button" class="btn btn-primary">Cancel</button>
+<!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
                             <button type="reset" class="btn btn-primary">Reset</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>

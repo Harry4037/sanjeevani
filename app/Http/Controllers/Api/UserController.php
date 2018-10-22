@@ -10,6 +10,7 @@ use Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Banner;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
 
@@ -19,15 +20,7 @@ class UserController extends Controller {
      * @apiGroup User
      *
      * @apiParam {String} user_id User id*.
-    //  * @apiParam {String} full_name User full name*.
-    //  * @apiParam {String} booking_id User booking id*.
-    //  * @apiParam {String} email_id User email address*.
-    //  * @apiParam {String} check_in_date User check in date*.
-    //  * @apiParam {String} check_out_date User check in date*.
      * @apiParam {File} aadhar_id User aadhar id document*.
-    //  * @apiParam {File} voter_id User voter id document*.
-    //  * @apiParam {JSON} members User members detail {"total_member":2,"members":{"full_name": "Ankit",	"age": 20},{"full_name": "Hariom","age": 20},
-      }".
      *
      * @apiSuccess {String} success true 
      * @apiSuccess {String}   message User check-in successfully.
@@ -49,50 +42,6 @@ class UserController extends Controller {
      *  "data": []
      * }
      * 
-    //  * @apiError FullNameMissing The full name was missing.
-    //  * @apiErrorExample Error-Response:
-    //  * HTTP/1.1 404 Not Found
-    //  * {
-    //  *  "status": false,
-    //  *  "message": "Full name missing.",
-    //  *  "data": []
-    //  * }
-    //  * 
-    //  * @apiError BookingIdMissing The booking id was missing.
-    //  * @apiErrorExample Error-Response:
-    //  * HTTP/1.1 404 Not Found
-    //  * {
-    //  *  "status": false,
-    //  *  "message": "Booking Id missing.",
-    //  *  "data": []
-    //  * }
-    //  * 
-    //  * @apiError EmailIdMissing The email id was missing.
-    //  * @apiErrorExample Error-Response:
-    //  * HTTP/1.1 404 Not Found
-    //  * {
-    //  *  "status": false,
-    //  *  "message": "Email Id missing.",
-    //  *  "data": []
-    //  * }
-    //  * 
-    //  * @apiError CheckInMissing The check In date was missing.
-    //  * @apiErrorExample Error-Response:
-    //  * HTTP/1.1 404 Not Found
-    //  * {
-    //  *  "status": false,
-    //  *  "message": "Check In date missing.",
-    //  *  "data": []
-    //  * }
-    //  * 
-    //  * @apiError CheckOutMissing The check Out date was missing.
-    //  * @apiErrorExample Error-Response:
-    //  * HTTP/1.1 404 Not Found
-    //  * {
-    //  *  "status": false,
-    //  *  "message": "Check out date missing.",
-    //  *  "data": []
-    //  * }
      * 
      * @apiError AadharIdMissing The aadhar document was missing.
      * @apiErrorExample Error-Response:
@@ -103,14 +52,6 @@ class UserController extends Controller {
      *  "data": []
      * }
      * 
-    //  * @apiError VoterIdMissing The voter document was missing.
-    //  * @apiErrorExample Error-Response:
-    //  * HTTP/1.1 404 Not Found
-    //  * {
-    //  *  "status": false,
-    //  *  "message": "Voter id missing.",
-    //  *  "data": []
-    //  * }
      * 
      * @apiError InvalidUser This user was invalid.
      * @apiErrorExample Error-Response:
@@ -127,7 +68,7 @@ class UserController extends Controller {
         if (!$request->user_id) {
             $response['success'] = false;
             $response['message'] = "User Id missing.";
-            $response['data'] = [];
+            $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         // if (!$request->full_name) {
@@ -163,7 +104,7 @@ class UserController extends Controller {
         if (!$request->aadhar_id) {
             $response['success'] = false;
             $response['message'] = "Aadhar id missing.";
-            $response['data'] = [];
+            $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         // if (!$request->voter_id) {
@@ -187,11 +128,10 @@ class UserController extends Controller {
         if (!$user) {
             $response['success'] = false;
             $response['message'] = "Invalid user.";
-            $response['data'] = [];
+            $response['data'] = (object) [];
             return $this->jsonData($response);
         } else {
-            $name = explode(" ", $request->full_name);
-
+//            $name = explode(" ", $request->full_name);
             // $user->user_name = $request->full_name;
             // $user->first_name = isset($name[0]) ? $name[0] : '';
             // $user->last_name = isset($name[1]) ? $name[1] : '';
@@ -207,27 +147,61 @@ class UserController extends Controller {
             if ($user->save()) {
                 $response['success'] = true;
                 $response['message'] = "User check-in successfully.";
-                $response['data'] = [];
+                $response['data'] = $user;
                 return $this->jsonData($response);
             } else {
                 $response['success'] = false;
                 $response['message'] = "Something went be wrong.";
-                $response['data'] = [];
+                $response['data'] = (object) [];
                 return $this->jsonData($response);
             }
         }
     }
 
-
-    public function updateProfile(Request $request){
+    /**
+     * @api {post} /api/update-profile Update user profile
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName PostUpdateUserProfile
+     * @apiGroup User
+     * 
+     * @apiParam {String} user_id User id.
+     * @apiParam {String} full_name Full name.
+     * @apiParam {String} email_id Full name.
+     * @apiParam {File} profile_pic Profile Pic.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} message Profile update succesfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true,
+     * "message": "Profile update succesfully.",
+     * "data": {}
+     * }
+     * 
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User id missing.",
+     *  "data": {}
+     * }
+     * 
+     * 
+     */
+    public function updateProfile(Request $request) {
         if (!$request->user_id) {
             $response['success'] = false;
             $response['message'] = "User id missing.";
-            $response['data'] = [];
+            $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         $user = User::find($request->user_id);
-        if($user){
+        if ($user) {
             $name = explode(" ", $request->full_name);
 
             $user->user_name = $request->full_name;
@@ -235,30 +209,201 @@ class UserController extends Controller {
             $user->last_name = isset($name[1]) ? $name[1] : '';
             $user->email_id = $request->email_id;
 
-            if($user->save()){
-                $response['success'] = true;
-                $response['message'] = "Profile update succesfully.";
-                $response['data'] = [];
-                return $this->jsonData($response);
-            }else{
-                $response['success'] = false;
-                $response['message'] = "Something went be wrong.";
-                $response['data'] = [];
-                return $this->jsonData($response);    
+            if ($request->profile_pic) {
+                $profile_pic = $request->file("profile_pic");
+                $profile = Storage::disk('public')->put('Profile_pic', $profile_pic);
+                $profile_file_name = basename($profile);
+
+                $user->profile_pic_path = $profile_file_name;
             }
 
-        }else{
+            if ($user->save()) {
+                $response['success'] = true;
+                $response['message'] = "Profile update succesfully.";
+                $response['data'] = (object) [];
+                return $this->jsonData($response);
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Something went be wrong.";
+                $response['data'] = (object) [];
+                return $this->jsonData($response);
+            }
+        } else {
             $response['success'] = false;
             $response['message'] = "Invalid user.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+    }
+
+    /**
+     * @api {post} /api/change-password Change User Password
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName PostChangePassword
+     * @apiGroup User
+     * 
+     * @apiParam {String} user_id User id.
+     * @apiParam {String} old_password old Password.
+     * @apiParam {String} new_password New Password.
+     * @apiParam {String} confirm_password Confirm Password.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} message Password Changed successfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true,
+     * "message": "Password Changed successfully.",
+     * "data": {}
+     * }
+     * 
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError OldPasswordMissing The old password was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Old Password missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError NewPasswordMissing The new password was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "New Password missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError ConfirmPasswordMissing The confirm password was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Confirm Password missing.",
+     *  "data": {}
+     * }
+     * 
+     * 
+     */
+    public function changesPassword(Request $request) {
+        if (!$request->user_id) {
+            $response['success'] = false;
+            $response['message'] = "User id missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if (!$request->old_password) {
+            $response['success'] = false;
+            $response['message'] = "Old Password missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if (!$request->new_password) {
+            $response['success'] = false;
+            $response['message'] = "New Password missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if (!$request->confirm_password) {
+            $response['success'] = false;
+            $response['message'] = "Confirm Password missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if ($request->new_password != $request->confirm_password) {
+            $response['success'] = false;
+            $response['message'] = "Confirm Password doesn't match.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+
+        $user = User::find($request->user_id);
+        if (Hash::check($request->old_password, $user->password)) {
+            $user->password = bcrypt($request->new_password);
+            $user->save();
+            $response['success'] = true;
+            $response['message'] = "Password Changed successfully.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Incorrect old password.";
             $response['data'] = [];
             return $this->jsonData($response);
         }
     }
 
-    public function banners(Request $request){
-        $banner = Banner::all();
-        echo "<pre>";
-        print_r($banner);
-        die;
+    /**
+     * @api {post} /api/change-password Change User Password
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName PostChangePassword
+     * @apiGroup User
+     * 
+     * @apiParam {String} email_id User email id.
+     * @apiParam {String} user_type User type(Staff=> 2, Customer => 3).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} message Password Changed successfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true,
+     * "message": "Link send successfully. please check your email.",
+     * "data": {}
+     * }
+     * 
+     *  
+     * @apiError UserTypeMissing The user type was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User type missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError EmailIdMissing The email id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Email id missing.",
+     *  "data": {}
+     * }
+     * 
+     * 
+     */
+    public function forgetPassword() {
+        if (!$request->email_id) {
+            $response['success'] = false;
+            $response['message'] = "Email id missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if (!$request->user_type) {
+            $response['success'] = false;
+            $response['message'] = "User type missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        $response['success'] = true;
+        $response['message'] = "Link send successfully. please check your email.";
+        $response['data'] = [];
     }
+
 }
