@@ -10,6 +10,7 @@ use App\Models\ResortImage;
 use App\Models\RoomType;
 use App\Models\ResortRoom;
 use App\Models\ResortRating;
+use App\Models\TempImages;
 
 class ResortController extends Controller {
 
@@ -45,7 +46,7 @@ class ResortController extends Controller {
             foreach ($resorts as $resort) {
                 $resortsArray[$i]['name'] = $resort->name;
                 $checked_status = $resort->is_active ? "checked" : '';
-                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='banner_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $resortsArray[$i]['action'] = $resort->id;
                 $i++;
             }
@@ -61,20 +62,41 @@ class ResortController extends Controller {
     public function create(Request $request) {
 
         if ($request->isMethod("post")) {
-            $banner_image = $request->file("banner_image");
-            $banner = Storage::disk('public')->put('Banner', $banner_image);
-            $banner_file_name = basename($banner);
 
-            $banner = $this->banner;
-            $banner->name = $banner_file_name;
-            $banner->is_active = $request->banner_status;
-            $banner->created_by = 1;
-            $banner->updated_by = 1;
+            $resort = $this->resort;
+            $resort->name = $request->resort_name;
+            $resort->contact_number = $request->contact_no;
+            $resort->description = $request->resort_description;
+            $resort->address_1 = $request->address;
+            $resort->pincode = $request->pin_code;
+            // $resort->name = $request->state;
+            // $resort->name = $request->district;
+            $resort->city_id = $request->city;
+            if($resort->save()){
+                if($request->room_types){
+                    foreach($request->room_types as $room){
+                        $resortRoom = new ResortRoom();
+                        $resortRoom->resort_id = $resort->id;
+                        $resortRoom->room_type_id = $room;
+                        $resortRoom->save();
+                    }
+                }
 
-            if ($banner->save()) {
-                return redirect()->route('admin.banner.add')->with('status', 'Banner has been added successfully.');
-            } else {
-                return redirect()->route('admin.banner.add')->with('error', 'Something went be wrong.');
+                $tempImages = TempImages::all();
+                if($tempImages){
+                    foreach($tempImages as $tempImage){
+                        $resortImage = new ResortImage();
+                        $resortImage->resort_id = $resort->id;
+                        $resortImage->image_name = $tempImage->name;
+                        $resortImage->is_active = 1;
+                        $resortImage->save();
+                        $tempImage->delete();
+                    }
+                }
+
+                return redirect()->route('admin.resort.index')->with('status', 'Resort has been added successfully.');
+            }else{
+                return redirect()->route('admin.resort.add')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
@@ -91,18 +113,25 @@ class ResortController extends Controller {
     }
 
     public function uploadImages(Request $request) {
-        $banner_image = $request->file("file");
-        $banner = Storage::disk('public')->put('Resort', $banner_image);
-        $banner_file_name = basename($banner);
-        return $banner_file_name;
+        
+        $resort_image = $request->file("file");
+        $resort = Storage::disk('public')->put('Resort', $resort_image);
+        if($resort){
+            $resort_file_name = basename($resort);
+            $tempImage = new TempImages();
+            $tempImage->name = $resort_file_name;
+            $tempImage->save();
+        }
+        
+        // dd($resort_file_name);
     }
 
-    public function updateBannerStatus(Request $request) {
+    public function updateStatus(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $banner = $this->banner->findOrFail($request->record_id);
-                $banner->is_active = $request->status;
-                if ($banner->save()) {
+                $resort = $this->resort->findOrFail($request->record_id);
+                $resort->is_active = $request->status;
+                if ($resort->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
                 }
                 return [];

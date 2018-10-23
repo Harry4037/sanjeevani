@@ -13,7 +13,7 @@ $(document).ready(function () {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            {"data": "banner"},
+            {"data": "name"},
             {"data": null,
                 sortable: false,
                 render: function (data, type, row, meta) {
@@ -30,14 +30,13 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", ".banner_status", function () {
-
+    $(document).on("click", ".resort_status", function () {
         var record_id = this.id;
         var th = $(this);
         var status = th.attr('data-status');
         var update_status = (status == '1') ? 0 : 1;
         $.ajax({
-            url: _baseUrl + '/admin/banner-status',
+            url: _baseUrl + '/admin/resort/update-status',
             type: 'post',
             data: {status: update_status, record_id: record_id},
             dataType: 'json',
@@ -58,14 +57,38 @@ $(document).ready(function () {
 
     });
 
-    $("#addBannerForm").validate({
+    $("#addResortForm").validate({
         rules: {
-            banner_image: {
+            resort_name: {
                 required: true
             },
-            banner_status: {
+            contact_no: {
                 required: true
-            }
+            },
+            room_types: {
+                required: true
+            },
+            resort_description: {
+                required: true
+            },
+            address: {
+                required: true
+            },
+            pin_code: {
+                required: true
+            },
+            state: {
+                required: true
+            },
+            district: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            city: {
+                required: true
+            },
         }
     });
 

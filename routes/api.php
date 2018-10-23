@@ -19,6 +19,7 @@ Route::namespace("Api")->group(function () {
     Route::post('forget-password', 'UserController@forgetPassword');
     Route::get('services-list', 'ServiceController@serviceListing');
     
+    
     Route::middleware('auth:api')->group(function () {
         Route::get('logout', 'AuthController@logout');
         Route::post('check-in', 'UserController@checkIn');
@@ -26,6 +27,7 @@ Route::namespace("Api")->group(function () {
         Route::post('update-profile', 'UserController@updateProfile');
         Route::post('change-password', 'UserController@changesPassword');
         Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
+        Route::get('resort-detail', 'ResortController@resortDetail');
         
     });
 });

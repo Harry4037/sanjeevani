@@ -93,6 +93,7 @@ class AuthController extends Controller {
      *
      * @apiParam {String} mobile_number Users mobile number.
      * @apiParam {String} otp OTP.
+     * @apiParam {String} user_type User type (Customer => 3 or Staff member => 2).
      *
      * @apiSuccess {String} success true 
      * @apiSuccess {String}   message OTP verified successfully.
