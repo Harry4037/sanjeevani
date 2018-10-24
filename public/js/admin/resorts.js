@@ -14,6 +14,7 @@ $(document).ready(function () {
                 }
             },
             {"data": "name"},
+            {"data": "contact_no"},
             {"data": null,
                 sortable: false,
                 render: function (data, type, row, meta) {
@@ -63,7 +64,8 @@ $(document).ready(function () {
                 required: true
             },
             contact_no: {
-                required: true
+                required: true,
+                number: true
             },
             room_types: {
                 required: true
@@ -86,12 +88,42 @@ $(document).ready(function () {
             city: {
                 required: true
             },
-            city: {
-                required: true
-            },
+            
         }
     });
-
+    
+    $("#editResortForm").validate({
+        rules: {
+            edit_resort_name: {
+                required: true
+            },
+            edit_contact_no: {
+                required: true,
+                number: true
+            },
+            edit_room_types: {
+                required: true
+            },
+            edit_resort_description: {
+                required: true
+            },
+            edit_address: {
+                required: true
+            },
+            edit_pin_code: {
+                required: true
+            },
+            edit_state: {
+                required: true
+            },
+            edit_district: {
+                required: true
+            },
+            edit_city: {
+                required: true
+            }
+        }
+    });
 
     Dropzone.options.myDropzone = {
         init: function () {

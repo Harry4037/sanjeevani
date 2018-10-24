@@ -6,54 +6,44 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Resort;
-use App\Models\ResortImage;
-use App\Models\RoomType;
-use App\Models\ResortRoom;
-use App\Models\ResortRating;
-use App\Models\TempImages;
+use App\Models\ResortNearbyPlace;
 
-class ResortController extends Controller {
 
-    public function __construct(Resort $resort, ResortImage $resortImage, RoomType $roomType, ResortRoom $resortRoom, ResortRating $resortRating) {
-        $this->resort = $resort;
-        $this->resortImage = $resortImage;
-        $this->roomType = $roomType;
-        $this->resortRoom = $resortRoom;
-        $this->resortRating = $resortRating;
-    }
+class NearbyController extends Controller {
 
-    public function index() {
+    public function index($id) {
+        $resort = Resort::find($id);
         $css = [
             'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
         $js = [
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'js/admin/resorts.js'
+            'js/admin/nearby.js'
         ];
-        return view('admin.resort.index', ['js' => $js, 'css' => $css]);
+        return view('admin.nearby.index', ['js' => $js, 'css' => $css, 'resort' => $resort]);
     }
 
-    public function resortList(Request $request) {
+    public function nearbyList(Request $request, $id) {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            
+            $nearbys = ResortNearbyPlace::where("resort_id", $id)->get();
 
-            $query = $this->resort->query();
-            $resorts = $query->get();
             $i = 0;
-            $resortsArray = [];
-            foreach ($resorts as $resort) {
-                $resortsArray[$i]['name'] = $resort->name;
-                $checked_status = $resort->is_active ? "checked" : '';
-                $resortsArray[$i]['contact_no'] = $resort->contact_number;
-                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a><a href="' . route('admin.nearby.index', $resort->id) . '" class="btn btn-success btn-xs"><i class="fa fa-map"></i> nearbyplaces </a>';
+            $nearbyArray = [];
+            foreach ($nearbys as $nearby) {
+                $nearbyArray[$i]['name'] = $nearby->name;
+                $checked_status = $nearby->is_active ? "checked" : '';
+                $nearbyArray[$i]['distance'] = $nearby->distance_from_resort;
+                $nearbyArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $nearby->id . " data-status=" . $nearby->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $nearbyArray[$i]['action'] = '';
                 $i++;
             }
-            $data['recordsTotal'] = $this->resort->count();
-            $data['recordsFiltered'] = $this->resort->count();
-            $data['data'] = $resortsArray;
+            $data['recordsTotal'] = ResortNearbyPlace::count();
+            $data['recordsFiltered'] = ResortNearbyPlace::count();
+            $data['data'] = $nearbyArray;
             return $data;
         } catch (\Exception $e) {
             dd($e);
