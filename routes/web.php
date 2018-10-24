@@ -64,5 +64,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/create', 'ResortController@create')->name('admin.resort.add');
         Route::post('/update-status', 'ResortController@updateStatus')->name('admin.resort.status-update');
         Route::post('/upload-images', 'ResortController@uploadImages')->name('admin.resort.upload-image');
+        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
+        Route::get('/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
     });
 });

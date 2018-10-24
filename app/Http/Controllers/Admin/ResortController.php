@@ -47,7 +47,7 @@ class ResortController extends Controller {
                 $resortsArray[$i]['name'] = $resort->name;
                 $checked_status = $resort->is_active ? "checked" : '';
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = $resort->id;
+                $resortsArray[$i]['action'] = '<a href="'.route('admin.resort.edit', $resort->id).'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
             $data['recordsTotal'] = $this->resort->count();
@@ -72,9 +72,9 @@ class ResortController extends Controller {
             // $resort->name = $request->state;
             // $resort->name = $request->district;
             $resort->city_id = $request->city;
-            if($resort->save()){
-                if($request->room_types){
-                    foreach($request->room_types as $room){
+            if ($resort->save()) {
+                if ($request->room_types) {
+                    foreach ($request->room_types as $room) {
                         $resortRoom = new ResortRoom();
                         $resortRoom->resort_id = $resort->id;
                         $resortRoom->room_type_id = $room;
@@ -83,8 +83,8 @@ class ResortController extends Controller {
                 }
 
                 $tempImages = TempImages::all();
-                if($tempImages){
-                    foreach($tempImages as $tempImage){
+                if ($tempImages) {
+                    foreach ($tempImages as $tempImage) {
                         $resortImage = new ResortImage();
                         $resortImage->resort_id = $resort->id;
                         $resortImage->image_name = $tempImage->name;
@@ -95,17 +95,17 @@ class ResortController extends Controller {
                 }
 
                 return redirect()->route('admin.resort.index')->with('status', 'Resort has been added successfully.');
-            }else{
+            } else {
                 return redirect()->route('admin.resort.add')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
-            "vendors/dropzone/dist/min/dropzone.min.css"
+            "vendors/dropzone/dist/dropzone.css"
         ];
         $js = [
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'vendors/dropzone/dist/min/dropzone.min.js',
+            'vendors/dropzone/dist/dropzone.js',
             'js/admin/resorts.js'
         ];
         $roomTypes = $this->roomType->all();
@@ -113,17 +113,24 @@ class ResortController extends Controller {
     }
 
     public function uploadImages(Request $request) {
-        
+
         $resort_image = $request->file("file");
         $resort = Storage::disk('public')->put('Resort', $resort_image);
-        if($resort){
+        if ($resort) {
             $resort_file_name = basename($resort);
             $tempImage = new TempImages();
             $tempImage->name = $resort_file_name;
             $tempImage->save();
+
+            return ["status" => true, "id" => $tempImage->id];
         }
-        
-        // dd($resort_file_name);
+    }
+
+    public function deleteImages(Request $request) {
+        $data = TempImages::find($request->record_id);
+        if ($data) {
+            $data->delete();
+        }
     }
 
     public function updateStatus(Request $request) {
@@ -140,6 +147,18 @@ class ResortController extends Controller {
         } catch (\Exception $e) {
             dd($e);
         }
+    }
+    
+    public function editResort(Request $request, $id){
+        $data = $this->resort->find($id);
+        $roomTypes = $this->roomType->all();
+        $js = [
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+            'vendors/dropzone/dist/dropzone.js',
+            'js/admin/resorts.js'
+        ];
+        return view('admin.resort.edit-banner', ['js' => $js, 'data' => $data,'roomTypes' => $roomTypes]);
     }
 
 }

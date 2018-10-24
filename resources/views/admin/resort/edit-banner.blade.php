@@ -12,25 +12,18 @@
             </div>
             <div class="x_content">
                 <br>
-                <div class="form-group">
-                    <label >Resort Images</label>
-                    <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
-                        @csrf
-                    </form>
-                </div>
-
-                <form class="form-horizontal form-label-left" action="{{ route('admin.resort.add') }}" method="post" id="addResortForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="" method="post" id="editResortForm" >
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name">
+                            <input type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name" value="{{ $data->name }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number">
+                            <input type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number" value="{{ $data->contact_number }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -49,19 +42,19 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description"></textarea>
+                            <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description">{{ $data->description }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+                            <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ $data->address_1 }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
+                            <input type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode" value="{{ $data->pincode }}">
                         </div>
                     </div>
                     <div class="form-group">

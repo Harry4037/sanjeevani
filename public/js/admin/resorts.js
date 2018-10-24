@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+
     var t = $('#list').DataTable({
         lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
         searching: true,
@@ -20,7 +20,7 @@ $(document).ready(function () {
                     return row['status'];
                 }
             },
-            {"data": null},
+            {"data": "action"},
         ]
     });
 
@@ -91,5 +91,38 @@ $(document).ready(function () {
             },
         }
     });
+
+
+    Dropzone.options.myDropzone = {
+        init: function () {
+            this.on("success", function (file, response) {
+                if (response.status) {
+                    var removeButton = Dropzone.createElement("<button id='" + response.id + "'>Remove file</button>");
+                    var _this = this;
+                    removeButton.addEventListener("click", function (e) {
+                        // Make sure the button click doesn't submit the form:
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // If you want to the delete the file on the server as well,
+                        // you can do the AJAX request here.
+                        var record_id = this.id;
+                        if (record_id > 0) {
+                            $.ajax({
+                                url: _baseUrl + '/admin/resort/delete-images',
+                                type: 'post',
+                                data: {record_id: record_id},
+                                success: function (res) {
+                                    // Remove the file preview.
+                                    _this.removeFile(file);
+                                }
+                            });
+                        }
+                    });
+                    file.previewElement.appendChild(removeButton);
+                }
+            });
+        }
+    };
 
 });
