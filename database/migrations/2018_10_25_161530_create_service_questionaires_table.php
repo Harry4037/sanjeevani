@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServicesTable extends Migration {
+class CreateServiceQuestionairesTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,13 +12,14 @@ class CreateServicesTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('service_questionaires', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable();
-            $table->enum('type', ['Housekeeping', 'Issue'])->nullable();
+            $table->bigInteger('service_id')->default(0);
+            $table->bigInteger('question_id')->default(0);
             $table->tinyInteger('is_active')->default(1);
-            $table->string('created_by')->default(0);
-            $table->string('updated_by')->default(0);
+            $table->bigInteger('domain_id')->default(0);
+            $table->string('created_by')->default(1);
+            $table->string('updated_by')->default(1);
             $table->timestamps();
         });
     }
@@ -29,7 +30,7 @@ class CreateServicesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('service_questionaires');
     }
 
 }

@@ -11,31 +11,29 @@ use App\Models\NearbyPlaceImage;
 
 class NearbyController extends Controller {
 
-    public function index($id) {
-        $resort = Resort::find($id);
-        $css = [
-            'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
-        ];
-        $js = [
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-        ];
-        return view('admin.nearby.index', ['js' => $js, 'css' => $css, 'resort' => $resort]);
+    public function index() {
+        $css = ['vendors/datatables.net-bs/css/dataTables.bootstrap.min.css'];
+        $js = ['vendors/datatables.net/js/jquery.dataTables.min.js',
+            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'];
+
+        return view('admin.nearby.index', ['js' => $js, 'css' => $css]);
     }
 
-    public function nearbyList(Request $request, $id) {
+    public function nearbyList(Request $request) {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
 
-            $nearbys = ResortNearbyPlace::where("resort_id", $id)->get();
+            $nearbys = ResortNearbyPlace::all();
 
             $i = 0;
             $nearbyArray = [];
             foreach ($nearbys as $nearby) {
+                $resort = Resort::find($nearby->resort_id);
                 $nearbyArray[$i]['name'] = $nearby->name;
                 $checked_status = $nearby->is_active ? "checked" : '';
                 $nearbyArray[$i]['distance'] = $nearby->distance_from_resort;
+                $nearbyArray[$i]['resort_name'] = $resort->name;
                 $nearbyArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='nearby_status' id=" . $nearby->id . " data-status=" . $nearby->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $nearbyArray[$i]['action'] = '<a href="' . route('admin.nearby.edit', $nearby->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
@@ -49,11 +47,12 @@ class NearbyController extends Controller {
         }
     }
 
-    public function create(Request $request, $id) {
+    public function create(Request $request) {
 
         if ($request->isMethod("post")) {
 
             $place = new ResortNearbyPlace();
+            $place->resort_id = $request->resort_id;
             $place->name = $request->place_name;
             $place->resort_id = $request->resort_id;
             $place->distance_from_resort = $request->distance;
@@ -73,7 +72,7 @@ class NearbyController extends Controller {
                     }
                 }
 
-                return redirect()->route('admin.nearby.index', $id)->with('status', 'Nearby place has been added successfully.');
+                return redirect()->route('admin.nearby.index')->with('status', 'Nearby place has been added successfully.');
             } else {
                 return redirect()->route('admin.nearby.add')->with('error', 'Something went be wrong.');
             }
@@ -86,8 +85,8 @@ class NearbyController extends Controller {
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
             'vendors/dropzone/dist/dropzone.js',
         ];
-        $resort = Resort::find($id);
-        return view('admin.nearby.create-nearby', ['js' => $js, 'css' => $css, 'resort' => $resort]);
+        $resorts = Resort::where("is_active", 1)->get();
+        return view('admin.nearby.create-nearby', ['js' => $js, 'css' => $css, 'resorts' => $resorts]);
     }
 
     public function uploadImages(Request $request) {
@@ -126,6 +125,7 @@ class NearbyController extends Controller {
     public function editNearby(Request $request, $id) {
         $data = ResortNearbyPlace::find($id);
         if ($request->isMethod("post")) {
+            $data->resort_id = $request->resort_id;
             $data->name = $request->place_name;
             $data->distance_from_resort = $request->distance;
             $data->description = $request->place_description;
@@ -138,17 +138,8 @@ class NearbyController extends Controller {
             }
         }
 
-        $css = [
-            "vendors/iCheck/skins/flat/green.css"
-        ];
-        $js = [
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'vendors/iCheck/icheck.min.js',
-            'vendors/dropzone/dist/dropzone.js',
-            'js/admin/resorts.js'
-        ];
-        return view('admin.nearby.edit-nearby', ['js' => $js, 'css' => $css, 'data' => $data]);
+        $resorts = Resort::where("is_active", 1)->get();
+        return view('admin.nearby.edit-nearby', ['data' => $data, 'resorts' => $resorts]);
     }
 
 }

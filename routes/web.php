@@ -55,6 +55,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::get('/services-list', 'ServiceController@servicesList')->name('admin.service.list');
     Route::match(['get', 'post'], '/service-add', 'ServiceController@serviceAdd')->name('admin.service.add');
     Route::post('/service-status', 'ServiceController@updateServiceStatus')->name('admin.service.status');
+    Route::match(['get','post'],'/service/edit/{id}', 'ServiceController@edit')->name('admin.service.edit');
     /**
      * Resort Management
      */
@@ -71,9 +72,9 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
      * Resort Nearby Management
      */
     Route::prefix('nearby')->group(function() {
-        Route::get('/{id}', 'NearbyController@index')->name('admin.nearby.index');
-        Route::get('/nearby-list/{id}', 'NearbyController@nearbyList')->name('admin.nearby.list');
-        Route::match(['get', 'post'], '/create/{id}', 'NearbyController@create')->name('admin.nearby.add');
+        Route::get('/', 'NearbyController@index')->name('admin.nearby.index');
+        Route::get('/nearby-list', 'NearbyController@nearbyList')->name('admin.nearby.list');
+        Route::match(['get', 'post'], '/create', 'NearbyController@create')->name('admin.nearby.add');
         Route::post('/update-status', 'NearbyController@updateStatus')->name('admin.nearby.status-update');
         Route::post('/upload-images', 'NearbyController@uploadImages')->name('admin.nearby.upload-image');
 //        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');

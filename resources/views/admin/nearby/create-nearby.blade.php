@@ -22,10 +22,23 @@
                         </div>
                     </div>
                 </div>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.nearby.add', $resort->id) }}" method="post" id="addNearbyForm" >
+                <form class="form-horizontal form-label-left" action="{{ route('admin.nearby.add') }}" method="post" id="addNearbyForm" >
                     @csrf
                     <div id="nearby_images_div"></div>
-                    <input type="hidden" name="resort_id" id="resort_id" value="{{ $resort->id }}">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="resort_id" id="resort_id">
+                                <option value="">Choose option</option>
+                                @if($resorts)
+                                @foreach($resorts as $resort)
+                                <option value="{{ $resort->id }}">{{ $resort->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -142,6 +155,9 @@
 
         $("#addNearbyForm").validate({
             rules: {
+                resort_id: {
+                    required: true
+                },
                 place_name: {
                     required: true
                 },

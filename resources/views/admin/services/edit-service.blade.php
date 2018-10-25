@@ -7,18 +7,18 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Add Service</h2>
+                <h2>Edit Service</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.service.add') }}" method="post" id="addServiceForm" >
+                <form class="form-horizontal form-label-left" action="{{ route('admin.service.edit', $data->id) }}" method="post" id="editServiceForm" >
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name">
+                            <input value="{{ $data->name }}" type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name">
                         </div>
                     </div>
                     <div class="form-group">
@@ -26,9 +26,13 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="service_type" id="service_type">
                                 <option value="">Choose option</option>
-                                @if($serviceType)
-                                @foreach($serviceType as $serviceT)
-                                <option value="{{ $serviceT->id }}">{{ $serviceT->name }}</option>
+                                @if($sTypes)
+                                @foreach($sTypes as $sType)
+                                <option value="{{ $sType->id }}"
+                                        @if($sType->id == $data->type_id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $sType->name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -39,9 +43,13 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_id" id="resort_id">
                                 <option value="">Choose option</option>
-                                @if($resort)
-                                @foreach($resort as $res)
-                                <option value="{{ $res->id }}">{{ $res->name }}</option>
+                                @if($resorts)
+                                @foreach($resorts as $resort)
+                                <option value="{{ $resort->id }}" 
+                                        @if($resort->id == $data->resort_id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $resort->name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -51,9 +59,9 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Questions</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
-                                @if($question)
-                                @foreach($question as $ques)
-                                <input class="flat" type="checkbox" name="service_question[]" value="{{ $ques->id }}"  > {{ $ques->name }}
+                                @if($questions)
+                                @foreach($questions as $question)
+                                <input class="flat" type="checkbox" name="service_question[]" value="{{ $question->id }}" @if(in_array($question->id, $qSArray)) {{ "checked" }} @endif > {{ $question->name }}
                                 <br>
                                 @endforeach
                                 @endif
@@ -81,7 +89,7 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $("#addServiceForm").validate({
+        $("#editServiceForm").validate({
             rules: {
                 service_name: {
                     required: true
