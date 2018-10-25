@@ -105,10 +105,10 @@ class ResortController extends Controller {
             return $this->jsonData($response);
         }
 
-        $resort = Resort::find($request->resort_id);
+        $resort = Resort::where(["id" => $request->resort_id, "is_active" => 1])->first();
         if ($resort) {
             $data['resort'] = $resort;
-            $images = ResortImage::where("resort_id", $request->resort_id)->get();
+            $images = ResortImage::where(["resort_id" => $request->resort_id, "is_active" => 1])->get();
             if ($images) {
                 $i = 0;
                 foreach ($images as $image) {

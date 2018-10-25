@@ -10,7 +10,6 @@ use App\Models\ResortImage;
 use App\Models\RoomType;
 use App\Models\ResortRoom;
 use App\Models\ResortRating;
-use App\Models\TempImages;
 
 class ResortController extends Controller {
 
@@ -70,8 +69,6 @@ class ResortController extends Controller {
             $resort->description = $request->resort_description;
             $resort->address_1 = $request->address;
             $resort->pincode = $request->pin_code;
-            // $resort->name = $request->state;
-            // $resort->name = $request->district;
             $resort->city_id = $request->city;
             if ($resort->save()) {
                 if ($request->room_types) {
@@ -82,16 +79,13 @@ class ResortController extends Controller {
                         $resortRoom->save();
                     }
                 }
-
-                $tempImages = TempImages::all();
-                if ($tempImages) {
-                    foreach ($tempImages as $tempImage) {
+                if ($request->resort_images) {
+                    foreach ($request->resort_images as $tempImage) {
                         $resortImage = new ResortImage();
                         $resortImage->resort_id = $resort->id;
-                        $resortImage->image_name = $tempImage->name;
+                        $resortImage->image_name = $tempImage;
                         $resortImage->is_active = 1;
                         $resortImage->save();
-                        $tempImage->delete();
                     }
                 }
 
@@ -116,16 +110,11 @@ class ResortController extends Controller {
     }
 
     public function uploadImages(Request $request) {
-
         $resort_image = $request->file("file");
         $resort = Storage::disk('public')->put('Resort', $resort_image);
         if ($resort) {
             $resort_file_name = basename($resort);
-            $tempImage = new TempImages();
-            $tempImage->name = $resort_file_name;
-            $tempImage->save();
-
-            return ["status" => true, "id" => $tempImage->id];
+            return ["status" => true, "id" => time(), "file_name" => $resort_file_name];
         }
     }
 
@@ -154,14 +143,14 @@ class ResortController extends Controller {
 
     public function editResort(Request $request, $id) {
         $data = $this->resort->find($id);
-        if($request->isMethod("post")){
+        if ($request->isMethod("post")) {
             $data->name = $request->edit_resort_name;
             $data->contact_number = $request->edit_contact_no;
             $data->description = $request->edit_resort_description;
             $data->address_1 = $request->edit_address;
             $data->pincode = $request->edit_pin_code;
             $data->city_id = $request->edit_city;
-            if($data->save()){
+            if ($data->save()) {
                 if ($request->edit_room_types) {
                     ResortRoom::where("resort_id", $data->id)->delete();
                     foreach ($request->edit_room_types as $room) {
@@ -171,14 +160,14 @@ class ResortController extends Controller {
                         $resortRoom->save();
                     }
                 }
-               return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.'); 
+                return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.');
             }
         }
-        
-        
-        $dataRooms  = $this->resortRoom->where("resort_id", $data->id)->get();
+
+
+        $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
         $roomArray = [];
-        foreach($dataRooms as $dataRoom){
+        foreach ($dataRooms as $dataRoom) {
             $roomArray[] = $dataRoom->room_type_id;
         }
         $roomTypes = $this->roomType->all();
@@ -192,7 +181,7 @@ class ResortController extends Controller {
             'vendors/dropzone/dist/dropzone.js',
             'js/admin/resorts.js'
         ];
-        return view('admin.resort.edit-banner', ['js' => $js, 'css' => $css, 'data' => $data, 'roomArray'  => $roomArray, 'roomTypes' => $roomTypes]);
+        return view('admin.resort.edit-banner', ['js' => $js, 'css' => $css, 'data' => $data, 'roomArray' => $roomArray, 'roomTypes' => $roomTypes]);
     }
 
 }

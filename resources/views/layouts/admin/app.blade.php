@@ -92,5 +92,7 @@
         <script src="{{ asset($js) }}"></script>
         @endforeach
         @endisset
+        
+        @yield('script')
     </body>
 </html>

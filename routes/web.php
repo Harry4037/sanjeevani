@@ -73,10 +73,10 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::prefix('nearby')->group(function() {
         Route::get('/{id}', 'NearbyController@index')->name('admin.nearby.index');
         Route::get('/nearby-list/{id}', 'NearbyController@nearbyList')->name('admin.nearby.list');
-//        Route::match(['get', 'post'], '/create', 'ResortController@create')->name('admin.resort.add');
-//        Route::post('/update-status', 'ResortController@updateStatus')->name('admin.resort.status-update');
-//        Route::post('/upload-images', 'ResortController@uploadImages')->name('admin.resort.upload-image');
+        Route::match(['get', 'post'], '/create/{id}', 'NearbyController@create')->name('admin.nearby.add');
+        Route::post('/update-status', 'NearbyController@updateStatus')->name('admin.nearby.status-update');
+        Route::post('/upload-images', 'NearbyController@uploadImages')->name('admin.nearby.upload-image');
 //        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
-//        Route::match(['get','post'],'/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
+        Route::match(['get','post'],'/edit/{id}', 'NearbyController@editNearby')->name('admin.nearby.edit');
     });
 });

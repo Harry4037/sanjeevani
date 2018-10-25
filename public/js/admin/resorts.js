@@ -129,29 +129,20 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button id='" + response.id + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "'>Remove file</button>");
+                    var hidden_image_html = "<input id='resort_image_input_"+ response.file_name +"' type='hidden' name='resort_images[]' value='"+ response.file_name +"'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
                         // Make sure the button click doesn't submit the form:
                         e.preventDefault();
                         e.stopPropagation();
-
-                        // If you want to the delete the file on the server as well,
-                        // you can do the AJAX request here.
                         var record_id = this.id;
-                        if (record_id > 0) {
-                            $.ajax({
-                                url: _baseUrl + '/admin/resort/delete-images',
-                                type: 'post',
-                                data: {record_id: record_id},
-                                success: function (res) {
-                                    // Remove the file preview.
-                                    _this.removeFile(file);
-                                }
-                            });
-                        }
+                        $("#resort_image_input_"+record_id).remove();
+                        _this.removeFile(file);
+                        
                     });
                     file.previewElement.appendChild(removeButton);
+                    $("#resort_images_div").append(hidden_image_html);
                 }
             });
         }

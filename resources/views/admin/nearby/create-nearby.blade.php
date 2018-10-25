@@ -7,51 +7,47 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Add Banner</h2>
+                <h2>Add Nearby</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
                 <div class="form-horizontal form-label-left">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Images</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Nearby Images</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                        <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
-                            @csrf
-                        </form>
+                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.nearby.upload-image') }}">
+                                @csrf
+                            </form>
                         </div>
                     </div>
                 </div>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.resort.add') }}" method="post" id="addResortForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.nearby.add', $resort->id) }}" method="post" id="addNearbyForm" >
                     @csrf
+                    <div id="nearby_images_div"></div>
+                    <input type="hidden" name="resort_id" id="resort_id" value="{{ $resort->id }}">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name">
+                            <input type="text" class="form-control" name="place_name" id="place_name" placeholder="Place Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Distance From Resort</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number">
+                            <input type="text" class="form-control" name="distance" id="distance" placeholder="Distance From Resort (in KM)">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Description</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <p style="padding: 5px;">
-                                @if($roomTypes)
-                                @foreach($roomTypes as $roomType)
-                                <input class="flat" type="checkbox" name="room_types[]" value="{{ $roomType->id }}"  > {{ $roomType->name }}
-                                @endforeach
-                                @endif
-                            <p>
+                            <textarea class="form-control" name="place_description" id="place_description" placeholder="Place Description"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Precautions</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description"></textarea>
+                            <textarea class="form-control" name="place_precaution" id="place_precaution" placeholder="Place Precaution"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -116,4 +112,70 @@
     </div>
 </div>
 
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        Dropzone.options.myDropzone = {
+            init: function () {
+                this.on("success", function (file, response) {
+                    if (response.status) {
+                        var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "'>Remove file</button>");
+                        var hidden_image_html = "<input id='nearby_image_input_" + response.id + "' type='hidden' name='nearby_images[]' value='" + response.file_name + "'>";
+                        var _this = this;
+                        removeButton.addEventListener("click", function (e) {
+                            // Make sure the button click doesn't submit the form:
+                            e.preventDefault();
+                            e.stopPropagation();
+                            var record_id = this.id;
+                            $("#nearby_image_input_" + record_id).remove();
+                            _this.removeFile(file);
+
+                        });
+                        file.previewElement.appendChild(removeButton);
+                        $("#nearby_images_div").append(hidden_image_html);
+                    }
+                });
+            }
+        };
+
+        $("#addNearbyForm").validate({
+            rules: {
+                place_name: {
+                    required: true
+                },
+                distance: {
+                    required: true,
+                    number: true
+                },
+                place_description: {
+                    required: true
+                },
+                place_precaution: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+                pin_code: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                district: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+
+            }
+        });
+    });
+
+
+
+</script>
 @endsection

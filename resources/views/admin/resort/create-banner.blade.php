@@ -15,7 +15,7 @@
                 <div class="form-horizontal form-label-left">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Images</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
                         <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
                             @csrf
                         </form>
@@ -24,6 +24,7 @@
                 </div>
                 <form class="form-horizontal form-label-left" action="{{ route('admin.resort.add') }}" method="post" id="addResortForm" enctype="multipart/form-data">
                     @csrf
+                    <div id="resort_images_div"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">

@@ -353,6 +353,113 @@
   },
   {
     "type": "post",
+    "url": "/api/nearby-list-detail",
+    "title": "Nearby place list & detail",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetNearbyListDetail",
+    "group": "Resort",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Nearby place found found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Json data.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"message\": \"Nearby places found.\",\n      \"data\": {\n      \"nearby\": [\n      {\n      \"id\": 1,\n      \"name\": \"Ever green Sweet\",\n      \"description\": \"Lore ipsum is the dummy text\",\n      \"distance\": 10,\n      \"precautions\": \"Lore ipsum is the dummy\",\n      \"address\": \"noida\",\n      \"images\": [\n      {\n      \"id\": \"http://127.0.0.1:8000/storage/Nearby/ExD6n45wLqb6U3NdEZ34vLjSDdntyUEWA9J6kUNu.jpeg\"\n      },\n      {\n      \"id\": \"http://127.0.0.1:8000/storage/Nearby/u5SKjA8LzMoIabk87njPSg5nTcFaAFgKkgZN2z1f.jpeg\"\n      }\n      ]\n      },\n      {\n      \"id\": 2,\n      \"name\": \"Testing\",\n      \"description\": \"jhkjhjh\",\n      \"distance\": 10,\n      \"precautions\": \"kjhkjhkjhkj\",\n      \"address\": \"noida\",\n      \"images\": [\n      {\n      \"id\": \"http://127.0.0.1:8000/storage/Nearby/qM3wyREsrYaOltoKitTxl75Jxd41Cqy5i8VZy95h.jpeg\"\n      }\n      ]\n      }\n      ]\n      }\n      }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Resort id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/NearbyController.php",
+    "groupTitle": "Resort"
+  },
+  {
+    "type": "post",
     "url": "/api/resort-detail",
     "title": "Resort detail",
     "header": {
