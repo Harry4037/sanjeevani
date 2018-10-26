@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
 
 class ForgetController extends Controller {
 
@@ -20,6 +21,12 @@ class ForgetController extends Controller {
     use SendsPasswordResetEmails;
 
     public function sendResetLinkEmail(Request $request) {
+//        $dd = Mail::send("emails.message", [], function($message){
+//           $message->to("om@mailinator.com", "jhon 007")->subject("tttttt"); 
+//        });
+//        
+//        
+//        dd($dd);
         $this->validateEmail($request);
 
         // We will send the password reset link to this user. Once we have attempted
@@ -29,9 +36,9 @@ class ForgetController extends Controller {
                 $request->only('email_id')
         );
 
-        return $response == Password::RESET_LINK_SENT ? $this->sendResetLinkResponse($response) : $this->sendResetLinkFailedResponse($request, $response);
+        return $response == Password::RESET_LINK_SENT ? $this->sendResetLinkResponse($request, $response) : $this->sendResetLinkFailedResponse($request, $response);
     }
-
+   
     protected function validateEmail(Request $request) {
         $this->validate($request, ['email_id' => 'required|email']);
     }

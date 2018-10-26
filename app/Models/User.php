@@ -27,10 +27,10 @@ class User extends Authenticatable {
         'password',
     ];
 
-//    public function getEmailForPasswordReset() {
-//        return $this->email_id;
-//    }
-//
+    public function getEmailForPasswordReset() {
+        return $this->email_id;
+    }
+
 //    public function routeNotificationFor($driver) {
 //        if (method_exists($this, $method = 'routeNotificationFor' . Str::studly($driver))) {
 //            return $this->{$method}();
@@ -45,5 +45,4 @@ class User extends Authenticatable {
 //                return $this->phone_number;
 //        }
 //    }
-
 }

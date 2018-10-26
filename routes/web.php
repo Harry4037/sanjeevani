@@ -21,7 +21,7 @@ Route::namespace("Admin")->prefix('admin')->group(function() {
     Route::post('/login', 'LoginController@login')->name('admin.login');
     Route::get('/logout', 'LoginController@logout')->name('admin.logout');
     Route::post('password/email', 'ForgetController@sendResetLinkEmail')->name('admin.password.email');
-//   Route::post('password/reset', 'ResetPasswordController@reset')->name('password.reset');
+   Route::post('password/reset', 'ResetPasswordController@resetPassword')->name('password.reset');
 });
 
 
