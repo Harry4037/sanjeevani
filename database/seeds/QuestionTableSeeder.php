@@ -13,9 +13,9 @@ class QuestionTableSeeder extends Seeder {
     public function run() {
         $typeArray = ["question 1", "question 2"];
         foreach ($typeArray as $type) {
-            DB::table('question_types')->insert([
+            DB::table('questions')->insert([
                 'name' => $type,
-                'question_type_id' => 1,
+                'question_type_id' => 1
             ]);
         }
     }
