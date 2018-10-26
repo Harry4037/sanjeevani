@@ -16,6 +16,9 @@
                 <a href="{{ route('admin.resort.index') }}"><i class="fa fa-home"></i> Resort Management</a>
             </li>
             <li>
+                <a href="{{ route('admin.nearby.index') }}"><i class="fa fa-car"></i> Nearby Place Management</a>
+            </li>
+            <li>
                 <a href="{{ route('admin.banner.index') }}"><i class="fa fa-flag-checkered"></i> Banner Management</a>
             </li>
             <li>

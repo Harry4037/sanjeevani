@@ -47,7 +47,7 @@ class ResortController extends Controller {
                 $checked_status = $resort->is_active ? "checked" : '';
                 $resortsArray[$i]['contact_no'] = $resort->contact_number;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a><a href="' . route('admin.nearby.index', $resort->id) . '" class="btn btn-success btn-xs"><i class="fa fa-map"></i> nearbyplaces </a>';
+                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
             $data['recordsTotal'] = $this->resort->count();

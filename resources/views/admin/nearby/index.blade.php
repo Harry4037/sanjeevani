@@ -9,12 +9,9 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Resorts Nearby<small>({{ $resort->name }})</small></h2>
-                <script>
-                    var resort_id = {{ $resort->id }};
-                </script>
+                <h2>Resorts Nearby</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.nearby.add', $resort->id) }}">Add Nearby</a>
+                    <a class="btn btn-success" href="{{ route('admin.nearby.add') }}">Add Nearby</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -25,6 +22,7 @@
                             <th>Sr.No.</th>
                             <th>Nearby Name</th>
                             <th>Distance</th>
+                            <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -48,7 +46,7 @@
             ordering: true,
             processing: true,
 //        serverSide: true,
-            ajax: _baseUrl + "/admin/nearby/nearby-list/" + resort_id,
+            ajax: _baseUrl + "/admin/nearby/nearby-list/",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -57,6 +55,7 @@
                 },
                 {"data": "name"},
                 {"data": "distance"},
+                {"data": "resort_name"},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

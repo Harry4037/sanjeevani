@@ -636,14 +636,28 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "user_id",
-            "description": "<p>User id.</p>"
+            "description": "<p>User id(required).</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "service_id",
-            "description": "<p>Service id.</p>"
+            "description": "<p>Service id(required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Service id(required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "question_id",
+            "description": "<p>question id's by comma separated.</p>"
           },
           {
             "group": "Parameter",
@@ -736,6 +750,309 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/service-request-accept",
+    "title": "Service Request Accept",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostServicerequestaccept",
+    "group": "Services",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "request_id",
+            "description": "<p>Service Request id(required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Staff user id(required).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Request accepted</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>blank object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"message\": \"Request accepted.\",\n      \"data\":{}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "RequestIdMissing",
+            "description": "<p>The request id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Request id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ServiceController.php",
+    "groupTitle": "Services"
+  },
+  {
+    "type": "get",
+    "url": "/api/service-request-list",
+    "title": "Service Request Listing",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostServicerequestlist",
+    "group": "Services",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Service id(required).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Service request found..</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"message\": \"Service request found.\",\n      \"data\":[\n      {\n      \"id\": 1,\n      \"service_name\": \"Air conditioner\",\n      \"service_type\": \"Housekeeping\",\n      \"comment\": \"hi test\",\n      \"user_info\":{\n      \"id\": 1,\n      \"salutation_id\": 0,\n      \"user_name\": \"Admin\",\n      \"password\": \"$2y$10$kPpsYwT0fw2mB4F9.cI1AeSBSi1XTndcCH3PLptRtjDebQZDShibK\",\n      \"first_name\": \"Admin\",\n      \"mid_name\": null,\n      \"last_name\": null,\n      \"booking_source_name\": null,\n      \"booking_id\": null,\n      \"resort_id\": 0,\n      \"total_room\": null,\n      \"package_detail_id\": 0,\n      \"gender\": \"M\",\n      \"email_id\": \"admin@mail.com\",\n      \"alternate_email_id\": null,\n      \"user_type_id\": 1,\n      \"designation_id\": 0,\n      \"department_id\": 0,\n      \"city_id\": 0,\n      \"language_id\": 0,\n      \"screen_name\": null,\n      \"date_of_joining\": \"2018-10-25 19:53:22\",\n      \"authority_id\": \"0\",\n      \"date_of_birth\": \"2018-10-25 19:53:22\",\n      \"is_user_loked\": 0,\n      \"profile_pic_path\": null,\n      \"aadhar_id\": null,\n      \"voter_id\": null,\n      \"check_in_date\": null,\n      \"check_out_date\": null,\n      \"mobile_number\": null,\n      \"other_contact_number\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"pincode\": null,\n      \"secuity_question\": null,\n      \"secuity_questio_answer\": null,\n      \"ref_time_zone_id\": null,\n      \"login_expiry_date\": null,\n      \"other_info\": null,\n      \"user_id_RA\": null,\n      \"is_active\": 1,\n      \"domain_id\": 0,\n      \"remember_token\": null,\n      \"otp\": null,\n      \"created_by\": \"0\",\n      \"updated_by\": \"0\",\n      \"created_at\": \"2018-10-25 19:53:22\",\n      \"updated_at\": null\n      }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"resort id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ServiceController.php",
+    "groupTitle": "Services"
+  },
+  {
+    "type": "post",
+    "url": "/api/change-password",
+    "title": "Change User Password",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostChangePassword",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email_id",
+            "description": "<p>User email id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_type",
+            "description": "<p>User type(Staff=&gt; 2, Customer =&gt; 3).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Password Changed successfully.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>blank object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"Link send successfully. please check your email.\",\n\"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserTypeMissing",
+            "description": "<p>The user type was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "EmailIdMissing",
+            "description": "<p>The email id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User type missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Email id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ResortController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
     "url": "/api/change-password",
     "title": "Change User Password",
     "header": {
@@ -903,113 +1220,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "email_id",
-            "description": "<p>User email id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "user_type",
-            "description": "<p>User type(Staff=&gt; 2, Customer =&gt; 3).</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "success",
-            "description": "<p>true</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Password Changed successfully.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "data",
-            "description": "<p>blank object.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"Link send successfully. please check your email.\",\n\"data\": {}\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserTypeMissing",
-            "description": "<p>The user type was missing.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "EmailIdMissing",
-            "description": "<p>The email id was missing.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User type missing.\",\n \"data\": {}\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Email id missing.\",\n \"data\": {}\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "post",
-    "url": "/api/change-password",
-    "title": "Change User Password",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>Users unique access-token.</p>"
-          }
-        ]
-      }
-    },
-    "name": "PostChangePassword",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "user_id",
             "description": "<p>User id.</p>"
           },
@@ -1231,7 +1441,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/ResortController.php",
+    "filename": "app/Http/Controllers/Api/UserController.php",
     "groupTitle": "User"
   },
   {
