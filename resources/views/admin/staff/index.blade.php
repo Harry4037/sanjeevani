@@ -8,9 +8,9 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Users</h2>
+                <h2>Staff</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.users.add') }}">Add User</a>
+                    <a class="btn btn-success" href="{{ route('admin.staff.add') }}">Add Staff</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -44,7 +44,7 @@
             ordering: true,
             processing: true,
 //        serverSide: true,
-            ajax: _baseUrl + "/admin/users-list",
+            ajax: _baseUrl + "/admin/staff/staff-list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -83,7 +83,7 @@
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/user-status',
+                url: _baseUrl + '/admin/staff/staff-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',

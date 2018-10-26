@@ -12,7 +12,7 @@
             </div>
             <div class="x_content">
                 <br>
-                
+
                 <form class="form-horizontal form-label-left" action="{{ route('admin.users.add') }}" method="post" id="addUserForm">
                     @csrf
                     <div class="form-group">
@@ -62,43 +62,29 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_id" id="resort_id">
                                 <option value="">Choose option</option>
-                                <option value="1">ABC</option>
-                                <option value="2">XYZ</option>
+                                @if($resorts)
+                                @foreach($resorts as $resort)
+                                <option value="{{ $resort->id }}">{{ $resort->name }}</option>
+                                @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
-<!--                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Type</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="resort_type_id" id="resort_type_id">
-                                <option value="">Choose option</option>
-                                <option value="1">Type 1</option>
-                                <option value="2">Type 2</option>
-                            </select>
-                        </div>
-                    </div>-->
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">No. of room</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="total_room" id="total_room">
-                                <option value="">Choose option</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                            </select>
+                            <input type="text" class="form-control" placeholder="Resort Room No." name="resort_room_id" id="resort_room_id">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="package_detail_id" id="package_detail_id">
+                            <select class="form-control" name="package_id" id="package_id">
                                 <option value="">Choose option</option>
-                                <option value="1">Package 1</option>
-                                <option value="2">Package 2</option>
-                                <option value="3">Package 3</option>
-                                <option value="4">Package 4</option>
+                                <option value="1">Health Package 1</option>
+                                <option value="2">Health 2</option>
+                                <option value="3">Health 3</option>
+                                <option value="4">Health 4</option>
                             </select>
                         </div>
                     </div>
@@ -108,7 +94,7 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div id="member_div">
-                        <div class="form-group">
+<!--                        <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Person Name</label>
                             <div class="col-md-2 col-sm-2 col-xs-2">
                                 <input type="text" class="form-control" name="person_name[]">
@@ -117,18 +103,18 @@
                             <div class="col-md-2 col-sm-2 col-xs-2">
                                 <input type="text" class="form-control" name="person_age[]">
                             </div>
-                        </div>
+                        </div>-->
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
-                            <button type="button" class="btn btn-primary" id="add_more_member">Add more</button>
+                            <button type="button" class="btn btn-primary" id="add_more_member">Add</button>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-<!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
+                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
                             <button type="reset" class="btn btn-primary">Reset</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
@@ -139,5 +125,70 @@
         </div>
     </div>
 </div>
+
+@endsection
+
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#check_in').daterangepicker({
+            singleDatePicker: true,
+            singleClasses: "picker_1",
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+
+        $('#check_out').daterangepicker({
+            singleDatePicker: true,
+            singleClasses: "picker_1"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+
+        $(document).on("click", "#add_more_member", function () {
+            var member_html = "<div class='form-group'><label class='control-label col-md-3 col-sm-3 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-2'><input type='text' class='form-control' name='person_name[]'>"
+                    + "</div><label class='control-label col-md-2 col-sm-2 col-xs-2'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-2'>"
+                    + "<input type='text' class='form-control' name='person_age[]'>"
+                    + "</div></div>";
+            $("#member_div").append(member_html);
+        });
+
+        $("#addUserForm").validate({
+            rules: {
+                booking_source_name: {
+                    required: true
+                },
+                booking_source_id: {
+                    required: true
+                },
+                user_name: {
+                    required: true
+                },
+                mobile_number: {
+                    required: true
+                },
+                email_id: {
+                    required: true
+                },
+                check_in: {
+                    required: true
+                },
+                check_out: {
+                    required: true
+                },
+                resort_id: {
+                    required: true
+                },
+                resort_room_id: {
+                    required: true
+                },
+                package_id: {
+                    required: true
+                }
+            }
+        });
+    });
+</script>
 
 @endsection

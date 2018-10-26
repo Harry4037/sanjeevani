@@ -5,16 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
 use Illuminate\Routing\Route;
 use Carbon\Carbon;
-use App\Models\UserBookingDetail;
-use App\Models\RoomBooking;
-use App\Models\BookingpeopleAccompany;
+use App\Models\User;
 use App\Models\Resort;
+use App\Models\UserBookingDetail;
 
-class UsersController extends Controller {
+class StaffController extends Controller {
 
     /**
      * Create a new authentication controller instance.
@@ -40,7 +37,7 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.users.index', ['js' => $js, 'css' => $css]);
+        return view('admin.staff.index', ['js' => $js, 'css' => $css]);
     }
 
     /**
@@ -59,7 +56,7 @@ class UsersController extends Controller {
             if ($searchKeyword) {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
-            $query->where("user_type_id", "!=", 1);
+            $query->where("user_type_id", "=", 2);
             $users = $query->get();
             $i = 0;
             $usersArray = [];
@@ -69,7 +66,7 @@ class UsersController extends Controller {
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$i]['view-deatil'] = route('admin.users.detail', ['id' => $user->id]);
+                $usersArray[$i]['view-deatil'] = route('admin.staff.detail', ['id' => $user->id]);
                 $i++;
             }
             $data['recordsTotal'] = $this->user->count();
@@ -115,68 +112,40 @@ class UsersController extends Controller {
     public function addUser(Request $request) {
 
         if ($request->isMethod("post")) {
-            $userExist = User::where("mobile_number", $request->mobile_number)
-                    ->where("user_type_id", 3)
+            $userExist = User::where("mobile_number", $request->staff_mobile_no)
+                    ->where("user_type_id", 2)
                     ->first();
+            
             if ($userExist) {
-                return redirect()->route('admin.users.add')->with('error', 'User already exists with thin mobile number');
+                return redirect()->route('admin.staff.add')->with('error', 'User already exists with thin mobile number');
             } else {
-                $name = explode(" ", $request->user_name);
+                $name = explode(" ", $request->staff_name);
 
                 $user = $this->user;
-                $user->user_type_id = 3;
-                $user->user_name = $request->user_name;
+                $user->user_type_id = 2;
+                $user->user_name = $request->staff_name;
                 $user->first_name = isset($name[0]) ? $name[0] : '';
                 $user->last_name = isset($name[1]) ? $name[1] : '';
-                $user->mobile_number = $request->mobile_number;
-                $user->email_id = $request->email_id;
+                $user->mobile_number = $request->staff_mobile_no;
+                $user->email_id = $request->staff_email;
                 $user->created_by = 1;
                 $user->updated_by = 1;
 
                 if ($user->save()) {
                     $userBooking = new UserBookingDetail();
-                    $userBooking->source_name = $request->booking_source_name;
-                    $userBooking->source_id = $request->booking_source_id;
+                    $userBooking->source_name = ' ';
+                    $userBooking->source_id = ' ';
                     $userBooking->user_id = $user->id;
                     $userBooking->resort_id = $request->resort_id;
-                    $userBooking->package_id = $request->package_id;
-                    if ($userBooking->save()) {
-                        $roomBooking = new RoomBooking();
-                        $roomBooking->booking_id = $userBooking->id;
-                        $roomBooking->resort_room_id = $request->resort_room_id;
-                        $check_in_date = Carbon::parse($request->check_in);
-                        $roomBooking->check_in = $check_in_date->format('Y-m-d');
-                        $check_out_date = Carbon::parse($request->check_out);
-                        $roomBooking->check_out = $check_out_date->format('Y-m-d');
-                        $roomBooking->save();
-                        if (!empty($request->person_name) && !empty($request->person_age)) {
-                            $i = 0;
-                            foreach ($request->person_name as $person_name) {
-                                $familyMember = new BookingpeopleAccompany();
-                                $familyMember->person_name = $person_name ? $person_name : ' ';
-                                $familyMember->person_age = $request->person_age[$i] ? $request->person_age[$i] : ' ';
-                                $familyMember->booking_id = $userBooking->id;
-                                $familyMember->save();
-                                $i++;
-                            }
-                        }
-                    }
-
-                    return redirect()->route('admin.users.add')->with('status', 'User has been added successfully');
+                    $userBooking->package_id = 0;
+                    $userBooking->save();
+                    return redirect()->route('admin.staff.add')->with('status', 'User has been added successfully');
                 }
             }
         }
 
-        $css = [
-            'vendors/bootstrap-daterangepicker/daterangepicker.css',
-        ];
-        $js = [
-            'vendors/moment/min/moment.min.js',
-            'vendors/bootstrap-daterangepicker/daterangepicker.js',
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-        ];
         $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.users.add-user', ['js' => $js, 'css' => $css, 'resorts' => $resorts]);
+        return view('admin.staff.add-user', ['resorts' => $resorts]);
     }
 
 }

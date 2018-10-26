@@ -8,7 +8,7 @@
             <li><a><i class="fa fa-users"></i> User Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('admin.users.index') }}">Users</a></li>
-                    <li><a href="#">Staff</a></li>
+                    <li><a href="{{ route('admin.staff.index') }}">Staff</a></li>
                     <!--<li><a href="index3.html">Dashboard3</a></li>-->
                 </ul>
             </li>
@@ -23,6 +23,9 @@
             </li>
             <li>
                 <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i> Services Management</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.jobs.index') }}"><i class="fa fa-hand-scissors-o"></i> Request Management</a>
             </li>
         </ul>
     </div>
