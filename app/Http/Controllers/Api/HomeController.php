@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Banner;
+use App\Models\RoomBooking;
+use App\Models\UserBookingDetail;
+use App\Models\Resort;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller {
 
     /**
-     * @api {post} /api/home Home
-     * @apiHeader {String} Authorization Users unique access-token.
+     * @api {get} /api/home Home
+     * @apiHeader {String} Accept application/json. 
      * @apiName PostHome
      * @apiGroup Home
      * 
@@ -23,91 +26,74 @@ class HomeController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-      {
-      "status": true,
-      "message": "service successfully access.",
-      "data": {
-      "user": {
-      "id": 3,
-      "salutation_id": 0,
-      "user_name": null,
-      "password": "$2y$10$e/EVCyHax2XGa9db94NY5O2qdBWRlLTnXvR2w5KQPlkOW9a.ocqOu",
-      "first_name": null,
-      "mid_name": null,
-      "last_name": null,
-      "booking_source_name": null,
-      "booking_id": null,
-      "resort_id": 0,
-      "total_room": null,
-      "package_detail_id": 0,
-      "gender": null,
-      "email_id": null,
-      "alternate_email_id": null,
-      "user_type_id": 3,
-      "designation_id": 0,
-      "department_id": 0,
-      "city_id": 0,
-      "language_id": 0,
-      "screen_name": null,
-      "date_of_joining": null,
-      "authority_id": "0",
-      "date_of_birth": null,
-      "is_user_loked": 0,
-      "profile_pic_path": null,
-      "aadhar_id": null,
-      "voter_id": null,
-      "check_in_date": null,
-      "check_out_date": null,
-      "mobile_number": "9999999999",
-      "other_contact_number": null,
-      "address1": null,
-      "address2": null,
-      "address3": null,
-      "pincode": null,
-      "secuity_question": null,
-      "secuity_questio_answer": null,
-      "ref_time_zone_id": null,
-      "login_expiry_date": null,
-      "other_info": null,
-      "user_id_RA": null,
-      "is_active": 1,
-      "domain_id": 0,
-      "remember_token": null,
-      "otp": "9999",
-      "created_by": "0",
-      "updated_by": "0",
-      "created_at": "2018-10-22 10:01:59",
-      "updated_at": "2018-10-22 10:01:59"
-      },
-      "banners": [
-      {
-      "id": 1,
-      "banner": "http://127.0.0.1:8000/storage/Banner/ScMwPfuAF6Yq1570eLzKVNNyLMiWVwdFjKkJywEK.jpeg"
-      }
-      ]
-      }
-      }
-     * 
-     * @apiError UserIdMissing The user id was missing.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
      * {
-     *  "status": false,
-     *  "message": "User id missing.",
-     *  "data": {}
+     * "status": true,
+     * "message": "service successfully access.",
+     * "data":{
+     * "user":{
+     * "id": 2,
+     * "user_name": null,
+     * "first_name": null,
+     * "mid_name": null,
+     * "last_name": null,
+     * "email_id": null,
+     * "user_type_id": 3,
+     * "address": null,
+     * "screen_name": null,
+     * "profile_pic_path": null,
+     * "mobile_number": "8077575835",
+     * "source_name": "Source Name",
+     * "source_id": "Source Id",
+     * "resort":{"id": 1, "name": "Parth Inn", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",…},
+     * "booking":{}
+     * },
+     * "banners":[]
      * }
+     * }
+     * 
      * 
      * 
      */
     public function home(Request $request) {
-        if (!$request->user_id) {
-            $response['success'] = false;
-            $response['message'] = "User Id missing.";
-            $response['data'] = [];
-            return $this->jsonData($response);
-        }
+//        if (!$request->user_id) {
+//            $response['success'] = false;
+//            $response['message'] = "User Id missing.";
+//            $response['data'] = [];
+//            return $this->jsonData($response);
+//        }
 
         $user = User::find($request->user_id);
+        if ($user) {
+            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
+            if ($userBookingDetail) {
+                $userResort = Resort::find($userBookingDetail->resort_id);
+                $userBooking = RoomBooking::find($userBookingDetail->id);
+            }
+            $userArray['id'] = $user->id;
+            $userArray['user_name'] = $user->user_name;
+            $userArray['first_name'] = $user->first_name;
+            $userArray['mid_name'] = $user->mid_name;
+            $userArray['last_name'] = $user->last_name;
+            $userArray['email_id'] = $user->email_id;
+            $userArray['user_type_id'] = $user->user_type_id;
+            $userArray['address'] = $user->address;
+            $userArray['screen_name'] = $user->screen_name;
+            $userArray['profile_pic_path'] = $user->profile_pic_path;
+            $userArray['mobile_number'] = $user->mobile_number;
+            $userArray['mobile_number'] = $user->mobile_number;
+            $userArray['source_name'] = $userBookingDetail->source_name ? $userBookingDetail->source_name : '';
+            $userArray['source_id'] = $userBookingDetail->source_id ? $userBookingDetail->source_id : '';
+            if (isset($userResort)) {
+                $userArray['resort'] = $userResort;
+            } else {
+                $userArray['resort'] = (object) [];
+            }
+            if (isset($userBooking)) {
+                $userArray['booking'] = $userBooking;
+            } else {
+                $userArray['booking'] = (object) [];
+            }
+        }
         $banners = Banner::all();
         $bannerArray = [];
         $i = 0;
@@ -120,7 +106,7 @@ class HomeController extends Controller {
         $response['success'] = true;
         $response['message'] = "service successfully access.";
         $response['data'] = [
-            "user" => $user,
+            "user" => isset($userArray) ? $userArray : (object) [],
             "banners" => $bannerArray
         ];
         return $this->jsonData($response);

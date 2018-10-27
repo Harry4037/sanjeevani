@@ -10,11 +10,13 @@ use App\Models\Question;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Models\ServiceType;
+use App\Models\Resort;
 
 class ServiceController extends Controller {
 
     /**
      * @api {get} /api/services-list  All services list
+     * @apiHeader {String} Accept application/json.
      * @apiName GetServiceList
      * @apiGroup Services
      * 
@@ -33,6 +35,7 @@ class ServiceController extends Controller {
      * "id": 1,
      * "name": "Room Cleaning",
      * "type": "Housekeeping",
+     * "icon": "",
      * "is_active": 1,
      * "created_by": "1",
      * "updated_by": "1",
@@ -43,6 +46,7 @@ class ServiceController extends Controller {
      * "id": 3,
      * "name": "Do Not Disturb",
      * "type": "Housekeeping",
+     * "icon": "",
      * "is_active": 1,
      * "created_by": "1",
      * "updated_by": "1",
@@ -55,6 +59,7 @@ class ServiceController extends Controller {
      * "id": 4,
      * "name": "Shower",
      * "type": "Issue",
+     * "icon": "",
      * "is_active": 1,
      * "created_by": "1",
      * "updated_by": "1",
@@ -133,12 +138,13 @@ class ServiceController extends Controller {
     /**
      * @api {post} /api/raise-service-request Raise service Request
      * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
      * @apiName PostRaiseServicerequest
      * @apiGroup Services
      * 
-     * @apiParam {String} user_id User id(required).
-     * @apiParam {String} service_id Service id(required).
-     * @apiParam {String} resort_id Service id(required).
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} service_id Service id*.
+     * @apiParam {String} resort_id Service id*.
      * @apiParam {String} question_id question id's by comma separated.
      * @apiParam {String} comment Comment.
      * 
@@ -154,14 +160,6 @@ class ServiceController extends Controller {
      * "data": {}
      * }
      * 
-     * @apiError CommentMissing The comment was missing.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *  "status": false,
-     *  "message": "Comment missing.",
-     *  "data": {}
-     * }
      * 
      * @apiError ServiceIdMissing The service id was missing.
      * @apiErrorExample Error-Response:
@@ -180,6 +178,41 @@ class ServiceController extends Controller {
      *  "message": "User id missing.",
      *  "data": {}
      * }
+     * @apiError ResortIdMissing The resort id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "resort id missing",
+     *  "data": {}
+     * }
+     * 
+     * @apiError InvalidService The service is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Invalid service",
+     *  "data": {}
+     * }
+     * 
+     * @apiError InvalidResort The resort is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Invalid resort",
+     *  "data": {}
+     * }
+     * 
+     * @apiError InvalidUser The user is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Invalid user",
+     *  "data": {}
+     * }
      * 
      * 
      */
@@ -192,7 +225,7 @@ class ServiceController extends Controller {
         }
         if (!$request->service_id) {
             $response['success'] = false;
-            $response['message'] = "resort id missing.";
+            $response['message'] = "service id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
@@ -203,6 +236,28 @@ class ServiceController extends Controller {
             return $this->jsonData($response);
         }
 
+        $user = User::find($request->user_id);
+        if (!$user) {
+            $response['success'] = false;
+            $response['message'] = "Invalid user.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+
+        $resort = Resort::find($request->resort_id);
+        if (!$resort) {
+            $response['success'] = false;
+            $response['message'] = "Invalid resort.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+        $service = Service::find($request->service_id);
+        if (!$service) {
+            $response['success'] = false;
+            $response['message'] = "Invalid service.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
         $serviceRequest = new ServiceRequest();
         $serviceRequest->resort_id = $request->resort_id;
         $serviceRequest->user_id = $request->user_id;
@@ -226,10 +281,11 @@ class ServiceController extends Controller {
     /**
      * @api {get} /api/service-request-list Service Request Listing
      * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
      * @apiName PostServicerequestlist
      * @apiGroup Services
      * 
-     * @apiParam {String} resort_id Service id(required).
+     * @apiParam {String} resort_id Resort id*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} message Service request found..
@@ -237,67 +293,67 @@ class ServiceController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-      {
-      "status": true,
-      "message": "Service request found.",
-      "data":[
-      {
-      "id": 1,
-      "service_name": "Air conditioner",
-      "service_type": "Housekeeping",
-      "comment": "hi test",
-      "user_info":{
-      "id": 1,
-      "salutation_id": 0,
-      "user_name": "Admin",
-      "password": "$2y$10$kPpsYwT0fw2mB4F9.cI1AeSBSi1XTndcCH3PLptRtjDebQZDShibK",
-      "first_name": "Admin",
-      "mid_name": null,
-      "last_name": null,
-      "booking_source_name": null,
-      "booking_id": null,
-      "resort_id": 0,
-      "total_room": null,
-      "package_detail_id": 0,
-      "gender": "M",
-      "email_id": "admin@mail.com",
-      "alternate_email_id": null,
-      "user_type_id": 1,
-      "designation_id": 0,
-      "department_id": 0,
-      "city_id": 0,
-      "language_id": 0,
-      "screen_name": null,
-      "date_of_joining": "2018-10-25 19:53:22",
-      "authority_id": "0",
-      "date_of_birth": "2018-10-25 19:53:22",
-      "is_user_loked": 0,
-      "profile_pic_path": null,
-      "aadhar_id": null,
-      "voter_id": null,
-      "check_in_date": null,
-      "check_out_date": null,
-      "mobile_number": null,
-      "other_contact_number": null,
-      "address1": null,
-      "address2": null,
-      "address3": null,
-      "pincode": null,
-      "secuity_question": null,
-      "secuity_questio_answer": null,
-      "ref_time_zone_id": null,
-      "login_expiry_date": null,
-      "other_info": null,
-      "user_id_RA": null,
-      "is_active": 1,
-      "domain_id": 0,
-      "remember_token": null,
-      "otp": null,
-      "created_by": "0",
-      "updated_by": "0",
-      "created_at": "2018-10-25 19:53:22",
-      "updated_at": null
-      }
+     * {
+     * "status": true,
+     * "message": "Service request found.",
+     * "data":[
+     * {
+     * "id": 1,
+     * "service_name": "Air conditioner",
+     * "service_type": "Housekeeping",
+     * "comment": "hi test",
+     * "user_info":{
+     * "id": 1,
+     * "salutation_id": 0,
+     * "user_name": "Admin",
+     * "password": "$2y$10$kPpsYwT0fw2mB4F9.cI1AeSBSi1XTndcCH3PLptRtjDebQZDShibK",
+     * "first_name": "Admin",
+     * "mid_name": null,
+     * "last_name": null,
+     * "booking_source_name": null,
+     * "booking_id": null,
+     * "resort_id": 0,
+     * "total_room": null,
+     * "package_detail_id": 0,
+     * "gender": "M",
+     * "email_id": "admin@mail.com",
+     * "alternate_email_id": null,
+     * "user_type_id": 1,
+     * "designation_id": 0,
+     * "department_id": 0,
+     * "city_id": 0,
+     * "language_id": 0,
+     * "screen_name": null,
+     * "date_of_joining": "2018-10-25 19:53:22",
+     * "authority_id": "0",
+     * "date_of_birth": "2018-10-25 19:53:22",
+     * "is_user_loked": 0,
+     * "profile_pic_path": null,
+     * "aadhar_id": null,
+     * "voter_id": null,
+     * "check_in_date": null,
+     * "check_out_date": null,
+     * "mobile_number": null,
+     * "other_contact_number": null,
+     * "address1": null,
+     * "address2": null,
+     * "address3": null,
+     * "pincode": null,
+     * "secuity_question": null,
+     * "secuity_questio_answer": null,
+     * "ref_time_zone_id": null,
+     * "login_expiry_date": null,
+     * "other_info": null,
+     * "user_id_RA": null,
+     * "is_active": 1,
+     * "domain_id": 0,
+     * "remember_token": null,
+     * "otp": null,
+     * "created_by": "0",
+     * "updated_by": "0",
+     * "created_at": "2018-10-25 19:53:22",
+     * "updated_at": null
+     * }
      * 
      * 
      * @apiError ResortIdMissing The resort id was missing.
@@ -306,6 +362,15 @@ class ServiceController extends Controller {
      * {
      *  "status": false,
      *  "message": "resort id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError InvalidResort The resort is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Invalid resort.",
      *  "data": {}
      * }
      * 
@@ -319,6 +384,13 @@ class ServiceController extends Controller {
             return $this->jsonData($response);
         }
 
+        $resort = Resort::find($request->resort_id);
+        if (!$resort) {
+            $response['success'] = false;
+            $response['message'] = "Invalid resort.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
         $newServices = ServiceRequest::where(["resort_id" => $request->resort_id, "request_status_id" => 1])->get();
 
         if ($newServices) {
@@ -350,82 +422,6 @@ class ServiceController extends Controller {
         }
     }
 
-    /**
-     * @api {post} /api/service-request-accept Service Request Accept
-     * @apiHeader {String} Authorization Users unique access-token.
-     * @apiName PostServicerequestaccept
-     * @apiGroup Services
-     * 
-     * @apiParam {String} request_id Service Request id(required).
-     * @apiParam {String} user_id Staff user id(required).
-     * 
-     * @apiSuccess {String} success true 
-     * @apiSuccess {String} message Request accepted
-     * @apiSuccess {JSON}   data blank object.
-     * 
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-      {
-      "status": true,
-      "message": "Request accepted.",
-      "data":{}
-     * 
-     * 
-     * @apiError RequestIdMissing The request id was missing.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *  "status": false,
-     *  "message": "Request id missing.",
-     *  "data": {}
-     * }
-     * 
-     * @apiError UserIdMissing The user id was missing.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *  "status": false,
-     *  "message": "User id missing.",
-     *  "data": {}
-     * }
-     * 
-     * 
-     */
-    public function requestAccept(Request $request) {
-        if (!$request->request_id) {
-            $response['success'] = false;
-            $response['message'] = "Request id missing.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
-        if (!$request->user_id) {
-            $response['success'] = false;
-            $response['message'] = "User id missing.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
 
-        $service = Service::find($request->request_id);
-        if ($service) {
-            $service->request_status_id = 2;
-            $service->accepted_by_id = $request->user_id;
-            if ($service->save()) {
-                $response['success'] = true;
-                $response['message'] = "Request accepted.";
-                $response['data'] = (object) [];
-                return $this->jsonData($response);
-            } else {
-                $response['success'] = false;
-                $response['message'] = "Something went be wrong.";
-                $response['data'] = (object) [];
-                return $this->jsonData($response);
-            }
-        } else {
-            $response['success'] = false;
-            $response['message'] = "Invalid requestng.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
-    }
 
 }

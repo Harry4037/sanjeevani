@@ -10,13 +10,13 @@ use App\Models\NearbyPlaceImage;
 class NearbyController extends Controller {
 
     /**
-     * @api {post} /api/nearby-list-detail Nearby place list & detail
-     * @apiHeader {String} Authorization Users unique access-token.
+     * @api {get} /api/nearby-list-detail Nearby place list & detail
+     * @apiHeader {String} Accept application/json.
      * @apiName GetNearbyListDetail
      * @apiGroup Resort
      * 
      * @apiParam {String} user_id User id.
-     * @apiParam {String} resort_id Resort id.
+     * @apiParam {String} resort_id Resort id*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} message Nearby place found found.
@@ -24,53 +24,44 @@ class NearbyController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-      {
-      "status": true,
-      "message": "Nearby places found.",
-      "data": {
-      "nearby": [
-      {
-      "id": 1,
-      "name": "Ever green Sweet",
-      "description": "Lore ipsum is the dummy text",
-      "distance": 10,
-      "precautions": "Lore ipsum is the dummy",
-      "address": "noida",
-      "images": [
-      {
-      "id": "http://127.0.0.1:8000/storage/Nearby/ExD6n45wLqb6U3NdEZ34vLjSDdntyUEWA9J6kUNu.jpeg"
-      },
-      {
-      "id": "http://127.0.0.1:8000/storage/Nearby/u5SKjA8LzMoIabk87njPSg5nTcFaAFgKkgZN2z1f.jpeg"
-      }
-      ]
-      },
-      {
-      "id": 2,
-      "name": "Testing",
-      "description": "jhkjhjh",
-      "distance": 10,
-      "precautions": "kjhkjhkjhkj",
-      "address": "noida",
-      "images": [
-      {
-      "id": "http://127.0.0.1:8000/storage/Nearby/qM3wyREsrYaOltoKitTxl75Jxd41Cqy5i8VZy95h.jpeg"
-      }
-      ]
-      }
-      ]
-      }
-      }
-     * 
-     * 
-     * @apiError UserIdMissing The user id was missing.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
      * {
-     *  "status": false,
-     *  "message": "User id missing.",
-     *  "data": {}
+     * "status": true,
+     * "message": "Nearby places found.",
+     * "data": {
+     * "nearby": [
+     * {
+     * "id": 1,
+     * "name": "Ever green Sweet",
+     * "description": "Lore ipsum is the dummy text",
+     * "distance": 10,
+     * "precautions": "Lore ipsum is the dummy",
+     * "address": "noida",
+     * "images": [
+     * {
+     * "id": "http://127.0.0.1:8000/storage/Nearby/ExD6n45wLqb6U3NdEZ34vLjSDdntyUEWA9J6kUNu.jpeg"
+     * },
+     * {
+     * "id": "http://127.0.0.1:8000/storage/Nearby/u5SKjA8LzMoIabk87njPSg5nTcFaAFgKkgZN2z1f.jpeg"
      * }
+     * ]
+     * },
+     * {
+     * "id": 2,
+     * "name": "Testing",
+     * "description": "jhkjhjh",
+     * "distance": 10,
+     * "precautions": "kjhkjhkjhkj",
+     * "address": "noida",
+     * "images": [
+     * {
+     * "id": "http://127.0.0.1:8000/storage/Nearby/qM3wyREsrYaOltoKitTxl75Jxd41Cqy5i8VZy95h.jpeg"
+     * }
+     * ]
+     * }
+     * ]
+     * }
+     * }
+     * 
      * 
      * @apiError ResortIdMissing The resort id was missing.
      * @apiErrorExample Error-Response:
@@ -84,12 +75,12 @@ class NearbyController extends Controller {
      * 
      */
     public function nearbyListDetail(Request $request) {
-        if (!$request->user_id) {
-            $response['success'] = false;
-            $response['message'] = "User id missing.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
+//        if (!$request->user_id) {
+//            $response['success'] = false;
+//            $response['message'] = "User id missing.";
+//            $response['data'] = (object) [];
+//            return $this->jsonData($response);
+//        }
         if (!$request->resort_id) {
             $response['success'] = false;
             $response['message'] = "Resort id missing.";
@@ -129,7 +120,7 @@ class NearbyController extends Controller {
         } else {
             $response['success'] = false;
             $response['message'] = "Nearby places not found.";
-            $response['data'] = (object) [];
+            $response['data'] = ["nearby" => []];
             return $this->jsonData($response);
         }
     }

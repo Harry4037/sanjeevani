@@ -53,6 +53,7 @@ class CreateUsersTable extends Migration {
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('otp')->nullable();
+            $table->text('oath_token')->nullable();
             $table->string('created_by')->default(0);
             $table->string('updated_by')->default(0);
             $table->timestamps();
