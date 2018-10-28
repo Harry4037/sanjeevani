@@ -39,6 +39,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::post('/user-status', 'UsersController@updateUserStatus')->name('admin.users.status');
     Route::match(['get', 'post'], '/user/add-user', 'UsersController@addUser')->name('admin.users.add');
     Route::get('/user/detail/{id}', 'UsersController@viewUser')->name('admin.users.detail');
+    Route::match(['get','post'],'/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
     /**
      * Users Management
      */

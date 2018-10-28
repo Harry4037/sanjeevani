@@ -69,7 +69,7 @@ class UsersController extends Controller {
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$i]['view-deatil'] = route('admin.users.detail', ['id' => $user->id]);
+                $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
             $data['recordsTotal'] = $this->user->count();
@@ -177,6 +177,81 @@ class UsersController extends Controller {
         ];
         $resorts = Resort::where("is_active", 1)->get();
         return view('admin.users.add-user', ['js' => $js, 'css' => $css, 'resorts' => $resorts]);
+    }
+
+    public function editUser(Request $request, $id) {
+        $user = User::find($id);
+        $userBooking = UserBookingDetail::where("user_id", $id)->first();
+        if($userBooking){
+            $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
+            $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
+        }
+        if ($request->isMethod("post")) {
+                $name = explode(" ", $request->user_name);
+
+                $user->user_name = $request->user_name;
+                $user->first_name = isset($name[0]) ? $name[0] : '';
+                $user->last_name = isset($name[1]) ? $name[1] : '';
+                $user->mobile_number = $request->mobile_number;
+                $user->email_id = $request->email_id;
+                $user->created_by = 1;
+                $user->updated_by = 1;
+
+                if ($user->save()) {
+                    UserBookingDetail::where("user_id", $user->id)->delete();
+                    $userBooking = new UserBookingDetail();
+                    $userBooking->source_name = $request->booking_source_name;
+                    $userBooking->source_id = $request->booking_source_id;
+                    $userBooking->user_id = $user->id;
+                    $userBooking->resort_id = $request->resort_id;
+                    $userBooking->package_id = $request->package_id;
+                    if ($userBooking->save()) {
+                        $roomBooking = new RoomBooking();
+                        $roomBooking->booking_id = $userBooking->id;
+                        $roomBooking->resort_room_id = $request->resort_room_id;
+                        $check_in_date = Carbon::parse($request->check_in);
+                        $roomBooking->check_in = $check_in_date->format('Y-m-d');
+                        $check_out_date = Carbon::parse($request->check_out);
+                        $roomBooking->check_out = $check_out_date->format('Y-m-d');
+                        $roomBooking->save();
+                        if (!empty($request->person_name) && !empty($request->person_age)) {
+                            $i = 0;
+                            foreach ($request->person_name as $person_name) {
+                                $familyMember = new BookingpeopleAccompany();
+                                $familyMember->person_name = $person_name ? $person_name : ' ';
+                                $familyMember->person_age = $request->person_age[$i] ? $request->person_age[$i] : ' ';
+                                $familyMember->booking_id = $userBooking->id;
+                                $familyMember->save();
+                                $i++;
+                            }
+                        }
+                    }
+
+                    return redirect()->route('admin.users.edit', $id)->with('status', 'User has been updated successfully');
+                }
+            
+        }
+
+        $css = [
+            'vendors/bootstrap-daterangepicker/daterangepicker.css',
+        ];
+        $js = [
+            'vendors/moment/min/moment.min.js',
+            'vendors/bootstrap-daterangepicker/daterangepicker.js',
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+        ];
+        $resorts = Resort::where("is_active", 1)->get();
+        return view('admin.users.edit-user', [
+            'js' => $js,
+            'css' => $css,
+            'resorts' => $resorts,
+            'user' => $user,
+            'userBooking' => $userBooking,
+            'roomBooking' => isset($roomBooking) ? $roomBooking : [],
+            'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
+            
+                ]
+        );
     }
 
 }

@@ -65,33 +65,33 @@ class HomeController extends Controller {
         $user = User::find($request->user_id);
         if ($user) {
             $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
+            $userRoom = [];
             if ($userBookingDetail) {
                 $userResort = Resort::find($userBookingDetail->resort_id);
-                $userBooking = RoomBooking::find($userBookingDetail->id);
+                $userRoom = RoomBooking::find($userBookingDetail->id);
             }
-            $userArray['id'] = $user->id;
+            $userArray['id'] = $user->id;                                                                                                                                                                                                                                                                                                                                                                                   
             $userArray['user_name'] = $user->user_name;
             $userArray['first_name'] = $user->first_name;
             $userArray['mid_name'] = $user->mid_name;
             $userArray['last_name'] = $user->last_name;
             $userArray['email_id'] = $user->email_id;
-            $userArray['user_type_id'] = $user->user_type_id;
+            $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
             $userArray['address'] = $user->address;
             $userArray['screen_name'] = $user->screen_name;
             $userArray['profile_pic_path'] = $user->profile_pic_path;
             $userArray['mobile_number'] = $user->mobile_number;
             $userArray['mobile_number'] = $user->mobile_number;
-            $userArray['source_name'] = $userBookingDetail->source_name ? $userBookingDetail->source_name : '';
-            $userArray['source_id'] = $userBookingDetail->source_id ? $userBookingDetail->source_id : '';
+            $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
+            $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
+            $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
+            $userArray['room_type'] = "Delux";
+            $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
+            $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;
             } else {
                 $userArray['resort'] = (object) [];
-            }
-            if (isset($userBooking)) {
-                $userArray['booking'] = $userBooking;
-            } else {
-                $userArray['booking'] = (object) [];
             }
         }
         $banners = Banner::all();

@@ -60,13 +60,7 @@
                         return row['status'];
                     }
                 },
-                {"data": null,
-                    sortable: false,
-                    render: function (data, type, row, meta) {
-                        var url = row['view-deatil'];
-                        return "<a class='btn btn-info' href='" + url + "'>view</>";
-                    }
-                },
+                {"data": "action"},
             ]
         });
 

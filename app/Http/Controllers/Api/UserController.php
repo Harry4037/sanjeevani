@@ -91,6 +91,12 @@ class UserController extends Controller {
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
+        if ($request->user_id != $request->user()->id) {
+            $response['success'] = false;
+            $response['message'] = "Unauthorized user.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
         if (!$request->aadhar_id) {
             $response['success'] = false;
             $response['message'] = "Aadhar id document missing.";
@@ -104,7 +110,7 @@ class UserController extends Controller {
             return $this->jsonData($response);
         }
 
-
+        
         $user = User::find($request->user_id);
         if (!$user) {
             $response['success'] = false;
@@ -194,6 +200,12 @@ class UserController extends Controller {
         if (!$request->user_id) {
             $response['success'] = false;
             $response['message'] = "User id missing.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+        if ($request->user_id != $request->user()->id) {
+            $response['success'] = false;
+            $response['message'] = "Unauthorized user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
@@ -308,6 +320,12 @@ class UserController extends Controller {
             $response['success'] = false;
             $response['message'] = "User id missing.";
             $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if ($request->user_id != $request->user()->id) {
+            $response['success'] = false;
+            $response['message'] = "Unauthorized user.";
+            $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->new_password) {

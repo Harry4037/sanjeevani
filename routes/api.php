@@ -21,6 +21,7 @@ Route::namespace("Api")->group(function () {
     Route::get('resort-detail', 'ResortController@resortDetail');
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
     Route::get('home', 'HomeController@home');
+    Route::get('service-request-list', 'ServiceController@serviceRequestListing');
 
     Route::middleware('auth:api')->group(function () {
         Route::get('logout', 'AuthController@logout');
@@ -28,8 +29,7 @@ Route::namespace("Api")->group(function () {
         Route::post('check-in', 'UserController@checkIn');
         Route::post('update-profile', 'UserController@updateProfile');
         Route::post('change-password', 'UserController@changesPassword');
-        Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
-        Route::get('service-request-list', 'ServiceController@serviceRequestListing');
+        Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');    
         Route::post('service-request-accept', 'ServiceController@requestAccept');
     });
 });

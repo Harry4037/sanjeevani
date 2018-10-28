@@ -16,7 +16,7 @@ class ServiceController extends Controller {
 
     /**
      * @api {get} /api/services-list  All services list
-     * @apiHeader {String} Accept application/json.
+     * @apiHeader {String} Accept application/json. 
      * @apiName GetServiceList
      * @apiGroup Services
      * 
@@ -140,7 +140,7 @@ class ServiceController extends Controller {
      * @apiHeader {String} Authorization Users unique access-token.
      * @apiHeader {String} Accept application/json.
      * @apiName PostRaiseServicerequest
-     * @apiGroup Services
+     * @apiGroup Staff Service
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} service_id Service id*.
@@ -223,6 +223,12 @@ class ServiceController extends Controller {
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
+        if ($request->user_id != $request->user()->id) {
+            $response['success'] = false;
+            $response['message'] = "Unauthorized user.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
         if (!$request->service_id) {
             $response['success'] = false;
             $response['message'] = "service id missing.";
@@ -280,10 +286,9 @@ class ServiceController extends Controller {
 
     /**
      * @api {get} /api/service-request-list Service Request Listing
-     * @apiHeader {String} Authorization Users unique access-token.
      * @apiHeader {String} Accept application/json.
      * @apiName PostServicerequestlist
-     * @apiGroup Services
+     * @apiGroup Staff Service
      * 
      * @apiParam {String} resort_id Resort id*.
      * 

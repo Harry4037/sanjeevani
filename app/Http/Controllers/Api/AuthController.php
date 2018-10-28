@@ -10,11 +10,12 @@ use Validator;
 use Carbon\Carbon;
 use App\Models\UserBookingDetail;
 use App\Models\Resort;
+use App\Models\RoomBooking;
 
 class AuthController extends Controller {
 
     /**
-     * @api {post} /api/send-otp  Send OTP to the entered mobile number
+     * @api {post} /api/send-otp  Send OTP
      * @apiHeader {String} Accept application/json. 
      * @apiName PostSendOtp
      * @apiGroup Auth
@@ -275,24 +276,24 @@ class AuthController extends Controller {
         $user = $request->user();
         $tokenResult = $user->createToken('SanjeevaniToken');
         $token = $tokenResult->token;
-        $token->expires_at = Carbon::now()->addWeeks(1);
+//        $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
-        $user['access_token'] = $tokenResult->accessToken;
-        $user['token_type'] = "Bearer";
-//        $user['expires_at'] = Carbon::parse(
-//                        $tokenResult->token->expires_at
-//                )->toDateTimeString();
+
         $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
+        $userRoom = [];
         if ($userBookingDetail) {
             $userResort = Resort::find($userBookingDetail->resort_id);
+            $userRoom = RoomBooking::find($userBookingDetail->id);
         }
         $userArray['id'] = $user->id;
+        $user['access_token'] = $tokenResult->accessToken;
+        $user['token_type'] = "Bearer";
         $userArray['user_name'] = $user->user_name;
         $userArray['first_name'] = $user->first_name;
         $userArray['mid_name'] = $user->mid_name;
         $userArray['last_name'] = $user->last_name;
         $userArray['email_id'] = $user->email_id;
-        $userArray['user_type_id'] = $user->user_type_id;
+        $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
         $userArray['address'] = $user->address;
         $userArray['screen_name'] = $user->screen_name;
         $userArray['profile_pic_path'] = $user->profile_pic_path;
@@ -300,8 +301,12 @@ class AuthController extends Controller {
         $userArray['mobile_number'] = $user->mobile_number;
         $userArray['token_type'] = $user->token_type;
         $userArray['access_token'] = $user->access_token;
-        $userArray['source_name'] = $userBookingDetail->source_name ? $userBookingDetail->source_name : '';
-        $userArray['source_id'] = $userBookingDetail->source_id ? $userBookingDetail->source_id : '';
+        $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
+        $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
+        $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
+        $userArray['room_type'] = "Delux";
+        $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
+        $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
         if (isset($userResort)) {
             $userArray['resort'] = $userResort;
         } else {
