@@ -140,7 +140,7 @@ class ServiceController extends Controller {
      * @apiHeader {String} Authorization Users unique access-token.
      * @apiHeader {String} Accept application/json.
      * @apiName PostRaiseServicerequest
-     * @apiGroup Staff Service
+     * @apiGroup Services
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} service_id Service id*.
@@ -426,7 +426,84 @@ class ServiceController extends Controller {
             return $this->jsonData($response);
         }
     }
+    
+    /**
+     * @api {post} /api/service-request-accept Service Request Accept
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostServicerequestaccept
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} request_id Service Request id(required).
+     * @apiParam {String} user_id Staff user id(required).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} message Request accepted
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+      {
+      "status": true,
+      "message": "Request accepted.",
+      "data":{}
+     * 
+     * 
+     * @apiError RequestIdMissing The request id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Request id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User id missing.",
+     *  "data": {}
+     * }
+     * 
+     * 
+     */
+    public function requestAccept(Request $request) {
+        if (!$request->request_id) {
+            $response['success'] = false;
+            $response['message'] = "Request id missing.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+        if (!$request->user_id) {
+            $response['success'] = false;
+            $response['message'] = "User id missing.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
 
-
+        $service = Service::find($request->request_id);
+        if ($service) {
+            $service->request_status_id = 2;
+            $service->accepted_by_id = $request->user_id;
+            if ($service->save()) {
+                $response['success'] = true;
+                $response['message'] = "Request accepted.";
+                $response['data'] = (object) [];
+                return $this->jsonData($response);
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Something went be wrong.";
+                $response['data'] = (object) [];
+                return $this->jsonData($response);
+            }
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Invalid requestng.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+    }
 
 }
