@@ -16,6 +16,7 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
+            $table->string('icon')->nullable();
             $table->tinyInteger('type_id')->default(1);
             $table->tinyInteger('resort_id')->default(1);
             $table->tinyInteger('is_active')->default(1);

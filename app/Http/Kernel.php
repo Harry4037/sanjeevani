@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            'oauth_exception',
             'throttle:60,1',
             'bindings',
         ],
@@ -61,5 +62,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'adminGuest' => \App\Http\Middleware\RedirectIfAdminAuthenticated::class,
+        'oauth_exception' => \App\Http\Middleware\oAuthExceptionHandler::class,
     ];
 }

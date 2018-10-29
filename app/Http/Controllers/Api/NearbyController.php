@@ -19,6 +19,7 @@ class NearbyController extends Controller {
      * @apiParam {String} resort_id Resort id*.
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message Nearby place found found.
      * @apiSuccess {JSON}   data Json data.
      * 
@@ -83,6 +84,7 @@ class NearbyController extends Controller {
 //        }
         if (!$request->resort_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Resort id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -114,11 +116,13 @@ class NearbyController extends Controller {
             }
 
             $response['success'] = true;
+            $response['status_code'] = 200;
             $response['message'] = "Nearby places found.";
             $response['data'] = $data;
             return $this->jsonData($response);
         } else {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Nearby places not found.";
             $response['data'] = ["nearby" => []];
             return $this->jsonData($response);

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::namespace("Api")->group(function () {
     Route::post('send-otp', 'AuthController@signup');
     Route::post('verify-otp', 'AuthController@login');
+    Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');
     Route::get('services-list', 'ServiceController@serviceListing');
     Route::get('resort-detail', 'ResortController@resortDetail');

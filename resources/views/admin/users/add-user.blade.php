@@ -87,7 +87,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_id" id="resort_room_id">
-                                
+
                             </select>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div id="member_div">
-   
+
                     </div>
                     <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
@@ -140,13 +140,21 @@
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_1",
+//            startDate: moment().startOf('hour'),
+//            locale: {
+//                format: 'DD/M/YYYY'
+//            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
 
         $('#check_out').daterangepicker({
             singleDatePicker: true,
-            singleClasses: "picker_1"
+            singleClasses: "picker_1",
+//            startDate: moment().startOf('hour'),
+//            locale: {
+//                format: 'DD/M/YYYY'
+//            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -212,7 +220,7 @@
                 return false;
             } else {
                 $.ajax({
-                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort +'/'+ resort_room ,
+                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
                     type: 'get',
                     dataType: 'html',
                     success: function (res) {

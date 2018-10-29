@@ -102,13 +102,41 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="resort_room_type" id="resort_room_type">
+                                <option value="">Choose option</option>
+                                @if($roomTypes)
+                                @foreach($roomTypes as $roomType)
+                                <option value="{{ $roomType->id }}"
+                                        @if(isset($roomBooking->room_type_id))
+                                        @if($roomType->id == $roomBooking->room_type_id)
+                                        {{ "selected" }}
+                                        @endif
+                                        @endif
+
+                                        >{{ $roomType->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($roomBooking->resort_room_id))
-                            <input value="{{ $roomBooking->resort_room_id }}" type="text" class="form-control" placeholder="Resort Room No." name="resort_room_id" id="resort_room_id">
-                            @else
-                            <input type="text" class="form-control" placeholder="Resort Room No." name="resort_room_id" id="resort_room_id">
-                            @endif
+                            <select class="form-control" name="resort_room_id" id="resort_room_id">
+                                @if($resortRooms)
+                                @foreach($resortRooms as $resortRoom)
+                                <option value="{{ $resortRoom->id }}"
+                                        @if(isset($roomBooking->room_room_id))
+                                        @if($resortRoom->id == $roomBooking->room_room_id)
+                                        {{ "selected" }}
+                                        @endif
+                                        @endif
+                                        >{{ $resortRoom->room_no }}</option>
+                                @endforeach
+                                @endif
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -174,13 +202,19 @@
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_1",
+//            locale: {
+//                format: 'DD/M/YYYY'
+//            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
 
         $('#check_out').daterangepicker({
             singleDatePicker: true,
-            singleClasses: "picker_1"
+            singleClasses: "picker_1",
+//            locale: {
+//                format: 'DD/M/YYYY'
+//            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -226,6 +260,34 @@
                     required: true
                 }
             }
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).on("change", "#resort_room_type", function () {
+            var resort = $("#resort_id :selected").val();
+            var resort_room = $("#resort_room_type :selected").val();
+            if (!resort) {
+                alert("Please select resort.")
+                return false;
+            } else if (!resort_room) {
+                alert("Please select resort room type.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (res) {
+                        $("#resort_room_id").html(res);
+                    }
+                });
+            }
+
         });
     });
 </script>

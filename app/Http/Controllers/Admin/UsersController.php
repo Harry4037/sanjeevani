@@ -13,6 +13,8 @@ use App\Models\UserBookingDetail;
 use App\Models\RoomBooking;
 use App\Models\BookingpeopleAccompany;
 use App\Models\Resort;
+use App\Models\RoomType;
+use App\Models\ResortRoom;
 
 class UsersController extends Controller {
 
@@ -143,6 +145,7 @@ class UsersController extends Controller {
                     if ($userBooking->save()) {
                         $roomBooking = new RoomBooking();
                         $roomBooking->booking_id = $userBooking->id;
+                        $roomBooking->room_type_id = $request->resort_room_type;
                         $roomBooking->resort_room_id = $request->resort_room_id;
                         $check_in_date = Carbon::parse($request->check_in);
                         $roomBooking->check_in = $check_in_date->format('Y-m-d');
@@ -183,9 +186,11 @@ class UsersController extends Controller {
     public function editUser(Request $request, $id) {
         $user = User::find($id);
         $userBooking = UserBookingDetail::where("user_id", $id)->first();
+        $roomTypes = RoomType::where("is_active", 1)->get();
         if($userBooking){
             $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
             $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
+            $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id, "room_type_id" => $roomBooking->room_type_id])->get();
         }
         if ($request->isMethod("post")) {
                 $name = explode(" ", $request->user_name);
@@ -199,23 +204,31 @@ class UsersController extends Controller {
                 $user->updated_by = 1;
 
                 if ($user->save()) {
-                    UserBookingDetail::where("user_id", $user->id)->delete();
-                    $userBooking = new UserBookingDetail();
+                    $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
+                    if(!$userBooking){
+                        $userBooking = new UserBookingDetail();
+                    }
                     $userBooking->source_name = $request->booking_source_name;
                     $userBooking->source_id = $request->booking_source_id;
                     $userBooking->user_id = $user->id;
                     $userBooking->resort_id = $request->resort_id;
                     $userBooking->package_id = $request->package_id;
                     if ($userBooking->save()) {
-                        $roomBooking = new RoomBooking();
+                        $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
+                        if(!$roomBooking){
+                            $roomBooking = new RoomBooking();
+                        }
                         $roomBooking->booking_id = $userBooking->id;
+                        $roomBooking->room_type_id = $request->resort_room_type;
                         $roomBooking->resort_room_id = $request->resort_room_id;
                         $check_in_date = Carbon::parse($request->check_in);
                         $roomBooking->check_in = $check_in_date->format('Y-m-d');
                         $check_out_date = Carbon::parse($request->check_out);
                         $roomBooking->check_out = $check_out_date->format('Y-m-d');
                         $roomBooking->save();
+                        
                         if (!empty($request->person_name) && !empty($request->person_age)) {
+                            BookingpeopleAccompany::where("booking_id", $userBooking->id)->delete();
                             $i = 0;
                             foreach ($request->person_name as $person_name) {
                                 $familyMember = new BookingpeopleAccompany();
@@ -246,8 +259,10 @@ class UsersController extends Controller {
             'js' => $js,
             'css' => $css,
             'resorts' => $resorts,
+            'roomTypes' => $roomTypes,
             'user' => $user,
             'userBooking' => $userBooking,
+            'resortRooms' => isset($resortRooms) ? $resortRooms : [],
             'roomBooking' => isset($roomBooking) ? $roomBooking : [],
             'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
             

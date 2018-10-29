@@ -26,6 +26,7 @@ class UserController extends Controller {
      * @apiParam {File} other_id User other document.
      *
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String}   message User check-in successfully.
      * @apiSuccess {JSON}   data blank array.
      * @apiSuccessExample {json} Success-Response:
@@ -87,33 +88,38 @@ class UserController extends Controller {
     public function checkIn(Request $request) {
         if (!$request->user_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "User Id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if ($request->user_id != $request->user()->id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Unauthorized user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->aadhar_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Aadhar id document missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->hasFile('aadhar_id')) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "aadhar id not valid file type.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
 
-        
+
         $user = User::find($request->user_id);
         if (!$user) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -121,6 +127,7 @@ class UserController extends Controller {
             if ($request->other_id) {
                 if (!$request->hasFile('other_id')) {
                     $response['success'] = false;
+                    $response['status_code'] = 404;
                     $response['message'] = "other id not valid file type.";
                     $response['data'] = (object) [];
                     return $this->jsonData($response);
@@ -139,11 +146,13 @@ class UserController extends Controller {
             $user->aadhar_id = $aadhar_file_name;
             if ($user->save()) {
                 $response['success'] = true;
+                $response['status_code'] = 200;
                 $response['message'] = "User check-in successfully.";
                 $response['data'] = $user;
                 return $this->jsonData($response);
             } else {
                 $response['success'] = false;
+                $response['status_code'] = 404;
                 $response['message'] = "Something went be wrong.";
                 $response['data'] = (object) [];
                 return $this->jsonData($response);
@@ -164,6 +173,7 @@ class UserController extends Controller {
      * @apiParam {File} profile_pic Profile Pic.
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message Profile update succesfully.
      * @apiSuccess {JSON}   data blank object.
      * 
@@ -199,12 +209,14 @@ class UserController extends Controller {
     public function updateProfile(Request $request) {
         if (!$request->user_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "User id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if ($request->user_id != $request->user()->id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Unauthorized user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -221,6 +233,7 @@ class UserController extends Controller {
             if ($request->profile_pic) {
                 if (!$request->hasFile("profile_pic")) {
                     $response['success'] = false;
+                    $response['status_code'] = 404;
                     $response['message'] = "Profile pic not valid file type.";
                     $response['data'] = (object) [];
                     return $this->jsonData($response);
@@ -234,17 +247,20 @@ class UserController extends Controller {
 
             if ($user->save()) {
                 $response['success'] = true;
+                $response['status_code'] = 200;
                 $response['message'] = "Profile update succesfully.";
                 $response['data'] = (object) [];
                 return $this->jsonData($response);
             } else {
                 $response['success'] = false;
+                $response['status_code'] = 404;
                 $response['message'] = "Something went be wrong.";
                 $response['data'] = (object) [];
                 return $this->jsonData($response);
             }
         } else {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -264,6 +280,7 @@ class UserController extends Controller {
      * @apiParam {String} confirm_password Confirm Password.
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message Password Changed successfully.
      * @apiSuccess {JSON}   data blank object.
      * 
@@ -318,30 +335,35 @@ class UserController extends Controller {
     public function changesPassword(Request $request) {
         if (!$request->user_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "User id missing.";
             $response['data'] = [];
             return $this->jsonData($response);
         }
         if ($request->user_id != $request->user()->id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Unauthorized user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->new_password) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "New Password missing.";
             $response['data'] = [];
             return $this->jsonData($response);
         }
         if (!$request->confirm_password) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Confirm Password missing.";
             $response['data'] = [];
             return $this->jsonData($response);
         }
         if ($request->new_password != $request->confirm_password) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Confirm Password doesn't match.";
             $response['data'] = [];
             return $this->jsonData($response);
@@ -350,6 +372,7 @@ class UserController extends Controller {
         $user = User::find($request->user_id);
         if (!$user) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid user.";
             $response['data'] = [];
             return $this->jsonData($response);
@@ -358,6 +381,7 @@ class UserController extends Controller {
         $user->password = bcrypt($request->new_password);
         $user->save();
         $response['success'] = true;
+        $response['status_code'] = 200;
         $response['message'] = "Password Changed successfully.";
         $response['data'] = [];
         return $this->jsonData($response);

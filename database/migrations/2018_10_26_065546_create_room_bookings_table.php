@@ -15,7 +15,8 @@ class CreateRoomBookingsTable extends Migration {
         Schema::create('room_bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('booking_id')->nullable(0);
-            $table->string('resort_room_id')->nullable();
+            $table->bigInteger('room_type_id')->default(0);
+            $table->bigInteger('resort_room_id')->default(0);
             $table->datetime('check_in')->nullable();
             $table->datetime('check_out')->nullable();
             $table->tinyInteger('is_active')->default(1);

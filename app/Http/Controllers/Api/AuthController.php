@@ -24,6 +24,7 @@ class AuthController extends Controller {
      * @apiParam {String} user_type User type*. (Staff member => 2 or Customer => 3).
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message OTP send successfully.
      * @apiSuccess {JSON}   data blank object.
      * 
@@ -77,6 +78,7 @@ class AuthController extends Controller {
         if (!$request->mobile_number) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "Mobile number missing.",
                         'data' => (object) []
             ]);
@@ -84,6 +86,7 @@ class AuthController extends Controller {
         if (strlen($request->mobile_number) != 10) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "Mobile number should be 10 digit.",
                         'data' => (object) []
             ]);
@@ -91,6 +94,7 @@ class AuthController extends Controller {
         if (!$request->user_type) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "User type missing.",
                         'data' => (object) []
             ]);
@@ -98,6 +102,7 @@ class AuthController extends Controller {
         if (!(in_array($request->user_type, [2, 3]))) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "User type invalid.",
                         'data' => (object) []
             ]);
@@ -116,6 +121,7 @@ class AuthController extends Controller {
             $user->save();
             return response()->json([
                         'status' => true,
+                        'status_code' => 200,
                         'message' => "OTP send successfully.",
                         'data' => (object) []
             ]);
@@ -124,6 +130,7 @@ class AuthController extends Controller {
             $userExist->password = bcrypt(9999);
             $userExist->save();
             $response['success'] = true;
+            $response['status_code'] = 200;
             $response['message'] = "OTP send successfully.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -141,6 +148,7 @@ class AuthController extends Controller {
      * @apiParam {String} user_type User type*. (Staff member => 2 or Customer => 3).
      *
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String}   message OTP verified successfully.
      * @apiSuccess {JSON}   data User detail with unique token.
      * @apiSuccessExample {json} Success-Response:
@@ -227,6 +235,7 @@ class AuthController extends Controller {
         if (!$request->mobile_number) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "Mobile number missing.",
                         'data' => (object) []
             ]);
@@ -234,6 +243,7 @@ class AuthController extends Controller {
         if (strlen($request->mobile_number) != 10) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "Mobile number should be 10 digit.",
                         'data' => (object) []
             ]);
@@ -241,6 +251,7 @@ class AuthController extends Controller {
         if (!$request->otp) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "OTP missing.",
                         'data' => (object) []
             ]);
@@ -248,6 +259,7 @@ class AuthController extends Controller {
         if (!$request->user_type) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "User type missing.",
                         'data' => (object) []
             ]);
@@ -255,6 +267,7 @@ class AuthController extends Controller {
         if (!(in_array($request->user_type, [2, 3]))) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "User type invalid.",
                         'data' => (object) []
             ]);
@@ -268,6 +281,7 @@ class AuthController extends Controller {
         if (!Auth::attempt($credentials)) {
             return response()->json([
                         'status' => false,
+                        'status_code' => 404,
                         'message' => "OTP or mobile number incorrect.",
                         'data' => (object) []
             ]);
@@ -315,9 +329,142 @@ class AuthController extends Controller {
 
         return response()->json([
                     'status' => true,
+                    'status_code' => 200,
                     'message' => "OTP verified successfully.",
                     'data' => $userArray,
         ]);
+    }
+
+    /**
+     * @api {post} /api/referesh-token  Referesh token
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostRefereshToken
+     * @apiGroup Auth
+     *
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} secret_key Secret key(fgwjdksA5Cyh2UuOIzGb6z+USJtc)*.
+     *
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String}   message Token refreshed successfully.
+     * @apiSuccess {JSON}   data User unique token.
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true,
+     * "status_code": 200,
+     * "message": "Token refreshed successfully.",
+     * "data": {
+     * "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQyZjQwOGQyNzE4N2RlZDVlMDEyZWZjODZhZDQ5NTQyZjJhNzQ5MzQ4NzVlODg0OTQ1ZDE0MjM2YzQzNDQyOTQ5YmVjYTE5Y2FhNDg0YzRiIn0.eyJhdWQiOiIxIiwianRpIjoiZDJmNDA4ZDI3MTg3ZGVkNWUwMTJlZmM4NmFkNDk1NDJmMmE3NDkzNDg3NWU4ODQ5NDVkMTQyMzZjNDM0NDI5NDliZWNhMTljYWE0ODRjNGIiLCJpYXQiOjE1NDA4MzgzNDAsIm5iZiI6MTU0MDgzODM0MCwiZXhwIjoxNTcyMzc0MzQwLCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.yV9o9kgadV-Spbl9MyFUEbiXNnrPRDQeanAAc1jJPZIGEaPlGh5VzlkTqY0NYXsvGUjaXRhXddUkAp4vY5EwDVzEAo-_cN0hW7sdQ43MNQJujCuwF2UZRTiNtOR0UV28Bu1ijZh7EBD1jn8OJ4qH4W7yXXCM3xMu7YlMYETJe5iELMMo7lwXmKpsOAXkQGcodPVgFZ0khBTmMO6ZP5SYSTJX5uv0kb586LzLpYbzWzse9BzQ3lk1JsZh6V9FFJ2SmHqoVadUGzcQQxxQBWI9J-iyncMZI4_J7Kp8WdsR4D0N5HfyBD6rMCnrW1Vunl7tE8SnXx7VLtPMv9CmqscTxrd3J2Eng-h0w3dOBUYdg4MqVGZFwuni7t0nGA_zhLCdXGEuurM-67UbWRPG5EwrJdzu9VcUYbmDqOCPDZkygjqBzhNpeuXmReOod2FxbiAvnhB0iRwDxOT1DnpPMuZpzUjKK6XL3vw82O-49OWoANbS4G4r1VI27vZwPZcYZUV8MZvPY3IGmqEPTHTfY0ccwjtfdOtLlzVtX4d8czOW5uynfpWmUdglY1RH9B7kda4KOsTXf4_kuLLyQU6cZs_F7SRIJ0gQCkP_87YrAK0cS_5jNZyUq7x7YriHYeMsyCtZ8vuh_vld8iPsd75w8eN2p4txRGVKd1Th54qLrKxMlBw"
+     * }
+     * }
+     *  
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     * "status": false,
+     * "status_code": 404,
+     * "message": "User id missing.",
+     * "data": {}
+     * }
+     *
+     * @apiError SecretKeyMissing The Mobile number should be 10 digit.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     * "status": false,
+     * "status_code": 404,
+     * "message": "Secret key missing.",
+     * "data": {}
+     * }
+     *  
+     * @apiError InvalidSecretKey The Secret key is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     * "status": false,
+     * "status_code": 404,
+     * "message": "Invalid Seceret key.",
+     * "data": {}
+     * }
+     * 
+     * 
+     */
+    public function refereshToken(Request $request) {
+        $seceret_key = "fgwjdksA5Cyh2UuOIzGb6z+USJtc";
+        if (!$request->user_id) {
+            return response()->json([
+                        'status' => false,
+                        'status_code' => 404,
+                        'message' => "User id missing.",
+                        'data' => (object) []
+            ]);
+        }
+        if (!$request->secret_key) {
+            return response()->json([
+                        'status' => false,
+                        'status_code' => 404,
+                        'message' => "Secret key missing.",
+                        'data' => (object) []
+            ]);
+        }
+        if ($request->secret_key != $seceret_key) {
+            return response()->json([
+                        'status' => false,
+                        'status_code' => 404,
+                        'message' => "Invalid Seceret key.",
+                        'data' => (object) []
+            ]);
+        }
+
+        try {
+            $user = User::find($request->user_id);
+
+            if ($user) {
+                $credentials = [
+                    'user_type_id' => $user->user_type_id,
+                    'mobile_number' => $user->mobile_number,
+                    'password' => $user->otp
+                ];
+                if (!Auth::attempt($credentials)) {
+                    return response()->json([
+                                'status' => false,
+                                'status_code' => 404,
+                                'message' => "OTP or mobile number incorrect.",
+                                'data' => (object) []
+                    ]);
+                }
+
+                $user = $request->user();
+                $tokenResult = $user->createToken('SanjeevaniToken');
+                $token = $tokenResult->token;
+                $token->save();
+
+                return response()->json([
+                            'status' => true,
+                            'status_code' => 200,
+                            'message' => "Token refreshed successfully.",
+                            'data' => [
+                                "token" => $tokenResult->accessToken
+                            ]
+                ]);
+            } else {
+                return response()->json([
+                            'status' => false,
+                            'status_code' => 404,
+                            'message' => "Invalid user",
+                            'data' => (object) []
+                ]);
+            }
+        } catch (Exception $ex) {
+            return response()->json([
+                        'status' => false,
+                        'status_code' => 404,
+                        'message' => $ex->getMessage(),
+                        'data' => (object) []
+            ]);
+        }
     }
 
 }

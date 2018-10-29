@@ -21,6 +21,7 @@ class HomeController extends Controller {
      * @apiParam {String} user_id User id.
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message service successfully access.
      * @apiSuccess {JSON}   data response.
      * 
@@ -104,6 +105,7 @@ class HomeController extends Controller {
         }
 
         $response['success'] = true;
+        $response['status_code'] = 200;
         $response['message'] = "service successfully access.";
         $response['data'] = [
             "user" => isset($userArray) ? $userArray : (object) [],

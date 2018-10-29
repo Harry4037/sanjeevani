@@ -21,6 +21,7 @@ class ServiceController extends Controller {
      * @apiGroup Services
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Services listing.
      * @apiSuccess {JSON} data response.
      * 
@@ -127,6 +128,7 @@ class ServiceController extends Controller {
         }
 
         $response['success'] = true;
+        $response['status_code'] = 200;
         $response['message'] = "Services listing.";
         $response['data'] = [
             "housekeeping" => $houseKeepingArrray,
@@ -149,6 +151,7 @@ class ServiceController extends Controller {
      * @apiParam {String} comment Comment.
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Request successfully created.
      * @apiSuccess {JSON}   data blank object.
      * 
@@ -219,24 +222,28 @@ class ServiceController extends Controller {
     public function raiseServiceRequest(Request $request) {
         if (!$request->user_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "User id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if ($request->user_id != $request->user()->id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Unauthorized user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->service_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "service id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->resort_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "resort id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -245,6 +252,7 @@ class ServiceController extends Controller {
         $user = User::find($request->user_id);
         if (!$user) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid user.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -253,6 +261,7 @@ class ServiceController extends Controller {
         $resort = Resort::find($request->resort_id);
         if (!$resort) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid resort.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -260,6 +269,7 @@ class ServiceController extends Controller {
         $service = Service::find($request->service_id);
         if (!$service) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid service.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -273,11 +283,13 @@ class ServiceController extends Controller {
         $serviceRequest->request_status_id = 1;
         if ($serviceRequest->save()) {
             $response['success'] = true;
+            $response['status_code'] = 200;
             $response['message'] = "Request successfully created.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         } else {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Something went be wrong.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -293,6 +305,7 @@ class ServiceController extends Controller {
      * @apiParam {String} resort_id Resort id*.
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message Service request found..
      * @apiSuccess {JSON}   data Array.
      * 
@@ -384,6 +397,7 @@ class ServiceController extends Controller {
     public function serviceRequestListing(Request $request) {
         if (!$request->resort_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Resort id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -392,6 +406,7 @@ class ServiceController extends Controller {
         $resort = Resort::find($request->resort_id);
         if (!$resort) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid resort.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -416,11 +431,13 @@ class ServiceController extends Controller {
             }
 
             $response['success'] = true;
+            $response['status_code'] = 200;
             $response['message'] = "Service request found.";
             $response['data'] = $dataArray;
             return $this->jsonData($response);
         } else {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "No service request found.";
             $response['data'] = [];
             return $this->jsonData($response);
@@ -438,6 +455,7 @@ class ServiceController extends Controller {
      * @apiParam {String} user_id Staff user id(required).
      * 
      * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
      * @apiSuccess {String} message Request accepted
      * @apiSuccess {JSON}   data blank object.
      * 
@@ -472,12 +490,14 @@ class ServiceController extends Controller {
     public function requestAccept(Request $request) {
         if (!$request->request_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Request id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
         if (!$request->user_id) {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "User id missing.";
             $response['data'] = (object) [];
             return $this->jsonData($response);
@@ -489,17 +509,20 @@ class ServiceController extends Controller {
             $service->accepted_by_id = $request->user_id;
             if ($service->save()) {
                 $response['success'] = true;
+                $response['status_code'] = 200;
                 $response['message'] = "Request accepted.";
                 $response['data'] = (object) [];
                 return $this->jsonData($response);
             } else {
                 $response['success'] = false;
+                $response['status_code'] = 404;
                 $response['message'] = "Something went be wrong.";
                 $response['data'] = (object) [];
                 return $this->jsonData($response);
             }
         } else {
             $response['success'] = false;
+            $response['status_code'] = 404;
             $response['message'] = "Invalid requestng.";
             $response['data'] = (object) [];
             return $this->jsonData($response);

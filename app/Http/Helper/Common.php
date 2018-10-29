@@ -8,6 +8,7 @@ trait Common {
 
         return response()->json([
             'status' => $data['success'],
+            'status_code' => $data['status_code'],
             'message' => $data['message'],
             'data' => $data['data']
         ]);

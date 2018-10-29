@@ -35,6 +35,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Icon</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="file" class="form-control" name="service_icon" id="service_icon" >
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_id" id="resort_id">
@@ -84,6 +90,9 @@
         $("#addServiceForm").validate({
             rules: {
                 service_name: {
+                    required: true
+                },
+                service_icon: {
                     required: true
                 },
                 service_type: {
