@@ -176,7 +176,8 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
         ];
         $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.users.add-user', ['js' => $js, 'css' => $css, 'resorts' => $resorts]);
+        $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
+        return view('admin.users.add-user', ['js' => $js, 'css' => $css, 'resorts' => $resorts, 'roomTypes' => $roomTypes]);
     }
 
     public function editUser(Request $request, $id) {

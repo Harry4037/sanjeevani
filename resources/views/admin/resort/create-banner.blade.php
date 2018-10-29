@@ -16,9 +16,9 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Images</label>
                         <div class="col-md-7 col-sm-7 col-xs-7">
-                        <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
-                            @csrf
-                        </form>
+                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
+                                @csrf
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -35,18 +35,6 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Type</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <p style="padding: 5px;">
-                                @if($roomTypes)
-                                @foreach($roomTypes as $roomType)
-                                <input class="flat" type="checkbox" name="room_types[]" value="{{ $roomType->id }}"  > {{ $roomType->name }}
-                                @endforeach
-                                @endif
-                            <p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -96,12 +84,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <div id="map"></div>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-2">Room Details</label>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div id="room_detail_div"></div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
+                            <button type="button" class="btn btn-primary" id="add_more_room">Add</button>
                         </div>
                     </div>
-
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -117,4 +108,76 @@
     </div>
 </div>
 
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+
+        var roomTypes = <?php echo json_encode($roomTypes) ?>;
+        console.log(roomTypes);
+        var room_type = "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label><div class = 'col-md-2 col-sm-2 col-xs-2'><select class='form-control' name='room_type[]' id='room_type'>";
+        $.each(roomTypes, function (key, val) {
+            room_type += "<option value='" + val.id + "'>" + val.name + "</option>";
+        });
+        room_type += "</select></div>";
+        $(document).on("click", "#add_more_room", function () {
+
+            var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-2'>"
+                    + "<input type='text' class='form-control' name='room_no[]'>"
+                    + "</div>" + room_type + "</div>";
+            $("#room_detail_div").append(member_html);
+        });
+        Dropzone.options.myDropzone = {
+            init: function () {
+                this.on("success", function (file, response) {
+                    if (response.status) {
+                        var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "'>Remove file</button>");
+                        var hidden_image_html = "<input id='resort_image_input_" + response.file_name + "' type='hidden' name='resort_images[]' value='" + response.file_name + "'>";
+                        var _this = this;
+                        removeButton.addEventListener("click", function (e) {
+                            // Make sure the button click doesn't submit the form:
+                            e.preventDefault();
+                            e.stopPropagation();
+                            var record_id = this.id;
+                            $("#resort_image_input_" + record_id).remove();
+                            _this.removeFile(file);
+                        });
+                        file.previewElement.appendChild(removeButton);
+                        $("#resort_images_div").append(hidden_image_html);
+                    }
+                });
+            }
+        };
+        $("#addResortForm").validate({
+            rules: {
+                resort_name: {
+                    required: true
+                },
+                contact_no: {
+                    required: true,
+                    number: true
+                },
+                resort_description: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+                pin_code: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                district: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+            }
+        });
+    });
+</script>
 @endsection

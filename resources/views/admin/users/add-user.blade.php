@@ -71,9 +71,24 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="resort_room_type" id="resort_room_type">
+                                <option value="">Choose option</option>
+                                @if($roomTypes)
+                                @foreach($roomTypes as $roomType)
+                                <option value="{{ $roomType->id }}">{{ $roomType->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Resort Room No." name="resort_room_id" id="resort_room_id">
+                            <select class="form-control" name="resort_room_id" id="resort_room_id">
+                                
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -94,18 +109,8 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div id="member_div">
-<!--                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Person Name</label>
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <input type="text" class="form-control" name="person_name[]">
-                            </div>
-                            <label class="control-label col-md-2 col-sm-2 col-xs-2">Person Age</label>
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <input type="text" class="form-control" name="person_age[]">
-                            </div>
-                        </div>-->
+   
                     </div>
-
                     <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
                             <button type="button" class="btn btn-primary" id="add_more_member">Add</button>
@@ -188,6 +193,36 @@
                 }
             }
         });
+
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).on("change", "#resort_room_type", function () {
+            var resort = $("#resort_id :selected").val();
+            var resort_room = $("#resort_room_type :selected").val();
+            if (!resort) {
+                alert("Please select resort.")
+                return false;
+            } else if (!resort_room) {
+                alert("Please select resort room type.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort +'/'+ resort_room ,
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (res) {
+                        $("#resort_room_id").html(res);
+                    }
+                });
+            }
+
+        });
+
     });
 </script>
 

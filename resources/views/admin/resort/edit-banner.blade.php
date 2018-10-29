@@ -27,23 +27,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Type</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <p style="padding: 5px;">
-                                @if($roomTypes)
-                                @foreach($roomTypes as $roomType)
-                                <input class="flat" type="checkbox" name="edit_room_types[]" value="{{ $roomType->id }}"  
-                                       @if(in_array($roomType->id, $roomArray))
-                                       {{ "checked" }}
-                                       @endif
-                                       > 
-                                {{ $roomType->name }}
-                                @endforeach
-                                @endif
-                            <p>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <textarea class="form-control" name="edit_resort_description" id="edit_resort_description" placeholder="Resort Description">{{ $data->description }}</textarea>
@@ -90,12 +73,40 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <div id="map"></div>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-2">Room Details</label>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div id="room_detail_div">
+
+                        @if($dataRooms)
+                        @foreach($dataRooms as $dataRoom)
+                        <div class='form-group'>
+                            <label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label>
+                            <div class='col-md-2 col-sm-2 col-xs-2'>
+                                <input value="{{ $dataRoom->room_no }}" type='text' class='form-control' name='room_no[]'>
+                            </div>
+                            <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>                         <div class = 'col-md-2 col-sm-2 col-xs-2'>
+                                <select class='form-control' name='room_type[]' id='room_type'>
+                                    @if($roomTypes)
+                                    @foreach($roomTypes as $roomType)
+                                    <option value="{{ $roomType->id }}"
+                                            @if($roomType->id == $dataRoom->room_type_id)
+                                            {{ "selected" }}
+                                            @endif
+                                            >{{ $roomType->name }}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
+                            <button type="button" class="btn btn-primary" id="add_more_room">Add</button>
                         </div>
                     </div>
-
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -111,4 +122,58 @@
     </div>
 </div>
 
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+
+        $("#editResortForm").validate({
+            rules: {
+                edit_resort_name: {
+                    required: true
+                },
+                edit_contact_no: {
+                    required: true,
+                    number: true
+                },
+                edit_resort_description: {
+                    required: true
+                },
+                edit_address: {
+                    required: true
+                },
+                edit_pin_code: {
+                    required: true
+                },
+                edit_state: {
+                    required: true
+                },
+                edit_district: {
+                    required: true
+                },
+                edit_city: {
+                    required: true
+                }
+            }
+        });
+
+        var roomTypes = <?php echo json_encode($roomTypes) ?>;
+        console.log(roomTypes);
+        var room_type = "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label><div class = 'col-md-2 col-sm-2 col-xs-2'><select class='form-control' name='room_type[]' id='room_type'>";
+        $.each(roomTypes, function (key, val) {
+            room_type += "<option value='" + val.id + "'>" + val.name + "</option>";
+        });
+        room_type += "</select></div>";
+        $(document).on("click", "#add_more_room", function () {
+
+            var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-2'>"
+                    + "<input type='text' class='form-control' name='room_no[]'>"
+                    + "</div>" + room_type + "</div>";
+            $("#room_detail_div").append(member_html);
+        });
+
+    });
+
+</script>    
 @endsection

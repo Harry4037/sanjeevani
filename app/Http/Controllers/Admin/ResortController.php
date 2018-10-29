@@ -28,7 +28,6 @@ class ResortController extends Controller {
         $js = [
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'js/admin/resorts.js'
         ];
         return view('admin.resort.index', ['js' => $js, 'css' => $css]);
     }
@@ -71,14 +70,6 @@ class ResortController extends Controller {
             $resort->pincode = $request->pin_code;
             $resort->city_id = $request->city;
             if ($resort->save()) {
-                if ($request->room_types) {
-                    foreach ($request->room_types as $room) {
-                        $resortRoom = new ResortRoom();
-                        $resortRoom->resort_id = $resort->id;
-                        $resortRoom->room_type_id = $room;
-                        $resortRoom->save();
-                    }
-                }
                 if ($request->resort_images) {
                     foreach ($request->resort_images as $tempImage) {
                         $resortImage = new ResortImage();
@@ -88,6 +79,18 @@ class ResortController extends Controller {
                         $resortImage->save();
                     }
                 }
+                if ($request->room_type && $request->room_no) {
+                    $i = 0;
+                    foreach ($request->room_type as $room) {
+                        $resortRoom = new ResortRoom();
+                        $resortRoom->resort_id = $resort->id;
+                        $resortRoom->room_type_id = $room;
+                        $resortRoom->room_no = $request->room_no[$i];
+                        $resortRoom->save();
+                        $i++;
+                    }
+                }
+
 
                 return redirect()->route('admin.resort.index')->with('status', 'Resort has been added successfully.');
             } else {
@@ -95,15 +98,10 @@ class ResortController extends Controller {
             }
         }
         $css = [
-            "vendors/iCheck/skins/flat/green.css",
             "vendors/dropzone/dist/dropzone.css",
         ];
         $js = [
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'vendors/iCheck/icheck.min.js',
             'vendors/dropzone/dist/dropzone.js',
-            'js/admin/resorts.js'
         ];
         $roomTypes = $this->roomType->all();
         return view('admin.resort.create-banner', ['js' => $js, 'css' => $css, 'roomTypes' => $roomTypes]);
@@ -151,25 +149,25 @@ class ResortController extends Controller {
             $data->pincode = $request->edit_pin_code;
             $data->city_id = $request->edit_city;
             if ($data->save()) {
-                if ($request->edit_room_types) {
+                if ($request->room_type && $request->room_no) {
                     ResortRoom::where("resort_id", $data->id)->delete();
-                    foreach ($request->edit_room_types as $room) {
+                    $i = 0;
+                    foreach ($request->room_type as $room) {
                         $resortRoom = new ResortRoom();
                         $resortRoom->resort_id = $data->id;
                         $resortRoom->room_type_id = $room;
+                        $resortRoom->room_no = $request->room_no[$i];
                         $resortRoom->save();
+                        $i++;
                     }
                 }
+
                 return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.');
             }
         }
 
 
         $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
-        $roomArray = [];
-        foreach ($dataRooms as $dataRoom) {
-            $roomArray[] = $dataRoom->room_type_id;
-        }
         $roomTypes = $this->roomType->all();
         $css = [
             "vendors/iCheck/skins/flat/green.css"
@@ -181,7 +179,11 @@ class ResortController extends Controller {
             'vendors/dropzone/dist/dropzone.js',
             'js/admin/resorts.js'
         ];
-        return view('admin.resort.edit-banner', ['js' => $js, 'css' => $css, 'data' => $data, 'roomArray' => $roomArray, 'roomTypes' => $roomTypes]);
+        return view('admin.resort.edit-banner', ['js' => $js, 'css' => $css, 'data' => $data, 'dataRooms' => $dataRooms, 'roomTypes' => $roomTypes]);
     }
 
+    public function getResortRooms(Request $request, $resort=0, $type=0){
+        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $type, "is_active" => 1])->get();
+        return view('admin.resort.rooms', [ 'resortRooms' => $resortRooms ]);
+    }
 }
