@@ -13,7 +13,7 @@
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.service.add') }}" method="post" id="addServiceForm" >
+                <form class="form-horizontal form-label-left" action="{{ route('admin.service.add') }}" method="post" id="addServiceForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Name</label>

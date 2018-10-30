@@ -83,7 +83,7 @@ class ServiceController extends Controller {
                 $serviceQuestion = ServiceQuestionaire::where("service_id", $houseKeep->id)->get();
                 $houseKeepingArrray[$i]['id'] = $houseKeep->id;
                 $houseKeepingArrray[$i]['name'] = $houseKeep->name;
-                $houseKeepingArrray[$i]['icon'] = '';
+                $houseKeepingArrray[$i]['icon'] = asset("storage/Service_icon/". $houseKeep->icon);
                 if ($serviceQuestion) {
                     $j = 0;
                     foreach ($serviceQuestion as $serviceQues) {

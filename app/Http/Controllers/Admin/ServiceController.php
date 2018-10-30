@@ -65,13 +65,17 @@ class ServiceController extends Controller {
     public function serviceAdd(Request $request) {
 
         if ($request->isMethod("post")) {
-            $icon_image = $request->file("service_icon");
-            $icon = Storage::disk('public')->put('Service_icon', $icon_image);
-            $icon_file_name = basename($icon);
-
             $service = new Service();
+            if ($request->hasFile("service_icon")) {
+                $icon_image = $request->file("service_icon");
+                $icon = Storage::disk('public')->put('Service_icon', $icon_image);
+                $icon_file_name = basename($icon);
+                $service->icon = $icon_file_name;
+            }
+
+
             $service->name = $request->service_name;
-            $service->icon = $icon_file_name;
+
             $service->type_id = $request->service_type;
             $service->resort_id = $request->resort_id;
             $service->is_active = 1;
