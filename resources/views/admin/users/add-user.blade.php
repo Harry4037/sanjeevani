@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-2">People Accompanying</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">People Accompanying</label>
                     </div>
                     <div class="ln_solid"></div>
                     <div id="member_div">

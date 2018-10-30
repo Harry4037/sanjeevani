@@ -136,7 +136,7 @@ class UserController extends Controller {
                 $otherId = Storage::disk('local')->put('Aadhar', $other_id);
                 $other_file_name = basename($otherId);
 
-                $user->voter_id = $voter_file_name;
+                $user->voter_id = $other_file_name;
             }
 
             $aadhar_id = $request->file("aadhar_id");
@@ -225,10 +225,14 @@ class UserController extends Controller {
         if ($user) {
             $name = explode(" ", $request->full_name);
 
-            $user->user_name = $request->full_name;
-            $user->first_name = isset($name[0]) ? $name[0] : '';
-            $user->last_name = isset($name[1]) ? $name[1] : '';
-            $user->email_id = $request->email_id;
+            if ($request->full_name) {
+                $user->user_name = $request->full_name;
+                $user->first_name = isset($name[0]) ? $name[0] : '';
+                $user->last_name = isset($name[1]) ? $name[1] : '';
+            }
+            if ($request->email_id) {
+                $user->email_id = $request->email_id;
+            }
 
             if ($request->profile_pic) {
                 if (!$request->hasFile("profile_pic")) {
