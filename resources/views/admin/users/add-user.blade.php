@@ -16,17 +16,9 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.users.add') }}" method="post" id="addUserForm">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
-                        </div>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">General Details</label>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
-                        </div>
-                    </div>
+                    <div class="ln_solid"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -45,6 +37,23 @@
                             <input type="text" class="form-control" placeholder="Customer Email Address" name="email_id" id="email_id">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In Date</label>
                         <div class="col-md-2 col-sm-2 col-xs-2">
@@ -105,7 +114,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">People Accompanying</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">People Accompanying</label>
+                    </div>
+                    <div class="ln_solid"></div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">People Accompanying</label>
                     </div>
                     <div class="ln_solid"></div>
                     <div id="member_div">
@@ -140,9 +154,9 @@
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_1",
-//            startDate: moment().startOf('hour'),
-//            locale: {
-//                format: 'DD/M/YYYY'
+            //            startDate: moment().startOf('hour'),
+            //            locale: {
+            //                format: 'DD/M/YYYY'
 //            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
@@ -151,9 +165,9 @@
         $('#check_out').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_1",
-//            startDate: moment().startOf('hour'),
+            //            startDate: moment().startOf('hour'),
 //            locale: {
-//                format: 'DD/M/YYYY'
+            //                format: 'DD/M/YYYY'
 //            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
@@ -199,8 +213,7 @@
                 package_id: {
                     required: true
                 }
-            }
-        });
+            }});
 
 
         $.ajaxSetup({

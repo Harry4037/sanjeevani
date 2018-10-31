@@ -28,7 +28,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-7 col-sm-7 col-xs-12">
                             <textarea class="form-control" name="edit_resort_description" id="edit_resort_description" placeholder="Resort Description">{{ $data->description }}</textarea>
                         </div>
                     </div>
@@ -72,10 +72,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-2">Room Details</label>
-                    </div>
                     <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Room Details</label>
+                    </div>
+
                     <div id="room_detail_div">
 
                         @if($dataRooms)
@@ -104,7 +105,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
-                            <button type="button" class="btn btn-primary" id="add_more_room">Add</button>
+                            <button type="button" class="btn btn-primary" id="add_more_room">Add Room</button>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -125,8 +126,21 @@
 @endsection
 
 @section('script')
+<script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
     $(document).ready(function () {
+
+//For ckeditor
+        CKEDITOR.replace('edit_resort_description', {
+            removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
+            removePlugins: 'image, link',
+//        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
+        });
+        CKEDITOR.instances.edit_resort_description.on('change', function () {
+            if (CKEDITOR.instances.edit_resort_description.getData().length > 0) {
+                $('label[for="edit_resort_description"]').hide();
+            }
+        });
 
         $("#editResortForm").validate({
             rules: {

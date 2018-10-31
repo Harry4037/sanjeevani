@@ -169,17 +169,8 @@ class ResortController extends Controller {
 
         $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
         $roomTypes = $this->roomType->all();
-        $css = [
-            "vendors/iCheck/skins/flat/green.css"
-        ];
-        $js = [
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'vendors/iCheck/icheck.min.js',
-            'vendors/dropzone/dist/dropzone.js',
-            'js/admin/resorts.js'
-        ];
-        return view('admin.resort.edit-banner', ['js' => $js, 'css' => $css, 'data' => $data, 'dataRooms' => $dataRooms, 'roomTypes' => $roomTypes]);
+
+        return view('admin.resort.edit-banner', ['data' => $data, 'dataRooms' => $dataRooms, 'roomTypes' => $roomTypes]);
     }
 
     public function getResortRooms(Request $request, $resort=0, $type=0){
