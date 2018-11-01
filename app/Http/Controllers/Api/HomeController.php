@@ -64,36 +64,52 @@ class HomeController extends Controller {
 //        }
 
         $user = User::find($request->user_id);
+//        dd($user);
         if ($user) {
-            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
-            $userRoom = [];
-            if ($userBookingDetail) {
-                $userResort = Resort::find($userBookingDetail->resort_id);
-                $userRoom = RoomBooking::find($userBookingDetail->id);
-            }
-            $userArray['id'] = $user->id;                                                                                                                                                                                                                                                                                                                                                                                   
-            $userArray['user_name'] = $user->user_name;
-            $userArray['first_name'] = $user->first_name;
-            $userArray['mid_name'] = $user->mid_name;
-            $userArray['last_name'] = $user->last_name;
-            $userArray['email_id'] = $user->email_id;
-            $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
-            $userArray['address'] = $user->address;
-            $userArray['screen_name'] = $user->screen_name;
-            $userArray['profile_pic_path'] = $user->profile_pic_path;
-            $userArray['mobile_number'] = $user->mobile_number;
-            $userArray['mobile_number'] = $user->mobile_number;
-            $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
-            $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
-            $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
-            $userArray['room_type'] = "Delux";
-            $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
-            $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
-            if (isset($userResort)) {
-                $userArray['resort'] = $userResort;
-            } else {
-                $userArray['resort'] = (object) [];
-            }
+            //User Detail
+            $userArray['id'] = $user;
+//            $userArray['id'] = $user->id;
+//            $userArray['user_name'] = $user->user_name ? $user->user_name : '';
+//            $userArray['first_name'] = $user->first_name ? $user->first_name : '';
+//            $userArray['mid_name'] = $user->mid_name ? $user->mid_name : '';
+//            $userArray['last_name'] = $user->last_name ? $user->last_name : '';
+//            $userArray['email_id'] = $user->email_id ? $user->email_id : '';
+//            $userArray['mobile_number'] = $user->mobile_number ? $user->mobile_number : '';
+//            $userArray['user_type_id'] = $user->booking_detail ? 3 : 4;
+//            $userArray['address'] = $user->address ? $user->address : '';
+//            $userArray['screen_name'] = $user->screen_name ? $user->screen_name : '';
+//            $userArray['profile_pic_path'] = $user->profile_pic_path ? asset("storage/profile_pic/".$user->profile_pic_path) : '';
+//            
+//            //Health Detail
+//            $userArray['health_detail']['id'] =  $user->id;
+//            $userArray['health_detail']['is_diabeties'] =  $user->health_detail->is_diabeties == 1 ? "Yes" : "No";
+//            $userArray['health_detail']['is_ppa'] =  $user->health_detail->is_ppa == 1 ? "Yes" : "No";
+//            $userArray['health_detail']['hba_1c'] =  $user->health_detail->hba_1c == 1 ? "Yes" : "No";
+//            $userArray['health_detail']['fasting'] =  $user->health_detail->fasting ? $user->health_detail->fasting : '';
+//            $userArray['health_detail']['bp'] =  $user->health_detail->bp ? $user->health_detail->bp : '';
+//            $userArray['health_detail']['insullin_dependency'] =  $user->health_detail->insullin_dependency ? $user->health_detail->insullin_dependency : '';
+//            $userArray['health_detail']['medical_documents'] =  asset("storage/medical_document/".$user->medical_documents);
+//            
+//            //Booking Detail
+//            $userArray['booking_detail']['id'] =  $user->booking_detail->id;
+//            $userArray['booking_detail']['source_name'] =  $user->booking_detail->source_name;
+//            $userArray['booking_detail']['source_id'] =  $user->booking_detail->source_id;
+//            $userArray['booking_detail']['resort'] =  $user->resort_detail;
+
+//            $userArray['source_name'] = $user->booking_detail ? : (object)[];
+//            $userArray['health_detail'] = $user->health_detail ? : (object)[];
+            
+//            $userArray['source_name'] = $user->booking_detail ? $user->booking_detail->source_name : '';
+//            $userArray['source_id'] = $user->booking_detail ? $user->booking_detail->source_id : '';
+//            $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
+//            $userArray['room_type'] = "Delux";
+//            $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
+//            $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
+//            if (isset($userResort)) {
+//                $userArray['resort'] = $userResort;
+//            } else {
+//                $userArray['resort'] = (object) [];
+//            }
         }
         $banners = Banner::all();
         $bannerArray = [];

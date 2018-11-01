@@ -16,26 +16,9 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.users.edit', $user->id) }}" method="post" id="editUserForm">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userBooking->source_name))
-                            <input value="{{ $userBooking->source_name }}" type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
-                            @else
-                            <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
-                            @endif
-                        </div>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">General Details</label>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userBooking->source_id))
-                            <input value="{{ $userBooking->source_id }}" type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
-                            @else
-                            <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
-                            @endif
-
-                        </div>
-                    </div>
+                    <div class="ln_solid"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -69,6 +52,120 @@
 
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Health Details</label>
+                    </div>
+                    <div class="ln_solid"></div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="is_diabeties" id="is_diabeties">
+                                <option value="">Choose option</option>
+                                @if(isset($userHealth->is_diabeties))
+                                <option value="1" @if($userHealth->is_diabeties == '1'){{ "selected" }}@endif>Yes</option>
+                                <option value="0" @if($userHealth->is_diabeties == '0'){{ "selected" }}@endif>No</option>
+                                @else
+                                <option value="1" >Yes</option>
+                                <option value="0" >No</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="is_ppa" id="is_ppa">
+                                <option value="">Choose option</option>
+                                @if(isset($userHealth->is_ppa))
+                                <option value="1" @if($userHealth->is_ppa == '1'){{ "selected" }}@endif>Yes</option>
+                                <option value="0" @if($userHealth->is_ppa == '0'){{ "selected" }}@endif>No</option>
+                                @else
+                                <option value="1" >Yes</option>
+                                <option value="0" >No</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="hba_1c" id="hba_1c">
+                                <option value="">Choose option</option>
+                                @if(isset($userHealth->hba_1c))
+                                <option value="1" @if($userHealth->hba_1c == '1'){{ "selected" }}@endif>Yes</option>
+                                <option value="0" @if($userHealth->hba_1c == '0'){{ "selected" }}@endif>No</option>
+                                @else
+                                <option value="1" >Yes</option>
+                                <option value="0" >No</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @if(isset($userHealth->fasting))
+                            <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ $userHealth->fasting }}">
+                            @else
+                            <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" >
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @if(isset($userHealth->bp))
+                            <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ $userHealth->bp }}">
+                            @else
+                            <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" >
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @if(isset($userHealth->insullin_dependency))
+                            <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ $userHealth->insullin_dependency }}">
+                            @else
+                            <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" >
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="file" class="form-control" placeholder="Medical Document" name="medical_documents" id="medical_documents" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @if(isset($userBooking->source_name))
+                            <input value="{{ $userBooking->source_name }}" type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
+                            @else
+                            <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @if(isset($userBooking->source_id))
+                            <input value="{{ $userBooking->source_id }}" type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
+                            @else
+                            <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
+                            @endif
+
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In Date</label>
                         <div class="col-md-2 col-sm-2 col-xs-2">
@@ -160,13 +257,20 @@
                         @if(isset($bookingAccompany) && !empty($bookingAccompany))
                         @foreach($bookingAccompany as $bookingA)
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Person Name</label>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Name</label>
                             <div class="col-md-2 col-sm-2 col-xs-2">
                                 <input value="{{ $bookingA->person_name }}" type="text" class="form-control" name="person_name[]">
                             </div>
-                            <label class="control-label col-md-2 col-sm-2 col-xs-2">Person Age</label>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Age</label>
                             <div class="col-md-2 col-sm-2 col-xs-2">
                                 <input value="{{ $bookingA->person_age }}" type="text" class="form-control" name="person_age[]">
+                            </div>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Type</label>
+                            <div class="col-md-2 col-sm-2 col-xs-2">
+                                <select class="form-control" name="person_type[]" >
+                                    <option value="Adult" @if($bookingA->person_type == 'Adult'){{ "selected" }} @endif>Adult</option>
+                                    <option value="Children" @if($bookingA->person_type == 'Children'){{ "selected" }} @endif>Children</option>
+                                </select>
                             </div>
                         </div>
                         @endforeach
@@ -174,13 +278,13 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
-                            <button type="button" class="btn btn-primary" id="add_more_member">Add</button>
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
+                            <button type="button" class="btn btn-primary" id="add_more_member">Add Members</button>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
                             <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
                             <button type="reset" class="btn btn-primary">Reset</button>
                             <button type="submit" class="btn btn-success">Submit</button>
@@ -188,6 +292,7 @@
                     </div>
 
                 </form>
+
             </div>
         </div>
     </div>
@@ -220,9 +325,10 @@
         });
 
         $(document).on("click", "#add_more_member", function () {
-            var member_html = "<div class='form-group'><label class='control-label col-md-3 col-sm-3 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-2'><input type='text' class='form-control' name='person_name[]'>"
-                    + "</div><label class='control-label col-md-2 col-sm-2 col-xs-2'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-2'>"
-                    + "<input type='text' class='form-control' name='person_age[]'>"
+            var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
+                    + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                    + "<input type='text' class='form-control' name='person_age[]'></div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Type</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                    + "<select class='form-control' name='person_type[]'><option value='Adult'>Adult</option><option value='Child'>Children</option></select>"
                     + "</div></div>";
             $("#member_div").append(member_html);
         });
@@ -253,12 +359,36 @@
                 resort_id: {
                     required: true
                 },
+                resort_room_type: {
+                    required: true
+                },
                 resort_room_id: {
                     required: true
                 },
                 package_id: {
                     required: true
-                }
+                },
+                is_diabeties: {
+                    required: true
+                },
+                is_ppa: {
+                    required: true
+                },
+                hba_1c: {
+                    required: true
+                },
+                fasting: {
+                    required: true
+                },
+                bp: {
+                    required: true
+                },
+                insullin_dependency: {
+                    required: true
+                },
+                medical_documents: {
+                    required: true
+                },
             }
         });
 

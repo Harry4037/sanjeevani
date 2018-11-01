@@ -14,8 +14,9 @@ class CreateBookingpeopleAccompaniesTable extends Migration {
     public function up() {
         Schema::create('bookingpeople_accompanies', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('person_name')->nullable(0);
-            $table->string('person_age')->nullable(0);
+            $table->string('person_name')->nullable();
+            $table->string('person_age')->nullable();
+            $table->string('person_type')->nullable();
             $table->string('booking_id')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);

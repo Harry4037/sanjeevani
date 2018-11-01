@@ -15,6 +15,8 @@ use App\Models\BookingpeopleAccompany;
 use App\Models\Resort;
 use App\Models\RoomType;
 use App\Models\ResortRoom;
+use App\Models\UserhealthDetail;
+use Validator;
 
 class UsersController extends Controller {
 
@@ -108,7 +110,21 @@ class UsersController extends Controller {
     public function viewUser(Request $request, $id) {
         try {
             $user = $this->user->find($id);
-            return view('admin.users.user-detail', ["user" => $user]);
+            $userBooking = UserBookingDetail::where("user_id", $id)->first();
+            $userHealth = UserhealthDetail::where("user_id", $id)->first();
+            if ($userBooking) {
+                $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
+                $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
+                $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id, "room_type_id" => $roomBooking->room_type_id])->get();
+            }
+            return view('admin.users.user-detail', [
+                "user" => $user,
+                'userBooking' => $userBooking,
+                'userHealth' => $userHealth,
+                'resortRooms' => isset($resortRooms) ? $resortRooms : [],
+                'roomBooking' => isset($roomBooking) ? $roomBooking : [],
+                'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
+            ]);
         } catch (Exception $ex) {
             dd($e);
         }
@@ -123,49 +139,98 @@ class UsersController extends Controller {
             if ($userExist) {
                 return redirect()->route('admin.users.add')->with('error', 'User already exists with thin mobile number');
             } else {
-                $name = explode(" ", $request->user_name);
 
-                $user = $this->user;
-                $user->user_type_id = 3;
-                $user->user_name = $request->user_name;
-                $user->first_name = isset($name[0]) ? $name[0] : '';
-                $user->last_name = isset($name[1]) ? $name[1] : '';
-                $user->mobile_number = $request->mobile_number;
-                $user->email_id = $request->email_id;
-                $user->created_by = 1;
-                $user->updated_by = 1;
+                $validator = Validator::make($request->all(), [
+                            'user_name' => 'bail|required',
+                            'mobile_number' => 'bail|required|numeric',
+                            'email_id' => 'bail|required|email',
+                            'is_diabeties' => 'bail|required',
+                            'is_ppa' => 'bail|required',
+                            'hba_1c' => 'bail|required',
+                            'fasting' => 'bail|required',
+                            'bp' => 'bail|required',
+                            'bp' => 'bail|required',
+                            'insullin_dependency' => 'bail|required',
+                            'medical_documents' => 'bail|required',
+                            'booking_source_name' => 'bail|required',
+                            'booking_source_id' => 'bail|required',
+                            'resort_id' => 'bail|required',
+                            'package_id' => 'bail|required',
+                            'resort_room_id' => 'bail|required',
+                            'check_in' => 'bail|required',
+                            'check_out' => 'bail|required',
+//                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.users.add')->withErrors($validator)->withInput();
+                }
+                try {
+                    $name = explode(" ", $request->user_name);
 
-                if ($user->save()) {
-                    $userBooking = new UserBookingDetail();
-                    $userBooking->source_name = $request->booking_source_name;
-                    $userBooking->source_id = $request->booking_source_id;
-                    $userBooking->user_id = $user->id;
-                    $userBooking->resort_id = $request->resort_id;
-                    $userBooking->package_id = $request->package_id;
-                    if ($userBooking->save()) {
-                        $roomBooking = new RoomBooking();
-                        $roomBooking->booking_id = $userBooking->id;
-                        $roomBooking->room_type_id = $request->resort_room_type;
-                        $roomBooking->resort_room_id = $request->resort_room_id;
-                        $check_in_date = Carbon::parse($request->check_in);
-                        $roomBooking->check_in = $check_in_date->format('Y-m-d');
-                        $check_out_date = Carbon::parse($request->check_out);
-                        $roomBooking->check_out = $check_out_date->format('Y-m-d');
-                        $roomBooking->save();
-                        if (!empty($request->person_name) && !empty($request->person_age)) {
-                            $i = 0;
-                            foreach ($request->person_name as $person_name) {
-                                $familyMember = new BookingpeopleAccompany();
-                                $familyMember->person_name = $person_name ? $person_name : ' ';
-                                $familyMember->person_age = $request->person_age[$i] ? $request->person_age[$i] : ' ';
-                                $familyMember->booking_id = $userBooking->id;
-                                $familyMember->save();
-                                $i++;
+                    $user = $this->user;
+                    $user->user_type_id = 3;
+                    $user->user_name = $request->user_name;
+                    $user->first_name = isset($name[0]) ? $name[0] : '';
+                    $user->last_name = isset($name[1]) ? $name[1] : '';
+                    $user->mobile_number = $request->mobile_number;
+                    $user->email_id = $request->email_id;
+                    $user->created_by = 1;
+                    $user->updated_by = 1;
+
+                    if ($user->save()) {
+                        $doc_file_name = '';
+                        if ($request->hasFile("medical_documents")) {
+                            $medical_documents = $request->file("medical_documents");
+                            $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
+                            $doc_file_name = basename($medical_doc);
+                        }
+
+                        $userHealthDetail = new UserhealthDetail();
+                        $userHealthDetail->is_diabeties = $request->is_diabeties;
+                        $userHealthDetail->is_ppa = $request->is_ppa;
+                        $userHealthDetail->hba_1c = $request->hba_1c;
+                        $userHealthDetail->fasting = $request->fasting;
+                        $userHealthDetail->bp = $request->bp;
+                        $userHealthDetail->insullin_dependency = $request->insullin_dependency;
+                        $userHealthDetail->medical_documents = $doc_file_name;
+                        $userHealthDetail->user_id = $user->id;
+                        $userHealthDetail->save();
+
+                        $userBooking = new UserBookingDetail();
+                        $userBooking->source_name = $request->booking_source_name;
+                        $userBooking->source_id = $request->booking_source_id;
+                        $userBooking->user_id = $user->id;
+                        $userBooking->resort_id = $request->resort_id;
+                        $userBooking->package_id = $request->package_id;
+                        if ($userBooking->save()) {
+                            $roomBooking = new RoomBooking();
+                            $roomBooking->booking_id = $userBooking->id;
+                            $roomBooking->room_type_id = $request->package_id;
+                            $roomBooking->resort_room_id = $request->resort_room_id;
+                            $check_in_date = Carbon::parse($request->check_in);
+                            $roomBooking->check_in = $check_in_date->format('Y-m-d');
+                            $check_out_date = Carbon::parse($request->check_out);
+                            $roomBooking->check_out = $check_out_date->format('Y-m-d');
+                            $roomBooking->save();
+                            if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
+
+                                foreach ($request->person_name as $key => $person_name) {
+                                    if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                                        $familyMember = new BookingpeopleAccompany();
+                                        $familyMember->person_name = $person_name ? $person_name : ' ';
+                                        $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                                        $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                                        $familyMember->booking_id = $userBooking->id;
+                                        $familyMember->save();
+                                    }
+                                }
                             }
                         }
-                    }
 
-                    return redirect()->route('admin.users.add')->with('status', 'User has been added successfully');
+                        return redirect()->route('admin.users.index')->with('status', 'User has been added successfully');
+                    }
+                } catch (\Exception $e) {
+                    return redirect()->route('admin.users.index')->withErrors($e->getMessage())->withInput();
                 }
             }
         }
@@ -186,13 +251,40 @@ class UsersController extends Controller {
     public function editUser(Request $request, $id) {
         $user = User::find($id);
         $userBooking = UserBookingDetail::where("user_id", $id)->first();
+        $userHealth = UserhealthDetail::where("user_id", $id)->first();
         $roomTypes = RoomType::where("is_active", 1)->get();
-        if($userBooking){
+        if ($userBooking) {
             $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
             $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
             $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id, "room_type_id" => $roomBooking->room_type_id])->get();
         }
         if ($request->isMethod("post")) {
+            try {
+                $validator = Validator::make($request->all(), [
+                            'user_name' => 'bail|required',
+                            'mobile_number' => 'bail|required|numeric',
+                            'email_id' => 'bail|required|email',
+                            'is_diabeties' => 'bail|required',
+                            'is_ppa' => 'bail|required',
+                            'hba_1c' => 'bail|required',
+                            'fasting' => 'bail|required',
+                            'bp' => 'bail|required',
+                            'bp' => 'bail|required',
+                            'insullin_dependency' => 'bail|required',
+                            'medical_documents' => 'bail|required',
+                            'booking_source_name' => 'bail|required',
+                            'booking_source_id' => 'bail|required',
+                            'resort_id' => 'bail|required',
+                            'package_id' => 'bail|required',
+                            'resort_room_id' => 'bail|required',
+                            'check_in' => 'bail|required',
+                            'check_out' => 'bail|required',
+//                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.users.edit', $id)->withErrors($validator);
+                }
+
                 $name = explode(" ", $request->user_name);
 
                 $user->user_name = $request->user_name;
@@ -204,8 +296,29 @@ class UsersController extends Controller {
                 $user->updated_by = 1;
 
                 if ($user->save()) {
+                    $doc_file_name = '';
+                    if ($request->hasFile("medical_documents")) {
+                        $medical_documents = $request->file("medical_documents");
+                        $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
+                        $doc_file_name = basename($medical_doc);
+                    }
+
+                    $userHealthDetail = UserhealthDetail::where("user_id", $user->id)->first();
+                    if (!$userHealthDetail) {
+                        $userHealthDetail = new UserhealthDetail();
+                    }
+                    $userHealthDetail->is_diabeties = $request->is_diabeties;
+                    $userHealthDetail->is_ppa = $request->is_ppa;
+                    $userHealthDetail->hba_1c = $request->hba_1c;
+                    $userHealthDetail->fasting = $request->fasting;
+                    $userHealthDetail->bp = $request->bp;
+                    $userHealthDetail->insullin_dependency = $request->insullin_dependency;
+                    $userHealthDetail->medical_documents = $doc_file_name;
+                    $userHealthDetail->user_id = $user->id;
+                    $userHealthDetail->save();
+
                     $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
-                    if(!$userBooking){
+                    if (!$userBooking) {
                         $userBooking = new UserBookingDetail();
                     }
                     $userBooking->source_name = $request->booking_source_name;
@@ -215,7 +328,7 @@ class UsersController extends Controller {
                     $userBooking->package_id = $request->package_id;
                     if ($userBooking->save()) {
                         $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
-                        if(!$roomBooking){
+                        if (!$roomBooking) {
                             $roomBooking = new RoomBooking();
                         }
                         $roomBooking->booking_id = $userBooking->id;
@@ -226,26 +339,29 @@ class UsersController extends Controller {
                         $check_out_date = Carbon::parse($request->check_out);
                         $roomBooking->check_out = $check_out_date->format('Y-m-d');
                         $roomBooking->save();
-                        
+
                         if (!empty($request->person_name) && !empty($request->person_age)) {
                             BookingpeopleAccompany::where("booking_id", $userBooking->id)->delete();
-                            $i = 0;
-                            foreach ($request->person_name as $person_name) {
-                                $familyMember = new BookingpeopleAccompany();
-                                $familyMember->person_name = $person_name ? $person_name : ' ';
-                                $familyMember->person_age = $request->person_age[$i] ? $request->person_age[$i] : ' ';
-                                $familyMember->booking_id = $userBooking->id;
-                                $familyMember->save();
-                                $i++;
+
+                            foreach ($request->person_name as $key => $person_name) {
+                                if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                                    $familyMember = new BookingpeopleAccompany();
+                                    $familyMember->person_name = $person_name ? $person_name : ' ';
+                                    $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                                    $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                                    $familyMember->booking_id = $userBooking->id;
+                                    $familyMember->save();
+                                }
                             }
                         }
+
+                        return redirect()->route('admin.users.edit', $id)->with('status', 'User has been updated successfully');
                     }
-
-                    return redirect()->route('admin.users.edit', $id)->with('status', 'User has been updated successfully');
                 }
-            
+            } catch (\Exception $e) {
+                return redirect()->route('admin.users.index')->with($e->getMessage());
+            }
         }
-
         $css = [
             'vendors/bootstrap-daterangepicker/daterangepicker.css',
         ];
@@ -262,10 +378,10 @@ class UsersController extends Controller {
             'roomTypes' => $roomTypes,
             'user' => $user,
             'userBooking' => $userBooking,
+            'userHealth' => $userHealth,
             'resortRooms' => isset($resortRooms) ? $resortRooms : [],
             'roomBooking' => isset($roomBooking) ? $roomBooking : [],
             'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
-            
                 ]
         );
     }
