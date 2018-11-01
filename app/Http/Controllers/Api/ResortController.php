@@ -84,12 +84,6 @@ class ResortController extends Controller {
      * 
      */
     public function resortDetail(Request $request) {
-//        if (!$request->user_id) {
-//            $response['success'] = false;
-//            $response['message'] = "User id missing.";
-//            $response['data'] = (object) [];
-//            return $this->jsonData($response);
-//        }
         if (!$request->resort_id) {
             $response['success'] = false;
             $response['status_code'] = 404;
@@ -98,20 +92,22 @@ class ResortController extends Controller {
             return $this->jsonData($response);
         }
 
-        $resort = Resort::where(["id" => $request->resort_id, "is_active" => 1])->first();
+        $resort = Resort::select('id', 'name', 'description')->where(["id" => $request->resort_id, "is_active" => 1])->with([
+                    'resortImages' => function($query) {
+                        $query->select('id', 'image_name', 'resort_id');
+                    }
+                ])->with([
+                    'resortRooms' => function($query) {
+                        $query->select('id', 'resort_id', 'room_no', 'room_type_id')->with([
+                            'roomType' => function ($query) {
+                                $query->select('id', 'name');
+                            }
+                        ]);
+                    }
+                ])->first();
+
         if ($resort) {
             $data['resort'] = $resort;
-            $images = ResortImage::where(["resort_id" => $request->resort_id, "is_active" => 1])->get();
-            if ($images) {
-                $i = 0;
-                foreach ($images as $image) {
-                    $data['images'][$i]['id'] = $image->id;
-                    $data['images'][$i]['image'] = asset('storage/Resort/' . $image->image_name);
-                    $i++;
-                }
-            } else {
-                $data['images'] = [];
-            }
 
             $response['success'] = true;
             $response['status_code'] = 200;

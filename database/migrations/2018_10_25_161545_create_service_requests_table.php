@@ -15,7 +15,7 @@ class CreateServiceRequestsTable extends Migration {
         Schema::create('service_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('comment')->nullable();
-            $table->string('question_id')->nullable();
+            $table->bigInteger('question_id')->default(0);
             $table->bigInteger('service_id')->default(0);
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('request_status_id')->default(0);

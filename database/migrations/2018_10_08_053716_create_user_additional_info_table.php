@@ -20,6 +20,7 @@ class CreateUserAdditionalInfoTable extends Migration
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->tinyInteger('is_active')->default(1);
+            $table->bigInteger('domain_id')->default(0);
             $table->timestamps();
         });
     }

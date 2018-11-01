@@ -503,7 +503,7 @@ class ServiceController extends Controller {
             return $this->jsonData($response);
         }
 
-        $service = Service::find($request->request_id);
+        $service = ServiceRequest::find($request->request_id);
         if ($service) {
             $service->request_status_id = 2;
             $service->accepted_by_id = $request->user_id;

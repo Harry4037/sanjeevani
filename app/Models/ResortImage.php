@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ResortImage extends Model
 {
+    
+    public function getImageNameAttribute($name){
+        return asset('storage/Resort/'.$name);
+    }
 
 }
