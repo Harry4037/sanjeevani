@@ -10,6 +10,7 @@ use App\Models\Resort;
 use App\Models\Question;
 use App\Models\ServiceQuestionaire;
 use Illuminate\Support\Facades\Storage;
+use Validator;
 
 class ServiceController extends Controller {
 
@@ -46,6 +47,7 @@ class ServiceController extends Controller {
             $servicesArray = [];
             foreach ($services as $service) {
                 $stype = ServiceType::find($service->type_id);
+                $servicesArray[$i]['icon'] = '<img width=50 height=50 src='.asset("storage/Service_icon/".$service->icon).' >';
                 $servicesArray[$i]['name'] = $service->name;
                 $servicesArray[$i]['type'] = $stype ? $stype->name : '';
                 $checked_status = $service->is_active ? "checked" : '';
@@ -65,6 +67,17 @@ class ServiceController extends Controller {
     public function serviceAdd(Request $request) {
 
         if ($request->isMethod("post")) {
+
+            $validator = Validator::make($request->all(), [
+                        'service_name' => 'bail|required',
+                        'resort_id' => 'bail|required',
+                        'service_type' => 'bail|required',
+                        'service_icon' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width<500,height<500',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('admin.service.add')->withErrors($validator)->withInput();
+            }
+
             $service = new Service();
             if ($request->hasFile("service_icon")) {
                 $icon_image = $request->file("service_icon");
@@ -73,9 +86,7 @@ class ServiceController extends Controller {
                 $service->icon = $icon_file_name;
             }
 
-
             $service->name = $request->service_name;
-
             $service->type_id = $request->service_type;
             $service->resort_id = $request->resort_id;
             $service->is_active = 1;

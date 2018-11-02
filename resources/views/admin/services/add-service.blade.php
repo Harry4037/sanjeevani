@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name">
+                            <input value="{{ old('service_name') }}" type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name">
                         </div>
                     </div>
                     <div class="form-group">
@@ -28,7 +28,11 @@
                                 <option value="">Choose option</option>
                                 @if($serviceType)
                                 @foreach($serviceType as $serviceT)
-                                <option value="{{ $serviceT->id }}">{{ $serviceT->name }}</option>
+                                <option value="{{ $serviceT->id }}" 
+                                        @if(old('service_type') == $serviceT->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $serviceT->name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -47,7 +51,11 @@
                                 <option value="">Choose option</option>
                                 @if($resort)
                                 @foreach($resort as $res)
-                                <option value="{{ $res->id }}">{{ $res->name }}</option>
+                                <option value="{{ $res->id }}"
+                                        @if(old('resort_id') == $res->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $res->name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -58,8 +66,15 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
                                 @if($question)
-                                @foreach($question as $ques)
-                                <input class="flat" type="checkbox" name="service_question[]" value="{{ $ques->id }}"  > {{ $ques->name }}
+                                @foreach($question as $key => $ques)
+                                <input class="flat" type="checkbox" name="service_question[]" value="{{ $ques->id }}"  
+                                       @if(isset(old('service_question')[$key]))
+                                       @if(old('service_question')[$key] == $ques->id)
+                                        {{ "checked" }}
+                                        @endif
+                                        @endif
+                                       
+                                       > {{ $ques->name }}
                                 <br>
                                 @endforeach
                                 @endif

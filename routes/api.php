@@ -20,27 +20,35 @@ Route::namespace("Api")->group(function () {
     Route::post('verify-otp', 'AuthController@login');
     //Home
     Route::get('home', 'HomeController@home');
+    // Housekeeping & Service listing
+    Route::get('services-list', 'ServiceController@serviceListing');
+    //Raised service order & request listing
+    Route::get('order-request-list', 'ServiceController@userServiceRequest');
+
+    //service order & request listing of specific resort (Staff)
+    Route::get('service-request-list', 'StaffController@serviceRequestListing');
 
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');
-    Route::get('services-list', 'ServiceController@serviceListing');
     Route::get('resort-detail', 'ResortController@resortDetail');
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
-    Route::get('service-request-list', 'ServiceController@serviceRequestListing');
+
 
 
 
     Route::middleware('auth:api')->group(function () {
-        Route::get('logout', 'AuthController@logout');
+        //Raise service request (by user)
+        Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
 
-
-
+        //Accept service order & request (by staff member)
+        Route::post('service-request-accept', 'StaffController@requestAccept');
+        
+        //Myjobs (staff member)
+        Route::get('myjobs', 'StaffController@myJobListing');
 
         Route::post('check-in', 'UserController@checkIn');
+        Route::get('logout', 'AuthController@logout');
         Route::post('update-profile', 'UserController@updateProfile');
         Route::post('change-password', 'UserController@changesPassword');
-        Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
-        Route::post('service-request-accept', 'ServiceController@requestAccept');
-        Route::get('order-request-list', 'MyjobsController@userServiceRequest');
     });
 });

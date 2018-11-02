@@ -20,6 +20,7 @@
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
+                            <th>Service Icon</th>
                             <th>Service Name</th>
                             <th>Service Type</th>
                             <th>Status</th>
@@ -51,6 +52,7 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
+                {"data": "icon"},
                 {"data": "name"},
                 {"data": "type"},
                 {"data": null,

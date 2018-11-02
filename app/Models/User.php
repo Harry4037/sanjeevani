@@ -27,6 +27,7 @@ class User extends Authenticatable {
         'otp',
         'password',
     ];
+
 //    protected $appends = [
 //        'booking_detail',
 //        'health_detail',
@@ -52,12 +53,20 @@ class User extends Authenticatable {
         return $this->email_id;
     }
 
-    public function userHealthDetail(){
-        return $this->hasOne('App\Models\UserhealthDetail', 'user_id'); 
+    public function userHealthDetail() {
+        return $this->hasOne('App\Models\UserhealthDetail', 'user_id');
     }
-    
-    public function userBookingDetail(){
-        return $this->hasOne('App\Models\UserBookingDetail', 'user_id'); 
+
+    public function userBookingDetail() {
+        return $this->hasOne('App\Models\UserBookingDetail', 'user_id');
+    }
+
+    public function getUserTypeIdAttribute($value) {
+        if ($value == 3) {
+            return $this->userBookingDetail ? 3 : 4;
+        } else {
+            return $value;
+        }
     }
 
 }

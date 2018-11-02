@@ -185,7 +185,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>OTP send successfully.</p>"
+            "description": "<p>OTP sent successfully.</p>"
           },
           {
             "group": "Success 200",
@@ -199,7 +199,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"status\": true,\n \"message\": \"OTP send successfully.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 200 OK\n {\n    \"status\": true,\n    \"status_code\": 200,\n    \"message\": \"OTP sent successfully.\",\n    \"data\": {}\n }",
           "type": "json"
         }
       ]
@@ -211,13 +211,13 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "MobileNumberMissing",
-            "description": "<p>The mobile number of the User was missing.</p>"
+            "description": "<p>The mobile number is missing.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
             "field": "UserTypeMissing",
-            "description": "<p>The User type was missing.</p>"
+            "description": "<p>The User type is missing.</p>"
           },
           {
             "group": "Error 4xx",
@@ -236,22 +236,22 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"Mobile number missing.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Mobile number missing.\",\n      \"data\": {}\n  }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"User type missing.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"User type missing.\",\n    \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"Mobile number should be 10 digit.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Mobile number should be 10 digit.\",\n   \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"User type invalid.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n    \"message\": \"User type invalid.\",\n    \"data\": {}\n}",
           "type": "json"
         }
       ]
@@ -342,7 +342,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"OTP verified successfully.\",\n\"data\":{\n\"id\": 2,\n\"user_name\": null,\n\"first_name\": null,\n\"mid_name\": null,\n\"last_name\": null,\n\"email_id\": null,\n\"user_type_id\": 3,\n\"address\": null,\n\"screen_name\": null,\n\"profile_pic_path\": null,\n\"mobile_number\": \"8077575835\",\n\"token_type\": \"Bearer\",\n\"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU1OGZlMmI1NjcxN2Q3MDI2YmFhNmEzMjAxNmYxY2ZlODU5NDVjMGQ5YmI1MjFmZWViZTBjZmQ2MmI3MmE5NDU1YmM3NDU4NGI4ZWQxZDZmIn0.eyJhdWQiOiIxIiwianRpIjoiZTU4ZmUyYjU2NzE3ZDcwMjZiYWE2YTMyMDE2ZjFjZmU4NTk0NWMwZDliYjUyMWZlZWJlMGNmZDYyYjcyYTk0NTViYzc0NTg0YjhlZDFkNmYiLCJpYXQiOjE1NDA2NTk3NTQsIm5iZiI6MTU0MDY1OTc1NCwiZXhwIjoxNTcyMTk1NzU0LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.NQCP1kv1nQzvK9ExA0KCug-kXSE23heVLUL-1BuxB8tY6w_cI7XJ4ETAMBiZvIcgepyd_MjU-ngVRkx6WQCIhn4JJ2Zmu6ULUDSPeFWN2BwLcxRl-DziLixcyYTEWzY8LLrCxK7qtjD39_fOZFmW81wFlIfyBfwCpmKJenmR-GxMB4Ltbs-mHbQQs9Xwazi_JgtVc4oPJmHXrBGpXD4nU8ULSkDXbyH6VNkaJbGjvjqQplmRXbns6U04110hkWDUoMn2FmRyuuBj10aMMVrcsqi4yUP2IDlKXTTfnH8x5Ae6zzX0LHZJFiWE3KNZFXsaamVQfCHHnUAnPKFW3SHUBzUKjWXfFB6G0WsiM_dcZsGduu9Qnd-PpiMcWq8Uhq31FMBl2qHNenX_1mwpM0p3sfnYotVQaoNUu9-2IM1zmRXCEoGA3SsDto7nfdChdBPh6Z-6VILo2AqzkhzuYpRuNyHcvv2bOAXH1RgXbeH1A4ru0_glMKTp2jwd9IStJdkCMdADk_sUo31oeEMtkApRzYZc1qzWENtNdYWtpniADOHlMpJe1lv7X3qsgnI3hD7uZNZlZ72-xj5M15SvDCBW3uLWXd0TioI0s3311wzX9Li8HdjAcjwRsJJy1xij4NJgdEE9UZ_6jGyHt6ghEhdBgL691xUrwI1fAaHe0aLZSKA\",\n\"source_name\": \"Source Name\",\n\"source_id\": \"Source Id\",\n\"resort\":{\"id\": 1, \"name\": \"Parth Inn\", \"description\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.\",…}\n}\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"OTP verified successfully.\",\n   \"data\": {\n       \"id\": 2,\n       \"user_name\": null,\n       \"first_name\": null,\n       \"mid_name\": null,\n       \"last_name\": null,\n       \"email_id\": null,\n       \"user_type_id\": 4,\n       \"address\": null,\n       \"screen_name\": null,\n       \"profile_pic_path\": null,\n       \"mobile_number\": \"8077575835\",\n       \"token_type\": \"Bearer\",\n       \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjljO\nTU1ZGI4NzVkMTMyMmM3ZjQxZWI1NjkxZjBhZGJmY2UwYjNlZmY2MTFjODcyMmZiYTMxN2E1ZjViYz\nk5OWRiZmFiMzQwOThlMmU2NmFlIn0.eyJhdWQiOiIxIiwianRpIjoiOWM5NTVkYjg3NWQxMzIyYzdm\nNDFlYjU2OTFmMGFkYmZjZTBiM2VmZjYxMWM4NzIyZmJhMzE3YTVmNWJjOTk5ZGJmYWIzNDA5OGUyZT\nY2YWUiLCJpYXQiOjE1NDExNTc3NDksIm5iZiI6MTU0MTE1Nzc0OSwiZXhwIjoxNTcyNjkzNzQ4LCJz\ndWIiOiIyIiwic2NvcGVzIjpbXX0.ZzxBt0Qk3jKxxeJgx-ik-unJ-JfcSZe4g6mRXYl87tR05N1X-Hdt\nfBoQnx8m_9saQfCBa-ypOjhYYyGkbclelXNWapGLJ0OsNi9bvMUULIW3nS6kidOHvYIzWpSyOhM59AVu\nSm1OGPO521Yc_oXJrjMew7ABAvD0s8cVD7EmOuIjsJry4Vm8_7h4kC93l-3lmCpA6J5VPJmKJgKdMShr\ncLbFSHqCsOmsWwWYBGlU_og7y5V0AVbFdi7Hf6PvPx1vSyX_EfCkUD7tfuN_vMCsCeiya4zeSTHl5ks8\n4zmO3G0PsXh4YzH18u-_sB2SMzhWEq_mbsuJgA6aUCHlSCP9pro53h4lQsp4l_HVF0th828h8PqTF_W\nweU4V1y9ndwobwoGOpz0qMBQ99L-e2K6ujJDu7kVY6KALzvsyEP3dlGeU09hPzS2fM_oVy8Wps3qmAj\nV2ObzkAjBX69lkn0e2ertreVndKo-HB79MSyTxMIO4kpp3dGsS9jgL_gdLPe4eIHhtGz73JDxycAaHjO\nxH6CcXwc3sR5MYkyZ-Ok372ASQqj6zV5u2yPB4HF23ELSyRYohHIbw5uO2SNk8qz9pJxaucTp5uLYFN1\nJjgcaU4sSHTOA-_Z7YmepMpfukFYtnsiVZ8ySjhUg1rUx1EAPexieacexqY_PJJM5iPXKyyeY\",\n       \"source_name\": \"\",\n       \"source_id\": \"\",\n       \"resort_room_no\": \"\",\n       \"room_type\": \"Delux\",\n       \"check_in\": \"\",\n       \"check_out\": \"\",\n       \"resort\": {}\n      }\n}",
           "type": "json"
         }
       ]
@@ -372,51 +372,51 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "UserTypeMissing",
-            "description": "<p>The User Type was missing.</p>"
+            "description": "<p>The User Type is missing.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
             "field": "InvalidUserType",
-            "description": "<p>The User invalid user type.</p>"
+            "description": "<p>The user type invalid</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
             "field": "IncorrectOTP",
-            "description": "<p>The OTP is incorrect.</p>"
+            "description": "<p>The OTP or mobile number incorrect.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"Mobile number missing.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Mobile number missing.\",\n    \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"Mobile number should be 10 digit.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Mobile number should be 10 digit.\",\n    \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"OTP missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"OTP missing.\",\n    \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User type missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"User type missing.\",\n    \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"User type invalid.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"User type invalid.\",\n    \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n\"status\": false,\n\"message\": \"Incorrect OTP.\",\n\"data\":{}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"OTP or mobile number incorrect.\",\n    \"data\": {}\n }",
           "type": "json"
         }
       ]
@@ -710,6 +710,113 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/order-request-list",
+    "title": "Order & Request list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetOrderRequestlist",
+    "group": "Services",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Order &amp; Request found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Order & Request found.\",\n  \"data\": {\n      \"order_request\": [\n           {\n               \"id\": 1,\n               \"comment\": \"\",\n               \"service_id\": 1,\n               \"question_id\": 1,\n               \"request_status_id\": 2,\n               \"accepted_by_id\": 1,\n               \"service_detail\": {\n                   \"id\": 1,\n                   \"name\": \"Air conditioner\"\n               },\n              \"question_detail\": {\n                  \"id\": 1,\n                  \"name\": \"question 1\"\n               },\n              \"request_status\": {\n                  \"id\": 2,\n                  \"status\": \"In Progress\"\n               },\n               \"accepted_by\": {\n                   \"id\": 1,\n                   \"user_name\": \"Admin\",\n                   \"first_name\": \"Admin\",\n                   \"last_name\": null\n               }\n           },\n           {\n               \"id\": 2,\n               \"comment\": \"\",\n               \"service_id\": 2,\n               \"question_id\": 0,\n               \"request_status_id\": 1,\n               \"accepted_by_id\": 0,\n               \"service_detail\": {\n                   \"id\": 2,\n                   \"name\": \"Room Cleaning\"\n               },\n               \"question_detail\": null,\n               \"request_status\": {\n                   \"id\": 1,\n                   \"status\": \"Pending\"\n               },\n               \"accepted_by\": null\n           },\n           {\n               \"id\": 3,\n               \"comment\": \"\",\n               \"service_id\": 3,\n               \"question_id\": 0,\n               \"request_status_id\": 3,\n               \"accepted_by_id\": 1,\n               \"service_detail\": {\n                   \"id\": 3,\n                   \"name\": \"Air conditioners\"\n               },\n               \"question_detail\": null,\n               \"request_status\": {\n                  \"id\": 3,\n                  \"status\": \"Your Approval Needed\"\n               },\n               \"accepted_by\": {\n                   \"id\": 1,\n                   \"user_name\": \"Admin\",\n                   \"first_name\": \"Admin\",\n                   \"last_name\": null\n               }\n           }\n       ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "OrderRequestNotFound",
+            "description": "<p>The Order &amp; Request not found.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The User id missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Order & Request not found.\",\n      \"data\": {\n          \"order_request\": []\n      }\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"user id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ServiceController.php",
+    "groupTitle": "Services"
+  },
+  {
+    "type": "get",
     "url": "/api/services-list",
     "title": "All services list",
     "header": {
@@ -763,7 +870,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"Services listing.\",\n\"data\": {\n\"housekeeping\": [\n{\n\"id\": 1,\n\"name\": \"Room Cleaning\",\n\"type\": \"Housekeeping\",\n\"icon\": \"\",\n\"is_active\": 1,\n\"created_by\": \"1\",\n\"updated_by\": \"1\",\n\"created_at\": \"2018-10-22 09:30:58\",\n\"updated_at\": \"2018-10-22 09:40:52\"\n},\n{\n\"id\": 3,\n\"name\": \"Do Not Disturb\",\n\"type\": \"Housekeeping\",\n\"icon\": \"\",\n\"is_active\": 1,\n\"created_by\": \"1\",\n\"updated_by\": \"1\",\n\"created_at\": \"2018-10-22 09:31:42\",\n\"updated_at\": \"2018-10-22 09:31:42\"\n}\n],\n\"issues\": [\n{\n\"id\": 4,\n\"name\": \"Shower\",\n\"type\": \"Issue\",\n\"icon\": \"\",\n\"is_active\": 1,\n\"created_by\": \"1\",\n\"updated_by\": \"1\",\n\"created_at\": \"2018-10-22 09:31:54\",\n\"updated_at\": \"2018-10-22 09:31:54\"\n}\n]\n}\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Services listing.\",\n   \"data\": {\n       \"housekeeping\": [\n           {\n               \"id\": 1,\n               \"name\": \"Air conditioner\",\n               \"icon\": \"http://127.0.0.1:8000/storage/Service_icon/cWpiFZ9YG4duaP7Cfch2DgeVn3AYdSBAZPWFkd6g.png\",\n               \"questions\": [\n                   {\n                       \"id\": 1,\n                       \"name\": \"question 1\"\n                   },\n                   {\n                       \"id\": 2,\n                       \"name\": \"question 2\"\n                   }\n               ]\n           },\n           {\n               \"id\": 3,\n               \"name\": \"Air conditioners\",\n               \"icon\": \"http://127.0.0.1:8000/storage/Service_icon/i0hRXnlJoVdUcSENmCNxvHANVZ1drvwyFqtVB14O.png\",\n               \"questions\": [\n                    {\n                       \"id\": 1,\n                       \"name\": \"question 1\"\n                    },\n                   {\n                       \"id\": 2,\n                       \"name\": \"question 2\"\n                   }\n               ]\n           }\n       ],\n       \"issues\": [\n           {\n                \"id\": 2,\n               \"name\": \"Room Cleaning\",\n               \"icon\": \"http://127.0.0.1:8000/storage/Service_icon/i0hRXnlJoVdUcSENmCNxvHANVZ1drvwyFqtVB14O.png\",\n               \"questions\": [\n                   {\n                       \"id\": 1,\n                       \"name\": \"question 1\"\n                   }\n               ]\n          },\n          {\n              \"id\": 4,\n              \"name\": \"Do Not Disturbe\",\n              \"icon\": \"http://127.0.0.1:8000/storage/Service_icon/i0hRXnlJoVdUcSENmCNxvHANVZ1drvwyFqtVB14O.png\",\n              \"questions\": [\n                  {\n                      \"id\": 1,\n                      \"name\": \"question 1\"\n                  },\n                  {\n                      \"id\": 2,\n                      \"name\": \"question 2\"\n                  }\n              ]\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -827,7 +934,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "question_id",
-            "description": "<p>question id's by comma separated.</p>"
+            "description": "<p>question id.</p>"
           },
           {
             "group": "Parameter",
@@ -886,26 +993,26 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "ServiceIdMissing",
-            "description": "<p>The service id was missing.</p>"
+            "field": "UserIdMissing",
+            "description": "<p>The user id is missing.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "UserIdMissing",
-            "description": "<p>The user id was missing.</p>"
+            "field": "UnauthorizedUser",
+            "description": "<p>The user is unauthorized.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ServiceIdMissing",
+            "description": "<p>The service id is missing.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
             "field": "ResortIdMissing",
-            "description": "<p>The resort id was missing.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "InvalidService",
-            "description": "<p>The service is invalid.</p>"
+            "description": "<p>The resort id is missing.</p>"
           },
           {
             "group": "Error 4xx",
@@ -916,40 +1023,40 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "InvalidUser",
-            "description": "<p>The user is invalid.</p>"
+            "field": "InvalidService",
+            "description": "<p>The service is invalid.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"service id missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n {\n     \"status\": false,\n     \"status_code\": 404,\n     \"message\": \"User id missing.\",\n     \"data\": {}\n }",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Unauthorized user.\",\n    \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"resort id missing\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"service id missing.\",\n    \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid service\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"resort id missing.\",\n    \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid resort\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Invalid resort.\",\n    \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid user\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Invalid service.\",\n    \"data\": {}\n}",
           "type": "json"
         }
       ]
@@ -1040,7 +1147,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"message\": \"Request accepted.\",\n      \"data\":{}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"status\": true,\n  \"status_code\": 200,\n  \"message\": \"Request accepted.\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
@@ -1065,18 +1172,18 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Request id missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Request id missing.\",\n   \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": false,\n  \"status_code\": 404,\n  \"message\": \"User id missing.\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/ServiceController.php",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
     "groupTitle": "Staff_Service"
   },
   {
@@ -1147,7 +1254,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"Service request found.\",\n\"data\":[\n{\n\"id\": 1,\n\"service_name\": \"Air conditioner\",\n\"service_type\": \"Housekeeping\",\n\"comment\": \"hi test\",\n\"user_info\":{\n\"id\": 1,\n\"salutation_id\": 0,\n\"user_name\": \"Admin\",\n\"password\": \"$2y$10$kPpsYwT0fw2mB4F9.cI1AeSBSi1XTndcCH3PLptRtjDebQZDShibK\",\n\"first_name\": \"Admin\",\n\"mid_name\": null,\n\"last_name\": null,\n\"booking_source_name\": null,\n\"booking_id\": null,\n\"resort_id\": 0,\n\"total_room\": null,\n\"package_detail_id\": 0,\n\"gender\": \"M\",\n\"email_id\": \"admin@mail.com\",\n\"alternate_email_id\": null,\n\"user_type_id\": 1,\n\"designation_id\": 0,\n\"department_id\": 0,\n\"city_id\": 0,\n\"language_id\": 0,\n\"screen_name\": null,\n\"date_of_joining\": \"2018-10-25 19:53:22\",\n\"authority_id\": \"0\",\n\"date_of_birth\": \"2018-10-25 19:53:22\",\n\"is_user_loked\": 0,\n\"profile_pic_path\": null,\n\"aadhar_id\": null,\n\"voter_id\": null,\n\"check_in_date\": null,\n\"check_out_date\": null,\n\"mobile_number\": null,\n\"other_contact_number\": null,\n\"address1\": null,\n\"address2\": null,\n\"address3\": null,\n\"pincode\": null,\n\"secuity_question\": null,\n\"secuity_questio_answer\": null,\n\"ref_time_zone_id\": null,\n\"login_expiry_date\": null,\n\"other_info\": null,\n\"user_id_RA\": null,\n\"is_active\": 1,\n\"domain_id\": 0,\n\"remember_token\": null,\n\"otp\": null,\n\"created_by\": \"0\",\n\"updated_by\": \"0\",\n\"created_at\": \"2018-10-25 19:53:22\",\n\"updated_at\": null\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"status\": true,\n  \"status_code\": 200,\n  \"message\": \"Service request found.\",\n  \"data\": [\n       {\n           \"id\": 1,\n           \"comment\": \"\",\n           \"service_id\": 1,\n           \"user_id\": 2,\n           \"service_detail\": {\n               \"id\": 1,\n               \"name\": \"Air conditioner\",\n               \"icon\": \"http://127.0.0.1:8000/storage/Service_icon/cWpiFZ9YG4duaP7Cfch2DgeVn3AYdSBAZPWFkd6g.png\",\n               \"type_id\": 1,\n              \"service_type\": {\n                  \"id\": 1,\n                   \"name\": \"Housekeeping\"\n               }\n           },\n           \"user_detail\": {\n               \"id\": 2,\n               \"user_name\": null,\n               \"email_id\": null,\n               \"mobile_number\": \"8077575835\"\n          }\n       },\n       {\n           \"id\": 2,\n           \"comment\": \"\",\n           \"service_id\": 2,\n           \"user_id\": 2,\n          \"service_detail\": {\n              \"id\": 2,\n               \"name\": \"Room Cleaning\",\n               \"icon\": \"http://127.0.0.1:8000/storage/Service_icon/C2taEVpOfEQghJco5Y4uhARv6x1WKMOpE8Szaixn.png\",\n               \"type_id\": 2,\n              \"service_type\": {\n                   \"id\": 2,\n                   \"name\": \"Issue\"\n               }\n           },\n           \"user_detail\": {\n               \"id\": 2,\n               \"user_name\": null,\n               \"email_id\": null,\n               \"mobile_number\": \"8077575835\"\n          }\n       }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -1172,18 +1279,18 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"resort id missing.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Resort id missing.\",\n   \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid resort.\",\n \"data\": {}\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": false,\n  \"status_code\": 404,\n  \"message\": \"Invalid resort.\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/ServiceController.php",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
     "groupTitle": "Staff_Service"
   },
   {

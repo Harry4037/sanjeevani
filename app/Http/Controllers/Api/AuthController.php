@@ -447,4 +447,7 @@ class AuthController extends Controller {
         }
     }
 
+    public function logout(){
+        return $this->sendSuccessResponse("logout successfully", (object)[]);
+    }
 }

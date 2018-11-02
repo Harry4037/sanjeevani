@@ -20,5 +20,9 @@ class ServiceRequest extends Model
     public function acceptedBy(){
         return $this->belongsTo('App\Models\User', 'accepted_by_id');
     }
+    
+    public function userDetail(){
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
        
 }
