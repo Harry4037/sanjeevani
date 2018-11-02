@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class UserBookingDetail extends Model {
 
     protected $appends = [
+        'resort',
         'room_booking',
         'bookingpeople_accompany',
     ];
 
+    public function getResortAttribute() {
+        $resort = Resort::select('id', 'name', 'description', 'contact_number', 'address_1')->where("id", $this->resort_id)
+                ->first();
+        return $resort;
+    }
     public function getRoomBookingAttribute() {
         $roomBooking = RoomBooking::select('id', 'check_in', 'check_out', 'room_type_id', 'resort_room_id')->where("booking_id", $this->id)
                 ->first();
