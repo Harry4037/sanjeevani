@@ -52,15 +52,12 @@ class User extends Authenticatable {
         return $this->email_id;
     }
 
-//    protected static function boot() {
-//        parent::boot();
-//
-//        if (request()->segment(1) == 'api') {
-//
-//             static::addGlobalScope('select', function (Builder $builder) {
-//                 $builder->select('id', 'user_name' );
-//             });
-//        }
-//    }
+    public function userHealthDetail(){
+        return $this->hasOne('App\Models\UserhealthDetail', 'user_id'); 
+    }
+    
+    public function userBookingDetail(){
+        return $this->hasOne('App\Models\UserBookingDetail', 'user_id'); 
+    }
 
 }

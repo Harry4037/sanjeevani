@@ -46,18 +46,37 @@ class Handler extends ExceptionHandler {
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception) {
-        
-        
-        if ($exception instanceof MethodNotAllowedHttpException) {
+        if (\Request::segment(1) == "api") {
+            if ($exception instanceof AuthenticationException) {
+                return response()->json([
+                            'status' => false,
+                            'status_code' => 401,
+                            'massage' => "Invalid token",
+                            'data' => (object) [],
+                ]);
+            }
+
+            if ($exception instanceof MethodNotAllowedHttpException) {
+                return response()->json([
+                            'success' => false,
+                            'status_code' => 400,
+                            'message' => 'Method is not allowed for this requeste.',
+                            'data' => (object) [],
+                ]);
+            }
+
             return response()->json([
                         'success' => false,
-                        'message' => 'Method is not allowed for this requeste.',
+                        'status_code' => 400,
+                        'message' => "Something went be wrong. Please contact administrator.",
+                        'error' => $exception->getMessage(),
                         'data' => (object) [],
             ]);
         }
 
+
 //        dd($exception);
-        
+
         return parent::render($request, $exception);
     }
 

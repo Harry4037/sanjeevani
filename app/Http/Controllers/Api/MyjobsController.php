@@ -112,7 +112,7 @@ class MyjobsController extends Controller {
                         'acceptedBy' => function($query) {
                             $query->select('id', 'user_name', 'first_name', 'last_name');
                         }
-                    ])->where("user_id", $request->user_id)->get();
+                    ])->get();
 
             if ($serviceRequest['order_request']->toArray()) {
                 return response()->json([

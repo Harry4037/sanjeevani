@@ -141,26 +141,44 @@ class AuthController extends Controller {
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     * "status": true,
-     * "message": "OTP verified successfully.",
-     * "data":{
-     * "id": 2,
-     * "user_name": null,
-     * "first_name": null,
-     * "mid_name": null,
-     * "last_name": null,
-     * "email_id": null,
-     * "user_type_id": 3,
-     * "address": null,
-     * "screen_name": null,
-     * "profile_pic_path": null,
-     * "mobile_number": "8077575835",
-     * "token_type": "Bearer",
-     * "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU1OGZlMmI1NjcxN2Q3MDI2YmFhNmEzMjAxNmYxY2ZlODU5NDVjMGQ5YmI1MjFmZWViZTBjZmQ2MmI3MmE5NDU1YmM3NDU4NGI4ZWQxZDZmIn0.eyJhdWQiOiIxIiwianRpIjoiZTU4ZmUyYjU2NzE3ZDcwMjZiYWE2YTMyMDE2ZjFjZmU4NTk0NWMwZDliYjUyMWZlZWJlMGNmZDYyYjcyYTk0NTViYzc0NTg0YjhlZDFkNmYiLCJpYXQiOjE1NDA2NTk3NTQsIm5iZiI6MTU0MDY1OTc1NCwiZXhwIjoxNTcyMTk1NzU0LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.NQCP1kv1nQzvK9ExA0KCug-kXSE23heVLUL-1BuxB8tY6w_cI7XJ4ETAMBiZvIcgepyd_MjU-ngVRkx6WQCIhn4JJ2Zmu6ULUDSPeFWN2BwLcxRl-DziLixcyYTEWzY8LLrCxK7qtjD39_fOZFmW81wFlIfyBfwCpmKJenmR-GxMB4Ltbs-mHbQQs9Xwazi_JgtVc4oPJmHXrBGpXD4nU8ULSkDXbyH6VNkaJbGjvjqQplmRXbns6U04110hkWDUoMn2FmRyuuBj10aMMVrcsqi4yUP2IDlKXTTfnH8x5Ae6zzX0LHZJFiWE3KNZFXsaamVQfCHHnUAnPKFW3SHUBzUKjWXfFB6G0WsiM_dcZsGduu9Qnd-PpiMcWq8Uhq31FMBl2qHNenX_1mwpM0p3sfnYotVQaoNUu9-2IM1zmRXCEoGA3SsDto7nfdChdBPh6Z-6VILo2AqzkhzuYpRuNyHcvv2bOAXH1RgXbeH1A4ru0_glMKTp2jwd9IStJdkCMdADk_sUo31oeEMtkApRzYZc1qzWENtNdYWtpniADOHlMpJe1lv7X3qsgnI3hD7uZNZlZ72-xj5M15SvDCBW3uLWXd0TioI0s3311wzX9Li8HdjAcjwRsJJy1xij4NJgdEE9UZ_6jGyHt6ghEhdBgL691xUrwI1fAaHe0aLZSKA",
-     * "source_name": "Source Name",
-     * "source_id": "Source Id",
-     * "resort":{"id": 1, "name": "Parth Inn", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",…}
-     * }
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "OTP verified successfully.",
+     *    "data": {
+     *        "id": 2,
+     *        "user_name": null,
+     *        "first_name": null,
+     *        "mid_name": null,
+     *        "last_name": null,
+     *        "email_id": null,
+     *        "user_type_id": 4,
+     *        "address": null,
+     *        "screen_name": null,
+     *        "profile_pic_path": null,
+     *        "mobile_number": "8077575835",
+     *        "token_type": "Bearer",
+     *        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjljO
+     * TU1ZGI4NzVkMTMyMmM3ZjQxZWI1NjkxZjBhZGJmY2UwYjNlZmY2MTFjODcyMmZiYTMxN2E1ZjViYz
+     * k5OWRiZmFiMzQwOThlMmU2NmFlIn0.eyJhdWQiOiIxIiwianRpIjoiOWM5NTVkYjg3NWQxMzIyYzdm
+     * NDFlYjU2OTFmMGFkYmZjZTBiM2VmZjYxMWM4NzIyZmJhMzE3YTVmNWJjOTk5ZGJmYWIzNDA5OGUyZT
+     * Y2YWUiLCJpYXQiOjE1NDExNTc3NDksIm5iZiI6MTU0MTE1Nzc0OSwiZXhwIjoxNTcyNjkzNzQ4LCJz
+     * dWIiOiIyIiwic2NvcGVzIjpbXX0.ZzxBt0Qk3jKxxeJgx-ik-unJ-JfcSZe4g6mRXYl87tR05N1X-Hdt
+     * fBoQnx8m_9saQfCBa-ypOjhYYyGkbclelXNWapGLJ0OsNi9bvMUULIW3nS6kidOHvYIzWpSyOhM59AVu
+     * Sm1OGPO521Yc_oXJrjMew7ABAvD0s8cVD7EmOuIjsJry4Vm8_7h4kC93l-3lmCpA6J5VPJmKJgKdMShr
+     * cLbFSHqCsOmsWwWYBGlU_og7y5V0AVbFdi7Hf6PvPx1vSyX_EfCkUD7tfuN_vMCsCeiya4zeSTHl5ks8
+     * 4zmO3G0PsXh4YzH18u-_sB2SMzhWEq_mbsuJgA6aUCHlSCP9pro53h4lQsp4l_HVF0th828h8PqTF_W
+     * weU4V1y9ndwobwoGOpz0qMBQ99L-e2K6ujJDu7kVY6KALzvsyEP3dlGeU09hPzS2fM_oVy8Wps3qmAj
+     * V2ObzkAjBX69lkn0e2ertreVndKo-HB79MSyTxMIO4kpp3dGsS9jgL_gdLPe4eIHhtGz73JDxycAaHjO
+     * xH6CcXwc3sR5MYkyZ-Ok372ASQqj6zV5u2yPB4HF23ELSyRYohHIbw5uO2SNk8qz9pJxaucTp5uLYFN1
+     * JjgcaU4sSHTOA-_Z7YmepMpfukFYtnsiVZ8ySjhUg1rUx1EAPexieacexqY_PJJM5iPXKyyeY",
+     *        "source_name": "",
+     *        "source_id": "",
+     *        "resort_room_no": "",
+     *        "room_type": "Delux",
+     *        "check_in": "",
+     *        "check_out": "",
+     *        "resort": {}
+     *       }
      * }
      *  
      * @apiError MobileNumberMissing The mobile number is missing.

@@ -12,12 +12,12 @@ class RoomBooking extends Model
     ];
     
     public function getRoomTypeAttribute() {
-        $roomType = RoomType::find($this->room_type_id);
+        $roomType = RoomType::select('id','name')->find($this->room_type_id);
         return $roomType;
     }
     
     public function getResortRoomAttribute() {
-        $resortRoom = ResortRoom::find($this->resort_room_id);
+        $resortRoom = ResortRoom::select('id','room_no')->find($this->resort_room_id);
         return $resortRoom;
     }
 }

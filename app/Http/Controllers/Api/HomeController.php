@@ -9,6 +9,7 @@ use App\Models\UserBookingDetail;
 use App\Models\Resort;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller {
 
@@ -63,38 +64,20 @@ class HomeController extends Controller {
 //            return $this->jsonData($response);
 //        }
 
-        $user = User::find($request->user_id);
-        if ($user) {
-            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
-            $userRoom = [];
-            if ($userBookingDetail) {
-                $userResort = Resort::find($userBookingDetail->resort_id);
-                $userRoom = RoomBooking::find($userBookingDetail->id);
-            }
-            $userArray['id'] = $user->id;                                                                                                                                                                                                                                                                                                                                                                                   
-            $userArray['user_name'] = $user->user_name;
-            $userArray['first_name'] = $user->first_name;
-            $userArray['mid_name'] = $user->mid_name;
-            $userArray['last_name'] = $user->last_name;
-            $userArray['email_id'] = $user->email_id;
-            $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
-            $userArray['address'] = $user->address;
-            $userArray['screen_name'] = $user->screen_name;
-            $userArray['profile_pic_path'] = $user->profile_pic_path;
-            $userArray['mobile_number'] = $user->mobile_number;
-            $userArray['mobile_number'] = $user->mobile_number;
-            $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
-            $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
-            $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
-            $userArray['room_type'] = "Delux";
-            $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
-            $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
-            if (isset($userResort)) {
-                $userArray['resort'] = $userResort;
-            } else {
-                $userArray['resort'] = (object) [];
-            }
-        }
+        $user = User::select('id', 'user_name', 'mobile_number', 'email_id', 'voter_id', 'aadhar_id', 'address1', 'city_id', 'user_type_id')
+                ->where(["id" => $request->user_id])
+                ->with([
+                    'userHealthDetail' => function($query) {
+                        $query->select(DB::raw("id, user_id, medical_documents, fasting, bp, insullin_dependency, (CASE WHEN (is_diabeties = '1') THEN 'yes' ELSE 'no' END) as diabeties, (CASE WHEN (is_ppa = '1') THEN 'yes' ELSE 'no' END) as ppa, (CASE WHEN (hba_1c = '1') THEN 'yes' ELSE 'no' END) as hba_1c"));
+                    }
+                ])
+                ->with([
+                    'userBookingDetail' => function($query) {
+                        $query->select('id', 'user_id', 'source_name', 'resort_id', 'package_id');
+                    }
+                ])
+                ->first();
+
         $banners = Banner::all();
         $bannerArray = [];
         $i = 0;
@@ -108,7 +91,7 @@ class HomeController extends Controller {
         $response['status_code'] = 200;
         $response['message'] = "service successfully access.";
         $response['data'] = [
-            "user" => isset($userArray) ? $userArray : (object) [],
+            "user" => $user ? $user : (object) [],
             "banners" => $bannerArray
         ];
         return $this->jsonData($response);
