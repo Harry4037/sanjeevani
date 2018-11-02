@@ -14,7 +14,9 @@ use Illuminate\Http\Request;
  */
 
 Route::namespace("Api")->group(function () {
+    //Sent OTP
     Route::post('send-otp', 'AuthController@signup');
+    //Verify OTP
     Route::post('verify-otp', 'AuthController@login');
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');

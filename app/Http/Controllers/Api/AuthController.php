@@ -25,115 +25,102 @@ class AuthController extends Controller {
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
-     * @apiSuccess {String} message OTP send successfully.
-     * @apiSuccess {JSON}   data blank object.
+     * @apiSuccess {String} message OTP sent successfully.
+     * @apiSuccess {JSON} data blank object.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *  "status": true,
-     *  "message": "OTP send successfully.",
-     *  "data": {}
-     * }
+     *  {
+     *     "status": true,
+     *     "status_code": 200,
+     *     "message": "OTP sent successfully.",
+     *     "data": {}
+     *  }
      * 
-     * @apiError MobileNumberMissing The mobile number of the User was missing.
+     * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     * "status": false,
-     * "message": "Mobile number missing.",
-     * "data":{}
-     * }
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Mobile number missing.",
+     *       "data": {}
+     *   }
      * 
-     * @apiError UserTypeMissing The User type was missing.
+     * @apiError UserTypeMissing The User type is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     * "status": false,
-     * "message": "User type missing.",
-     * "data":{}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "User type missing.",
+     *     "data": {}
+     *  }
      * 
      * @apiError MobileNumber10Digit The Mobile number should be 10 digit.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      * {
-     * "status": false,
-     * "message": "Mobile number should be 10 digit.",
-     * "data":{}
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Mobile number should be 10 digit.",
+     *    "data": {}
      * }
      * 
      * @apiError InvalidUserType The User invalid user type.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      * {
-     * "status": false,
-     * "message": "User type invalid.",
-     * "data":{}
+     *    "status": false,
+     *    "status_code": 404,
+     *     "message": "User type invalid.",
+     *     "data": {}
      * }
      * 
      * 
      */
     public function signup(Request $request) {
-        if (!$request->mobile_number) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "Mobile number missing.",
-                        'data' => (object) []
-            ]);
-        }
-        if (strlen($request->mobile_number) != 10) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "Mobile number should be 10 digit.",
-                        'data' => (object) []
-            ]);
-        }
-        if (!$request->user_type) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "User type missing.",
-                        'data' => (object) []
-            ]);
-        }
-        if (!(in_array($request->user_type, [2, 3]))) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "User type invalid.",
-                        'data' => (object) []
-            ]);
-        }
+        try {
+            if (!$request->mobile_number) {
+                return $this->sendErrorResponse("Mobile number missing.", (object) []);
+            }
+            if (strlen($request->mobile_number) != 10) {
+                return $this->sendErrorResponse("Mobile number should be 10 digit.", (object) []);
+            }
+            if (!$request->user_type) {
+                return $this->sendErrorResponse("User type missing.", (object) []);
+            }
+            if (!(in_array($request->user_type, [2, 3]))) {
+                return $this->sendErrorResponse("User type invalid.", (object) []);
+            }
 
-        $userExist = User::where("mobile_number", $request->mobile_number)
-                ->where("user_type_id", $request->user_type)
-                ->first();
-        if (!$userExist) {
-            $user = new User([
-                'mobile_number' => $request->mobile_number,
-                'user_type_id' => $request->user_type,
-                'otp' => 9999,
-                'password' => bcrypt(9999)
-            ]);
-            $user->save();
-            return response()->json([
-                        'status' => true,
-                        'status_code' => 200,
-                        'message' => "OTP send successfully.",
-                        'data' => (object) []
-            ]);
-        } else {
-            $userExist->otp = 9999;
-            $userExist->password = bcrypt(9999);
-            $userExist->save();
-            $response['success'] = true;
-            $response['status_code'] = 200;
-            $response['message'] = "OTP send successfully.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
+            $userExist = User::where("mobile_number", $request->mobile_number)
+                    ->where("user_type_id", $request->user_type)
+                    ->first();
+            if (!$userExist) {
+                $user = new User([
+                    'mobile_number' => $request->mobile_number,
+                    'user_type_id' => $request->user_type,
+                    'otp' => 9999,
+                    'password' => bcrypt(9999)
+                ]);
+                if ($user->save()) {
+                    return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } else {
+                $userExist->otp = 9999;
+                $userExist->password = bcrypt(9999);
+                $userExist->save();
+                if ($userExist->save()) {
+                    return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            }
+        } catch (\Exception $e) {
+            return $this->sendErrorResponse($e->getMessage(), (object) []);
         }
     }
 
@@ -179,160 +166,135 @@ class AuthController extends Controller {
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     * "status": false,
-     * "message": "Mobile number missing.",
-     * "data":{}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Mobile number missing.",
+     *     "data": {}
+     *  }
      *
      * @apiError MobileNumber10Digit The Mobile number should be 10 digit.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     * "status": false,
-     * "message": "Mobile number should be 10 digit.",
-     * "data":{}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Mobile number should be 10 digit.",
+     *     "data": {}
+     *  }
      *  
      * @apiError OTPMissing The OTP is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     *  "status": false,
-     *  "message": "OTP missing.",
-     *  "data": {}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "OTP missing.",
+     *     "data": {}
+     *  }
      * 
-     * @apiError UserTypeMissing The User Type was missing.
+     * @apiError UserTypeMissing The User Type is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     *  "status": false,
-     *  "message": "User type missing.",
-     *  "data": {}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "User type missing.",
+     *     "data": {}
+     *  }
      * 
-     * @apiError InvalidUserType The User invalid user type.
+     * @apiError InvalidUserType The user type invalid 
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     * "status": false,
-     * "message": "User type invalid.",
-     * "data":{}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "User type invalid.",
+     *     "data": {}
+     *  }
      * 
-     * @apiError IncorrectOTP The OTP is incorrect.
+     * @apiError IncorrectOTP The OTP or mobile number incorrect.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     * {
-     * "status": false,
-     * "message": "Incorrect OTP.",
-     * "data":{}
-     * }
+     *  {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "OTP or mobile number incorrect.",
+     *     "data": {}
+     *  }
      * 
      */
     public function login(Request $request) {
-        if (!$request->mobile_number) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "Mobile number missing.",
-                        'data' => (object) []
-            ]);
-        }
-        if (strlen($request->mobile_number) != 10) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "Mobile number should be 10 digit.",
-                        'data' => (object) []
-            ]);
-        }
-        if (!$request->otp) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "OTP missing.",
-                        'data' => (object) []
-            ]);
-        }
-        if (!$request->user_type) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "User type missing.",
-                        'data' => (object) []
-            ]);
-        }
-        if (!(in_array($request->user_type, [2, 3]))) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "User type invalid.",
-                        'data' => (object) []
-            ]);
-        }
+        try {
+            if (!$request->mobile_number) {
+                return $this->sendErrorResponse("Mobile number missing.", (object) []);
+            }
+            if (strlen($request->mobile_number) != 10) {
+                return $this->sendErrorResponse("Mobile number should be 10 digit.", (object) []);
+            }
+            if (!$request->otp) {
+                return $this->sendErrorResponse("OTP missing.", (object) []);
+            }
+            if (!$request->user_type) {
+                return $this->sendErrorResponse("User type missing.", (object) []);
+            }
+            if (!(in_array($request->user_type, [2, 3]))) {
+                return $this->sendErrorResponse("User type invalid.", (object) []);
+            }
 
-        $credentials = [
-            'user_type_id' => $request->user_type,
-            'mobile_number' => $request->mobile_number,
-            'password' => $request->otp
-        ];
-        if (!Auth::attempt($credentials)) {
-            return response()->json([
-                        'status' => false,
-                        'status_code' => 404,
-                        'message' => "OTP or mobile number incorrect.",
-                        'data' => (object) []
-            ]);
-        }
+            $credentials = [
+                'user_type_id' => $request->user_type,
+                'mobile_number' => $request->mobile_number,
+                'password' => $request->otp
+            ];
+            if (!Auth::attempt($credentials)) {
+                return $this->sendErrorResponse("OTP or mobile number incorrect.", (object) []);
+            }
 
-        $user = $request->user();
-        $tokenResult = $user->createToken('SanjeevaniToken');
-        $token = $tokenResult->token;
+            $user = $request->user();
+            $tokenResult = $user->createToken('SanjeevaniToken');
+            $token = $tokenResult->token;
 //        $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
+            $token->save();
 
-        $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
-        $userRoom = [];
-        if ($userBookingDetail) {
-            $userResort = Resort::find($userBookingDetail->resort_id);
-            $userRoom = RoomBooking::find($userBookingDetail->id);
-        }
-        $userArray['id'] = $user->id;
-        $user['access_token'] = $tokenResult->accessToken;
-        $user['token_type'] = "Bearer";
-        $userArray['user_name'] = $user->user_name;
-        $userArray['first_name'] = $user->first_name;
-        $userArray['mid_name'] = $user->mid_name;
-        $userArray['last_name'] = $user->last_name;
-        $userArray['email_id'] = $user->email_id;
-        $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
-        $userArray['address'] = $user->address;
-        $userArray['screen_name'] = $user->screen_name;
-        $userArray['profile_pic_path'] = $user->profile_pic_path;
-        $userArray['mobile_number'] = $user->mobile_number;
-        $userArray['mobile_number'] = $user->mobile_number;
-        $userArray['token_type'] = $user->token_type;
-        $userArray['access_token'] = $user->access_token;
-        $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
-        $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
-        $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
-        $userArray['room_type'] = "Delux";
-        $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
-        $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
-        if (isset($userResort)) {
-            $userArray['resort'] = $userResort;
-        } else {
-            $userArray['resort'] = (object) [];
-        }
+            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
+            $userRoom = [];
+            if ($userBookingDetail) {
+                $userResort = Resort::find($userBookingDetail->resort_id);
+                $userRoom = RoomBooking::find($userBookingDetail->id);
+            }
+            $userArray['id'] = $user->id;
+            $user['access_token'] = $tokenResult->accessToken;
+            $user['token_type'] = "Bearer";
+            $userArray['user_name'] = $user->user_name;
+            $userArray['first_name'] = $user->first_name;
+            $userArray['mid_name'] = $user->mid_name;
+            $userArray['last_name'] = $user->last_name;
+            $userArray['email_id'] = $user->email_id;
+            $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
+            $userArray['address'] = $user->address;
+            $userArray['screen_name'] = $user->screen_name;
+            $userArray['profile_pic_path'] = $user->profile_pic_path;
+            $userArray['mobile_number'] = $user->mobile_number;
+            $userArray['mobile_number'] = $user->mobile_number;
+            $userArray['token_type'] = $user->token_type;
+            $userArray['access_token'] = $user->access_token;
+            $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
+            $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
+            $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
+            $userArray['room_type'] = "Delux";
+            $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
+            $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
+            if (isset($userResort)) {
+                $userArray['resort'] = $userResort;
+            } else {
+                $userArray['resort'] = (object) [];
+            }
 
-        return response()->json([
-                    'status' => true,
-                    'status_code' => 200,
-                    'message' => "OTP verified successfully.",
-                    'data' => $userArray,
-        ]);
+            return $this->sendSuccessResponse("OTP verified successfully.", $userArray);
+        } catch (\Exception $e) {
+            return $this->sendErrorResponse($e->getMessage(), (object) []);
+        }
     }
 
     /**
