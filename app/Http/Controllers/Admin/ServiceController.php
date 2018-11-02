@@ -47,7 +47,7 @@ class ServiceController extends Controller {
             $servicesArray = [];
             foreach ($services as $service) {
                 $stype = ServiceType::find($service->type_id);
-                $servicesArray[$i]['icon'] = '<img width=50 height=50 src='.asset("storage/Service_icon/".$service->icon).' >';
+                $servicesArray[$i]['icon'] = '<img width=50 height=50 src='.$service->icon.' >';
                 $servicesArray[$i]['name'] = $service->name;
                 $servicesArray[$i]['type'] = $stype ? $stype->name : '';
                 $checked_status = $service->is_active ? "checked" : '';
