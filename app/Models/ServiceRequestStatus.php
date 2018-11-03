@@ -14,4 +14,11 @@ class ServiceRequestStatus extends Model
                 . "WHEN (request_status = 'Under Approval') THEN 'Your Approval Needed' "
                 . "ELSE 'Completed' END) as status"));
     }
+    public function scopeStaffRequestStatus($query){
+        $query->addSelect(DB::raw("(CASE "
+                . "WHEN (request_status = 'New') THEN 'New' "
+                . "WHEN (request_status = 'Accepted') THEN 'On going' "
+                . "WHEN (request_status = 'Under Approval') THEN 'Under approval' "
+                . "ELSE 'Completed' END) as status"));
+    }
 }

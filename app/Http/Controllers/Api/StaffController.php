@@ -211,6 +211,92 @@ class StaffController extends Controller {
         }
     }
 
+    /**
+     * @api {get} /api/myjobs Myjobs
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetMyjobs
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id Staff user id(required).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message My jobs
+     * @apiSuccess {JSON}   data Array.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *{
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "My jobs.",
+     *    "data": {
+     *        "ongoing_jobs": [
+     *           {
+     *                "id": 2,
+     *                "comment": "",
+     *                "question_id": 0,
+     *                "service_id": 2,
+     *                "request_status_id": 2,
+     *                "user_id": 3,
+     *                "service_detail": {
+     *                    "id": 2,
+     *                    "name": "Do not disturb",
+     *                    "type_id": 2,
+     *                    "service_type": {
+     *                        "id": 2,
+     *                        "name": "Issue"
+     *                    }
+     *                },
+     *                "question_detail": null,
+     *                "request_status": {
+     *                    "id": 2,
+     *                    "status": "On going"
+     *                }
+     *            }
+     *        ],
+     *        "under_approval_jobs": [
+     *            {
+     *                "id": 1,
+     *                "comment": "",
+     *                "question_id": 0,
+     *                "service_id": 1,
+     *                "request_status_id": 3,
+     *                "user_id": 3,
+     *                "service_detail": {
+     *                    "id": 1,
+     *                    "name": "Room Cleaning",
+     *                    "type_id": 1,
+     *                    "service_type": {
+     *                        "id": 1,
+     *                        "name": "Housekeeping"
+     *                    }
+     *                },
+     *                "question_detail": null,
+     *                "request_status": {
+     *                    "id": 3,
+     *                    "status": "Under approval"
+     *                }
+     *            }
+     *        ],
+     *        "completed_jobs": []
+     *    }
+     *}
+     * 
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *   "status": false,
+     *   "status_code": 404,
+     *   "message": "User id missing.",
+     *   "data": {}
+     * }
+     * 
+     * 
+     */
     public function myJobListing(Request $request) {
         try {
             if (!$request->user_id) {
@@ -222,6 +308,53 @@ class StaffController extends Controller {
             if ($request->user()->user_type_id != 2) {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
+
+            $jobs['ongoing_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
+                    ->with([
+                        'serviceDetail' => function($query) {
+                            $query->select('id', 'name', 'type_id');
+                        }
+                    ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->staffRequestStatus();
+                        }
+                    ])
+                    ->get();
+            $jobs['under_approval_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
+                    ->with([
+                        'serviceDetail' => function($query) {
+                            $query->select('id', 'name', 'type_id');
+                        }
+                    ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->staffRequestStatus();
+                        }
+                    ])
+                    ->get();
+            $jobs['completed_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
+                    ->with([
+                        'serviceDetail' => function($query) {
+                            $query->select('id', 'name', 'type_id');
+                        }
+                    ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->staffRequestStatus();
+                        }
+                    ])
+                    ->get();
+            return $this->sendSuccessResponse("My jobs.", $jobs);
         } catch (Exception $ex) {
             return $this->administratorResponse();
         }

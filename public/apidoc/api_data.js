@@ -1066,6 +1066,109 @@ define({ "api": [
     "groupTitle": "Services"
   },
   {
+    "type": "get",
+    "url": "/api/myjobs",
+    "title": "Myjobs",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetMyjobs",
+    "group": "Staff_Service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Staff user id(required).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>My jobs</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"My jobs.\",\n   \"data\": {\n       \"ongoing_jobs\": [\n          {\n               \"id\": 2,\n               \"comment\": \"\",\n               \"question_id\": 0,\n               \"service_id\": 2,\n               \"request_status_id\": 2,\n               \"user_id\": 3,\n               \"service_detail\": {\n                   \"id\": 2,\n                   \"name\": \"Do not disturb\",\n                   \"type_id\": 2,\n                   \"service_type\": {\n                       \"id\": 2,\n                       \"name\": \"Issue\"\n                   }\n               },\n               \"question_detail\": null,\n               \"request_status\": {\n                   \"id\": 2,\n                   \"status\": \"On going\"\n               }\n           }\n       ],\n       \"under_approval_jobs\": [\n           {\n               \"id\": 1,\n               \"comment\": \"\",\n               \"question_id\": 0,\n               \"service_id\": 1,\n               \"request_status_id\": 3,\n               \"user_id\": 3,\n               \"service_detail\": {\n                   \"id\": 1,\n                   \"name\": \"Room Cleaning\",\n                   \"type_id\": 1,\n                   \"service_type\": {\n                       \"id\": 1,\n                       \"name\": \"Housekeeping\"\n                   }\n               },\n               \"question_detail\": null,\n               \"request_status\": {\n                   \"id\": 3,\n                   \"status\": \"Under approval\"\n               }\n           }\n       ],\n       \"completed_jobs\": []\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": false,\n  \"status_code\": 404,\n  \"message\": \"User id missing.\",\n  \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
+    "groupTitle": "Staff_Service"
+  },
+  {
     "type": "post",
     "url": "/api/service-request-accept",
     "title": "Service Request Accept",
