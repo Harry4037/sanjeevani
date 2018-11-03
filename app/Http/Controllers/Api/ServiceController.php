@@ -438,7 +438,7 @@ class ServiceController extends Controller {
             $serviceRequest['order_request'] = ServiceRequest::select('id', 'comment', 'service_id', 'question_id', 'request_status_id', 'accepted_by_id')->where(["user_id" => $request->user_id])
                             ->with([
                                 'serviceDetail' => function($query) {
-                                    $query->select('id', 'name');
+                                    $query->select('id', 'name', 'type_id');
                                 }
                             ])->with([
                         'questionDetail' => function($query) {
