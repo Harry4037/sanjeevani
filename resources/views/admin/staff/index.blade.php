@@ -41,9 +41,8 @@
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-            ordering: true,
             processing: true,
-//        serverSide: true,
+            serverSide: true,
             ajax: _baseUrl + "/admin/staff/staff-list",
             "columns": [
                 {"data": null,
@@ -63,8 +62,7 @@
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
-                        var url = row['view-deatil'];
-                        return "<a class='btn btn-info' href='" + url + "'>view</>";
+                        return row['view-deatil'];
                     }
                 },
             ]

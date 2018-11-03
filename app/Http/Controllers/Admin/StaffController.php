@@ -57,7 +57,9 @@ class StaffController extends Controller {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
             $query->where("user_type_id", "=", 2);
-            $users = $query->get();
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $users = $query->take($limit)->offset($offset)->latest()->get();
             $i = 0;
             $usersArray = [];
             foreach ($users as $user) {
@@ -66,11 +68,10 @@ class StaffController extends Controller {
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$i]['view-deatil'] = route('admin.staff.detail', ['id' => $user->id]);
+                $usersArray[$i]['view-deatil'] = '<a class="btn btn-info btn-xs" href="' . route('admin.staff.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>';
                 $i++;
             }
-            $data['recordsTotal'] = $this->user->count();
-            $data['recordsFiltered'] = $this->user->count();
+
             $data['data'] = $usersArray;
             return $data;
         } catch (\Exception $e) {
@@ -110,42 +111,45 @@ class StaffController extends Controller {
     }
 
     public function addUser(Request $request) {
+        try {
+            if ($request->isMethod("post")) {
+                $userExist = User::where("mobile_number", $request->staff_mobile_no)
+                        ->where("user_type_id", 2)
+                        ->first();
 
-        if ($request->isMethod("post")) {
-            $userExist = User::where("mobile_number", $request->staff_mobile_no)
-                    ->where("user_type_id", 2)
-                    ->first();
-            
-            if ($userExist) {
-                return redirect()->route('admin.staff.add')->with('error', 'User already exists with thin mobile number');
-            } else {
-                $name = explode(" ", $request->staff_name);
+                if ($userExist) {
+                    return redirect()->route('admin.staff.add')->with('error', 'User already exists with thin mobile number');
+                } else {
+                    $name = explode(" ", $request->staff_name);
 
-                $user = $this->user;
-                $user->user_type_id = 2;
-                $user->user_name = $request->staff_name;
-                $user->first_name = isset($name[0]) ? $name[0] : '';
-                $user->last_name = isset($name[1]) ? $name[1] : '';
-                $user->mobile_number = $request->staff_mobile_no;
-                $user->email_id = $request->staff_email;
-                $user->created_by = 1;
-                $user->updated_by = 1;
+                    $user = $this->user;
+                    $user->user_type_id = 2;
+                    $user->user_name = $request->staff_name;
+                    $user->first_name = isset($name[0]) ? $name[0] : '';
+                    $user->last_name = isset($name[1]) ? $name[1] : '';
+                    $user->mobile_number = $request->staff_mobile_no;
+                    $user->email_id = $request->staff_email;
+                    $user->created_by = 1;
+                    $user->updated_by = 1;
 
-                if ($user->save()) {
-                    $userBooking = new UserBookingDetail();
-                    $userBooking->source_name = ' ';
-                    $userBooking->source_id = ' ';
-                    $userBooking->user_id = $user->id;
-                    $userBooking->resort_id = $request->resort_id;
-                    $userBooking->package_id = 0;
-                    $userBooking->save();
-                    return redirect()->route('admin.staff.add')->with('status', 'User has been added successfully');
+                    if ($user->save()) {
+                        $userBooking = new UserBookingDetail();
+                        $userBooking->source_name = ' ';
+                        $userBooking->source_id = ' ';
+                        $userBooking->user_id = $user->id;
+                        $userBooking->resort_id = $request->resort_id;
+                        $userBooking->package_id = 0;
+                        $userBooking->save();
+                        return redirect()->route('admin.staff.add')->with('status', 'User has been added successfully');
+                    }
                 }
             }
-        }
 
-        $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.staff.add-user', ['resorts' => $resorts]);
+            $resorts = Resort::where("is_active", 1)->get();
+            return view('admin.staff.add-user', ['resorts' => $resorts]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.staff.add')->with('error', $ex->getMessage());
+        }
     }
 
 }

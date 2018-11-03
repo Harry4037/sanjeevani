@@ -58,13 +58,15 @@ class UsersController extends Controller {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
-
+//            dd($request->get('order'));
             $query = $this->user->query();
             if ($searchKeyword) {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
-            $query->where("user_type_id", "!=", 1);
-            $users = $query->get();
+            $query->where("user_type_id", "=", 3);
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $users = $query->take($limit)->offset($offset)->latest()->get();
             $i = 0;
             $usersArray = [];
             foreach ($users as $user) {
@@ -73,11 +75,9 @@ class UsersController extends Controller {
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
-            $data['recordsTotal'] = $this->user->count();
-            $data['recordsFiltered'] = $this->user->count();
             $data['data'] = $usersArray;
             return $data;
         } catch (\Exception $e) {

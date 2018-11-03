@@ -20,9 +20,9 @@
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
-                            <th>Name</th>
-                            <th>EmailAddress</th>
                             <th>PhoneNo.</th>
+                            <th>Name</th>
+                            <th>Email Address</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -42,9 +42,8 @@
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-            ordering: true,
             processing: true,
-//        serverSide: true,
+            serverSide: true,
             ajax: _baseUrl + "/admin/users-list",
             "columns": [
                 {"data": null,
@@ -52,16 +51,16 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
+                {"data": "mobileno", sortable: true},
                 {"data": "name", sortable: true},
                 {"data": "email", sortable: true},
-                {"data": "mobileno", sortable: true},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
                         return row['status'];
                     }
                 },
-                {"data": "action"},
+                {"data": "action", sortable: false},
             ]
         });
 

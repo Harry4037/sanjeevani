@@ -18,19 +18,19 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Name" name="staff_name" id="staff_name">
+                            <input value="{{ old('staff_name') }}" type="text" class="form-control" placeholder="Name" name="staff_name" id="staff_name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
+                            <input value="{{ old('staff_mobile_no') }}" type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
+                            <input value="{{ old('staff_email') }}" type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
                         </div>
                     </div>
                     <div class="form-group">
@@ -40,7 +40,11 @@
                                 <option value="">Choose option</option>
                                 @if($resorts)
                                 @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}">{{ $resort->name }}</option>
+                                <option value="{{ $resort->id }}"
+                                        @if(old('staff_email') == $resort->id)
+                                        {{ "slected" }}
+                                        @endif
+                                        >{{ $resort->name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -49,7 +53,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Address.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Address" name="staff_address" id="staff_address">
+                            <input value="{{ old('staff_address') }}" type="text" class="form-control" placeholder="Address" name="staff_address" id="staff_address">
                         </div>
                     </div>
                     
