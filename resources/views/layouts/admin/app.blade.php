@@ -15,9 +15,9 @@
         <link href="{{ asset("vendors/font-awesome/css/font-awesome.min.css") }}" rel="stylesheet">
         <!-- NProgress -->
         <link href="{{ asset("vendors/nprogress/nprogress.css") }}" rel="stylesheet">
-        
+
         <link href="{{ asset("css/admin/custom.css") }}" rel="stylesheet">
-        
+
         @isset($css)
         @foreach($css as $cs)
         <link href="{{ asset($cs) }}" rel="stylesheet">
@@ -65,22 +65,22 @@
         <!-- jQuery Sparklines -->
         <script src="{{ asset("vendors/jquery-sparkline/dist/jquery.sparkline.min.js") }}"></script>
         <script src="{{ asset("js/jquery.validate.js") }}"></script>  
-        
-<!--         Flot 
-        <script src="{{ asset("vendors/Flot/jquery.flot.js") }}"></script>
-        <script src="{{ asset("vendors/Flot/jquery.flot.pie.js") }}"></script>
-        <script src="{{ asset("vendors/Flot/jquery.flot.time.js") }}"></script>
-        <script src="{{ asset("vendors/Flot/jquery.flot.stack.js") }}"></script>
-        <script src="{{ asset("vendors/Flot/jquery.flot.resize.js") }}"></script>
-         Flot plugins 
-        <script src="{{ asset("vendors/flot.orderbars/js/jquery.flot.orderBars.js") }}"></script>
-        <script src="{{ asset("vendors/flot-spline/js/jquery.flot.spline.min.js") }}"></script>
-        <script src="{{ asset("vendors/flot.curvedlines/curvedLines.js") }}"></script>
-         DateJS 
-        <script src="{{ asset("vendors/DateJS/build/date.js") }}"></script>
-         bootstrap-daterangepicker 
-        <script src="{{ asset("vendors/moment/min/moment.min.js") }}"></script>
-        <script src="{{ asset("vendors/bootstrap-daterangepicker/daterangepicker.js") }}"></script>-->
+
+        <!--         Flot 
+                <script src="{{ asset("vendors/Flot/jquery.flot.js") }}"></script>
+                <script src="{{ asset("vendors/Flot/jquery.flot.pie.js") }}"></script>
+                <script src="{{ asset("vendors/Flot/jquery.flot.time.js") }}"></script>
+                <script src="{{ asset("vendors/Flot/jquery.flot.stack.js") }}"></script>
+                <script src="{{ asset("vendors/Flot/jquery.flot.resize.js") }}"></script>
+                 Flot plugins 
+                <script src="{{ asset("vendors/flot.orderbars/js/jquery.flot.orderBars.js") }}"></script>
+                <script src="{{ asset("vendors/flot-spline/js/jquery.flot.spline.min.js") }}"></script>
+                <script src="{{ asset("vendors/flot.curvedlines/curvedLines.js") }}"></script>
+                 DateJS 
+                <script src="{{ asset("vendors/DateJS/build/date.js") }}"></script>
+                 bootstrap-daterangepicker 
+                <script src="{{ asset("vendors/moment/min/moment.min.js") }}"></script>
+                <script src="{{ asset("vendors/bootstrap-daterangepicker/daterangepicker.js") }}"></script>-->
 
         @yield('footer-script')
 
@@ -92,7 +92,25 @@
         <script src="{{ asset($js) }}"></script>
         @endforeach
         @endisset
-        
+
         @yield('script')
+
+        <script>
+
+            $(document).on('change', "#state", function () {
+                var state_id = $("#state :selected").val();
+                state_id = state_id ? state_id : 0;
+//        if (state_id) {
+                $.ajax({
+                    url: _baseUrl + '/admin/city-list/' + state_id,
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (res) {
+                        $("#city").html(res);
+                    }
+                });
+//        }
+            })
+        </script>
     </body>
 </html>

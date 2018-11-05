@@ -16,12 +16,14 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table id="list" class="table table-striped table-bordered">
+                <table id="list" class="table table-striped table-bordered table-responsive text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
+                            <th>Resort Image</th>
                             <th>Resort Name</th>
                             <th>Contact Number</th>
+                            <th>Address</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -42,9 +44,8 @@
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-            ordering: true,
             processing: true,
-//        serverSide: true,
+            serverSide: true,
             ajax: _baseUrl + "/admin/resort/resorts-list",
             "columns": [
                 {"data": null,
@@ -52,15 +53,19 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
+                {"data": "image",sortable: false},
                 {"data": "name"},
                 {"data": "contact_no"},
+                {"data": "address"},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
                         return row['status'];
                     }
                 },
-                {"data": "action"},
+                {"data": "action",
+                    sortable: false,
+                },
             ]
         });
 
@@ -90,7 +95,7 @@
                         $(".msg").css("display", "block");
                         setTimeout(function () {
                             $(".msg").fadeOut();
-                        }, 5000);
+                        }, 1000);
                     }
                 }
             });

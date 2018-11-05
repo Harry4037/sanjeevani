@@ -5,15 +5,31 @@
             <li>
                 <a href="{{ route('admin.dashboard') }}"><i class="fa fa-users"></i> Dashboard</a>
             </li>
-            <li><a><i class="fa fa-users"></i> User Management <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    <li><a href="{{ route('admin.users.index') }}">Users</a></li>
-                    <li><a href="{{ route('admin.staff.index') }}">Staff</a></li>
-                    <!--<li><a href="index3.html">Dashboard3</a></li>-->
-                </ul>
+            <li @if(in_array(Route::currentRouteName(), ['admin.resort.add','admin.resort.edit']))
+                 {{ "class=current-page" }}
+                 @endif
+                 >
+                 <a href="{{ route('admin.resort.index') }}"><i class="fa fa-home"></i> Resort Management</a>
             </li>
-            <li>
-                <a href="{{ route('admin.resort.index') }}"><i class="fa fa-home"></i> Resort Management</a>
+            <li @if(in_array(Route::currentRouteName(), ['admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
+                 {{ "class=active" }}
+                 @endif>
+                 <a><i class="fa fa-users"></i> User Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu"  
+                    @if(in_array(Route::currentRouteName(), ['admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
+                    {{ "style=display:block;" }}
+                    @endif
+                    >
+                    <li @if(in_array(Route::currentRouteName(), ['admin.users.add','admin.users.edit','admin.users.detail']))
+                    {{ "class=current-page" }}
+                    @endif
+                        
+                        ><a href="{{ route('admin.users.index') }}">Users</a></li>
+                    <li @if(in_array(Route::currentRouteName(), ['admin.staff.add','admin.staff.index']))
+                    {{ "class=current-page" }}
+                    @endif
+                        ><a href="{{ route('admin.staff.index') }}">Staff</a></li>
+                </ul>
             </li>
             <li>
                 <a href="{{ route('admin.nearby.index') }}"><i class="fa fa-car"></i> Nearby Place Management</a>

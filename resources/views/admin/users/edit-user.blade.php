@@ -307,9 +307,6 @@
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_1",
-//            locale: {
-//                format: 'DD/M/YYYY'
-//            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });

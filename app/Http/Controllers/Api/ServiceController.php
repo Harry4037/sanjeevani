@@ -323,7 +323,7 @@ class ServiceController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Order & Request found.",
@@ -398,7 +398,7 @@ class ServiceController extends Controller {
      *            }
      *        ]
      *    }
-     *}
+     * }
      * 
      * @apiError OrderRequestNotFound The Order & Request not found.
      * @apiErrorExample Error-Response:
@@ -476,6 +476,105 @@ class ServiceController extends Controller {
                         'message' => $ex->getMessage(),
                         'data' => []
             ]);
+        }
+    }
+
+    /**
+     * @api {post} /api/approve-service-request Approve service Request
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostApproveServicerequest
+     * @apiGroup Services
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} service_id Service id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Service approved successfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true,
+     * "message": "Service approved successfully.",
+     * "data": {}
+     * }
+     * 
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *      "status": false,
+     *      "status_code": 404,
+     *      "message": "User id missing.",
+     *      "data": {}
+     *  }
+     * 
+     * @apiError UnauthorizedUser The user is unauthorized.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Unauthorized user.",
+     *     "data": {}
+     * }
+     * 
+     * @apiError ServiceIdMissing The service id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "service id missing.",
+     *     "data": {}
+     * }
+     * 
+     * @apiError InvalidService The service is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Invalid service.",
+     *     "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function approveServiceRequest(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            if (!$request->service_id) {
+                return $this->sendErrorResponse("service id missing.", (object) []);
+            }
+
+            $user = User::where(["id" => $request->user_id, "is_active" => 1])->first();
+            if (!$user) {
+                return $this->sendErrorResponse("Invalid user.", (object) []);
+            }
+
+            $serviceRequest = ServiceRequest::where(["id" => $request->service_id, "request_status_id" => 3, "is_active" => 1])->first();
+            if (!$serviceRequest) {
+                return $this->sendErrorResponse("Invalid service & order.", (object) []);
+            }
+            $serviceRequest->request_status_id = 4;
+            if ($serviceRequest->save()) {
+                return $this->sendSuccessResponse("Service approved successfully", (object) []);
+            } else {
+                return $this->administratorResponse();
+            }
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
         }
     }
 

@@ -91,7 +91,7 @@
                         $(".msg").css("display", "block");
                         setTimeout(function () {
                             $(".msg").fadeOut();
-                        }, 5000);
+                        }, 1000);
                     }
                 }
             });

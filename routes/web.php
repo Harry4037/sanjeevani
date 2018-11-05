@@ -26,10 +26,26 @@ Route::namespace("Admin")->prefix('admin')->group(function() {
 
 
 Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(function() {
+    Route::get('/city-list/{id}', 'CommonController@getCityList')->name('admin.city.list');
     /**
      * Dashboard & Profile routes
      */
     Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
+
+    /**
+     * Resort Management
+     */
+    Route::prefix('resort')->group(function() {
+        Route::get('/', 'ResortController@index')->name('admin.resort.index');
+        Route::get('/resorts-list', 'ResortController@resortList')->name('admin.resort.list');
+        Route::match(['get', 'post'], '/create', 'ResortController@create')->name('admin.resort.add');
+        Route::post('/update-status', 'ResortController@updateStatus')->name('admin.resort.status-update');
+        Route::post('/upload-images', 'ResortController@uploadImages')->name('admin.resort.upload-image');
+        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
+        Route::match(['get', 'post'], '/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
+        Route::get('/resort-rooms/{resort}/{type}', 'ResortController@getResortRooms')->name('admin.resort.rooms');
+        Route::post('/delete-room', 'ResortController@deleteRoom')->name('admin.resort.delete-room');
+    });
 
     /**
      * Users Management
@@ -39,7 +55,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::post('/user-status', 'UsersController@updateUserStatus')->name('admin.users.status');
     Route::match(['get', 'post'], '/user/add-user', 'UsersController@addUser')->name('admin.users.add');
     Route::get('/user/detail/{id}', 'UsersController@viewUser')->name('admin.users.detail');
-    Route::match(['get','post'],'/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
+    Route::match(['get', 'post'], '/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
     /**
      * Users Management
      */
@@ -67,19 +83,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::match(['get', 'post'], '/service-add', 'ServiceController@serviceAdd')->name('admin.service.add');
     Route::post('/service-status', 'ServiceController@updateServiceStatus')->name('admin.service.status');
     Route::match(['get', 'post'], '/service/edit/{id}', 'ServiceController@edit')->name('admin.service.edit');
-    /**
-     * Resort Management
-     */
-    Route::prefix('resort')->group(function() {
-        Route::get('/', 'ResortController@index')->name('admin.resort.index');
-        Route::get('/resorts-list', 'ResortController@resortList')->name('admin.resort.list');
-        Route::match(['get', 'post'], '/create', 'ResortController@create')->name('admin.resort.add');
-        Route::post('/update-status', 'ResortController@updateStatus')->name('admin.resort.status-update');
-        Route::post('/upload-images', 'ResortController@uploadImages')->name('admin.resort.upload-image');
-        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
-        Route::match(['get', 'post'], '/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
-        Route::get('/resort-rooms/{resort}/{type}', 'ResortController@getResortRooms')->name('admin.resort.rooms');
-    });
+
     /**
      * Resort Nearby Management
      */

@@ -10,6 +10,9 @@ use App\Models\ResortImage;
 use App\Models\RoomType;
 use App\Models\ResortRoom;
 use App\Models\ResortRating;
+use App\Models\StateMaster;
+use App\Models\CityMaster;
+use Validator;
 
 class ResortController extends Controller {
 
@@ -36,21 +39,36 @@ class ResortController extends Controller {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
 
             $query = $this->resort->query();
-            $resorts = $query->get();
+            if ($searchKeyword) {
+                $query->where("name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("description", "LIKE", "%$searchKeyword%")
+                        ->orWhere("contact_number", "LIKE", "%$searchKeyword%")
+                        ->orWhere("address_1", "LIKE", "%$searchKeyword%")
+                        ->orWhere("pincode", "LIKE", "%$searchKeyword%");
+            }
+            $data['recordsTotal'] = $this->resort->count();
+            $data['recordsFiltered'] = $this->resort->count();
+            $resorts = $query->take($limit)->offset($offset)->latest()->get();
             $i = 0;
             $resortsArray = [];
             foreach ($resorts as $resort) {
+                $resortImage = $this->resortImage->where("resort_id", $resort->id)->first();
+                $cityState = CityMaster::find($resort->city_id)->first();
+                $address = $resort->address_1 . ",<br>" . $cityState->city . ",<br>" . $cityState->state->state . ",<br>" . $resort->pincode;
+                $img = !empty($resortImage) ? $resortImage->image_name : asset('img/noimage.png');
+                $resortsArray[$i]['image'] = "<img width=80 height=70 src='" . $img . "'>";
                 $resortsArray[$i]['name'] = $resort->name;
                 $checked_status = $resort->is_active ? "checked" : '';
                 $resortsArray[$i]['contact_no'] = $resort->contact_number;
+                $resortsArray[$i]['address'] = $address;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
-            $data['recordsTotal'] = $this->resort->count();
-            $data['recordsFiltered'] = $this->resort->count();
+
             $data['data'] = $resortsArray;
             return $data;
         } catch (\Exception $e) {
@@ -59,52 +77,72 @@ class ResortController extends Controller {
     }
 
     public function create(Request $request) {
+        try {
+            if ($request->isMethod("post")) {
 
-        if ($request->isMethod("post")) {
-
-            $resort = $this->resort;
-            $resort->name = $request->resort_name;
-            $resort->contact_number = $request->contact_no;
-            $resort->description = $request->resort_description;
-            $resort->address_1 = $request->address;
-            $resort->pincode = $request->pin_code;
-            $resort->city_id = $request->city;
-            if ($resort->save()) {
-                if ($request->resort_images) {
-                    foreach ($request->resort_images as $tempImage) {
-                        $resortImage = new ResortImage();
-                        $resortImage->resort_id = $resort->id;
-                        $resortImage->image_name = $tempImage;
-                        $resortImage->is_active = 1;
-                        $resortImage->save();
-                    }
-                }
-                if ($request->room_type && $request->room_no) {
-                    $i = 0;
-                    foreach ($request->room_type as $room) {
-                        $resortRoom = new ResortRoom();
-                        $resortRoom->resort_id = $resort->id;
-                        $resortRoom->room_type_id = $room;
-                        $resortRoom->room_no = $request->room_no[$i];
-                        $resortRoom->save();
-                        $i++;
-                    }
+                $validator = Validator::make($request->all(), [
+                            'resort_name' => 'bail|required',
+                            'contact_no' => 'bail|required',
+                            'address' => 'bail|required',
+                            'pin_code' => 'bail|required|numeric',
+                            'city' => 'bail|required|numeric',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.resort.add')->withErrors($validator)->withInput();
                 }
 
+                $resort = $this->resort;
+                $resort->name = $request->resort_name;
+                $resort->contact_number = $request->contact_no;
+                $resort->description = $request->resort_description;
+                $resort->address_1 = $request->address;
+                $resort->pincode = $request->pin_code;
+                $resort->city_id = $request->city;
+                if ($resort->save()) {
+                    if ($request->resort_images) {
+                        foreach ($request->resort_images as $tempImage) {
+                            $resortImage = new ResortImage();
+                            $resortImage->resort_id = $resort->id;
+                            $resortImage->image_name = $tempImage;
+                            $resortImage->is_active = 1;
+                            $resortImage->save();
+                        }
+                    }
+                    if ($request->room_type && $request->room_no) {
+                        $i = 0;
+                        foreach ($request->room_type as $room) {
+                            $resortRoom = new ResortRoom();
+                            $resortRoom->resort_id = $resort->id;
+                            $resortRoom->room_type_id = $room;
+                            $resortRoom->room_no = $request->room_no[$i];
+                            $resortRoom->save();
+                            $i++;
+                        }
+                    }
 
-                return redirect()->route('admin.resort.index')->with('status', 'Resort has been added successfully.');
-            } else {
-                return redirect()->route('admin.resort.add')->with('error', 'Something went be wrong.');
+
+                    return redirect()->route('admin.resort.index')->with('status', 'Resort has been added successfully.');
+                } else {
+                    return redirect()->route('admin.resort.add')->with('error', 'Something went be wrong.');
+                }
             }
+            $css = [
+                "vendors/dropzone/dist/dropzone.css",
+            ];
+            $js = [
+                'vendors/dropzone/dist/dropzone.js',
+            ];
+            $roomTypes = $this->roomType->all();
+            $states = StateMaster::all();
+            return view('admin.resort.create', [
+                'js' => $js,
+                'css' => $css,
+                'roomTypes' => $roomTypes,
+                'states' => $states,
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.resort.add')->with('error', $ex->getMessage());
         }
-        $css = [
-            "vendors/dropzone/dist/dropzone.css",
-        ];
-        $js = [
-            'vendors/dropzone/dist/dropzone.js',
-        ];
-        $roomTypes = $this->roomType->all();
-        return view('admin.resort.create-banner', ['js' => $js, 'css' => $css, 'roomTypes' => $roomTypes]);
     }
 
     public function uploadImages(Request $request) {
@@ -140,41 +178,69 @@ class ResortController extends Controller {
     }
 
     public function editResort(Request $request, $id) {
-        $data = $this->resort->find($id);
-        if ($request->isMethod("post")) {
-            $data->name = $request->edit_resort_name;
-            $data->contact_number = $request->edit_contact_no;
-            $data->description = $request->edit_resort_description;
-            $data->address_1 = $request->edit_address;
-            $data->pincode = $request->edit_pin_code;
-            $data->city_id = $request->edit_city;
-            if ($data->save()) {
-                if ($request->room_type && $request->room_no) {
-                    ResortRoom::where("resort_id", $data->id)->delete();
-                    $i = 0;
-                    foreach ($request->room_type as $room) {
-                        $resortRoom = new ResortRoom();
-                        $resortRoom->resort_id = $data->id;
-                        $resortRoom->room_type_id = $room;
-                        $resortRoom->room_no = $request->room_no[$i];
-                        $resortRoom->save();
-                        $i++;
+        try {
+            $data = $this->resort->find($id);
+            if ($request->isMethod("post")) {
+                $data->name = $request->edit_resort_name;
+                $data->contact_number = $request->edit_contact_no;
+                $data->description = $request->edit_resort_description;
+                $data->address_1 = $request->edit_address;
+                $data->pincode = $request->edit_pin_code;
+                $data->city_id = $request->city;
+                if ($data->save()) {
+                    if ($request->room_type && $request->room_no) {
+                        ResortRoom::where("resort_id", $data->id)->delete();
+                        $i = 0;
+                        foreach ($request->room_type as $room) {
+                            $resortRoom = new ResortRoom();
+                            $resortRoom->resort_id = $data->id;
+                            $resortRoom->room_type_id = $room;
+                            $resortRoom->room_no = $request->room_no[$i];
+                            $resortRoom->save();
+                            $i++;
+                        }
                     }
+
+                    return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.');
                 }
-
-                return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.');
             }
+
+
+            $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
+            $roomTypes = $this->roomType->all();
+            $states = StateMaster::all();
+            $selectedCity = CityMaster::find($data->city_id);
+            $cities = CityMaster::where("state_id", $selectedCity->state_id)->get();
+            return view('admin.resort.edit', [
+                'data' => $data,
+                'dataRooms' => $dataRooms,
+                'roomTypes' => $roomTypes,
+                'states' => $states,
+                'selectedCity' => $selectedCity,
+                'cities' => $cities,
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.resort.edit', $id)->with('error', $ex->getMessage());
         }
-
-
-        $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
-        $roomTypes = $this->roomType->all();
-
-        return view('admin.resort.edit-banner', ['data' => $data, 'dataRooms' => $dataRooms, 'roomTypes' => $roomTypes]);
     }
 
-    public function getResortRooms(Request $request, $resort=0, $type=0){
+    public function getResortRooms(Request $request, $resort = 0, $type = 0) {
         $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $type, "is_active" => 1])->get();
-        return view('admin.resort.rooms', [ 'resortRooms' => $resortRooms ]);
+        return view('admin.resort.rooms', [ 'resortRooms' => $resortRooms]);
     }
+
+    public function deleteRoom(Request $request) {
+        try {
+            $room = $this->resortRoom->find($request->record_id);
+            if ($room) {
+                $room->delete();
+                return ["status" => true];
+            } else {
+                return ["status" => false];
+            }
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+    }
+
 }

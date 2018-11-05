@@ -39,12 +39,18 @@ Route::namespace("Api")->group(function () {
     Route::middleware('auth:api')->group(function () {
         //Raise service request (by user)
         Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
+        
+        //Approved service request (by user)
+        Route::post('approve-service-request', 'ServiceController@approveServiceRequest');
 
         //Accept service order & request (by staff member)
         Route::post('service-request-accept', 'StaffController@requestAccept');
         
         //Myjobs (staff member)
         Route::get('myjobs', 'StaffController@myJobListing');
+        
+        //Myjob mark as complete (staff member)
+        Route::post('job-mark-complete', 'StaffController@markasComplete');
 
         Route::post('check-in', 'UserController@checkIn');
         Route::get('logout', 'AuthController@logout');

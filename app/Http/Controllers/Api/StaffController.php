@@ -227,7 +227,7 @@ class StaffController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "My jobs.",
@@ -282,7 +282,7 @@ class StaffController extends Controller {
      *        ],
      *        "completed_jobs": []
      *    }
-     *}
+     * }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -355,6 +355,82 @@ class StaffController extends Controller {
                     ])
                     ->get();
             return $this->sendSuccessResponse("My jobs.", $jobs);
+        } catch (Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {post} /api/job-mark-complete My Job mark as completed
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName POSTMyjobMarkComplete
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id Staff user id(required).
+     * @apiParam {String} job_id Job Id(required).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Your job status has been changed. Now your job in under approval.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *{
+     *   "status": true,
+     *   "status_code": 200,
+     *   "message": "Your job status has been changed. Now your job in under approval.",
+     *   "data": {}
+     *}
+     * 
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *   "status": false,
+     *   "status_code": 404,
+     *   "message": "User id missing.",
+     *   "data": {}
+     * }
+     * 
+     * 
+     * @apiError JobIdMissing The job id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *{
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Job id missing.",
+     *    "data": {}
+     *}
+     * 
+     * 
+     */
+    public function markasComplete(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            if (!$request->job_id) {
+                return $this->sendErrorResponse("Job id missing", (object) []);
+            }
+            $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
+            ;
+            if (!$job) {
+                return $this->sendErrorResponse("Invalid job", (object) []);
+            }
+
+            $job->request_status_id = 3;
+            if ($job->save()) {
+                return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
+            } else {
+                return $this->administratorResponse();
+            }
         } catch (Exception $ex) {
             return $this->administratorResponse();
         }

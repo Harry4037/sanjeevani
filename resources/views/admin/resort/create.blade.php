@@ -14,8 +14,8 @@
                 <br>
                 <div class="form-horizontal form-label-left">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Images</label>
-                        <div class="col-md-8 col-sm-8 col-xs-12">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Resort Images</label>
+                        <div class="col-md-10 col-sm-10 col-xs-12">
                             <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
                                 @csrf
                             </form>
@@ -28,50 +28,49 @@
                     <div id="resort_images_div"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('resort_name') }}" type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('contact_no') }}" type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
-                            <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description"></textarea>
+                            <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description">{{ old('resort_description') }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('address') }}" type="text" class="form-control" name="address" id="address" placeholder="Address">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="state" id="state">
                                 <option value="">Choose option</option>
-                                <option value="1">UP</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">District</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="district" id="district">
-                                <option value="">Choose option</option>
-                                <option value="1">Noida</option>
+                                @if($states)
+                                @foreach($states as $state)
+                                <option value="{{ $state->id }}"
+                                        @if(old('state') == $state->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $state->state }}</option>
+                                @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
                                 <option value="1">Sector 66</option>
@@ -81,8 +80,8 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('pin_code') }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -90,15 +89,42 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
                     </div>
 
-                    <div id="room_detail_div"></div>
+                    <div id="room_detail_div">
+                        @if(old('room_no'))
+                        @foreach(old('room_no') as $key => $old_room)
+                        <div class='form-group'>
+                            <label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>
+                            <div class='col-md-2 col-sm-2 col-xs-12'>
+                                <input type='text' class='form-control' name='room_no[]'>
+                            </div>
+                            <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>
+                            <div class = 'col-md-2 col-sm-2 col-xs-11'>
+                                <select class='form-control' name='room_type[]' id='room_type'>
+                                    @if($roomTypes)
+                                    @foreach($roomTypes as $roomType)
+                                    <option value="{{ $roomType->id }}">{{ $roomType->name }}"
+                                        @if(old('room_type')[$key] == $roomType->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        ></option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <i style='cursor:pointer' class='fa fa-times delete_this_div'></i>
+                        </div>
+                        @endforeach
+                        @endif
+
+                    </div>
                     <div class="form-group">
-                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
                             <button type="button" class="btn btn-primary" id="add_more_room">Add Room</button>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                             <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
                             <button type="reset" class="btn btn-primary">Reset</button>
                             <button type="submit" class="btn btn-success">Submit</button>
@@ -132,22 +158,22 @@ $(document).ready(function () {
 
 
     var roomTypes = <?php echo json_encode($roomTypes) ?>;
-    var room_type = "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label><div class = 'col-md-2 col-sm-2 col-xs-2'><select class='form-control' name='room_type[]' id='room_type'>";
+    var room_type = "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label><div class = 'col-md-2 col-sm-2 col-xs-11'><select class='form-control' name='room_type[]' id='room_type'>";
     $.each(roomTypes, function (key, val) {
         room_type += "<option value='" + val.id + "'>" + val.name + "</option>";
     });
     room_type += "</select></div>";
-    
-    
+
+
     $(document).on("click", "#add_more_room", function () {
 
-        var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-2'>"
+        var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-12'>"
                 + "<input type='text' class='form-control' name='room_no[]'>"
-                + "</div>" + room_type + "</div>";
+                + "</div>" + room_type + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#room_detail_div").append(member_html);
     });
-    
-    
+
+
     Dropzone.options.myDropzone = {
         init: function () {
             this.on("success", function (file, response) {
@@ -174,12 +200,12 @@ $(document).ready(function () {
     $("#addResortForm").validate({
         ignore: [],
         rules: {
-            cktext: {
-                required: function ()
-                {
-                    CKEDITOR.instances.cktext.updateElement();
-                },
-            },
+//            cktext: {
+//                required: function ()
+//                {
+//                    CKEDITOR.instances.cktext.updateElement();
+//                },
+//            },
             resort_name: {
                 required: true
             },
@@ -187,9 +213,9 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-            resort_description: {
-                required: true
-            },
+//            resort_description: {
+//                required: true
+//            },
             address: {
                 required: true
             },
@@ -199,19 +225,16 @@ $(document).ready(function () {
             state: {
                 required: true
             },
-            district: {
-                required: true
-            },
             city: {
                 required: true
             },
         }
     });
-    
-    $(document).on("onclick", ".delete_this_div", function () {
-        console.log($(this).parent("div"));
+
+    $(document).on("click", ".delete_this_div", function () {
         $(this).parent("div").remove();
     });
+
 });
 </script>
 @endsection
