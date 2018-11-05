@@ -4,43 +4,52 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Resort;
-use App\Models\ResortNearbyPlace;
-use App\Models\NearbyPlaceImage;
+use App\Models\ServiceRequest;
 
-class JobsController extends Controller {
+class OrderRequestController extends Controller {
 
     public function index() {
         $css = ['vendors/datatables.net-bs/css/dataTables.bootstrap.min.css'];
         $js = ['vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'];
 
-        return view('admin.nearby.index', ['js' => $js, 'css' => $css]);
+        return view('admin.order-request.index', ['js' => $js, 'css' => $css]);
     }
 
-    public function nearbyList(Request $request) {
+    public function orderRequestList(Request $request) {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
 
-            $nearbys = ResortNearbyPlace::all();
-
-            $i = 0;
-            $nearbyArray = [];
-            foreach ($nearbys as $nearby) {
-                $resort = Resort::find($nearby->resort_id);
-                $nearbyArray[$i]['name'] = $nearby->name;
-                $checked_status = $nearby->is_active ? "checked" : '';
-                $nearbyArray[$i]['distance'] = $nearby->distance_from_resort;
-                $nearbyArray[$i]['resort_name'] = $resort->name;
-                $nearbyArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='nearby_status' id=" . $nearby->id . " data-status=" . $nearby->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $nearbyArray[$i]['action'] = '<a href="' . route('admin.nearby.edit', $nearby->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
-                $i++;
+            $serviceRequests = ServiceRequest::select('id', 'comment', 'service_id', 'question_id', 'request_status_id', 'user_id')
+                            ->take($limit)->offset($offset)
+                            ->with([
+                                'serviceDetail' => function($query) {
+                                    $query->select('id', 'name', 'type_id');
+                                }
+                            ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->userRequestStatus();
+                        }
+                    ])->with([
+                        'userDetail'
+                    ])->get();
+            
+            $dataArray = [];
+            foreach ($serviceRequests as $key => $serviceRequest) {
+                $dataArray[$key]['service_type'] = $serviceRequest->serviceDetail->serviceType->name;
+                $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail->name;
+                $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
+                $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
+                $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
             }
-            $data['recordsTotal'] = ResortNearbyPlace::count();
-            $data['recordsFiltered'] = ResortNearbyPlace::count();
-            $data['data'] = $nearbyArray;
+            $data['recordsTotal'] = count($serviceRequests);
+            $data['recordsFiltered'] = count($serviceRequests);
+            $data['data'] = $dataArray;
             return $data;
         } catch (\Exception $e) {
             dd($e);

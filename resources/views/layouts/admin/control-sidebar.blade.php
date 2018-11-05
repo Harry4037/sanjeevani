@@ -41,7 +41,7 @@
                 <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i> Services Management</a>
             </li>
             <li>
-                <a href="{{ route('admin.jobs.index') }}"><i class="fa fa-hand-scissors-o"></i> Request Management</a>
+                <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i> Request Management</a>
             </li>
         </ul>
     </div>

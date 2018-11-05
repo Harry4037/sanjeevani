@@ -99,13 +99,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     /**
      * Jobs Management
      */
-    Route::prefix('jobs')->group(function() {
-        Route::get('/', 'JobsController@index')->name('admin.jobs.index');
-        Route::get('/jobs-list', 'JobsController@jobsList')->name('admin.jobs.list');
-//        Route::match(['get', 'post'], '/create', 'NearbyController@create')->name('admin.nearby.add');
-//        Route::post('/update-status', 'NearbyController@updateStatus')->name('admin.nearby.status-update');
-//        Route::post('/upload-images', 'NearbyController@uploadImages')->name('admin.nearby.upload-image');
-//        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
-//        Route::match(['get','post'],'/edit/{id}', 'NearbyController@editNearby')->name('admin.nearby.edit');
+    Route::prefix('order-request')->group(function() {
+        Route::get('/', 'OrderRequestController@index')->name('admin.order-request.index');
+        Route::get('/order-request-list', 'OrderRequestController@orderRequestList')->name('admin.order-request.list');
     });
 });
