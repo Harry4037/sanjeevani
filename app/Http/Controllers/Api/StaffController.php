@@ -25,55 +25,81 @@ class StaffController extends Controller {
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *   "status": true,
-     *   "status_code": 200,
-     *   "message": "Service request found.",
-     *   "data": [
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Service request found.",
+     *    "data": [
      *        {
      *            "id": 1,
      *            "comment": "",
      *            "service_id": 1,
      *            "user_id": 2,
+     *            "question_id": 1,
+     *            "question_detail": {
+     *                "id": 1,
+     *                "question": "question 1"
+     *            },
      *            "service_detail": {
      *                "id": 1,
      *                "name": "Air conditioner",
-     *                "icon": "http://127.0.0.1:8000/storage/Service_icon/cWpiFZ9YG4duaP7Cfch2DgeVn3AYdSBAZPWFkd6g.png",
+     *                "icon": "http://127.0.0.1:8000/storage/Service_icon/se9y9nUSeTSmoYw90EloODuyFUDyF1w86h3ngTll.jpeg",
      *                "type_id": 1,
-     *               "service_type": {
-     *                   "id": 1,
+     *                "service_type": {
+     *                    "id": 1,
      *                    "name": "Housekeeping"
      *                }
      *            },
      *            "user_detail": {
      *                "id": 2,
-     *                "user_name": null,
-     *                "email_id": null,
-     *                "mobile_number": "8077575835"
-     *           }
-     *        },
-     *        {
-     *            "id": 2,
-     *            "comment": "",
-     *            "service_id": 2,
-     *            "user_id": 2,
-     *           "service_detail": {
-     *               "id": 2,
-     *                "name": "Room Cleaning",
-     *                "icon": "http://127.0.0.1:8000/storage/Service_icon/C2taEVpOfEQghJco5Y4uhARv6x1WKMOpE8Szaixn.png",
-     *                "type_id": 2,
-     *               "service_type": {
-     *                    "id": 2,
-     *                    "name": "Issue"
-     *                }
-     *            },
-     *            "user_detail": {
-     *                "id": 2,
-     *                "user_name": null,
-     *                "email_id": null,
-     *                "mobile_number": "8077575835"
+     *                "user_name": "Hariom Gangwar",
+     *                "email_id": "hariom4037@gmail.com",
+     *                "mobile_number": "9999999999",
+     *                "user_booking_detail": {
+     *                    "id": 1,
+     *                    "user_id": 2,
+     *                    "source_name": "Makemy trip",
+     *                    "source_id": "QWERTY12345",
+     *                    "resort_id": 1,
+     *                   "resort": {
+     *                        "id": 1,
+     *                        "name": "Parth Inn",
+     *                        "description": "<p>Lorem ipsum</p>",
+     *                        "contact_number": "9999999999",
+     *                        "address_1": "sector 63"
+     *                    },
+     *                    "room_booking": {
+     *                        "id": 1,
+     *                        "check_in": "2018-11-06 00:00:00",
+     *                        "check_out": "2018-11-06 00:00:00",
+     *                        "room_type_id": 2,
+     *                        "resort_room_id": 3,
+     *                        "room_type": {
+     *                            "id": 2,
+     *                            "name": "Cottage"
+     *                        },
+     *                       "resort_room": {
+     *                            "id": 3,
+     *                            "room_no": "105"
+     *                        }
+     *                    },
+     *                   "bookingpeople_accompany": [
+     *                        {
+     *                            "id": 1,
+     *                            "person_name": "Ankit",
+     *                            "person_age": "25",
+     *                            "person_type": "Adult"
+     *                        },
+     *                        {
+     *                            "id": 2,
+     *                            "person_name": "Anshi",
+     *                            "person_age": "5",
+     *                            "person_type": "Child"
+     *                       }
+     *                   ]
+     *               }
      *           }
      *        }
-     *   ]
+     *    ]
      * }
      * 
      * 
@@ -109,7 +135,12 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
 
-            $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
+            $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
+                    ->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name as question');
+                        }
+                    ])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
@@ -117,7 +148,12 @@ class StaffController extends Controller {
                     ])
                     ->with([
                         'userDetail' => function($query) {
-                            $query->select('id', 'user_name', 'email_id', 'mobile_number');
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
                         }
                     ])
                     ->get();
@@ -227,62 +263,91 @@ class StaffController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
+     *{
      *    "status": true,
      *    "status_code": 200,
      *    "message": "My jobs.",
      *    "data": {
      *        "ongoing_jobs": [
-     *           {
-     *                "id": 2,
-     *                "comment": "",
-     *                "question_id": 0,
-     *                "service_id": 2,
-     *                "request_status_id": 2,
-     *                "user_id": 3,
-     *                "service_detail": {
-     *                    "id": 2,
-     *                    "name": "Do not disturb",
-     *                    "type_id": 2,
-     *                    "service_type": {
-     *                        "id": 2,
-     *                        "name": "Issue"
-     *                    }
-     *                },
-     *                "question_detail": null,
-     *                "request_status": {
-     *                    "id": 2,
-     *                    "status": "On going"
-     *                }
-     *            }
-     *        ],
-     *        "under_approval_jobs": [
      *            {
      *                "id": 1,
      *                "comment": "",
-     *                "question_id": 0,
+     *                "question_id": 1,
      *                "service_id": 1,
-     *                "request_status_id": 3,
-     *                "user_id": 3,
+     *                "request_status_id": 2,
+     *                "user_id": 2,
      *                "service_detail": {
      *                    "id": 1,
-     *                    "name": "Room Cleaning",
+     *                    "name": "Air conditioner",
      *                    "type_id": 1,
      *                    "service_type": {
      *                        "id": 1,
      *                        "name": "Housekeeping"
      *                    }
      *                },
-     *                "question_detail": null,
+     *                "question_detail": {
+     *                    "id": 1,
+     *                    "name": "question 1"
+     *                },
      *                "request_status": {
-     *                    "id": 3,
-     *                    "status": "Under approval"
+     *                    "id": 2,
+     *                    "status": "On going"
+     *                },
+     *                "user_detail": {
+     *                    "id": 2,
+     *                    "user_name": "Hariom Gangwar",
+     *                    "email_id": "hariom4037@gmail.com",
+     *                    "mobile_number": "9999999999",
+     *                    "user_booking_detail": {
+     *                        "id": 1,
+     *                        "user_id": 2,
+     *                        "source_name": "Makemy trip",
+     *                        "source_id": "QWERTY12345",
+     *                        "resort_id": 1,
+     *                        "resort": {
+     *                            "id": 1,
+     *                            "name": "Parth Inn",
+     *                            "description": "<p>Lorem ipsum</p>",
+     *                            "contact_number": "9999999999",
+     *                            "address_1": "sector 63"
+     *                        },
+     *                        "room_booking": {
+     *                            "id": 1,
+     *                            "check_in": "2018-11-06 00:00:00",
+     *                            "check_out": "2018-11-06 00:00:00",
+     *                            "room_type_id": 2,
+     *                            "resort_room_id": 3,
+     *                            "room_type": {
+     *                                "id": 2,
+     *                                "name": "Cottage"
+     *                            },
+     *                            "resort_room": {
+     *                                "id": 3,
+     *                                "room_no": "105"
+     *                            }
+     *                        },
+     *                        "bookingpeople_accompany": [
+     *                            {
+     *                                "id": 1,
+     *                                "person_name": "Ankit",
+     *                                "person_age": "25",
+     *                                "person_type": "Adult"
+     *                            },
+     *                            {
+     *                                "id": 2,
+     *                                "person_name": "Anshi",
+     *                                "person_age": "5",
+     *                                "person_type": "Child"
+     *                            }
+     *                        ]
+     *                    }
      *                }
      *            }
      *        ],
+     *        "under_approval_jobs": [],
      *        "completed_jobs": []
      *    }
-     * }
+     *}
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -322,8 +387,18 @@ class StaffController extends Controller {
                         'requestStatus' => function($query) {
                             $query->select('id')->staffRequestStatus();
                         }
+                    ])->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->get();
+            
             $jobs['under_approval_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
@@ -336,6 +411,15 @@ class StaffController extends Controller {
                     ])->with([
                         'requestStatus' => function($query) {
                             $query->select('id')->staffRequestStatus();
+                        }
+                    ])->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
                         }
                     ])
                     ->get();
@@ -351,6 +435,15 @@ class StaffController extends Controller {
                     ])->with([
                         'requestStatus' => function($query) {
                             $query->select('id')->staffRequestStatus();
+                        }
+                    ])->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
                         }
                     ])
                     ->get();
@@ -377,12 +470,12 @@ class StaffController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *   "status": true,
      *   "status_code": 200,
      *   "message": "Your job status has been changed. Now your job in under approval.",
      *   "data": {}
-     *}
+     * }
      * 
      * 
      * @apiError UserIdMissing The user id is missing.
@@ -399,12 +492,12 @@ class StaffController extends Controller {
      * @apiError JobIdMissing The job id is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "Job id missing.",
      *    "data": {}
-     *}
+     * }
      * 
      * 
      */
