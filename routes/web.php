@@ -103,4 +103,19 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/', 'OrderRequestController@index')->name('admin.order-request.index');
         Route::get('/order-request-list', 'OrderRequestController@orderRequestList')->name('admin.order-request.list');
     });
+
+    /**
+     * Amenity Management
+     */
+    Route::prefix('amenity')->group(function() {
+        Route::get('/', 'AmenityController@index')->name('admin.amenity.index');
+        Route::get('/amenities-list', 'AmenityController@amenityList')->name('admin.amenity.list');
+        Route::match(['get', 'post'], '/create', 'AmenityController@create')->name('admin.amenity.add');
+        Route::post('/update-status', 'AmenityController@updateStatus')->name('admin.amenity.status-update');
+        Route::post('/upload-images', 'AmenityController@uploadImages')->name('admin.amenity.upload-image');
+        Route::post('/delete-images', 'AmenityController@deleteImages')->name('admin.amenity.delete-image');
+        Route::match(['get', 'post'], '/edit/{id}', 'AmenityController@editResort')->name('admin.amenity.edit');
+        Route::get('/resort-rooms/{resort}/{type}', 'AmenityController@getResortRooms')->name('admin.amenity.rooms');
+        Route::post('/delete-room', 'AmenityController@deleteRoom')->name('admin.amenity.delete-room');
+    });
 });

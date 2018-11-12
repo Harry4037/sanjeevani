@@ -43,6 +43,9 @@
             <li>
                 <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i> Request Management</a>
             </li>
+            <li>
+                <a href="{{ route('admin.amenity.index') }}"><i class="fa fa-hand-scissors-o"></i> Amenity Management</a>
+            </li>
         </ul>
     </div>
 </div>
