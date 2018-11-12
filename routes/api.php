@@ -27,6 +27,9 @@ Route::namespace("Api")->group(function () {
 
     //service order & request listing of specific resort (Staff)
     Route::get('service-request-list', 'StaffController@serviceRequestListing');
+    
+    //Amenities listing of specific resort
+    Route::get('amenities-list', 'AmenityController@amenitiesListing');
 
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');
@@ -52,6 +55,9 @@ Route::namespace("Api")->group(function () {
         //Myjob mark as complete (staff member)
         Route::post('job-mark-complete', 'StaffController@markasComplete');
 
+        //Book amenity
+        Route::post('book-amenities', 'AmenityController@bookAmenities');
+        
         Route::post('check-in', 'UserController@checkIn');
         Route::get('logout', 'AuthController@logout');
         Route::post('update-profile', 'UserController@updateProfile');
