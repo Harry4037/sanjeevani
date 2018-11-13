@@ -12,5 +12,11 @@ class Resort extends Model {
     public function resortRooms(){
         return $this->hasMany('App\Models\ResortRoom','resort_id');
     }
+    public function resortAmenities(){
+        return $this->hasMany('App\Models\Amenity','resort_id');
+    }
+    public function resortNearByPlaces(){
+        return $this->hasMany('App\Models\ResortNearbyPlace','resort_id');
+    }
 
 }

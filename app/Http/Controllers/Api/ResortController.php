@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Resort;
 use App\Models\ResortImage;
 use App\Models\ResortRoom;
+use App\Models\RoomType;
 
 class ResortController extends Controller {
 
@@ -84,42 +85,46 @@ class ResortController extends Controller {
      * 
      */
     public function resortDetail(Request $request) {
-        if (!$request->resort_id) {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "Resort id missing.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
+        try {
+            if (!$request->resort_id) {
+                return $this->sendErrorResponse("Resort id missing.", (object) []);
+            }
 
-        $resort = Resort::select('id', 'name', 'description')->where(["id" => $request->resort_id, "is_active" => 1])->with([
-                    'resortImages' => function($query) {
-                        $query->select('id', 'image_name', 'resort_id');
+            $resort = Resort::select('id', 'name', 'description', 'address_1 as address')->where(["id" => $request->resort_id, "is_active" => 1])->with([
+                        'resortImages' => function($query) {
+                            $query->select('id', 'image_name', 'resort_id');
+                        }
+                    ])->with([
+                        'resortAmenities' => function($query) {
+                            $query->select('id', 'resort_id', 'name');
+                        }
+                    ])->with([
+                        'resortNearByPlaces' => function($query) {
+                            $query->select('id', 'name', 'distance_from_resort', 'resort_id');
+                        }
+                    ])->first();
+
+            if ($resort) {
+                $resortRoomTypes = ResortRoom::select('room_type_id')->where("resort_id", $resort->id)->distinct()->get();
+                $resortRoomArray = [];
+                if ($resortRoomTypes) {
+                    foreach ($resortRoomTypes as $key => $resortRoomType) {
+                        $roomType = RoomType::find($resortRoomType->room_type_id);
+                        $resortRoomArray[$key]['id'] = $roomType->id;
+                        $resortRoomArray[$key]['name'] = $roomType->name;
                     }
-                ])->with([
-                    'resortRooms' => function($query) {
-                        $query->select('id', 'resort_id', 'room_no', 'room_type_id')->with([
-                            'roomType' => function ($query) {
-                                $query->select('id', 'name');
-                            }
-                        ]);
-                    }
-                ])->first();
+                }
 
-        if ($resort) {
-            $data['resort'] = $resort;
+                $data['resort'] = $resort;
+                $data['resort']['room_types'] = $resortRoomArray;
 
-            $response['success'] = true;
-            $response['status_code'] = 200;
-            $response['message'] = "Resort found.";
-            $response['data'] = $data;
-            return $this->jsonData($response);
-        } else {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "Resort not found.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
+                return $this->sendSuccessResponse("Resort found.", $data);
+            } else {
+
+                return $this->sendErrorResponse("Resort not found.", (object) []);
+            }
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
         }
     }
 
