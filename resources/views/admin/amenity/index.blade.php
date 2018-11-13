@@ -20,12 +20,10 @@
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
-                            <th>Resort Image</th>
+                            <th>Amenity Name</th>
                             <th>Resort Name</th>
-                            <th>Contact Number</th>
-                            <th>Address</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <!--<th>Action</th>-->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -53,18 +51,13 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "image",sortable: false},
                 {"data": "name"},
-                {"data": "contact_no"},
-                {"data": "address"},
+                {"data": "resort_name"},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
                         return row['status'];
                     }
-                },
-                {"data": "action",
-                    sortable: false,
                 },
             ]
         });
@@ -75,13 +68,13 @@
             }
         });
 
-        $(document).on("click", ".resort_status", function () {
+        $(document).on("click", ".amenity_status", function () {
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/resort/update-status',
+                url: _baseUrl + '/admin/amenity/update-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',

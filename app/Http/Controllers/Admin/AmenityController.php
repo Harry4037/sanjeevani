@@ -40,20 +40,15 @@ class AmenityController extends Controller {
             $data['recordsFiltered'] = $query->count();
             $amenities = $query->take($limit)->offset($offset)->latest()->get();
             $i = 0;
-            dd($resorts->toArray());
+//            dd($amenities->toArray());
             $resortsArray = [];
             foreach ($amenities as $amenity) {
                 $resort = Resort::find($amenity->resort_id);
-                $cityState = CityMaster::find($resort->city_id)->first();
-                $address = $resort->address_1 . ",<br>" . $cityState->city . ",<br>" . $cityState->state->state . ",<br>" . $resort->pincode;
-                $img = !empty($resortImage) ? $resortImage->image_name : asset('img/noimage.png');
-                $resortsArray[$i]['image'] = "<img width=80 height=70 src='" . $img . "'>";
-                $resortsArray[$i]['name'] = $resort->name;
-                $checked_status = $resort->is_active ? "checked" : '';
-                $resortsArray[$i]['contact_no'] = $resort->contact_number;
-                $resortsArray[$i]['address'] = $address;
-                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                $resortsArray[$i]['name'] = $amenity->name;
+                $checked_status = $amenity->is_active ? "checked" : '';
+                $resortsArray[$i]['resort_name'] = $resort->name;
+                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='amenity_status' id=" . $amenity->id . " data-status=" . $amenity->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+//                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
 
@@ -147,9 +142,9 @@ class AmenityController extends Controller {
     public function updateStatus(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $resort = $this->resort->findOrFail($request->record_id);
-                $resort->is_active = $request->status;
-                if ($resort->save()) {
+                $amenity = Amenity::findOrFail($request->record_id);
+                $amenity->is_active = $request->status;
+                if ($amenity->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
                 }
                 return [];
@@ -157,72 +152,6 @@ class AmenityController extends Controller {
             return [];
         } catch (\Exception $e) {
             dd($e);
-        }
-    }
-
-    public function editResort(Request $request, $id) {
-        try {
-            $data = $this->resort->find($id);
-            if ($request->isMethod("post")) {
-                $data->name = $request->edit_resort_name;
-                $data->contact_number = $request->edit_contact_no;
-                $data->description = $request->edit_resort_description;
-                $data->address_1 = $request->edit_address;
-                $data->pincode = $request->edit_pin_code;
-                $data->city_id = $request->city;
-                if ($data->save()) {
-                    if ($request->room_type && $request->room_no) {
-                        ResortRoom::where("resort_id", $data->id)->delete();
-                        $i = 0;
-                        foreach ($request->room_type as $room) {
-                            $resortRoom = new ResortRoom();
-                            $resortRoom->resort_id = $data->id;
-                            $resortRoom->room_type_id = $room;
-                            $resortRoom->room_no = $request->room_no[$i];
-                            $resortRoom->save();
-                            $i++;
-                        }
-                    }
-
-                    return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.');
-                }
-            }
-
-
-            $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
-            $roomTypes = $this->roomType->all();
-            $states = StateMaster::all();
-            $selectedCity = CityMaster::find($data->city_id);
-            $cities = CityMaster::where("state_id", $selectedCity->state_id)->get();
-            return view('admin.resort.edit', [
-                'data' => $data,
-                'dataRooms' => $dataRooms,
-                'roomTypes' => $roomTypes,
-                'states' => $states,
-                'selectedCity' => $selectedCity,
-                'cities' => $cities,
-            ]);
-        } catch (\Exception $ex) {
-            return redirect()->route('admin.resort.edit', $id)->with('error', $ex->getMessage());
-        }
-    }
-
-    public function getResortRooms(Request $request, $resort = 0, $type = 0) {
-        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $type, "is_active" => 1])->get();
-        return view('admin.resort.rooms', [ 'resortRooms' => $resortRooms]);
-    }
-
-    public function deleteRoom(Request $request) {
-        try {
-            $room = $this->resortRoom->find($request->record_id);
-            if ($room) {
-                $room->delete();
-                return ["status" => true];
-            } else {
-                return ["status" => false];
-            }
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
         }
     }
 

@@ -30,6 +30,9 @@ Route::namespace("Api")->group(function () {
     
     //Amenities listing of specific resort
     Route::get('amenities-list', 'AmenityController@amenitiesListing');
+    
+    //Notification List
+    Route::get('notification-list', 'NotificationController@notificationList');
 
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');
