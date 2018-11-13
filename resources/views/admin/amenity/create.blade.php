@@ -27,6 +27,19 @@
                     @csrf
                     <div id="amenity_images_div"></div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" id="resort_id" name="resort_id">
+                                <option value="">Select option</option>
+                                @if($resorts)
+                                @foreach($resorts as $resort)
+                                <option value="{{ $resort->id }}">{{ $resort->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('amenity_name') }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Amenity Name">
@@ -99,6 +112,40 @@
 <script>
 $(document).ready(function () {
 
+    $(document).on('focus', ".from_timepicker", function () {
+        $(this).daterangepicker({
+            timePicker: true,
+//            timePicker24Hour: true,
+            timePickerIncrement: 1,
+            timePickerSeconds: true,
+            locale: {
+                format: 'hh:mm:ss A'
+            },
+            singleDatePicker: true,
+            singleClasses: "picker_3",
+        }).on('show.daterangepicker', function (ev, picker) {
+            picker.container.find(".calendar-table").hide();
+        });
+    });
+    
+    $(document).on('focus', ".to_timepicker", function () {
+        $(this).daterangepicker({
+            timePicker: true,
+//            timePicker24Hour: true,
+            timePickerIncrement: 1,
+            timePickerSeconds: true,
+            locale: {
+                format: 'hh:mm:ss A'
+            },
+            singleDatePicker: true,
+            singleClasses: "picker_3",
+        }).on('show.daterangepicker', function (ev, picker) {
+            picker.container.find(".calendar-table").hide();
+        });
+    });
+
+
+
 //For ckeditor
     CKEDITOR.replace('amenity_description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
@@ -117,20 +164,19 @@ $(document).ready(function () {
         var html = "<div class='form-group'>\n\
                 <label class='control-label col-md-2 col-sm-2 col-xs-12'>From</label>\n\
                 <div class='col-md-2 col-sm-2 col-xs-12'>"
-                + "<input type='text' class='form-control' name='from_time[]'>"
+                + "<input readonly type='text' class='form-control from_timepicker' name='from_time[]' >"
                 + "</div>\n\
             <label class='control-label col-md-1 col-sm-1 col-xs-12'>To</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-12'>"
-            +"<input type='text' class='form-control' name='to_time[]'>"
-            +"</div>"
-            +"<label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>\n\
+                + "<input readonly type='text' class='form-control to_timepicker' name='to_time[]'>"
+                + "</div>"
+                + "<label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-10'>"
-            +"<input type='text' class='form-control' name='total_people[]'>"
-            +"</div>"
+                + "<input type='number' class='form-control' name='total_people[]'>"
+                + "</div>"
                 + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#time_slot_div").append(html);
     });
-
 
     Dropzone.options.myDropzone = {
         init: function () {
@@ -164,6 +210,9 @@ $(document).ready(function () {
 //                    CKEDITOR.instances.cktext.updateElement();
 //                },
 //            },
+            resort_id: {
+                required: true
+            },
             amenity_name: {
                 required: true
             },

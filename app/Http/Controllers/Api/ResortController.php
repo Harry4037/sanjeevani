@@ -54,12 +54,12 @@ class ResortController extends Controller {
      *               "resort_images": [
      *                   {
      *                       "id": 1,
-     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/ptjHTnrFSngDDbqO20ZHl4YDy035S0z1cIuop8EC.jpeg",
+     *                       "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/Resort/ptjHTnrFSngDDbqO20ZHl4YDy035S0z1cIuop8EC.jpeg",
      *                       "resort_id": 1
      *                   },
      *                   {
      *                       "id": 2,
-     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/xQvt0XF682PO9gzaA05gTB2MQKP0ZH62XYGsgn2i.jpeg",
+     *                       "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/Resort/xQvt0XF682PO9gzaA05gTB2MQKP0ZH62XYGsgn2i.jpeg",
      *                       "resort_id": 1
      *                   },
      *                   {
@@ -69,7 +69,7 @@ class ResortController extends Controller {
      *                   },
      *                   {
      *                       "id": 4,
-     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/kVkodMPi1Y5QfPKeOjY8LXbf0tiKoOS4sHbaQOMu.jpeg",
+     *                       "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/Resort/kVkodMPi1Y5QfPKeOjY8LXbf0tiKoOS4sHbaQOMu.jpeg",
      *                       "resort_id": 1
      *                   }
      *               ],
@@ -123,7 +123,7 @@ class ResortController extends Controller {
 
             $resort = Resort::select('id', 'name', 'description', 'address_1 as address')->where(["id" => $request->resort_id, "is_active" => 1])->with([
                         'resortImages' => function($query) {
-                            $query->select('id', 'image_name', 'resort_id');
+                            $query->select('id', 'image_name as banner_image_url', 'resort_id');
                         }
                     ])->with([
                         'resortAmenities' => function($query) {

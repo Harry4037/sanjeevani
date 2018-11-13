@@ -39,10 +39,12 @@ class NearbyController extends Controller {
      * "address": "noida",
      * "images": [
      * {
-     * "id": "http://127.0.0.1:8000/storage/Nearby/ExD6n45wLqb6U3NdEZ34vLjSDdntyUEWA9J6kUNu.jpeg"
+     * "id": 1,
+     * "banner_image_url": "http://127.0.0.1:8000/storage/Nearby/ExD6n45wLqb6U3NdEZ34vLjSDdntyUEWA9J6kUNu.jpeg"
      * },
      * {
-     * "id": "http://127.0.0.1:8000/storage/Nearby/u5SKjA8LzMoIabk87njPSg5nTcFaAFgKkgZN2z1f.jpeg"
+     * "id": 2,
+     * "banner_image_url": "http://127.0.0.1:8000/storage/Nearby/u5SKjA8LzMoIabk87njPSg5nTcFaAFgKkgZN2z1f.jpeg"
      * }
      * ]
      * },
@@ -106,7 +108,7 @@ class NearbyController extends Controller {
                     $j = 0;
                     foreach ($nearbyImages as $nearbyImage) {
                         $data['nearby'][$i]['images'][$j]['id'] = $nearbyImage->id;
-                        $data['nearby'][$i]['images'][$j]['id'] = asset("storage/Nearby/" . $nearbyImage->name);
+                        $data['nearby'][$i]['images'][$j]['banner_image_url'] = asset("storage/Nearby/" . $nearbyImage->name);
                         $j++;
                     }
                 } else {

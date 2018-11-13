@@ -49,7 +49,16 @@ class HomeController extends Controller {
      * "resort":{"id": 1, "name": "Parth Inn", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",…},
      * "booking":{}
      * },
-     * "banners":[]
+     * "banners": [
+     *    {
+     *        "id": 1,
+     *        "banner_image_url": "http://127.0.0.1:8000/storage/Banner/5zR5E72L3GDGglqaCQWveafypHYVhEjunOXVzKlx.jpeg"
+     *    },
+     *    {
+     *        "id": 2,
+     *        "banner_image_url": "http://127.0.0.1:8000/storage/Banner/2qQnTA8jAuT9eNV7UHXY561xYrZHxXHYWcXILaXO.jpeg"
+     *    }
+     *  ]
      * }
      * }
      * 
@@ -83,7 +92,7 @@ class HomeController extends Controller {
         $i = 0;
         foreach ($banners as $banner) {
             $bannerArray[$i]['id'] = $banner->id;
-            $bannerArray[$i]['banner'] = asset('storage/Banner/' . $banner->name);
+            $bannerArray[$i]['banner_image_url'] = asset('storage/Banner/' . $banner->name);
             $i++;
         }
 

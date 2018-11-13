@@ -71,7 +71,7 @@ class AmenityController extends Controller {
         }
         $amenities = Amenity::select('id', 'name', 'description')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
                     'amenityImages' => function($query) {
-                        $query->select('id', 'image_name', 'amenity_id');
+                        $query->select('id', 'image_name as banner_image_url', 'amenity_id');
                     }
                 ])->get();
 
