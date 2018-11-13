@@ -27,50 +27,81 @@ class ResortController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     * "status": true,
-     * "message": "Resort found.",
-     * "data":{
-     * "resort":{
-     * "id": 1,
-     * "name": "Parth Inn",
-     * "description": "resort description",
-     * "contact_number": "9999999999",
-     * "other_contact_number": null,
-     * "address_1": "Noida",
-     * "address_2": null,
-     * "address_3": null,
-     * "pincode": 201301,
-     * "city_id": 1,
-     * "latitude": 0,
-     * "longitude": 0,
-     * "is_active": 1,
-     * "domain_id": 0,
-     * "created_by": "1",
-     * "updated_by": "1",
-     * "created_at": "2018-10-23 18:43:57",
-     * "updated_at": "2018-10-23 18:48:48"
-     * },
-     * "images":[
-     * {
-     * "id": 1,
-     * "image": "http://sanjeevani.dbaquincy.com//storage/Resort/vRjSo14bSmWYs3Iuf3lHLVcItYuR5Ib9wrn8jFny.jpeg"
-     * },
-     * {
-     * "id": 2,
-     * "image": "http://sanjeevani.dbaquincy.com//storage/Resort/56aJrFsQGrr2mvw6xEw9B1jwcutzH3SKiSxnSWmP.jpeg"
-     * },
-     * {
-     * "id": 3,
-     * "image": "http://sanjeevani.dbaquincy.com//storage/Resort/3HY6kUbXtN4A4HlYHoeqDzri7D1L7E3K04Xm6VxL.jpeg"
-     * },
-     * {
-     * "id": 4,
-     * "image": "http://sanjeevani.dbaquincy.com//storage/Resort/SQ2PLNjBNKeGicszxZqApeK0nII1iqi08XPkwWqa.jpeg"
-     * }
-     * ]
-     * }
-     * }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Resort found.",
+     *       "data": {
+     *           "resort": {
+     *               "id": 1,
+     *               "name": "Parth Inn",
+     *               "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>",
+     *               "address": "sector 63",
+     *               "room_types": [
+     *                   {
+     *                       "id": 1,
+     *                       "name": "Tent"
+     *                   },
+     *                   {
+     *                       "id": 2,
+     *                       "name": "Cottage"
+     *                   },
+     *                   {
+     *                       "id": 3,
+     *                       "name": "Delux Room"
+     *                   }
+     *               ],
+     *               "resort_images": [
+     *                   {
+     *                       "id": 1,
+     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/ptjHTnrFSngDDbqO20ZHl4YDy035S0z1cIuop8EC.jpeg",
+     *                       "resort_id": 1
+     *                   },
+     *                   {
+     *                       "id": 2,
+     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/xQvt0XF682PO9gzaA05gTB2MQKP0ZH62XYGsgn2i.jpeg",
+     *                       "resort_id": 1
+     *                   },
+     *                   {
+     *                       "id": 3,
+     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/NqHeZs8Qw9gIyuRNNg3YgtD3JrS0Cx5QH8OmYaAy.jpeg",
+     *                       "resort_id": 1
+     *                   },
+     *                   {
+     *                       "id": 4,
+     *                       "image_name": "http://sanjeevani.dbaquincy.com/storage/Resort/kVkodMPi1Y5QfPKeOjY8LXbf0tiKoOS4sHbaQOMu.jpeg",
+     *                       "resort_id": 1
+     *                   }
+     *               ],
+     *               "resort_amenities": [
+     *                   {
+     *                       "id": 1,
+     *                       "resort_id": 1,
+     *                       "name": "Gym"
+     *                   },
+     *                   {
+     *                       "id": 2,
+     *                       "resort_id": 1,
+     *                       "name": "SPA"
+     *                   }
+     *               ],
+     *               "resort_near_by_places": [
+     *                   {
+     *                       "id": 1,
+     *                       "name": "Water Fall",
+     *                       "distance_from_resort": 25,
+     *                       "resort_id": 1
+     *                   },
+     *                   {
+     *                       "id": 2,
+     *                       "name": "Nilgri forest",
+     *                       "distance_from_resort": 10,
+     *                       "resort_id": 1
+     *                   }
+     *               ]
+     *           }
+     *       }
+     *   }
      * 
      * 
      * @apiError ResortIdMissing The resort id was missing.
