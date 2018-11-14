@@ -11,7 +11,7 @@ class QuestionTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        $typeArray = ["question 1", "question 2"];
+        $typeArray = ["Lorem Ipsum is simply dummy text", "Lorem Ipsum is simply dummy text"];
         foreach ($typeArray as $type) {
             DB::table('questions')->insert([
                 'name' => $type,

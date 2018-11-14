@@ -178,16 +178,18 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "'>Remove file</button>");
-                    var hidden_image_html = "<input id='resort_image_input_" + response.file_name + "' type='hidden' name='resort_images[]' value='" + response.file_name + "'>";
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' id='" + response.file_name + "'>Remove file</button>");
+                    var hidden_image_html = "<input id='resort_image_input_" + response.id + "' type='hidden' name='resort_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
                         // Make sure the button click doesn't submit the form:
                         e.preventDefault();
                         e.stopPropagation();
                         var record_id = this.id;
-                        $("#resort_image_input_" + record_id).remove();
-                        _this.removeFile(file);
+                        var record_val = this.val;
+                        console.log(record_val);
+//                        $("#resort_image_input_" + record_id).remove();
+//                        _this.removeFile(file);
                     });
                     file.previewElement.appendChild(removeButton);
                     $("#resort_images_div").append(hidden_image_html);

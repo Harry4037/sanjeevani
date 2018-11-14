@@ -8,11 +8,11 @@ class ResortImage extends Model
 {
     
     public function getImageNameAttribute($name){
-        return asset('storage/Resort/'.$name);
+        return asset('storage/resort_images/'.$name);
     }
     
     public function getBannerImageUrlAttribute($name){
-        return asset('storage/Resort/'.$name);
+        return asset('storage/resort_images/'.$name);
     }
 
 }

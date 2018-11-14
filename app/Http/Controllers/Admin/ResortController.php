@@ -44,10 +44,8 @@ class ResortController extends Controller {
             $query = $this->resort->query();
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%")
-                        ->orWhere("description", "LIKE", "%$searchKeyword%")
                         ->orWhere("contact_number", "LIKE", "%$searchKeyword%")
-                        ->orWhere("address_1", "LIKE", "%$searchKeyword%")
-                        ->orWhere("pincode", "LIKE", "%$searchKeyword%");
+                        ->orWhere("address_1", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $this->resort->count();
             $data['recordsFiltered'] = $this->resort->count();
@@ -65,14 +63,14 @@ class ResortController extends Controller {
                 $resortsArray[$i]['contact_no'] = $resort->contact_number;
                 $resortsArray[$i]['address'] = $address;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a><a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Update Images </a>';
                 $i++;
             }
 
             $data['data'] = $resortsArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -141,13 +139,13 @@ class ResortController extends Controller {
                 'states' => $states,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.resort.add')->with('error', $ex->getMessage());
+            return redirect()->route('admin.resort.index')->with('error', $ex->getMessage());
         }
     }
 
     public function uploadImages(Request $request) {
         $resort_image = $request->file("file");
-        $resort = Storage::disk('public')->put('Resort', $resort_image);
+        $resort = Storage::disk('public')->put('resort_images', $resort_image);
         if ($resort) {
             $resort_file_name = basename($resort);
             return ["status" => true, "id" => time(), "file_name" => $resort_file_name];

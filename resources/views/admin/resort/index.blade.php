@@ -1,7 +1,6 @@
 @extends('layouts.admin.app')
 
 @section('content')
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         @include('errors.errors-and-messages')
@@ -46,14 +45,19 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/resort/resorts-list",
+            ajax: {
+                url: _baseUrl + "/admin/resort/resorts-list",
+                error: function (xhr, error, thrown) {
+                    alert(error);
+                },
+            },
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "image",sortable: false},
+                {"data": "image", sortable: false},
                 {"data": "name"},
                 {"data": "contact_no"},
                 {"data": "address"},
