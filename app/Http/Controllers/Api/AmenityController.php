@@ -241,4 +241,101 @@ class AmenityController extends Controller {
         }
     }
 
+    /**
+     * @api {get} /api/amenities-time-slots  Amenities Time slots
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetAmenityTimeSlots
+     * @apiGroup Amenities
+     * 
+     * @apiParam {String} amenity_id Amenity id*.
+     * @apiParam {String} booking_date Booking date (yyyy/mm/dd).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Anemity time slots
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "time slots",
+     *    "data": [
+     *        {
+     *            "id": 1,
+     *            "from": "09:00:00",
+     *            "to": "10:00:00",
+     *            "is_booking_available": false
+     *        },
+     *        {
+     *            "id": 2,
+     *            "from": "10:00:00",
+     *            "to": "11:00:00",
+     *            "is_booking_available": true
+     *        }
+     *    ]
+     * }
+     * 
+     * 
+     * @apiError AmenityIdMissing The amenity is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "amenity id missing.",
+     *       "data": {}
+     *   } 
+     * 
+     * @apiError BooingDateMissing The booking date is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "booking date id missing.",
+     *       "data": {}
+     *   } 
+     * 
+     */
+    public function amenityTimeSlots(Request $request) {
+        if (!$request->amenity_id) {
+            return $this->sendErrorResponse("amenity id missing.", (object) []);
+        }
+        if (!$request->booking_date) {
+            return $this->sendErrorResponse("booking date missing.", (object) []);
+        }
+
+        $amenity = Amenity::find($request->amenity_id);
+        if (!$amenity) {
+            return $this->sendErrorResponse("Invalid amenity.", (object) []);
+        }
+        $amenityTimeSlots = AmenityTimeSlot::select('id', 'from', 'to', 'allow_no_of_member')->where([
+                    "amenity_id" => $request->amenity_id
+                ])->get();
+        if ($amenityTimeSlots) {
+            $slotArray = [];
+            foreach ($amenityTimeSlots as $key => $amenityTimeSlot) {
+                $bookings = AmenityRequest::where([
+                            "booking_date" => $request->booking_date,
+                            "from" => $amenityTimeSlot->from,
+                            "to" => $amenityTimeSlot->to,
+                        ])->count();
+                $flag = true;
+                if ($bookings >= $amenityTimeSlot->allow_no_of_member) {
+                    $flag = false;
+                }
+
+                $slotArray[$key]['id'] = $amenityTimeSlot->id;
+                $slotArray[$key]['from'] = $amenityTimeSlot->from;
+                $slotArray[$key]['to'] = $amenityTimeSlot->to;
+                $slotArray[$key]['is_booking_available'] = $flag;
+            }
+            return $this->sendSuccessResponse("time slots", $slotArray);
+        } else {
+            return $this->sendErrorResponse("No time slot available for booking", (object) []);
+        }
+    }
+
 }

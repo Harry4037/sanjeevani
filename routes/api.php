@@ -31,6 +31,9 @@ Route::namespace("Api")->group(function () {
     //Amenities listing of specific resort
     Route::get('amenities-list', 'AmenityController@amenitiesListing');
     
+    //Amenities slots
+    Route::get('amenities-time-slots', 'AmenityController@amenityTimeSlots');
+    
     //Notification List
     Route::get('notification-list', 'NotificationController@notificationList');
 
