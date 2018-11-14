@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller {
 
@@ -32,13 +33,17 @@ class NotificationController extends Controller {
      *            "id": 1,
      *            "title": "Lorem Ipsum",
      *            "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-     *            "type": 1
+     *            "type": 1,
+     *            "date": "27-Nov-2018",
+     *            "time": "05:00:00 AM"
      *        },
      *        {
      *            "id": 2,
      *            "title": "Lorem Ipsum",
      *            "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-     *            "type": 1
+     *            "type": 1,
+     *            "date": "27-Nov-2018",
+     *            "time": "05:00:00 AM"
      *        }
      *    ]
      * }
@@ -60,7 +65,7 @@ class NotificationController extends Controller {
         if (!$request->user_id) {
             return $this->sendErrorResponse("User id missing.", (object) []);
         }
-        $notifications = Notification::select('id','title', 'message', 'type')->where("user_id", $request->user_id)->latest()->get();
+        $notifications = Notification::select(DB::raw('id, title, message, type, DATE_FORMAT(created_at, "%d-%b-%Y")  as date, DATE_FORMAT(created_at, "%r")  as time'))->where("user_id", $request->user_id)->latest()->get();
 
         return $this->sendSuccessResponse("Notifications", $notifications);
     }

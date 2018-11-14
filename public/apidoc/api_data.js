@@ -960,7 +960,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Notifications\",\n   \"data\": [\n       {\n           \"id\": 1,\n           \"title\": \"Lorem Ipsum\",\n           \"message\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n           \"type\": 1\n       },\n       {\n           \"id\": 2,\n           \"title\": \"Lorem Ipsum\",\n           \"message\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n           \"type\": 1\n       }\n   ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Notifications\",\n   \"data\": [\n       {\n           \"id\": 1,\n           \"title\": \"Lorem Ipsum\",\n           \"message\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n           \"type\": 1,\n           \"date\": \"27-Nov-2018\",\n           \"time\": \"05:00:00 AM\"\n       },\n       {\n           \"id\": 2,\n           \"title\": \"Lorem Ipsum\",\n           \"message\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry.\",\n           \"type\": 1,\n           \"date\": \"27-Nov-2018\",\n           \"time\": \"05:00:00 AM\"\n       }\n   ]\n}",
           "type": "json"
         }
       ]
