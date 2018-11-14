@@ -30,11 +30,15 @@ class NotificationController extends Controller {
      *    "data": [
      *        {
      *            "id": 1,
-     *            "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+     *            "title": "Lorem Ipsum",
+     *            "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+     *            "type": 1
      *        },
      *        {
      *            "id": 2,
-     *            "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+     *            "title": "Lorem Ipsum",
+     *            "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+     *            "type": 1
      *        }
      *    ]
      * }
@@ -56,7 +60,7 @@ class NotificationController extends Controller {
         if (!$request->user_id) {
             return $this->sendErrorResponse("User id missing.", (object) []);
         }
-        $notifications = Notification::select('id', 'message')->where("user_id", $request->user_id)->latest()->get();
+        $notifications = Notification::select('id','title', 'message', 'type')->where("user_id", $request->user_id)->latest()->get();
 
         return $this->sendSuccessResponse("Notifications", $notifications);
     }
