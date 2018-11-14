@@ -153,6 +153,8 @@ class AuthController extends Controller {
      *        "email_id": null,
      *        "user_type_id": 4,
      *        "address": null,
+     *        "state": "UP",
+     *        "city": "Noida",
      *        "screen_name": null,
      *        "profile_pic_path": null,
      *        "mobile_number": "8077575835",
@@ -291,6 +293,8 @@ class AuthController extends Controller {
             $userArray['email_id'] = $user->email_id;
             $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
             $userArray['address'] = $user->address;
+            $userArray['state'] = "UP";
+            $userArray['city'] = "Noida";
             $userArray['screen_name'] = $user->screen_name;
             $userArray['profile_pic_path'] = $user->profile_pic_path;
             $userArray['mobile_number'] = $user->mobile_number;
