@@ -29,22 +29,36 @@
                         </li>
                     </ul>
                     <div class="ln_solid"></div>
-                    <div id="crop-avatar">
-                        <!-- Current avatar -->
-                        <img class="img-responsive avatar-view" src="{{ asset('img/img.jpg') }}" alt="Avatar" title="Change the avatar">
-                    </div>
-                    <div class="clearfix"></div>
-                    <div id="crop-avatar">
-                        <!-- Current avatar -->
-                        <img class="img-responsive avatar-view" src="{{ asset('img/img.jpg') }}" alt="Avatar" title="Change the avatar">
-                    </div>
-                    <br />
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">General Details</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Health Details</label>
                     </div>
                     <div class="ln_solid"></div>
+                    <div class="row">
+                        <label class="col-md-1 col-sm-1 col-xs-6">Daibeties</label>
+                        <div class="col-md-3 col-sm-3 col-xs-6">{{ $userHealth->is_diabeties ? "Yes" : "No" }}</div>
+                        <label class="col-md-1 col-sm-1 col-xs-6">PP</label>
+                        <div class="col-md-3 col-sm-3 col-xs-6">{{ $userHealth->is_ppa ? "Yes" : "No" }}</div>
+                        <label class="col-md-1 col-sm-1 col-xs-6">HBA1C</label>
+                        <div class="col-md-3 col-sm-3 col-xs-6">{{ $userHealth->hba_1c ? "Yes" : "No" }}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <label class="col-md-1 col-sm-1 col-xs-6">Fasting</label>
+                        <div class="col-md-3 col-sm-3 col-xs-6">{{ $userHealth->fasting }}</div>
+                        <label class="col-md-1 col-sm-1 col-xs-6">BP</label>
+                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $userHealth->bp }}</div>
+                        <label class="col-md-2 col-sm-2 col-xs-6">Insulin Dependency</label>
+                        <div class="col-md-3 col-sm-3 col-xs-6">{{ $userHealth->insullin_dependency }}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="col-1">Medical Document</label>
+                            <img class="col-11" src="{{ $userHealth->medical_documents }}" >
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

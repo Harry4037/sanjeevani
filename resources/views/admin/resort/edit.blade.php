@@ -12,8 +12,31 @@
             </div>
             <div class="x_content">
                 <br>
-                <form class="form-horizontal form-label-left" action="" method="post" id="editResortForm" >
+                <div class="form-horizontal form-label-left">
+                    @if($resortImages)
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"></label>
+                        @foreach($resortImages as $resortImage)
+                        <div class="col-md-2 col-sm-2 col-xs-6">
+                            <img src="{{ $resortImage->image_name }}" width=150 height=150>
+                            <button style="margin-left: 30px;" class="btn btn-info btn-xs delete_resort_image" id="{{ $resortImage->id }}" >Remove</button>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Resort Images</label>
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="ln_solid"></div>
+                <form class="form-horizontal form-label-left" action="" method="post" id="editResortForm" enctype="multipart/form-data">
                     @csrf
+                    <div id="resort_images_div"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -122,7 +145,7 @@
                         <div class="col-md-9 col-sm-9 col-xs-12 text-center">
                             <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
                             <button type="reset" class="btn btn-primary">Reset</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
 
@@ -224,6 +247,63 @@ $(document).ready(function () {
 
         }
     });
+
+    $(document).on('click', '.delete_resort_image', function () {
+        var record_id = this.id;
+        var _this = $(this);
+        if (record_id) {
+            $.ajax({
+                url: _baseUrl + '/admin/resort/delete-resort-images',
+                type: 'post',
+                data: {record_id: record_id},
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status)
+                    {
+                        _this.parent("div").remove();
+                    } else {
+                        alert("Something went be wrong");
+                    }
+                }
+            });
+
+        }
+    });
+
+    Dropzone.options.myDropzone = {
+        init: function () {
+            this.on("success", function (file, response) {
+                if (response.status) {
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var hidden_image_html = "<input id='resort_image_input_" + response.id + "' type='hidden' name='resort_images[]' value='" + response.file_name + "'>";
+                    var _this = this;
+                    removeButton.addEventListener("click", function (e) {
+                        // Make sure the button click doesn't submit the form:
+                        e.preventDefault();
+                        e.stopPropagation();
+                        var record_id = this.id;
+                        var record_val = $(this).attr("data-val");
+                        $.ajax({
+                            url: _baseUrl + '/admin/resort/delete-images',
+                            type: 'post',
+                            data: {record_val: record_val, record_id: record_id},
+//                            dataType: 'json',
+                            success: function (res) {
+                                console.log(res);
+                                $("#resort_image_input_" + record_id).remove();
+                                _this.removeFile(file);
+                            }
+                        });
+
+
+                    });
+                    file.previewElement.appendChild(removeButton);
+                    $("#resort_images_div").append(hidden_image_html);
+                }
+            });
+        },
+        dictDefaultMessage: "Drop or Select multiple images for resort."
+    };
 });
 
 </script>    

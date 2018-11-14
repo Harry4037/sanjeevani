@@ -144,6 +144,12 @@
 <script>
 $(document).ready(function () {
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
 //For ckeditor
     CKEDITOR.replace('resort_description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
@@ -178,7 +184,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' id='" + response.file_name + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                     var hidden_image_html = "<input id='resort_image_input_" + response.id + "' type='hidden' name='resort_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -186,10 +192,20 @@ $(document).ready(function () {
                         e.preventDefault();
                         e.stopPropagation();
                         var record_id = this.id;
-                        var record_val = this.val;
-                        console.log(record_val);
-//                        $("#resort_image_input_" + record_id).remove();
-//                        _this.removeFile(file);
+                        var record_val = $(this).attr("data-val");
+                        $.ajax({
+                            url: _baseUrl + '/admin/resort/delete-images',
+                            type: 'post',
+                            data: {record_val: record_val, record_id: record_id},
+//                            dataType: 'json',
+                            success: function (res) {
+                                console.log(res);
+                                $("#resort_image_input_" + record_id).remove();
+                                _this.removeFile(file);
+                            }
+                        });
+
+
                     });
                     file.previewElement.appendChild(removeButton);
                     $("#resort_images_div").append(hidden_image_html);

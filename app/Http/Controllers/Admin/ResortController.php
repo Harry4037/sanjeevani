@@ -54,7 +54,7 @@ class ResortController extends Controller {
             $resortsArray = [];
             foreach ($resorts as $resort) {
                 $resortImage = $this->resortImage->where("resort_id", $resort->id)->first();
-                $cityState = CityMaster::find($resort->city_id)->first();
+                $cityState = CityMaster::find($resort->city_id);
                 $address = $resort->address_1 . ",<br>" . $cityState->city . ",<br>" . $cityState->state->state . ",<br>" . $resort->pincode;
                 $img = !empty($resortImage) ? $resortImage->image_name : asset('img/noimage.png');
                 $resortsArray[$i]['image'] = "<img width=80 height=70 src='" . $img . "'>";
@@ -63,7 +63,7 @@ class ResortController extends Controller {
                 $resortsArray[$i]['contact_no'] = $resort->contact_number;
                 $resortsArray[$i]['address'] = $address;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a><a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Update Images </a>';
+                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 $i++;
             }
 
@@ -153,10 +153,7 @@ class ResortController extends Controller {
     }
 
     public function deleteImages(Request $request) {
-        $data = TempImages::find($request->record_id);
-        if ($data) {
-            $data->delete();
-        }
+        @unlink('storage/resort_images/' . $request->record_val);
     }
 
     public function updateStatus(Request $request) {
@@ -199,11 +196,28 @@ class ResortController extends Controller {
                         }
                     }
 
+                    if ($request->resort_images) {
+                        ResortImage::where("resort_id", $data->id)->delete();
+                        foreach ($request->resort_images as $tempImage) {
+                            $resortImage = new ResortImage();
+                            $resortImage->resort_id = $data->id;
+                            $resortImage->image_name = $tempImage;
+                            $resortImage->is_active = 1;
+                            $resortImage->save();
+                        }
+                    }
+
                     return redirect()->route('admin.resort.edit', $id)->with('status', 'Resort has been updated successfully.');
                 }
             }
 
-
+            $css = [
+                "vendors/dropzone/dist/dropzone.css",
+            ];
+            $js = [
+                'vendors/dropzone/dist/dropzone.js',
+            ];
+            $resortImages = ResortImage::where("resort_id", $data->id)->get();
             $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
             $roomTypes = $this->roomType->all();
             $states = StateMaster::all();
@@ -211,20 +225,23 @@ class ResortController extends Controller {
             $cities = CityMaster::where("state_id", $selectedCity->state_id)->get();
             return view('admin.resort.edit', [
                 'data' => $data,
+                'resortImages' => $resortImages,
                 'dataRooms' => $dataRooms,
                 'roomTypes' => $roomTypes,
                 'states' => $states,
                 'selectedCity' => $selectedCity,
                 'cities' => $cities,
+                'css' => $css,
+                'js' => $js,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.resort.edit', $id)->with('error', $ex->getMessage());
+            return redirect()->route('admin.resort.index')->with('error', $ex->getMessage());
         }
     }
 
     public function getResortRooms(Request $request, $resort = 0, $type = 0) {
         $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $type, "is_active" => 1])->get();
-        return view('admin.resort.rooms', [ 'resortRooms' => $resortRooms]);
+        return view('admin.resort.rooms', ['resortRooms' => $resortRooms]);
     }
 
     public function deleteRoom(Request $request) {
@@ -236,6 +253,17 @@ class ResortController extends Controller {
             } else {
                 return ["status" => false];
             }
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+    }
+
+    public function deleteResortImage(Request $request) {
+        try {
+            $resortImage = ResortImage::select('image_name as resort_img')->find($request->record_id);
+            @unlink('storage/resort_images/' . $resortImage->resort_img);
+            ResortImage::find($request->record_id)->delete();
+            return ["status" => true];
         } catch (\Exception $ex) {
             dd($ex->getMessage());
         }

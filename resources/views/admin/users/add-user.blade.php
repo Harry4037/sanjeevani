@@ -13,7 +13,7 @@
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.users.add') }}" method="post" id="addUserForm">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.users.add') }}" method="post" id="addUserForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">General Details</label>

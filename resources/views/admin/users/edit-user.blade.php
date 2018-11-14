@@ -13,7 +13,7 @@
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.users.edit', $user->id) }}" method="post" id="editUserForm">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.users.edit', $user->id) }}" method="post" id="editUserForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">General Details</label>
@@ -136,7 +136,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="file" class="form-control" placeholder="Medical Document" name="medical_documents" id="medical_documents" >
+                            <input type="file" class="form-control" name="medical_documents" id="medical_documents" >
                         </div>
                     </div>
 

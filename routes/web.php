@@ -42,6 +42,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/update-status', 'ResortController@updateStatus')->name('admin.resort.status-update');
         Route::post('/upload-images', 'ResortController@uploadImages')->name('admin.resort.upload-image');
         Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
+        Route::post('/delete-resort-images', 'ResortController@deleteResortImage')->name('admin.resort.delete-resort-image');
         Route::match(['get', 'post'], '/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
         Route::get('/resort-rooms/{resort}/{type}', 'ResortController@getResortRooms')->name('admin.resort.rooms');
         Route::post('/delete-room', 'ResortController@deleteRoom')->name('admin.resort.delete-room');

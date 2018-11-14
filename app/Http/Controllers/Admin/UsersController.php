@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Illuminate\Routing\Route;
 use Carbon\Carbon;
@@ -296,6 +297,7 @@ class UsersController extends Controller {
                 $user->updated_by = 1;
 
                 if ($user->save()) {
+
                     $doc_file_name = '';
                     if ($request->hasFile("medical_documents")) {
                         $medical_documents = $request->file("medical_documents");
