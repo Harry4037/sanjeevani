@@ -92,7 +92,7 @@ class HomeController extends Controller {
         $i = 0;
         foreach ($banners as $banner) {
             $bannerArray[$i]['id'] = $banner->id;
-            $bannerArray[$i]['banner_image_url'] = asset('storage/Banner/' . $banner->name);
+            $bannerArray[$i]['banner_image_url'] = $banner->name;
             $i++;
         }
 

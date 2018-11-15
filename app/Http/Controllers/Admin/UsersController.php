@@ -173,6 +173,7 @@ class UsersController extends Controller {
                     $user->first_name = isset($name[0]) ? $name[0] : '';
                     $user->last_name = isset($name[1]) ? $name[1] : '';
                     $user->mobile_number = $request->mobile_number;
+                    $user->otp = 9999;
                     $user->email_id = $request->email_id;
                     $user->created_by = 1;
                     $user->updated_by = 1;
