@@ -364,7 +364,7 @@ class AuthController extends Controller {
             $userArray['check_out_time'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('H:i A') : '';
             $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->id : "";
             $userArray['no_of_guest'] = $adultNo." Adult and ".$childNo." Child";
-            $userArray['guest_detail'] = $userBookingDetail->bookingpeople_accompany ? $userBookingDetail->bookingpeople_accompany : [];
+            $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;
             } else {
