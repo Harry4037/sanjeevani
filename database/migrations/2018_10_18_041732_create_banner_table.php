@@ -15,7 +15,7 @@ class CreateBannerTable extends Migration {
         Schema::create('banner', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
-            $table->bigIntegre('resort_id')->default(0);
+            $table->bigInteger('resort_id')->default(0);
             $table->string('created_by')->default(0);
             $table->string('updated_by')->default(0);
             $table->tinyInteger('is_active')->default(1);
