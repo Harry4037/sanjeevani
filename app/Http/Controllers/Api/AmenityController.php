@@ -24,31 +24,51 @@ class AmenityController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Anemities found.",
-     *       "data": [
-     *           {
-     *               "id": 1,
-     *               "name": "SPA",
-     *               "description": "<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Timings</strong>:-</p>\r\n\r\n<p>9:00 AM to 5:00 PM</p>\r\n",
-     *               "is_booking_avaliable": true,
-     *               "amenity_images": [
-     *                   {
-     *                       "id": 1,
-     *                       "image_name": "http://127.0.0.1:8000/storage/amenities_images/z9HSMKf5VNM5XeBU9UGtBZ8EYgcLvcEAMPDkZXGq.jpeg",
-     *                       "amenity_id": 1
-     *                   },
-     *                   {
-     *                       "id": 2,
-     *                       "image_name": "http://127.0.0.1:8000/storage/amenities_images/z9HSMKf5VNM5XeBU9UGtBZ8EYgcLvcEAMPDkZXGq.jpeg",
-     *                       "amenity_id": 1
-     *                   }
-     *               ]
-     *           }
-     *       ]
-     *   }
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Anemities found.",
+     *    "data": [
+     *        {
+     *            "id": 1,
+     *            "name": "Gym",
+     *            "description": "<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Opening Timings</strong>:-</p>\r\n\r\n<p>9:00 AM to 11:00 AM</p>\r\n<p>5:00 PM to 7:00 PM</p>\r\n",
+     *            "address": "sector 62, Noida, UP",
+     *            "is_booking_avaliable": false,
+     *            "amenity_images": [
+     *                {
+     *                    "id": 1,
+     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/ptjHTnrFSngDDbqO20ZHl4YDy035S0z1cIuop8EC.jpeg",
+     *                    "amenity_id": 1
+     *                },
+     *                {
+     *                    "id": 2,
+     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/xQvt0XF682PO9gzaA05gTB2MQKP0ZH62XYGsgn2i.jpeg",
+     *                    "amenity_id": 1
+     *                }
+     *            ]
+     *        },
+     *        {
+     *            "id": 2,
+     *            "name": "SPA",
+     *            "description": "<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Timings</strong>:-</p>\r\n\r\n<p>9:00 AM to 10:00 AM</p>\r\n<p>4:00 PM to 5:00 PM</p>\r\n",
+     *            "address": "sector 62, Noida, UP",
+     *            "is_booking_avaliable": true,
+     *            "amenity_images": [
+     *                {
+     *                    "id": 3,
+     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/NqHeZs8Qw9gIyuRNNg3YgtD3JrS0Cx5QH8OmYaAy.jpeg",
+     *                    "amenity_id": 2
+     *                },
+     *                {
+     *                    "id": 4,
+     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/kVkodMPi1Y5QfPKeOjY8LXbf0tiKoOS4sHbaQOMu.jpeg",
+     *                    "amenity_id": 2
+     *                }
+     *            ]
+     *        }
+     *    ]
+     *}
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
