@@ -18,19 +18,19 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input value="{{ old('staff_name') }}" type="text" class="form-control" placeholder="Name" name="staff_name" id="staff_name">
+                            <input value="{{ $user->user_name }}" type="text" class="form-control" placeholder="Name" name="staff_name" id="staff_name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input value="{{ old('staff_mobile_no') }}" type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
+                            <input value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input value="{{ old('staff_email') }}" type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
+                            <input value="{{ $user->email_id }}" type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,8 +41,8 @@
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}"
-                                        @if(old('staff_email') == $resort->id)
-                                        {{ "slected" }}
+                                        @if(isset($userBooking->resort->id) && ($userBooking->resort->id == $resort->id))
+                                        {{ "selected" }}
                                         @endif
                                         >{{ $resort->name }}</option>
                                 @endforeach
@@ -53,7 +53,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Address.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input value="{{ old('staff_address') }}" type="text" class="form-control" placeholder="Address" name="staff_address" id="staff_address">
+                            <input value="{{ $user->address1 }}" type="text" class="form-control" placeholder="Address" name="staff_address" id="staff_address">
                         </div>
                     </div>
                     <div class="form-group">
@@ -64,7 +64,7 @@
                                 @if($states)
                                 @foreach($states as $state)
                                 <option value="{{ $state->id }}"
-                                        @if(old('state') == $state->id)
+                                        @if(isset($selectedCity->state->id) && $selectedCity->state->id == $state->id)
                                         {{ "selected" }}
                                         @endif
                                         >{{ $state->state }}</option>
@@ -78,13 +78,22 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
+                                @if($userCites)
+                                @foreach($userCites as $userCity)
+                                <option value="{{ $userCity->id }}" 
+                                        @if(isset($selectedCity->id) && $selectedCity->id == $userCity->id))
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $userCity->city }}</option>
+                                @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ old('pin_code') }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
+                            <input value="{{ $user->pincode }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
                         </div>
                     </div>
 

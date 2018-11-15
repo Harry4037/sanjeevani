@@ -115,14 +115,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In Date</label>
-                        <div class="col-md-2 col-sm-2 col-xs-2">
-                            <input type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In</label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                            <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
-                        <label class="control-label col-md-2 col-sm-2 col-xs-2">Check Out Date</label>
-                        <div class="col-md-2 col-sm-2 col-xs-2">
-                            <input type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out</label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                            <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -182,7 +184,7 @@
                     <div class="ln_solid"></div>
                     <div id="member_div">
                         @if(old('person_name'))
-                        
+
                         @foreach(old('person_name') as $key => $pp)
                         <div class="form-group">
                             <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Name</label>
@@ -203,7 +205,7 @@
                         </div>
                         @endforeach
                         @endif
-                        
+
                     </div>
                     <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
@@ -233,26 +235,23 @@
     $(document).ready(function () {
         $('#check_in').daterangepicker({
             singleDatePicker: true,
-            singleClasses: "picker_1",
-            //            startDate: moment().startOf('hour'),
-            //            locale: {
-            //                format: 'DD/M/YYYY'
-//            }
+            timePicker: true,
+            singleClasses: "picker_2",
+            locale: {
+                format: 'YYYY/M/DD hh:mm:ss A'
+            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
 
         $('#check_out').daterangepicker({
             singleDatePicker: true,
-            singleClasses: "picker_1",
-            //            startDate: moment().startOf('hour'),
-//            locale: {
-            //                format: 'DD/M/YYYY'
-//            }
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
-        });
-
+            timePicker: true,
+            singleClasses: "picker_2",
+            startDate: moment().startOf('hour').add(24, 'hour'),
+            locale: {
+                format: 'YYYY/M/DD hh:mm:ss A'
+            }});
         $(document).on("click", "#add_more_member", function () {
             var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
                     + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
@@ -346,12 +345,11 @@
                     }
                 });
             }
-
         });
-        
-        $(document).on("change", "#resort_room_id", function(){
-           var record_val = $("#resort_room_id :selected").text();;
-           $("#resort_room_id_hidden").val(record_val);
+        $(document).on("change", "#resort_room_id", function () {
+            var record_val = $("#resort_room_id :selected").text();
+            ;
+            $("#resort_room_id_hidden").val(record_val);
         });
     });
 </script>

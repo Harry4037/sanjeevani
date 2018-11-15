@@ -68,16 +68,15 @@ class UsersController extends Controller {
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
-            $i = 0;
             $usersArray = [];
-            foreach ($users as $user) {
-                $usersArray[$i]['name'] = $user->first_name . ' ' . $user->last_ame;
-                $usersArray[$i]['email'] = $user->email_id;
-                $usersArray[$i]['mobileno'] = $user->mobile_number;
+            foreach ($users as $key => $user) {
+                $usersArray[$key]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$key]['email'] = $user->email_id;
+                $usersArray[$key]['mobileno'] = $user->mobile_number;
+                $usersArray[$key]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
                 $checked_status = $user->is_active ? "checked" : '';
-                $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
-                $i++;
+                $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
             }
             $data['data'] = $usersArray;
             return $data;
@@ -127,7 +126,7 @@ class UsersController extends Controller {
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
             ]);
         } catch (Exception $ex) {
-            dd($e);
+            return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -209,9 +208,9 @@ class UsersController extends Controller {
                             $roomBooking->room_type_id = $request->package_id;
                             $roomBooking->resort_room_id = $request->resort_room_id;
                             $check_in_date = Carbon::parse($request->check_in);
-                            $roomBooking->check_in = $check_in_date->format('Y-m-d');
+                            $roomBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
                             $check_out_date = Carbon::parse($request->check_out);
-                            $roomBooking->check_out = $check_out_date->format('Y-m-d');
+                            $roomBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
                             $roomBooking->save();
                             if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
 
@@ -250,17 +249,20 @@ class UsersController extends Controller {
     }
 
     public function editUser(Request $request, $id) {
-        $user = User::find($id);
-        $userBooking = UserBookingDetail::where("user_id", $id)->first();
-        $userHealth = UserhealthDetail::where("user_id", $id)->first();
-        $roomTypes = RoomType::where("is_active", 1)->get();
-        if ($userBooking) {
-            $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
-            $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
-            $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id, "room_type_id" => $roomBooking->room_type_id])->get();
-        }
-        if ($request->isMethod("post")) {
-            try {
+        try {
+            $user = User::find($id);
+            $userBooking = UserBookingDetail::where("user_id", $id)->first();
+            $userHealth = UserhealthDetail::where("user_id", $id)->first();
+            $roomTypes = RoomType::where("is_active", 1)->get();
+            if ($userBooking) {
+//                dd($userBooking->toArray());
+                $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
+                $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
+                $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id,
+                            "room_type_id" => $roomBooking->room_type_id
+                        ])->get();
+            }
+            if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
                             'user_name' => 'bail|required',
                             'mobile_number' => 'bail|required|numeric',
@@ -272,7 +274,7 @@ class UsersController extends Controller {
                             'bp' => 'bail|required',
                             'bp' => 'bail|required',
                             'insullin_dependency' => 'bail|required',
-                            'medical_documents' => 'bail|required',
+//                            'medical_documents' => 'bail|required',
                             'booking_source_name' => 'bail|required',
                             'booking_source_id' => 'bail|required',
                             'resort_id' => 'bail|required',
@@ -337,9 +339,9 @@ class UsersController extends Controller {
                         $roomBooking->room_type_id = $request->resort_room_type;
                         $roomBooking->resort_room_id = $request->resort_room_id;
                         $check_in_date = Carbon::parse($request->check_in);
-                        $roomBooking->check_in = $check_in_date->format('Y-m-d');
+                        $roomBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
                         $check_out_date = Carbon::parse($request->check_out);
-                        $roomBooking->check_out = $check_out_date->format('Y-m-d');
+                        $roomBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
                         $roomBooking->save();
 
                         if (!empty($request->person_name) && !empty($request->person_age)) {
@@ -360,32 +362,33 @@ class UsersController extends Controller {
                         return redirect()->route('admin.users.edit', $id)->with('status', 'User has been updated successfully');
                     }
                 }
-            } catch (\Exception $e) {
-                return redirect()->route('admin.users.index')->with($e->getMessage());
             }
+            $css = [
+                'vendors/bootstrap-daterangepicker/daterangepicker.css',
+            ];
+            $js = [
+                'vendors/moment/min/moment.min.js',
+                'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                'vendors/datatables.net/js/jquery.dataTables.min.js',
+            ];
+            $resorts = Resort::where("is_active", 1)->get();
+            return view('admin.users.edit-user', [
+                'js' => $js,
+                'css' => $css,
+                'resorts' => $resorts,
+                'roomTypes' => $roomTypes,
+                'user' => $user,
+                'userBooking' => $userBooking,
+                'userHealth' => $userHealth,
+                'resortRooms' => isset($resortRooms) ? $resortRooms : [],
+                'roomBooking' => isset($roomBooking) ? $roomBooking : [],
+                'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
+                    ]
+            );
+        } catch (\Exception $ex) {
+//            dd($ex);
+            return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
         }
-        $css = [
-            'vendors/bootstrap-daterangepicker/daterangepicker.css',
-        ];
-        $js = [
-            'vendors/moment/min/moment.min.js',
-            'vendors/bootstrap-daterangepicker/daterangepicker.js',
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-        ];
-        $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.users.edit-user', [
-            'js' => $js,
-            'css' => $css,
-            'resorts' => $resorts,
-            'roomTypes' => $roomTypes,
-            'user' => $user,
-            'userBooking' => $userBooking,
-            'userHealth' => $userHealth,
-            'resortRooms' => isset($resortRooms) ? $resortRooms : [],
-            'roomBooking' => isset($roomBooking) ? $roomBooking : [],
-            'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
-                ]
-        );
     }
 
 }

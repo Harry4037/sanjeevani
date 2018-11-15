@@ -28,27 +28,6 @@ class User extends Authenticatable {
         'password',
     ];
 
-//    protected $appends = [
-//        'booking_detail',
-//        'health_detail',
-//        'user_role',
-//    ];
-//    
-//    public function getUserRoleAttribute() {
-//        $userType = UserType::find($this->user_type_id);
-//        return $userType;
-//    }
-//    
-//    public function getBookingDetailAttribute() {
-//        $userBooking = UserBookingDetail::where("user_id", $this->id)->first();
-//        return $userBooking;
-//    }
-//
-//    public function getHealthDetailAttribute() {
-//        $userHealth = UserhealthDetail::where("user_id", $this->id)->first();
-//        return $userHealth;
-//    }
-
     public function getEmailForPasswordReset() {
         return $this->email_id;
     }

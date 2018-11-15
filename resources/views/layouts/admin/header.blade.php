@@ -17,10 +17,6 @@
             </div>
         </div>
         <!-- /menu profile quick info -->
-
-        <br />
-        <!-- /menu profile quick info -->
-
         <br />
         @include('layouts.admin.control-sidebar')
     </div>

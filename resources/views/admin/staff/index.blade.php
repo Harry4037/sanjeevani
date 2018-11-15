@@ -4,6 +4,7 @@
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
+        @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
@@ -22,6 +23,7 @@
                             <th>Name</th>
                             <th>EmailAddress</th>
                             <th>PhoneNo.</th>
+                            <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -53,6 +55,7 @@
                 {"data": "name", sortable: true},
                 {"data": "email", sortable: true},
                 {"data": "mobileno", sortable: true},
+                {"data": "resort_name"},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

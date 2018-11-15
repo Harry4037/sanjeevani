@@ -23,6 +23,7 @@
                             <th>PhoneNo.</th>
                             <th>Name</th>
                             <th>Email Address</th>
+                            <th>User Type</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -54,6 +55,7 @@
                 {"data": "mobileno", sortable: true},
                 {"data": "name", sortable: true},
                 {"data": "email", sortable: true},
+                {"data": "user_type", sortable: true},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

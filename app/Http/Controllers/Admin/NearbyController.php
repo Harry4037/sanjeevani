@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Resort;
 use App\Models\ResortNearbyPlace;
 use App\Models\NearbyPlaceImage;
+use App\Models\StateMaster;
 
 class NearbyController extends Controller {
 
@@ -48,51 +49,59 @@ class NearbyController extends Controller {
     }
 
     public function create(Request $request) {
-
-        if ($request->isMethod("post")) {
-
-            $place = new ResortNearbyPlace();
-            $place->resort_id = $request->resort_id;
-            $place->name = $request->place_name;
-            $place->resort_id = $request->resort_id;
-            $place->distance_from_resort = $request->distance;
-            $place->description = $request->place_description;
-            $place->precautions = $request->place_precaution;
-            $place->address_1 = $request->address;
-            $place->pincode = $request->pin_code;
-            $place->city_id = $request->city;
-            if ($place->save()) {
-                if ($request->nearby_images) {
-                    foreach ($request->nearby_images as $tempImage) {
-                        $resortImage = new NearbyPlaceImage();
-                        $resortImage->nearby_place_id = $place->id;
-                        $resortImage->name = $tempImage;
-                        $resortImage->is_active = 1;
-                        $resortImage->save();
+        try {
+            if ($request->isMethod("post")) {
+                $place = new ResortNearbyPlace();
+                $place->resort_id = $request->resort_id;
+                $place->name = $request->place_name;
+                $place->resort_id = $request->resort_id;
+                $place->distance_from_resort = $request->distance;
+                $place->description = $request->place_description;
+                $place->precautions = $request->place_precaution;
+                $place->address_1 = $request->address;
+                $place->pincode = $request->pin_code;
+                $place->city_id = $request->city;
+                if ($place->save()) {
+                    if ($request->nearby_images) {
+                        foreach ($request->nearby_images as $tempImage) {
+                            $resortImage = new NearbyPlaceImage();
+                            $resortImage->nearby_place_id = $place->id;
+                            $resortImage->name = $tempImage;
+                            $resortImage->is_active = 1;
+                            $resortImage->save();
+                        }
                     }
-                }
 
-                return redirect()->route('admin.nearby.index')->with('status', 'Nearby place has been added successfully.');
-            } else {
-                return redirect()->route('admin.nearby.add')->with('error', 'Something went be wrong.');
+                    return redirect()->route('admin.nearby.index')->with('status', 'Nearby place has been added successfully.');
+                } else {
+                    return redirect()->route('admin.nearby.add')->with('error', 'Something went be wrong.');
+                }
             }
+            $css = [
+                "vendors/dropzone/dist/dropzone.css",
+            ];
+            $js = [
+                'vendors/datatables.net/js/jquery.dataTables.min.js',
+                'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                'vendors/dropzone/dist/dropzone.js',
+            ];
+            $states = StateMaster::all();
+            $resorts = Resort::where("is_active", 1)->get();
+            return view('admin.nearby.create-nearby', [
+                'js' => $js,
+                'css' => $css,
+                'resorts' => $resorts,
+                'states' => $states
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.nearby.index')->with('error', $ex->getMessage());
         }
-        $css = [
-            "vendors/dropzone/dist/dropzone.css",
-        ];
-        $js = [
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'vendors/dropzone/dist/dropzone.js',
-        ];
-        $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.nearby.create-nearby', ['js' => $js, 'css' => $css, 'resorts' => $resorts]);
     }
 
     public function uploadImages(Request $request) {
 
         $image = $request->file("file");
-        $resort = Storage::disk('public')->put('Nearby', $image);
+        $resort = Storage::disk('public')->put('nearby_images', $image);
         if ($resort) {
             $file_name = basename($resort);
             return ["status" => true, "id" => time(), "file_name" => $file_name];
@@ -100,10 +109,7 @@ class NearbyController extends Controller {
     }
 
     public function deleteImages(Request $request) {
-        $data = TempImages::find($request->record_id);
-        if ($data) {
-            $data->delete();
-        }
+        @unlink('storage/nearby_images/' . $request->record_val);
     }
 
     public function updateStatus(Request $request) {
@@ -123,23 +129,64 @@ class NearbyController extends Controller {
     }
 
     public function editNearby(Request $request, $id) {
-        $data = ResortNearbyPlace::find($id);
-        if ($request->isMethod("post")) {
-            $data->resort_id = $request->resort_id;
-            $data->name = $request->place_name;
-            $data->distance_from_resort = $request->distance;
-            $data->description = $request->place_description;
-            $data->precautions = $request->place_precaution;
-            $data->address_1 = $request->address;
-            $data->pincode = $request->pin_code;
-            $data->city_id = $request->city;
-            if ($data->save()) {
-                return redirect()->route('admin.nearby.edit', $id)->with('status', 'Nearby place has been updated successfully.');
+        try {
+            $data = ResortNearbyPlace::find($id);
+            if ($request->isMethod("post")) {
+                $data->resort_id = $request->resort_id;
+                $data->name = $request->place_name;
+                $data->distance_from_resort = $request->distance;
+                $data->description = $request->place_description;
+                $data->precautions = $request->place_precaution;
+                $data->address_1 = $request->address;
+                $data->pincode = $request->pin_code;
+                $data->city_id = $request->city;
+                if ($data->save()) {
+                    if ($request->nearby_images) {
+                        foreach ($request->nearby_images as $tempImage) {
+                            $resortImage = new NearbyPlaceImage();
+                            $resortImage->nearby_place_id = $data->id;
+                            $resortImage->name = $tempImage;
+                            $resortImage->is_active = 1;
+                            $resortImage->save();
+                        }
+                    }
+                    return redirect()->route('admin.nearby.edit', $id)->with('status', 'Nearby place has been updated successfully.');
+                }
             }
-        }
 
-        $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.nearby.edit-nearby', ['data' => $data, 'resorts' => $resorts]);
+            $css = [
+                "vendors/dropzone/dist/dropzone.css",
+            ];
+            $js = [
+                'vendors/datatables.net/js/jquery.dataTables.min.js',
+                'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+                'vendors/dropzone/dist/dropzone.js',
+            ];
+            $resorts = Resort::where("is_active", 1)->get();
+            $states = StateMaster::all();
+            $nearbyImages = NearbyPlaceImage::where("nearby_place_id", $data->id)->get();
+            return view('admin.nearby.edit-nearby', [
+                'css' => $css,
+                'js' => $js,
+                'data' => $data,
+                'resorts' => $resorts,
+                'states' => $states,
+                'nearbyImages' => $nearbyImages,
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.nearby.index', $id)->with('error', $ex->getMessage());
+        }
+    }
+
+    public function deleteNearbyImage(Request $request) {
+        try {
+            $nearbyImage = NearbyPlaceImage::select('name as nearby_img')->find($request->record_id);
+            @unlink('storage/nearby_images/' . $nearbyImage->nearby_img);
+            NearbyPlaceImage::find($request->record_id)->delete();
+            return ["status" => true];
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
     }
 
 }

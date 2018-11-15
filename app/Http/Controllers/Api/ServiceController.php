@@ -403,7 +403,44 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $serviceRequest['order_request'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id])
+            $serviceRequest['order_request']['new_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id, "request_status_id" => 1])
+                            ->with([
+                                'serviceDetail' => function($query) {
+                                    $query->select('id', 'name', 'type_id', 'icon');
+                                }
+                            ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->userRequestStatus();
+                        }
+                    ])->with([
+                        'acceptedBy' => function($query) {
+                            $query->select('id', 'user_name', 'first_name', 'last_name');
+                        }
+                    ])->get();
+            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id, "request_status_id" => 2])->orWhere("request_status_id",3)
+                            ->with([
+                                'serviceDetail' => function($query) {
+                                    $query->select('id', 'name', 'type_id', 'icon');
+                                }
+                            ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->userRequestStatus();
+                        }
+                    ])->with([
+                        'acceptedBy' => function($query) {
+                            $query->select('id', 'user_name', 'first_name', 'last_name');
+                        }
+                    ])->get();
+                    
+            $serviceRequest['order_request']['completed_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id, "request_status_id" => 4])
                             ->with([
                                 'serviceDetail' => function($query) {
                                     $query->select('id', 'name', 'type_id', 'icon');

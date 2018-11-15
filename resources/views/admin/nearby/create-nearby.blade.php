@@ -70,37 +70,34 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="state" id="state">
                                 <option value="">Choose option</option>
-                                <option value="1">UP</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">District</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="district" id="district">
-                                <option value="">Choose option</option>
-                                <option value="1">Noida</option>
+                                @if($states)
+                                @foreach($states as $state)
+                                <option value="{{ $state->id }}"
+                                        @if(old('state') == $state->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $state->state }}</option>
+                                @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
-                                <option value="1">Sector 66</option>
-                                <option value="2">Sector 22</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
                         </div>
                     </div>
                     <div class="form-group">
@@ -130,11 +127,17 @@
 @section('script')
 <script>
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         Dropzone.options.myDropzone = {
             init: function () {
                 this.on("success", function (file, response) {
                     if (response.status) {
-                        var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "'>Remove file</button>");
+                        var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                         var hidden_image_html = "<input id='nearby_image_input_" + response.id + "' type='hidden' name='nearby_images[]' value='" + response.file_name + "'>";
                         var _this = this;
                         removeButton.addEventListener("click", function (e) {
@@ -142,8 +145,16 @@
                             e.preventDefault();
                             e.stopPropagation();
                             var record_id = this.id;
-                            $("#nearby_image_input_" + record_id).remove();
-                            _this.removeFile(file);
+                            var record_val = $(this).attr("data-val");
+                            $.ajax({
+                                url: _baseUrl + '/admin/nearby/delete-images',
+                                type: 'post',
+                                data: {record_val: record_val, record_id: record_id},
+                                success: function (res) {
+                                    $("#nearby_image_input_" + record_id).remove();
+                                    _this.removeFile(file);
+                                }
+                            });
 
                         });
                         file.previewElement.appendChild(removeButton);
@@ -186,7 +197,6 @@
                 city: {
                     required: true
                 },
-
             }
         });
     });

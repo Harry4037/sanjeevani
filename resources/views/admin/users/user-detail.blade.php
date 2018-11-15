@@ -53,14 +53,14 @@
                         <div class="col-md-3 col-sm-3 col-xs-6">{{ $userHealth->insullin_dependency }}</div>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="row">
+<!--                    <div class="row">
                         <div class="col-12">
                             <label class="col-4">Medical Document</label>
                             <img width="500" height="150" src="{{ $userHealth->medical_documents }}" >
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
+                    </div>-->
+                    <!--<div class="form-group">-->
+<!--                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
                     <div class="ln_solid"></div>
                     <div class="row">
@@ -68,15 +68,15 @@
                         <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->source_name }}</div>
                         <label class="col-md-2 col-sm-2 col-xs-6">Source Id</label>
                         <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->source_id }}</div>
-                        <!--                        <label class="col-m-2 col-sm-2 col-xs-6">HBA1C</label>
-                                                <div class="col-md-2 col-sm-2 col-xs-6">{{ $userHealth->hba_1c ? "Yes" : "No" }}</div>-->
-                    </div>
-                    <div class="row">
+                                                <label class="col-m-2 col-sm-2 col-xs-6">HBA1C</label>
+                                                <div class="col-md-2 col-sm-2 col-xs-6">{{ $userHealth->hba_1c ? "Yes" : "No" }}</div>
+                    </div>-->
+<!--                    <div class="row">
                         <label class="col-md-2 col-sm-2 col-xs-6">Check In</label>
                         <div class="col-md-2 col-sm-2 col-xs-6">{{ $roomBooking->check_in }}</div>
                         <label class="col-md-2 col-sm-2 col-xs-6">Check out</label>
                         <div class="col-md-2 col-sm-2 col-xs-6">{{ $roomBooking->check_out }}</div>
-                    </div>
+                    </div>-->
                 </div>
 
             </div>

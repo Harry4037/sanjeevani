@@ -73,8 +73,6 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
-                                <option value="1">Sector 66</option>
-                                <option value="2">Sector 22</option>
                             </select>
                         </div>
                     </div>

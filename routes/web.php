@@ -67,6 +67,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/staff-status', 'StaffController@updateUserStatus')->name('admin.staff.status');
         Route::match(['get', 'post'], '/add-staff', 'StaffController@addUser')->name('admin.staff.add');
         Route::get('/staff-detail/{id}', 'StaffController@viewUser')->name('admin.staff.detail');
+        Route::match(['get', 'post'], '/edit/{id}', 'StaffController@editUser')->name('admin.staff.edit');
     });
     /**
      * Banner Management
@@ -94,8 +95,9 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/create', 'NearbyController@create')->name('admin.nearby.add');
         Route::post('/update-status', 'NearbyController@updateStatus')->name('admin.nearby.status-update');
         Route::post('/upload-images', 'NearbyController@uploadImages')->name('admin.nearby.upload-image');
-//        Route::post('/delete-images', 'ResortController@deleteImages')->name('admin.resort.delete-image');
+        Route::post('/delete-images', 'NearbyController@deleteImages')->name('admin.nearby.delete-image');
         Route::match(['get', 'post'], '/edit/{id}', 'NearbyController@editNearby')->name('admin.nearby.edit');
+        Route::post('/delete-nearby-images', 'NearbyController@deleteNearbyImage')->name('admin.nearby.delete-nearby-image');
     });
     /**
      * Jobs Management
