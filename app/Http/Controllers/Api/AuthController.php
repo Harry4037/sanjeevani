@@ -140,48 +140,90 @@ class AuthController extends Controller {
      * @apiSuccess {JSON}   data User detail with unique token.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
+     *{
      *    "status": true,
      *    "status_code": 200,
      *    "message": "OTP verified successfully.",
      *    "data": {
      *        "id": 2,
-     *        "user_name": null,
-     *        "first_name": null,
+     *        "user_name": "Hariom",
+     *        "first_name": "Hariom",
      *        "mid_name": null,
-     *        "last_name": null,
-     *        "email_id": null,
-     *        "user_type_id": 4,
+     *        "last_name": "",
+     *        "email_id": "hariom4037@gmail.com",
+     *        "user_type_id": 3,
      *        "address": null,
      *        "state": "UP",
      *        "city": "Noida",
      *        "screen_name": null,
      *        "profile_pic_path": null,
-     *        "mobile_number": "8077575835",
+     *        "mobile_number": "9808243372",
      *        "token_type": "Bearer",
-     *        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjljO
-     * TU1ZGI4NzVkMTMyMmM3ZjQxZWI1NjkxZjBhZGJmY2UwYjNlZmY2MTFjODcyMmZiYTMxN2E1ZjViYz
-     * k5OWRiZmFiMzQwOThlMmU2NmFlIn0.eyJhdWQiOiIxIiwianRpIjoiOWM5NTVkYjg3NWQxMzIyYzdm
-     * NDFlYjU2OTFmMGFkYmZjZTBiM2VmZjYxMWM4NzIyZmJhMzE3YTVmNWJjOTk5ZGJmYWIzNDA5OGUyZT
-     * Y2YWUiLCJpYXQiOjE1NDExNTc3NDksIm5iZiI6MTU0MTE1Nzc0OSwiZXhwIjoxNTcyNjkzNzQ4LCJz
-     * dWIiOiIyIiwic2NvcGVzIjpbXX0.ZzxBt0Qk3jKxxeJgx-ik-unJ-JfcSZe4g6mRXYl87tR05N1X-Hdt
-     * fBoQnx8m_9saQfCBa-ypOjhYYyGkbclelXNWapGLJ0OsNi9bvMUULIW3nS6kidOHvYIzWpSyOhM59AVu
-     * Sm1OGPO521Yc_oXJrjMew7ABAvD0s8cVD7EmOuIjsJry4Vm8_7h4kC93l-3lmCpA6J5VPJmKJgKdMShr
-     * cLbFSHqCsOmsWwWYBGlU_og7y5V0AVbFdi7Hf6PvPx1vSyX_EfCkUD7tfuN_vMCsCeiya4zeSTHl5ks8
-     * 4zmO3G0PsXh4YzH18u-_sB2SMzhWEq_mbsuJgA6aUCHlSCP9pro53h4lQsp4l_HVF0th828h8PqTF_W
-     * weU4V1y9ndwobwoGOpz0qMBQ99L-e2K6ujJDu7kVY6KALzvsyEP3dlGeU09hPzS2fM_oVy8Wps3qmAj
-     * V2ObzkAjBX69lkn0e2ertreVndKo-HB79MSyTxMIO4kpp3dGsS9jgL_gdLPe4eIHhtGz73JDxycAaHjO
-     * xH6CcXwc3sR5MYkyZ-Ok372ASQqj6zV5u2yPB4HF23ELSyRYohHIbw5uO2SNk8qz9pJxaucTp5uLYFN1
-     * JjgcaU4sSHTOA-_Z7YmepMpfukFYtnsiVZ8ySjhUg1rUx1EAPexieacexqY_PJJM5iPXKyyeY",
-     *        "source_name": "",
-     *        "source_id": "",
-     *        "resort_room_no": "",
+     *        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijg2ZjM5ZTA0ZjQxN2
+     *          QwNDNhZmRkYWY4NDJlNTNlNTQ3NjMxYzJkMTdkMThmZDVlM2VhMTk1OTc3MGZmZjQzMWE2NjI1ZjI
+     * 0YzE5NDk1ZjllIn0.eyJhdWQiOiIxIiwianRpIjoiODZmMzllMDRmNDE3ZDA0M2FmZGRhZjg0MmU1M2U1NDc2M
+     * zFjMmQxN2QxOGZkNWUzZWExOTU5NzcwZmZmNDMxYTY2MjVmMjRjMTk0OTVmOWUiLCJpYXQiOjE1NDIyNTU5MDY
+     * sIm5iZiI6MTU0MjI1NTkwNiwiZXhwIjoxNTczNzkxOTA2LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.qnRi5ZXrBR
+     * Yk2DJdNi8GbsRkb9g3g26MoBinbHJdGYS0hEfYiItve5yAhRmvQhPiIW_GXIhKRKPAcGmy1tHsneiUEScDjD35EW
+     * Zwd39bpQGDx_VQAGp5JlM2rlj5KOVv52BqFiyLiod8621eevI7SvduWm7VojLFXPRqsWbCilVcQQB5WPIFdTNfor
+     * g3giro7Qa_nzmEZH_iUl0_955HWHx9L9XmuSg9pznePzcDqbyG4M7gB6guJUk0hIUP3cO3Aueu91LZtsA-jGXRkj
+     * dT2S9ONpVRWewl1aksPzjYFxtdUSfH2PQveGWsCMCka85i1B5v1JlyqDb38gNeWbB3Gqy8-2rV9AYS5gYy1lAgCv
+     * xrR9XoElyyguLU_BHQCMuU7_-034A1UbHZfg9_r3IR85_u25McRvSTHiZWPQXVDD2tHh5zLyhyDJjcD_Bh9jMxSE
+     * 9E3b9HruJiJv8DVhTkvW6re95astIZe5X7oW8j7fDHvwWBUMdBfSnnBcyCp-6HVl6nByxevw3-OV_ugsCDuhsOKWw
+     * jaUT4KkyJFxFjKjmbSQautj2FBum3Vy85fOMkgye_8rfYADsKXw81RQjixkflRfmifP4Ii68tES77apdXGqxJricNc
+     * VSBPzBiUThcnPCd_X8f4-vuQwp3KM-Jn8-rC0RT1lUHhlnHPyEzAmQ",
+     *        "source_name": "Make my trip",
+     *        "source_id": "QWERT123456",
+     *        "resort_room_no": 1,
      *        "room_type": "Delux",
-     *        "check_in": "",
-     *        "check_out": "",
-     *        "resort": {}
-     *       }
-     * }
+     *        "check_in_date": "15-Nov-2018",
+     *        "check_in_time": "00:00 AM",
+     *        "check_out_date": "17-Nov-2018",
+     *        "check_out_time": "00:00 AM",
+     *        "booking_id": 1,
+     *        "no_of_guest": "1 Adult and 2 Child",
+     *        "guest_detail": [
+     *            {
+     *                "id": 1,
+     *                "person_name": "Ankit",
+     *                "person_age": "25",
+     *                "person_type": "Adult"
+     *            },
+     *            {
+     *                "id": 2,
+     *                "person_name": "Anshu",
+     *                "person_age": "5",
+     *                "person_type": "Child"
+     *            },
+     *            {
+     *                "id": 3,
+     *                "person_name": "om",
+     *                "person_age": "10",
+     *                "person_type": "Child"
+     *            }
+     *        ],
+     *        "resort": {
+     *            "id": 1,
+     *            "name": "Parth Inn",
+     *            "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *            "contact_number": "9808243372",
+     *            "other_contact_number": null,
+     *            "address_1": "Sector 66",
+     *            "address_2": null,
+     *            "address_3": null,
+     *            "pincode": 243601,
+     *            "city_id": 50,
+     *            "latitude": 0,
+     *            "longitude": 0,
+     *            "is_active": 1,
+     *            "domain_id": 0,
+     *            "created_by": "1",
+     *            "updated_by": "1",
+     *            "created_at": "2018-11-14 13:51:50",
+     *            "updated_at": "2018-11-14 13:52:58"
+     *        }
+     *    }
+     *}
      *  
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
@@ -279,7 +321,18 @@ class AuthController extends Controller {
 
             $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
             $userRoom = [];
+            $adultNo = 0;
+            $childNo = 0;
             if ($userBookingDetail) {
+                if ($userBookingDetail->bookingpeople_accompany) {
+                    foreach ($userBookingDetail->bookingpeople_accompany as $guest) {
+                        if ($guest->person_type == "Adult") {
+                            $adultNo += 1;
+                        } elseif ($guest->person_type == "Child") {
+                            $childNo += 1;
+                        }
+                    }
+                }
                 $userResort = Resort::find($userBookingDetail->resort_id);
                 $userRoom = RoomBooking::find($userBookingDetail->id);
             }
@@ -305,8 +358,13 @@ class AuthController extends Controller {
             $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
             $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
             $userArray['room_type'] = "Delux";
-            $userArray['check_in'] = $userRoom ? $userRoom->check_in : '';
-            $userArray['check_out'] = $userRoom ? $userRoom->check_out : '';
+            $userArray['check_in_date'] = $userRoom ? Carbon::parse($userRoom->check_in)->format('d-M-Y') : '';
+            $userArray['check_in_time'] = $userRoom ? Carbon::parse($userRoom->check_in)->format('H:i A') : '';
+            $userArray['check_out_date'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('d-M-Y') : '';
+            $userArray['check_out_time'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('H:i A') : '';
+            $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->id : "";
+            $userArray['no_of_guest'] = $adultNo." Adult and ".$childNo." Child";
+            $userArray['guest_detail'] = $userBookingDetail->bookingpeople_accompany ? $userBookingDetail->bookingpeople_accompany : [];
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;
             } else {
@@ -451,7 +509,8 @@ class AuthController extends Controller {
         }
     }
 
-    public function logout(){
-        return $this->sendSuccessResponse("logout successfully", (object)[]);
+    public function logout() {
+        return $this->sendSuccessResponse("logout successfully", (object) []);
     }
+
 }

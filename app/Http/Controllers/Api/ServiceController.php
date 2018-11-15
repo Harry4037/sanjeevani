@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\Models\Service;
 use App\Models\ServiceQuestionaire;
 use App\Models\Question;
@@ -323,71 +324,38 @@ class ServiceController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
+     *{
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Order & Request found.",
-     *   "data": {
-     *       "order_request": [
-     *            {
+     *    "data": {
+     *        "order_request": [
+     *           {
      *                "id": 1,
      *                "comment": "",
      *                "service_id": 1,
      *                "question_id": 1,
-     *                "request_status_id": 2,
-     *                "accepted_by_id": 1,
-     *                "service_detail": {
-     *                    "id": 1,
-     *                    "name": "Air conditioner"
-     *                },
-     *               "question_detail": {
-     *                   "id": 1,
-     *                   "name": "question 1"
-     *                },
-     *               "request_status": {
-     *                   "id": 2,
-     *                   "status": "In Progress"
-     *                },
-     *                "accepted_by": {
-     *                    "id": 1,
-     *                    "user_name": "Admin",
-     *                    "first_name": "Admin",
-     *                    "last_name": null
-     *                }
-     *            },
-     *            {
-     *                "id": 2,
-     *                "comment": "",
-     *                "service_id": 2,
-     *                "question_id": 0,
      *                "request_status_id": 1,
-     *                "accepted_by_id": 0,
+     *                "accepted_by_id": 1,
+     *                "date": "15-11-2018",
+     *                "time": "04:31:35 AM",
      *                "service_detail": {
-     *                    "id": 2,
-     *                    "name": "Room Cleaning"
+     *                    "id": 1,
+     *                    "name": "Iron",
+     *                    "type_id": 1,
+     *                    "icon": "http://127.0.0.1:8000/storage/Service_icon/O43z5c9J2lUhL1iRmQHNietloHjRLHbpiD842V2X.jpeg",
+     *                    "service_type": {
+     *                        "id": 1,
+     *                        "name": "Housekeeping"
+     *                    }
      *                },
-     *                "question_detail": null,
+     *                "question_detail": {
+     *                    "id": 1,
+     *                    "name": "Lorem Ipsum is simply dummy text"
+     *                },
      *                "request_status": {
      *                    "id": 1,
      *                    "status": "Pending"
-     *                },
-     *                "accepted_by": null
-     *            },
-     *            {
-     *                "id": 3,
-     *                "comment": "",
-     *                "service_id": 3,
-     *                "question_id": 0,
-     *                "request_status_id": 3,
-     *                "accepted_by_id": 1,
-     *                "service_detail": {
-     *                    "id": 3,
-     *                    "name": "Air conditioners"
-     *                },
-     *                "question_detail": null,
-     *                "request_status": {
-     *                   "id": 3,
-     *                   "status": "Your Approval Needed"
      *                },
      *                "accepted_by": {
      *                    "id": 1,
@@ -398,7 +366,7 @@ class ServiceController extends Controller {
      *            }
      *        ]
      *    }
-     * }
+     *}
      * 
      * @apiError OrderRequestNotFound The Order & Request not found.
      * @apiErrorExample Error-Response:
@@ -435,10 +403,10 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $serviceRequest['order_request'] = ServiceRequest::select('id', 'comment', 'service_id', 'question_id', 'request_status_id', 'accepted_by_id')->where(["user_id" => $request->user_id])
+            $serviceRequest['order_request'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id])
                             ->with([
                                 'serviceDetail' => function($query) {
-                                    $query->select('id', 'name', 'type_id');
+                                    $query->select('id', 'name', 'type_id', 'icon');
                                 }
                             ])->with([
                         'questionDetail' => function($query) {
