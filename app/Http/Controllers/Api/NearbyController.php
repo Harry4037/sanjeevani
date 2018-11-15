@@ -108,7 +108,7 @@ class NearbyController extends Controller {
                     $j = 0;
                     foreach ($nearbyImages as $nearbyImage) {
                         $data['nearby'][$i]['images'][$j]['id'] = $nearbyImage->id;
-                        $data['nearby'][$i]['images'][$j]['banner_image_url'] = asset("storage/Nearby/" . $nearbyImage->name);
+                        $data['nearby'][$i]['images'][$j]['banner_image_url'] = $nearbyImage->name;
                         $j++;
                     }
                 } else {
