@@ -79,6 +79,7 @@ class AmenityController extends Controller {
             foreach ($amenities as $key => $amenity) {
                 $slots = AmenityTimeSlot::where('amenity_id', $amenity->id)->count();
                 $dataArray[$key] = $amenity;
+                $dataArray[$key]['address'] = "sector 62, Noida, UP";
                 $dataArray[$key]['is_booking_avaliable'] = $slots > 0 ? true : false;
             }
 

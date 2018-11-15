@@ -9,4 +9,8 @@ class AmenityImage extends Model
     public function getImageNameAttribute($name) {
         return asset('storage/amenities_images/' . $name);
     }
+    
+    public function getBannerImageUrlAttribute($name) {
+        return asset('storage/amenities_images/' . $name);
+    }
 }
