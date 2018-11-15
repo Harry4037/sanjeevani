@@ -459,7 +459,7 @@ class ServiceController extends Controller {
                         }
                     ])->get();
 
-            if ($serviceRequest['order_request']->toArray()) {
+            if ($serviceRequest['order_request']) {
                 return response()->json([
                             'status' => true,
                             'status_code' => 200,
