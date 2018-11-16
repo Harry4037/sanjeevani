@@ -7,7 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Update Amenity</h2>
+                <h2>Update Activity</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -19,24 +19,24 @@
                         @foreach($amenityImages as $amenityImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
                             <img class="img-rounded" src="{{ $amenityImage->image_name }}" width=100 height=100>
-                            <button style="margin-left: 24px;" class="btn btn-danger btn-xs delete_amenity_image" id="{{ $amenityImage->id }}" >Remove</button>
+                            <button style="margin-left: 24px;" class="btn btn-danger btn-xs delete_activity_image" id="{{ $amenityImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
                     @endif
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Amenity Images</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Activity Images</label>
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.amenity.upload-image') }}">
+                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.activity.upload-image') }}">
                                 @csrf
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="ln_solid"></div>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.amenity.edit', $amenity->id) }}" method="post" id="addAmenityForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.activity.edit', $amenity->id) }}" method="post" id="addActivityForm" enctype="multipart/form-data">
                     @csrf
-                    <div id="amenity_images_div"></div>
+                    <div id="activity_images_div"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -55,13 +55,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->name }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Amenity Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Description</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Amenity Description">{{ $amenity->description }}</textarea>
                         </div>
@@ -195,26 +195,36 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "'>Remove file</button>");
-                    var hidden_image_html = "<input id='amenity_image_input_" + response.file_name + "' type='hidden' name='amenity_images[]' value='" + response.file_name + "'>";
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var hidden_image_html = "<input id='amenity_image_input_" + response.id + "' type='hidden' name='amenity_images[]' value='" + response.file_name + "'>";
                     var _this = this;
+
                     removeButton.addEventListener("click", function (e) {
                         // Make sure the button click doesn't submit the form:
                         e.preventDefault();
                         e.stopPropagation();
                         var record_id = this.id;
-                        $("#amenity_image_input_" + record_id).remove();
-                        _this.removeFile(file);
+                        var record_val = $(this).attr("data-val");
+                        $.ajax({
+                            url: _baseUrl + '/admin/activity/delete-images',
+                            type: 'post',
+                            data: {record_val: record_val, record_id: record_id},
+//                            dataType: 'json',
+                            success: function (res) {
+                                $("#amenity_image_input_" + record_id).remove();
+                                _this.removeFile(file);
+                            }
+                        });
                     });
                     file.previewElement.appendChild(removeButton);
-                    $("#amenity_images_div").append(hidden_image_html);
+                    $("#activity_images_div").append(hidden_image_html);
                 }
             });
         },
         dictDefaultMessage: "Drop or Select multiple images for amenity."
     };
 
-    $("#addAmenityForm").validate({
+    $("#addActivityForm").validate({
         ignore: [],
         rules: {
 //            cktext: {
@@ -236,12 +246,12 @@ $(document).ready(function () {
         $(this).parent("div").remove();
     });
 
-    $(document).on('click', '.delete_amenity_image', function () {
+    $(document).on('click', '.delete_activity_image', function () {
         var record_id = this.id;
         var _this = $(this);
         if (record_id) {
             $.ajax({
-                url: _baseUrl + '/admin/amenity/delete-amenity-images',
+                url: _baseUrl + '/admin/activity/delete-activity-images',
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
@@ -263,7 +273,7 @@ $(document).ready(function () {
         var _this = $(this);
         if (record_id) {
             $.ajax({
-                url: _baseUrl + '/admin/amenity/delete-time-slot',
+                url: _baseUrl + '/admin/activity/delete-time-slot',
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',

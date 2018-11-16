@@ -117,8 +117,24 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/update-status', 'AmenityController@updateStatus')->name('admin.amenity.status-update');
         Route::post('/upload-images', 'AmenityController@uploadImages')->name('admin.amenity.upload-image');
         Route::post('/delete-images', 'AmenityController@deleteImages')->name('admin.amenity.delete-image');
-        Route::match(['get', 'post'], '/edit/{id}', 'AmenityController@editResort')->name('admin.amenity.edit');
-        Route::get('/resort-rooms/{resort}/{type}', 'AmenityController@getResortRooms')->name('admin.amenity.rooms');
-        Route::post('/delete-room', 'AmenityController@deleteRoom')->name('admin.amenity.delete-room');
+        Route::match(['get', 'post'], '/edit/{id}', 'AmenityController@editAmenity')->name('admin.amenity.edit');
+        Route::post('/delete-amenity-images', 'AmenityController@deleteAmenityImage')->name('admin.amenity.delete-amenity-image');
+        Route::post('/delete-time-slot', 'AmenityController@deleteTimeSlot')->name('admin.amenity.delete-timeslot');
+        Route::post('/delete', 'AmenityController@deleteAmenity')->name('admin.amenity.delete');
+    });
+    /**
+     * Activity Management
+     */
+    Route::prefix('activity')->group(function() {
+        Route::get('/', 'ActivityController@index')->name('admin.activity.index');
+        Route::get('/activities-list', 'ActivityController@activityList')->name('admin.activity.list');
+        Route::match(['get', 'post'], '/create', 'ActivityController@create')->name('admin.activity.add');
+        Route::post('/update-status', 'ActivityController@updateStatus')->name('admin.activity.status-update');
+        Route::post('/upload-images', 'ActivityController@uploadImages')->name('admin.activity.upload-image');
+        Route::post('/delete-images', 'ActivityController@deleteImages')->name('admin.activity.delete-image');
+        Route::match(['get', 'post'], '/edit/{id}', 'ActivityController@editActivity')->name('admin.activity.edit');
+        Route::post('/delete-activity-images', 'ActivityController@deleteActivityImage')->name('admin.activity.delete-activity-image');
+        Route::post('/delete-time-slot', 'ActivityController@deleteTimeSlot')->name('admin.activity.delete-timeslot');
+        Route::post('/delete', 'ActivityController@deleteActivity')->name('admin.activity.delete');
     });
 });
