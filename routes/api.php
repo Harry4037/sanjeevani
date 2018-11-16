@@ -27,13 +27,19 @@ Route::namespace("Api")->group(function () {
 
     //service order & request listing of specific resort (Staff)
     Route::get('service-request-list', 'StaffController@serviceRequestListing');
-    
+
     //Amenities listing of specific resort
     Route::get('amenities-list', 'AmenityController@amenitiesListing');
-    
+
     //Amenities slots
     Route::get('amenities-time-slots', 'AmenityController@amenityTimeSlots');
-    
+
+    //Amenities listing of specific resort
+    Route::get('activities-list', 'ActivityController@activitiesListing');
+
+    //Amenities slots
+    Route::get('activity-time-slots', 'AmenityController@activityTimeSlots');
+
     //Notification List
     Route::get('notification-list', 'NotificationController@notificationList');
 
@@ -48,22 +54,25 @@ Route::namespace("Api")->group(function () {
     Route::middleware('auth:api')->group(function () {
         //Raise service request (by user)
         Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
-        
+
         //Approved service request (by user)
         Route::post('approve-service-request', 'ServiceController@approveServiceRequest');
 
         //Accept service order & request (by staff member)
         Route::post('service-request-accept', 'StaffController@requestAccept');
-        
+
         //Myjobs (staff member)
         Route::get('myjobs', 'StaffController@myJobListing');
-        
+
         //Myjob mark as complete (staff member)
         Route::post('job-mark-complete', 'StaffController@markasComplete');
 
         //Book amenity
         Route::post('book-amenities', 'AmenityController@bookAmenities');
-        
+
+        //Book amenity
+        Route::post('book-activities', 'ActivityController@bookAmenities');
+
         Route::post('check-in', 'UserController@checkIn');
         Route::get('logout', 'AuthController@logout');
         Route::post('update-profile', 'UserController@updateProfile');
