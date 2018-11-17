@@ -87,7 +87,7 @@ class HomeController extends Controller {
                 ])
                 ->first();
 
-        $banners = Banner::all();
+        $banners = Banner::where("is_active", 1)->get();
         $bannerArray = [];
         $i = 0;
         foreach ($banners as $banner) {

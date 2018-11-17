@@ -403,7 +403,9 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id])->orWhere("request_status_id", 3)
+            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
+                            ->where(["user_id" => $request->user_id])
+                            ->orWhere("request_status_id", 3)
                             ->orWhere("request_status_id", 1)
                             ->orWhere("request_status_id", 2)
                             ->with([

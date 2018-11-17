@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\UserBookingDetail;
 use App\Models\Resort;
 use App\Models\RoomBooking;
+use App\Models\CityMaster;
 
 class AuthController extends Controller {
 
@@ -140,7 +141,7 @@ class AuthController extends Controller {
      * @apiSuccess {JSON}   data User detail with unique token.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "OTP verified successfully.",
@@ -223,7 +224,7 @@ class AuthController extends Controller {
      *            "updated_at": "2018-11-14 13:52:58"
      *        }
      *    }
-     *}
+     * }
      *  
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
@@ -312,11 +313,10 @@ class AuthController extends Controller {
             if (!Auth::attempt($credentials)) {
                 return $this->sendErrorResponse("OTP or mobile number incorrect.", (object) []);
             }
-            
+
             if ($request->user()->is_active == 0) {
                 return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
             }
-            
             $user = $request->user();
             $tokenResult = $user->createToken('SanjeevaniToken');
             $token = $tokenResult->token;
@@ -340,6 +340,8 @@ class AuthController extends Controller {
                 $userResort = Resort::find($userBookingDetail->resort_id);
                 $userRoom = RoomBooking::find($userBookingDetail->id);
             }
+            $cityState = CityMaster::find($user->city_id);
+//            dd($cityState->toArray());
             $userArray['id'] = $user->id;
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
@@ -350,8 +352,8 @@ class AuthController extends Controller {
             $userArray['email_id'] = $user->email_id;
             $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
             $userArray['address'] = $user->address;
-            $userArray['state'] = "UP";
-            $userArray['city'] = "Noida";
+            $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
+            $userArray['city'] = isset($cityState->city) ? $cityState->city : "";
             $userArray['screen_name'] = $user->screen_name;
             $userArray['profile_pic_path'] = $user->profile_pic_path;
             $userArray['mobile_number'] = $user->mobile_number;
@@ -367,7 +369,7 @@ class AuthController extends Controller {
             $userArray['check_out_date'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('d-M-Y') : '';
             $userArray['check_out_time'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('H:i A') : '';
             $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->id : "";
-            $userArray['no_of_guest'] = $adultNo." Adult and ".$childNo." Child";
+            $userArray['no_of_guest'] = $adultNo . " Adult and " . $childNo . " Child";
             $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;
