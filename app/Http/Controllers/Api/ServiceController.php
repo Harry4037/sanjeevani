@@ -134,7 +134,7 @@ class ServiceController extends Controller {
                 $serviceQuestion = ServiceQuestionaire::where("service_id", $issue->id)->get();
                 $issuesArrray[$i]['id'] = $issue->id;
                 $issuesArrray[$i]['name'] = $issue->name;
-                $issuesArrray[$i]['icon'] = asset("storage/Service_icon/" . $houseKeep->icon);
+                $issuesArrray[$i]['icon'] = $houseKeep->icon;
                 if ($serviceQuestion) {
                     $j = 0;
                     foreach ($serviceQuestion as $serviceQues) {
