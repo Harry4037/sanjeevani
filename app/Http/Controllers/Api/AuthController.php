@@ -312,7 +312,11 @@ class AuthController extends Controller {
             if (!Auth::attempt($credentials)) {
                 return $this->sendErrorResponse("OTP or mobile number incorrect.", (object) []);
             }
-
+            
+            if ($request->user()->is_active == 0) {
+                return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
+            }
+            
             $user = $request->user();
             $tokenResult = $user->createToken('SanjeevaniToken');
             $token = $tokenResult->token;
