@@ -343,7 +343,7 @@ class AuthController extends Controller {
             $userArray['id'] = $user->id;
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
-            $userArray['user_name'] = $user->user_name;
+            $userArray['user_name'] = $userBookingDetail ? $user->user_name : "Welcom guest";
             $userArray['first_name'] = $user->first_name;
             $userArray['mid_name'] = $user->mid_name;
             $userArray['last_name'] = $user->last_name;
