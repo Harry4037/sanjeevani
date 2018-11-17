@@ -86,77 +86,50 @@ class UserController extends Controller {
      * 
      */
     public function checkIn(Request $request) {
-        if (!$request->user_id) {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "User Id missing.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
-        if ($request->user_id != $request->user()->id) {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "Unauthorized user.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
-        if (!$request->aadhar_id) {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "Aadhar id document missing.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
-        if (!$request->hasFile('aadhar_id')) {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "aadhar id not valid file type.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        }
+        try {
 
-
-        $user = User::find($request->user_id);
-        if (!$user) {
-            $response['success'] = false;
-            $response['status_code'] = 404;
-            $response['message'] = "Invalid user.";
-            $response['data'] = (object) [];
-            return $this->jsonData($response);
-        } else {
-            if ($request->other_id) {
-                if (!$request->hasFile('other_id')) {
-                    $response['success'] = false;
-                    $response['status_code'] = 404;
-                    $response['message'] = "other id not valid file type.";
-                    $response['data'] = (object) [];
-                    return $this->jsonData($response);
-                }
-                $other_id = $request->file("other_id");
-                $otherId = Storage::disk('local')->put('Aadhar', $other_id);
-                $other_file_name = basename($otherId);
-
-                $user->voter_id = $other_file_name;
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User Id missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            if (!$request->aadhar_id) {
+                return $this->sendErrorResponse("Aadhar id document missing.", (object) []);
+            }
+            if (!$request->hasFile('aadhar_id')) {
+                return $this->sendErrorResponse("aadhar id not valid file type.", (object) []);
             }
 
-            $aadhar_id = $request->file("aadhar_id");
-            $aadhar = Storage::disk('local')->put('Aadhar', $aadhar_id);
-            $aadhar_file_name = basename($aadhar);
 
-            $user->aadhar_id = $aadhar_file_name;
-            if ($user->save()) {
-                $response['success'] = true;
-                $response['status_code'] = 200;
-                $response['message'] = "User check-in successfully.";
-                $response['data'] = $user;
-                return $this->jsonData($response);
+            $user = User::find($request->user_id);
+            if (!$user) {
+                return $this->sendErrorResponse("Invalid user.", (object) []);
             } else {
-                $response['success'] = false;
-                $response['status_code'] = 404;
-                $response['message'] = "Something went be wrong.";
-                $response['data'] = (object) [];
-                return $this->jsonData($response);
+                if ($request->other_id) {
+                    if (!$request->hasFile('other_id')) {
+                        return $this->sendErrorResponse("other id not valid file type.", (object) []);
+                    }
+                    $other_id = $request->file("other_id");
+                    $otherId = Storage::disk('local')->put('aadhar_id', $other_id);
+                    $other_file_name = basename($otherId);
+
+                    $user->voter_id = $other_file_name;
+                }
+
+                $aadhar_id = $request->file("aadhar_id");
+                $aadhar = Storage::disk('local')->put('aadhar_id', $aadhar_id);
+                $aadhar_file_name = basename($aadhar);
+
+                $user->aadhar_id = $aadhar_file_name;
+                if ($user->save()) {
+                    return $this->sendSuccessResponse("User check-in successfully.", $user);
+                } else {
+                    return $this->administratorResponse();
+                }
             }
+        } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
