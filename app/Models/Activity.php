@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Amenity extends Model {
+class Activity extends Model {
 
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
-    public function amenityImages() {
-        return $this->hasMany('App\Models\AmenityImage', 'amenity_id');
+    public function activityImages() {
+        return $this->hasMany('App\Models\ActivityImage', 'amenity_id');
     }
 
 }

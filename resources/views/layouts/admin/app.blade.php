@@ -65,6 +65,7 @@
         <!-- jQuery Sparklines -->
         <script src="{{ asset("vendors/jquery-sparkline/dist/jquery.sparkline.min.js") }}"></script>
         <script src="{{ asset("js/jquery.validate.js") }}"></script>  
+        <script src="{{ asset("js/admin/bootbox.min.js") }}"></script>  
 
         <!--         Flot 
                 <script src="{{ asset("vendors/Flot/jquery.flot.js") }}"></script>
