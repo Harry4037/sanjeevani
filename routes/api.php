@@ -38,7 +38,7 @@ Route::namespace("Api")->group(function () {
     Route::get('activities-list', 'ActivityController@activitiesListing');
 
     //Amenities slots
-    Route::get('activity-time-slots', 'AmenityController@activityTimeSlots');
+    Route::get('activity-time-slots', 'ActivityController@activityTimeSlots');
 
     //Notification List
     Route::get('notification-list', 'NotificationController@notificationList');

@@ -1,6 +1,396 @@
 define({ "api": [
   {
     "type": "get",
+    "url": "/api/activities-list",
+    "title": "Activity listing & details",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetActivitiesList",
+    "group": "Activity",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Activities found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Activities found.\",\n   \"data\": [\n       {\n           \"id\": 2,\n           \"name\": \"Activity\",\n           \"description\": \"<p>tretretwfdsf</p>\\r\\n\\r\\n<p>gffdwerew</p>\",\n           \"address\": \"sector 62, Noida, UP\",\n           \"is_booking_avaliable\": true,\n           \"activity_images\": [\n               {\n                   \"id\": 2,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/activity_images/ekD0YEH9vfWaSqFIyeufWzroj3MmH2HMQOJHwGNV.jpeg\",\n                   \"amenity_id\": 2\n               }\n           ]\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Resort id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ActivityController.php",
+    "groupTitle": "Activity"
+  },
+  {
+    "type": "get",
+    "url": "/api/activity-time-slots",
+    "title": "Activity Time slots",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetActivityTimeSlots",
+    "group": "Activity",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "activity_id",
+            "description": "<p>Activity id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_date",
+            "description": "<p>Booking date (yyyy/mm/dd).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Activity time slots</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"time slots\",\n   \"data\": [\n       {\n           \"id\": 3,\n           \"from\": \"00:00:00\",\n           \"to\": \"01:00:00\",\n           \"is_booking_available\": true\n       },\n       {\n           \"id\": 4,\n           \"from\": \"02:00:00\",\n           \"to\": \"03:00:00\",\n           \"is_booking_available\": true\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ActivityIdMissing",
+            "description": "<p>The activity is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BooingDateMissing",
+            "description": "<p>The booking date is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"activity id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"booking date id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ActivityController.php",
+    "groupTitle": "Activity"
+  },
+  {
+    "type": "post",
+    "url": "/api/book-activities",
+    "title": "Activity Booking",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostActivityBooking",
+    "group": "Activity",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "activity_id",
+            "description": "<p>Amenity id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_date",
+            "description": "<p>Booking date (dd/mm/yyyy).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "from_time",
+            "description": "<p>From Time (24 hours format).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "to_time",
+            "description": "<p>To Time (24 hours format).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Activity booking created</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Activity booking created\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ActivityIdMissing",
+            "description": "<p>The amenity is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BooingDateMissing",
+            "description": "<p>The booking date is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "FromTimeMissing",
+            "description": "<p>The From time is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ToTimeMissing",
+            "description": "<p>The To time is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"user id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"resort id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"activity id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"booking date id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"From time missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"To time missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ActivityController.php",
+    "groupTitle": "Activity"
+  },
+  {
+    "type": "get",
     "url": "/api/amenities-list",
     "title": "Amenities listing & details",
     "header": {

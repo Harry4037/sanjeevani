@@ -9,5 +9,9 @@ class ActivityImage extends Model {
     public function getImageNameAttribute($name) {
         return asset('storage/activity_images/' . $name);
     }
+    
+    public function getBannerImageUrlAttribute($name) {
+        return asset('storage/activity_images/' . $name);
+    }
 
 }
