@@ -1586,6 +1586,70 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/resort-listing",
+    "title": "Resort listing",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetResortListing",
+    "group": "Resort",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Resorts found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Json data.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"resorts found\",\n   \"data\": [\n          {\n           \"id\": 1,\n           \"name\": \"Parth Inn\",\n           \"description\": \"<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>\",\n           \"address\": \"Secotr 66\",\n           \"resort_images\": [\n               {\n                   \"id\": 1,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/resort_images/VSDtAK5sVV7tcJadizsWBnlDsvzg2Zh8E5PAY2yG.jpeg\",\n                   \"resort_id\": 1\n               },\n               {\n                   \"id\": 2,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/resort_images/eaxPGN8eFHbOuVRzzWpwWBQr5X93ynaNsFbwlXLC.jpeg\",\n                   \"resort_id\": 1\n               },\n               {\n                   \"id\": 3,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/resort_images/gTuqwCLAVaSklGpvJJHvEz2Aa6DUENpSVjqIGEUC.jpeg\",\n                   \"resort_id\": 1\n               },\n               {\n                   \"id\": 4,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/resort_images/4VXIhvL8Xp4wQk3rrkoqODEGuHOH4zMB4nSZZsvp.jpeg\",\n                   \"resort_id\": 1\n               }\n           ]\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ResortController.php",
+    "groupTitle": "Resort"
+  },
+  {
+    "type": "get",
     "url": "/api/order-request-list",
     "title": "Order & Request list",
     "header": {

@@ -43,9 +43,13 @@ Route::namespace("Api")->group(function () {
     //Notification List
     Route::get('notification-list', 'NotificationController@notificationList');
 
+    Route::get('resort-detail', 'ResortController@resortDetail');
+    
+    Route::get('resort-listing', 'ResortController@resortListing');
+    
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');
-    Route::get('resort-detail', 'ResortController@resortDetail');
+    
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
 
 

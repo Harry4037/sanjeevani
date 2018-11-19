@@ -159,4 +159,75 @@ class ResortController extends Controller {
         }
     }
 
+    /**
+     * @api {get} /api/resort-listing Resort listing
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetResortListing
+     * @apiGroup Resort
+     * 
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Resorts found.
+     * @apiSuccess {JSON}   data Json data.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *{
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "resorts found",
+     *    "data": [
+     *           {
+     *            "id": 1,
+     *            "name": "Parth Inn",
+     *            "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *            "address": "Secotr 66",
+     *            "resort_images": [
+     *                {
+     *                    "id": 1,
+     *                    "banner_image_url": "http://127.0.0.1:8000/storage/resort_images/VSDtAK5sVV7tcJadizsWBnlDsvzg2Zh8E5PAY2yG.jpeg",
+     *                    "resort_id": 1
+     *                },
+     *                {
+     *                    "id": 2,
+     *                    "banner_image_url": "http://127.0.0.1:8000/storage/resort_images/eaxPGN8eFHbOuVRzzWpwWBQr5X93ynaNsFbwlXLC.jpeg",
+     *                    "resort_id": 1
+     *                },
+     *                {
+     *                    "id": 3,
+     *                    "banner_image_url": "http://127.0.0.1:8000/storage/resort_images/gTuqwCLAVaSklGpvJJHvEz2Aa6DUENpSVjqIGEUC.jpeg",
+     *                    "resort_id": 1
+     *                },
+     *                {
+     *                    "id": 4,
+     *                    "banner_image_url": "http://127.0.0.1:8000/storage/resort_images/4VXIhvL8Xp4wQk3rrkoqODEGuHOH4zMB4nSZZsvp.jpeg",
+     *                    "resort_id": 1
+     *                }
+     *            ]
+     *        }
+     *    ]
+     *}
+     * 
+     * 
+     * 
+     */
+    public function resortListing(Request $request) {
+        try {
+
+            $resorts = Resort::select('id', 'name', 'description', 'address_1 as address')->where(["is_active" => 1])->with([
+                        'resortImages' => function($query) {
+                            $query->select('id', 'image_name as banner_image_url', 'resort_id');
+                        }
+                    ])->get();
+            if ($resorts) {
+                return $this->sendSuccessResponse("resorts found", $resorts);
+            } else {
+                return $this->sendSuccessResponse("resorts not found", $resorts);
+            }
+        } catch (Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
 }
