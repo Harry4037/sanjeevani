@@ -24,7 +24,7 @@ class ActivityController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Activities found.",
@@ -34,6 +34,8 @@ class ActivityController extends Controller {
      *            "name": "Activity",
      *            "description": "<p>tretretwfdsf</p>\r\n\r\n<p>gffdwerew</p>",
      *            "address": "sector 62, Noida, UP",
+     *            "latitude": "28.608510",
+     *            "longitude": "77.347370",
      *            "is_booking_avaliable": true,
      *            "activity_images": [
      *                {
@@ -44,7 +46,7 @@ class ActivityController extends Controller {
      *            ]
      *        }
      *    ]
-     *}
+     * }
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
@@ -59,7 +61,7 @@ class ActivityController extends Controller {
      */
     public function activitiesListing(Request $request) {
         if (!$request->resort_id) {
-            return $this->sendErrorResponse("Resort id missing", (object)[]);
+            return $this->sendErrorResponse("Resort id missing", (object) []);
         }
         $amenities = Activity::select('id', 'name', 'description')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
                     'activityImages' => function($query) {
@@ -72,6 +74,8 @@ class ActivityController extends Controller {
                 $slots = ActivityTimeSlot::where('amenity_id', $amenity->id)->count();
                 $dataArray[$key] = $amenity;
                 $dataArray[$key]['address'] = "sector 62, Noida, UP";
+                $dataArray[$key]['latitude'] = "28.608510";
+                $dataArray[$key]['longitude'] = "77.347370";
                 $dataArray[$key]['is_booking_avaliable'] = $slots > 0 ? true : false;
             }
 
@@ -110,72 +114,72 @@ class ActivityController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Activity booking created",
      *    "data": {}
-     *}
+     * }
      * 
      * @apiError UserIdMissing The user id is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "user id missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "resort id missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      * @apiError ActivityIdMissing The amenity is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "activity id missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      * @apiError BooingDateMissing The booking date is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "booking date id missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      * @apiError FromTimeMissing The From time is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "From time missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      * @apiError ToTimeMissing The To time is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "To time missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      */
     public function bookAmenities(Request $request) {
@@ -250,7 +254,7 @@ class ActivityController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "time slots",
@@ -268,28 +272,28 @@ class ActivityController extends Controller {
      *            "is_booking_available": true
      *        }
      *    ]
-     *}
+     * }
      * 
      * 
      * @apiError ActivityIdMissing The activity is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "activity id missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      * @apiError BooingDateMissing The booking date is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
-     *{
+     * {
      *    "status": false,
      *    "status_code": 404,
      *    "message": "booking date id missing.",
      *    "data": {}
-     *} 
+     * } 
      * 
      */
     public function activityTimeSlots(Request $request) {

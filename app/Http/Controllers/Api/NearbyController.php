@@ -37,6 +37,8 @@ class NearbyController extends Controller {
      * "distance": 10,
      * "precautions": "Lore ipsum is the dummy",
      * "address": "noida",
+     * "latitude": "28.608510",
+     * "longitude": "77.347370",
      * "images": [
      * {
      * "id": 1,
@@ -55,6 +57,8 @@ class NearbyController extends Controller {
      * "distance": 10,
      * "precautions": "kjhkjhkjhkj",
      * "address": "noida",
+     * "latitude": "28.608510",
+     * "longitude": "77.347370",
      * "images": [
      * {
      * "id": "http://127.0.0.1:8000/storage/Nearby/qM3wyREsrYaOltoKitTxl75Jxd41Cqy5i8VZy95h.jpeg"
@@ -104,6 +108,8 @@ class NearbyController extends Controller {
                 $data['nearby'][$i]['distance'] = $near->distance_from_resort;
                 $data['nearby'][$i]['precautions'] = $near->precautions;
                 $data['nearby'][$i]['address'] = $near->address_1;
+                $data['nearby'][$i]['latitude'] = "28.608510";
+                $data['nearby'][$i]['longitude'] = "77.347370";
                 if ($nearbyImages) {
                     $j = 0;
                     foreach ($nearbyImages as $nearbyImage) {
