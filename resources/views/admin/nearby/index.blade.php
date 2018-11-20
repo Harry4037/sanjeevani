@@ -43,9 +43,9 @@
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-            ordering: true,
+//            ordering: true,
             processing: true,
-//        serverSide: true,
+            serverSide: true,
             ajax: _baseUrl + "/admin/nearby/nearby-list/",
             "columns": [
                 {"data": null,
@@ -92,6 +92,30 @@
                             $(".msg").fadeOut();
                         }, 5000);
                     }
+                }
+            });
+        });
+
+        $(document).on("click", ".delete", function () {
+            var record_id = this.id;
+            bootbox.confirm("Are you sure want to delete this nearby?", function (result) {
+                if (result) {
+                    $.ajax({
+                        url: _baseUrl + '/admin/nearby/delete',
+                        type: 'post',
+                        data: {id: record_id},
+                        dataType: 'json',
+                        success: function (res) {
+
+                            if (res.status)
+                            {
+                                t.draw();
+                                console.log(res);
+                            } else {
+                                alert("something went be wrong.")
+                            }
+                        }
+                    });
                 }
             });
         });

@@ -3,8 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Resort extends Model {
+    use SoftDeletes;
+    
+    protected $dates = ['deleted_at'];
     
     public function resortImages(){
         return $this->hasMany('App\Models\ResortImage','resort_id');

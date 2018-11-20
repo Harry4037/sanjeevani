@@ -37,18 +37,23 @@ class ResortController extends Controller {
      *               "name": "Parth Inn",
      *               "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>",
      *               "address": "sector 63",
+     *               "latitude": "sector 63",
+     *               "longitude": "sector 63",
      *               "room_types": [
      *                   {
      *                       "id": 1,
-     *                       "name": "Tent"
+     *                       "name": "Tent",
+     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon"
      *                   },
      *                   {
      *                       "id": 2,
-     *                       "name": "Cottage"
+     *                       "name": "Cottage",
+     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon"
      *                   },
      *                   {
      *                       "id": 3,
-     *                       "name": "Delux Room"
+     *                       "name": "Delux Room",
+     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon"
      *                   }
      *               ],
      *               "resort_images": [
@@ -77,12 +82,14 @@ class ResortController extends Controller {
      *                   {
      *                       "id": 1,
      *                       "resort_id": 1,
-     *                       "name": "Gym"
+     *                       "name": "Gym",
+     *                       "icon": "http://127.0.0.1:8000/storage/amenities_icon"
      *                   },
      *                   {
      *                       "id": 2,
      *                       "resort_id": 1,
-     *                       "name": "SPA"
+     *                       "name": "SPA",
+     *                       "icon": "http://127.0.0.1:8000/storage/amenities_icon"
      *                   }
      *               ],
      *               "resort_near_by_places": [
@@ -121,13 +128,13 @@ class ResortController extends Controller {
                 return $this->sendErrorResponse("Resort id missing.", (object) []);
             }
 
-            $resort = Resort::select('id', 'name', 'description', 'address_1 as address')->where(["id" => $request->resort_id, "is_active" => 1])->with([
+            $resort = Resort::select('id', 'name', 'description', 'address_1 as address', 'latitude', 'longitude')->where(["id" => $request->resort_id, "is_active" => 1])->with([
                         'resortImages' => function($query) {
                             $query->select('id', 'image_name as banner_image_url', 'resort_id');
                         }
                     ])->with([
                         'resortAmenities' => function($query) {
-                            $query->select('id', 'resort_id', 'name');
+                            $query->select('id', 'resort_id', 'name', 'icon');
                         }
                     ])->with([
                         'resortNearByPlaces' => function($query) {
@@ -143,6 +150,7 @@ class ResortController extends Controller {
                         $roomType = RoomType::find($resortRoomType->room_type_id);
                         $resortRoomArray[$key]['id'] = $roomType->id;
                         $resortRoomArray[$key]['name'] = $roomType->name;
+                        $resortRoomArray[$key]['icon'] = $roomType->icon;
                     }
                 }
 

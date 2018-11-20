@@ -16,7 +16,10 @@ class CreateAmenitiesTable extends Migration
         Schema::create('amenities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('resort_id')->default(0);
+            $table->string('icon')->nullable();
             $table->string('name')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->text('description')->nullable();
             $table->text('address')->nullable();
             $table->tinyInteger('is_active')->default(1);

@@ -105,6 +105,29 @@
             });
 
         });
+        
+        $(document).on("click", ".delete", function () {
+            var record_id = this.id;
+            bootbox.confirm("Are you sure want to delete this resort?", function (result) {
+                if (result) {
+                    $.ajax({
+                        url: _baseUrl + '/admin/resort/delete',
+                        type: 'post',
+                        data: {id: record_id},
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res);
+                            if (res.status)
+                            {
+                                t.draw();
+                            } else {
+                                alert("something went be wrong.")
+                            }
+                        }
+                    });
+                }
+            });
+        });
     });
 </script>
 @endsection

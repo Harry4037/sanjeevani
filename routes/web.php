@@ -46,6 +46,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
         Route::get('/resort-rooms/{resort}/{type}', 'ResortController@getResortRooms')->name('admin.resort.rooms');
         Route::post('/delete-room', 'ResortController@deleteRoom')->name('admin.resort.delete-room');
+        Route::post('/delete', 'ResortController@deleteResort')->name('admin.resort.delete');
     });
 
     /**
@@ -98,6 +99,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/delete-images', 'NearbyController@deleteImages')->name('admin.nearby.delete-image');
         Route::match(['get', 'post'], '/edit/{id}', 'NearbyController@editNearby')->name('admin.nearby.edit');
         Route::post('/delete-nearby-images', 'NearbyController@deleteNearbyImage')->name('admin.nearby.delete-nearby-image');
+        Route::post('/delete', 'NearbyController@deleteNearby')->name('admin.nearby.delete');
     });
     /**
      * Jobs Management

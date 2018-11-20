@@ -50,21 +50,20 @@ class ResortController extends Controller {
             $data['recordsTotal'] = $this->resort->count();
             $data['recordsFiltered'] = $this->resort->count();
             $resorts = $query->take($limit)->offset($offset)->latest()->get();
-            $i = 0;
             $resortsArray = [];
-            foreach ($resorts as $resort) {
+            foreach ($resorts as $key => $resort) {
                 $resortImage = $this->resortImage->where("resort_id", $resort->id)->first();
                 $cityState = CityMaster::find($resort->city_id);
                 $address = $resort->address_1 . ",<br>" . $cityState->city . ",<br>" . $cityState->state->state . ",<br>" . $resort->pincode;
                 $img = !empty($resortImage) ? $resortImage->image_name : asset('img/noimage.png');
-                $resortsArray[$i]['image'] = "<img width=80 height=70 src='" . $img . "'>";
-                $resortsArray[$i]['name'] = $resort->name;
+                $resortsArray[$key]['image'] = "<img class='img-rounded' width=80 height=70 src='" . $img . "'>";
+                $resortsArray[$key]['name'] = $resort->name;
                 $checked_status = $resort->is_active ? "checked" : '';
-                $resortsArray[$i]['contact_no'] = $resort->contact_number;
-                $resortsArray[$i]['address'] = $address;
-                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
-                $i++;
+                $resortsArray[$key]['contact_no'] = $resort->contact_number;
+                $resortsArray[$key]['address'] = $address;
+                $resortsArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='resort_status' id=" . $resort->id . " data-status=" . $resort->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $resortsArray[$key]['action'] = '<a href="' . route('admin.resort.edit', $resort->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $resort->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $resortsArray;
@@ -266,6 +265,15 @@ class ResortController extends Controller {
             return ["status" => true];
         } catch (\Exception $ex) {
             dd($ex->getMessage());
+        }
+    }
+
+    public function deleteResort(Request $request) {
+        $resort = Resort::find($request->id);
+        if ($resort->delete()) {
+            return ['status' => true];
+        } else {
+            return ['status' => true];
         }
     }
 

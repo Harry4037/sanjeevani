@@ -38,19 +38,19 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        
+
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-            ordering: true,
+//            ordering: true,
             processing: true,
-//        serverSide: true,
+            serverSide: true,
             ajax: _baseUrl + "/admin/banners-list",
             "columns": [
                 {"data": null,
@@ -96,6 +96,30 @@
                 }
             });
 
+        });
+        
+        $(document).on("click", ".delete", function () {
+            var record_id = this.id;
+            bootbox.confirm("Are you sure want to delete this banner?", function (result) {
+                if (result) {
+                    $.ajax({
+                        url: _baseUrl + '/admin/banner/delete',
+                        type: 'post',
+                        data: {id: record_id},
+                        dataType: 'json',
+                        success: function (res) {
+
+                            if (res.status)
+                            {
+                                t.draw();
+                                console.log(res);
+                            } else {
+                                alert("something went be wrong.")
+                            }
+                        }
+                    });
+                }
+            });
         });
     });
 </script>
