@@ -163,6 +163,7 @@ class ResortController extends Controller {
                 return $this->sendErrorResponse("Resort not found.", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex->getMessage());
             return $this->administratorResponse();
         }
     }
