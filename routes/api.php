@@ -48,6 +48,12 @@ Route::namespace("Api")->group(function () {
     //Resort detail
     Route::get('resort-detail', 'ResortController@resortDetail');
     
+    Route::get('terms-conditions', 'CmsController@termContidion');
+    
+    Route::get('about-us', 'CmsController@aboutUs');
+    
+    Route::get('conact-us', 'CmsController@contactUs');
+    
         
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');

@@ -1,0 +1,135 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\Activity;
+use App\Models\ActivityTimeSlot;
+use App\Models\ActivityRequest;
+
+class CmsController extends Controller {
+
+    /**
+     * @api {get} /api/terms-conditions  Terms & Conditions
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetTermCondition
+     * @apiGroup CMS
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message term & condition found.
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *  {
+     *      "status": true,
+     *      "status_code": 200,
+     *      "message": "term & condition found.",
+     *      "data": "<h1>Terms &amp; Conditions</h1>\n\n<ul>\n\t<li>\n\t<p>Please read the following terms and conditions carefully as it sets out the terms of a legally binding agreement between you (the reader) and Business Standard Private Limited.</p>\n\t</li>\n</ul>\n\n<h2>1) Introduction</h2>\n\n<ul>\n\t<li>\n\t<p>This following sets out the terms and conditions on which you may use the content on&nbsp;<br />\n\t</li>\n</ul>\n\n<h2>2) Registration Access and Use</h2>\n\n<ul>\n\t<li>\n\t<p>We welcome users to register on our digital platforms. We offer the below mentioned registration services which may be subject to change in the future. All changes will be appended in the terms and conditions page and communicated to existing users by email.</p>\n\n\t<p>Registration services are offered for individual subscribers only. If multiple individuals propose to access the same account or for corporate accounts kindly contact or write in to us. Subscription rates will vary for multiple same time access.</p>\n\t</li>\n</ul>\n"
+     *  }
+     * 
+     * 
+     */
+    public function termContidion(Request $request) {
+        try {
+            $data = "<h1>Terms &amp; Conditions</h1>
+
+<ul>
+	<li>
+	<p>Please read the following terms and conditions carefully as it sets out the terms of a legally binding agreement between you (the reader) and Business Standard Private Limited.</p>
+	</li>
+</ul>
+
+<h2>1) Introduction</h2>
+
+<ul>
+	<li>
+	<p>This following sets out the terms and conditions on which you may use the content on&nbsp;<br />
+	</li>
+</ul>
+
+<h2>2) Registration Access and Use</h2>
+
+<ul>
+	<li>
+	<p>We welcome users to register on our digital platforms. We offer the below mentioned registration services which may be subject to change in the future. All changes will be appended in the terms and conditions page and communicated to existing users by email.</p>
+
+	<p>Registration services are offered for individual subscribers only. If multiple individuals propose to access the same account or for corporate accounts kindly contact or write in to us. Subscription rates will vary for multiple same time access.</p>
+	</li>
+</ul>
+";
+            return $this->sendSuccessResponse("term & condition found.", $data);
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {get} /api/about-us  About us
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetAboutUs
+     * @apiGroup CMS
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message about us found.
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "about us found.",
+     *    "data": "<p><span >About Us</span></p>\n\n<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>\n"
+     * }
+     * 
+     * 
+     */
+    public function aboutUs(Request $request) {
+        try {
+            $data = "<p><span >About Us</span></p>
+
+<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+";
+            return $this->sendSuccessResponse("about us found.", $data);
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {get} /api/contact-us  Contact us
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetContactUs
+     * @apiGroup CMS
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message contact us found.
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *     "status": true,
+     *     "status_code": 200,
+     *     "message": "contact us found.",
+     *     "data": "<h3>55 SE. Mechanic St.</h3><br><p>Coventry,</p><br><p> RI 02816</p>"
+     * }
+     * 
+     * 
+     */
+    public function contactUs(Request $request) {
+        try {
+            $data = "<h3>55 SE. Mechanic St.</h3><br><p>Coventry,</p><br><p> RI 02816</p>";
+            return $this->sendSuccessResponse("contact us found.", $data);
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+}
