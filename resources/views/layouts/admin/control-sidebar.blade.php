@@ -65,6 +65,12 @@
                 >
                 <a href="{{ route('admin.activity.index') }}"><i class="fa fa-bars"></i> Activity Management</a>
             </li>
+            <li  @if(in_array(Route::currentRouteName(), ['admin.offer.add', 'admin.offer.edit']))
+                 {{ "class=current-page" }}
+                 @endif
+                >
+                <a href="{{ route('admin.offer.index') }}"><i class="fa fa-gift"></i> Offer Management</a>
+            </li>
         </ul>
     </div>
 </div>

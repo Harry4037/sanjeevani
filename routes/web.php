@@ -139,4 +139,19 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/delete-time-slot', 'ActivityController@deleteTimeSlot')->name('admin.activity.delete-timeslot');
         Route::post('/delete', 'ActivityController@deleteActivity')->name('admin.activity.delete');
     });
+    /**
+     * Offer Management
+     */
+    Route::prefix('offer')->group(function() {
+        Route::get('/', 'OfferController@index')->name('admin.offer.index');
+        Route::get('/offer-list', 'OfferController@offerList')->name('admin.offer.list');
+        Route::match(['get', 'post'], '/create', 'OfferController@create')->name('admin.offer.add');
+        Route::post('/update-status', 'OfferController@updateStatus')->name('admin.offer.status-update');
+        Route::post('/upload-images', 'OfferController@uploadImages')->name('admin.offer.upload-image');
+//        Route::post('/delete-images', 'OfferController@deleteImages')->name('admin.offer.delete-image');
+//        Route::match(['get', 'post'], '/edit/{id}', 'OfferController@editActivity')->name('admin.offer.edit');
+//        Route::post('/delete-activity-images', 'OfferController@deleteActivityImage')->name('admin.offer.delete-activity-image');
+//        Route::post('/delete-time-slot', 'OfferController@deleteTimeSlot')->name('admin.offer.delete-timeslot');
+//        Route::post('/delete', 'OfferController@deleteActivity')->name('admin.offer.delete');
+    });
 });

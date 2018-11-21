@@ -48,6 +48,9 @@ Route::namespace("Api")->group(function () {
     //Resort detail
     Route::get('resort-detail', 'ResortController@resortDetail');
     
+    //Offer listing detail
+    Route::get('offer-listing-detail', 'OfferController@offerListing');
+    
     Route::get('terms-conditions', 'CmsController@termContidion');
     
     Route::get('about-us', 'CmsController@aboutUs');
