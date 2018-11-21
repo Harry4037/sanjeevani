@@ -52,7 +52,7 @@ Route::namespace("Api")->group(function () {
     
     Route::get('about-us', 'CmsController@aboutUs');
     
-    Route::get('conact-us', 'CmsController@contactUs');
+    Route::get('contact-us', 'CmsController@contactUsDetail');
     
     Route::post('submit-contact-us', 'CmsController@contactUsSubmit');
     

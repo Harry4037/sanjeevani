@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use App\Models\Activity;
-use App\Models\ActivityTimeSlot;
-use App\Models\ActivityRequest;
 
 class CmsController extends Controller {
 
@@ -123,7 +120,7 @@ class CmsController extends Controller {
      * 
      * 
      */
-    public function contactUs(Request $request) {
+    public function contactUsDetail(Request $request) {
         try {
             $data = "<h3>55 SE. Mechanic St.</h3><br><p>Coventry,</p><br><p> RI 02816</p>";
             return $this->sendSuccessResponse("contact us found.", $data);
@@ -149,12 +146,12 @@ class CmsController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Your message submmited successfully.",
      *    "data": {}
-     *}
+     * }
      * 
      * @apiError UserIdMissing The user id is missing.
      * @apiErrorExample Error-Response:
@@ -196,13 +193,12 @@ class CmsController extends Controller {
             if (!$request->message) {
                 return $this->sendErrorResponse("Message missing", (object) []);
             }
-            return $this->sendSuccessResponse("Your message submmited successfully.", (object)[]);
+            return $this->sendSuccessResponse("Your message submmited successfully.", (object) []);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
         }
     }
-    
-    
+
     /**
      * @api {post} /api/sos  SOS
      * @apiHeader {String} Authorization Users unique access-token.
@@ -221,12 +217,12 @@ class CmsController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Your emergency request submmited successfully.",
      *    "data": {}
-     *}
+     * }
      * 
      * @apiError UserIdMissing The user id is missing.
      * @apiErrorExample Error-Response:
@@ -271,7 +267,7 @@ class CmsController extends Controller {
             if (!$request->longitude) {
                 return $this->sendErrorResponse("Longitude missing", (object) []);
             }
-            return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object)[]);
+            return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object) []);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
         }
