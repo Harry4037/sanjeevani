@@ -54,6 +54,8 @@ Route::namespace("Api")->group(function () {
     
     Route::get('conact-us', 'CmsController@contactUs');
     
+    Route::post('submit-contact-us', 'CmsController@contactUsSubmit');
+    
         
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');

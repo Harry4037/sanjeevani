@@ -132,4 +132,74 @@ class CmsController extends Controller {
         }
     }
 
+    /**
+     * @api {post} /api/submit-contact-us  Submit Contact us
+     * @apiHeader {String} Accept application/json. 
+     * @apiName PostSubmitContactUs
+     * @apiGroup CMS
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} subject subject*.
+     * @apiParam {String} message message*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Your message submmited successfully.
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *{
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Your message submmited successfully.",
+     *    "data": {}
+     *}
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "User id missing.",
+     *       "data": {}
+     *   } 
+     * @apiError SubjectMissing The subject is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Subject missing.",
+     *       "data": {}
+     *   } 
+     * @apiError MessageMissing The Message is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Message missing.",
+     *       "data": {}
+     *   } 
+     * 
+     */
+    public function contactUsSubmit(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing", (object) []);
+            }
+            if (!$request->subject) {
+                return $this->sendErrorResponse("Subject missing", (object) []);
+            }
+            if (!$request->message) {
+                return $this->sendErrorResponse("Message missing", (object) []);
+            }
+            return $this->sendSuccessResponse("Your message submmited successfully.", (object)[]);
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
 }
