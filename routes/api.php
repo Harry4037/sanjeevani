@@ -86,6 +86,8 @@ Route::namespace("Api")->group(function () {
 
         //Book amenity
         Route::post('book-activities', 'ActivityController@bookAmenities');
+        
+        Route::post('sos', 'CmsController@sos');
 
         Route::post('check-in', 'UserController@checkIn');
         Route::get('logout', 'AuthController@logout');

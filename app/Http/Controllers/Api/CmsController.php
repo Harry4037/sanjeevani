@@ -201,5 +201,80 @@ class CmsController extends Controller {
             return $this->administratorResponse();
         }
     }
+    
+    
+    /**
+     * @api {post} /api/sos  SOS
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json. 
+     * @apiName PostSOS
+     * @apiGroup CMS
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} latitude Latitude*.
+     * @apiParam {String} longitude Longitude*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Your emergency request submmited successfully.
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *{
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Your emergency request submmited successfully.",
+     *    "data": {}
+     *}
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "User id missing.",
+     *       "data": {}
+     *   } 
+     * @apiError LatitudeMissing The latitude is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Latitude missing.",
+     *       "data": {}
+     *   } 
+     * @apiError LongitudeMissing The Longitude is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Longitude missing.",
+     *       "data": {}
+     *   } 
+     * 
+     */
+    public function sos(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing", (object) []);
+            }
+            if ($request->user()->id != $request->user_id) {
+                return $this->sendErrorResponse("invalid user", (object) []);
+            }
+            if (!$request->latitude) {
+                return $this->sendErrorResponse("Latitude missing", (object) []);
+            }
+            if (!$request->longitude) {
+                return $this->sendErrorResponse("Longitude missing", (object) []);
+            }
+            return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object)[]);
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
 
 }
