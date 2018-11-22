@@ -100,11 +100,13 @@ class OfferController extends Controller {
             $css = [
                 'vendors/bootstrap-daterangepicker/daterangepicker.css',
                 "vendors/dropzone/dist/dropzone.css",
+                "https://cdn.quilljs.com/1.0.0/quill.snow.css",
             ];
             $js = [
                 'vendors/moment/min/moment.min.js',
                 'vendors/bootstrap-daterangepicker/daterangepicker.js',
                 'vendors/dropzone/dist/dropzone.js',
+                'https://cdn.quilljs.com/1.0.0/quill.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
             return view('admin.offer.create', [
@@ -127,7 +129,7 @@ class OfferController extends Controller {
     }
 
     public function deleteImages(Request $request) {
-        @unlink('storage/activity_images/' . $request->record_val);
+        @unlink('storage/offer_images/' . $request->record_val);
     }
 
     public function updateStatus(Request $request) {

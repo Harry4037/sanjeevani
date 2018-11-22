@@ -148,7 +148,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/create', 'OfferController@create')->name('admin.offer.add');
         Route::post('/update-status', 'OfferController@updateStatus')->name('admin.offer.status-update');
         Route::post('/upload-images', 'OfferController@uploadImages')->name('admin.offer.upload-image');
-//        Route::post('/delete-images', 'OfferController@deleteImages')->name('admin.offer.delete-image');
+        Route::post('/delete-images', 'OfferController@deleteImages')->name('admin.offer.delete-image');
 //        Route::match(['get', 'post'], '/edit/{id}', 'OfferController@editActivity')->name('admin.offer.edit');
 //        Route::post('/delete-activity-images', 'OfferController@deleteActivityImage')->name('admin.offer.delete-activity-image');
 //        Route::post('/delete-time-slot', 'OfferController@deleteTimeSlot')->name('admin.offer.delete-timeslot');

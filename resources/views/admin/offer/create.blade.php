@@ -48,13 +48,13 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ old('price') }}" type="text" class="form-control" name="price" id="price" placeholder="Price">
+                            <input value="{{ old('price') }}" type="number" class="form-control" name="price" id="price" placeholder="Price">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ old('discount') }}" type="text" class="form-control" name="discount" id="discount" placeholder="Discount">
+                            <input value="{{ old('discount') }}" type="number" class="form-control" name="discount" id="discount" placeholder="Discount">
                         </div>
                     </div>
                     <div class="form-group">
