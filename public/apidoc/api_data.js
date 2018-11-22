@@ -1843,6 +1843,89 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/offer-listing",
+    "title": "Offer listing & details",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetOfferListDetail",
+    "group": "Offer",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>offers found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"offers found\",\n   \"data\": [\n       {\n           \"id\": 2,\n           \"name\": \"3 days, 3 nights\",\n          \"description\": \"<h1><strong>3 days, 3 nights</strong></h1>\\n\\n<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>\\n\\n<ul>\\n\\t<li>\\n\\t<h1>but also the leap into electronic typesetting, remaining essentially unchanged.</h1>\\n\\t</li>\\n\\t<li>\\n\\t<h1>It was popularised in the 1960s with the release of Letraset sheets containing</h1>\\n\\t</li>\\n\\t<li>\\n\\t<h1>Lorem Ipsum passages, and more recently with desktop publishing software</h1>\\n\\t</li>\\n\\t<li>\\n\\t<h1>like Aldus PageMaker including versions of Lorem Ipsum</h1>\\n\\t</li>\\n</ul>\\n\",\n           \"valid_to\": \"Nov-21-2018\",\n           \"price\": 500,\n           \"discount\": \"10% OFF\",\n           \"discounted_price\": 450,\n           \"offer_images\": [\n               {\n                   \"id\": 2,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/offer_images/QKSTxwKTkrHBY1vp3OmMNSONGjse5lUT27xo8PXf.jpeg\",\n                   \"offer_id\": 2\n               },\n               {\n                   \"id\": 3,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/offer_images/KBv5Q07WSicZDST5Wf42U2iFhSivLMh6TsK5frcE.jpeg\",\n                   \"offer_id\": 2\n               }\n           ]\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Resort id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/OfferController.php",
+    "groupTitle": "Offer"
+  },
+  {
+    "type": "get",
     "url": "/api/nearby-list-detail",
     "title": "Nearby place list & detail",
     "header": {

@@ -49,7 +49,7 @@ Route::namespace("Api")->group(function () {
     Route::get('resort-detail', 'ResortController@resortDetail');
     
     //Offer listing detail
-    Route::get('offer-listing-detail', 'OfferController@offerListing');
+    Route::get('offer-listing', 'OfferController@offerListing');
     
     Route::get('terms-conditions', 'CmsController@termContidion');
     
