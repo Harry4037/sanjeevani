@@ -1670,6 +1670,102 @@
   },
   {
     "type": "get",
+    "url": "/api/health-program-listing",
+    "title": "Healthcare programs listing & details",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetHealthcareProgram",
+    "group": "Healthcare_Program",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Activities found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"healthcare program found.\",\n   \"data\": [\n       {\n           \"id\": 1,\n           \"name\": \"Diabetes Program\",\n           \"description\": \"<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>\",\n           \"start_from\": \"24-11-2018\",\n           \"end_to\": \"27-11-2018\",\n           \"total_days\": 4,\n           \"healthcare_images\": [\n               {\n                   \"id\": 1,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/offer_images/6ucWdCWKsZeZPDfIxfGVlzbg4VtjpLXG8HhpON8g.jpeg\",\n                   \"health_program_id\": 1\n               },\n               {\n                   \"id\": 2,\n                   \"banner_image_url\": \"http://127.0.0.1:8000/storage/offer_images/QKSTxwKTkrHBY1vp3OmMNSONGjse5lUT27xo8PXf.jpeg\",\n                   \"health_program_id\": 1\n               }\n           ],\n           \"healthcare_days\": [\n               {\n                   \"id\": 1,\n                   \"day\": \"1\",\n                   \"description\": \"<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>\",\n                   \"health_program_id\": 1\n               },\n               {\n                   \"id\": 2,\n                   \"day\": \"2\",\n                   \"description\": \"<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>\",\n                   \"health_program_id\": 1\n               },\n               {\n                   \"id\": 3,\n                   \"day\": \"3\",\n                   \"description\": \"<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>\",\n                   \"health_program_id\": 1\n               },\n               {\n                   \"id\": 4,\n                   \"day\": \"4\",\n                   \"description\": \"<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>\",\n                   \"health_program_id\": 1\n               }\n           ]\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Resort id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/HealthcareProgramController.php",
+    "groupTitle": "Healthcare_Program"
+  },
+  {
+    "type": "get",
     "url": "/api/home",
     "title": "Home",
     "header": {

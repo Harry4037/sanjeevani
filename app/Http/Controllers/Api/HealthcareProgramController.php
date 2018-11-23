@@ -15,7 +15,7 @@ class HealthcareProgramController extends Controller {
      * @api {get} /api/health-program-listing  Healthcare programs listing & details
      * @apiHeader {String} Accept application/json. 
      * @apiName GetHealthcareProgram
-     * @apiGroup Activity
+     * @apiGroup Healthcare Program
      * 
      * @apiParam {String} resort_id Resort id*.
      * 
