@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class UserBookingDetail extends Model {
 
@@ -18,7 +19,7 @@ class UserBookingDetail extends Model {
         return $resort;
     }
     public function getRoomBookingAttribute() {
-        $roomBooking = RoomBooking::select('id', 'check_in', 'check_out', 'room_type_id', 'resort_room_id')->where("booking_id", $this->id)
+        $roomBooking = RoomBooking::select(DB::raw('id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time, room_type_id, resort_room_id'))->where("booking_id", $this->id)
                 ->first();
         return $roomBooking;
     }

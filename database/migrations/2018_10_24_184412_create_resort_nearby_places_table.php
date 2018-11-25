@@ -32,6 +32,7 @@ class CreateResortNearbyPlacesTable extends Migration
             $table->string('created_by')->default(1);
             $table->string('updated_by')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

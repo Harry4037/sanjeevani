@@ -10,6 +10,10 @@ use App\Models\Resort;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Models\ResortNearbyPlace;
+use App\Models\offer;
+use Carbon\Carbon;
+use App\Models\HealthcateProgram;
 
 class HomeController extends Controller {
 
@@ -82,7 +86,7 @@ class HomeController extends Controller {
                 ])
                 ->with([
                     'userBookingDetail' => function($query) {
-                        $query->select('id', 'user_id', 'source_name', 'resort_id', 'package_id');
+                        $query->select('id', 'user_id', 'source_id as booking_id', 'source_name', 'resort_id', 'package_id');
                     }
                 ])
                 ->first();
@@ -96,12 +100,47 @@ class HomeController extends Controller {
             $i++;
         }
 
+        if($user){
+            $user['no_of_rooms'] = "1";
+        }
+
+$nearby = ResortNearbyPlace::select('id','name')->where(["is_active" => 1])->get();
+$offers = offer::where(["is_active" => 1])->with([
+        'offerImages' => function($query) {
+            $query->select('id', 'image_name as banner_image_url', 'offer_id');
+                }
+            ])->get();
+$offerArray = [];
+if($offers){
+    foreach ($offers as $key => $offer) {
+                $validity = Carbon::parse($offer->valid_to);
+                $offerArray[$key]['id'] = $offer->id;
+                $offerArray[$key]['name'] = $offer->name;
+                $offerArray[$key]['price'] = $offer->price;
+                $offerArray[$key]['discount'] = $offer->discount_percentage . "% OFF";
+                $offerArray[$key]['discounted_price'] = (int) $offer->price - (int) $offer->calculated_discount;
+                $offerArray[$key]['offer_images'] = $offer->offerImages;
+                }
+            }
+
+    $healthcare = HealthcateProgram::select(DB::raw('id, name'))->where(["is_active" => 1])
+        ->with([
+            'healthcareImages' => function($query) {
+                    $query->select('id', 'image_name as banner_image_url', 'health_program_id');
+                                }
+                ])->get();
+
+
+// dd($healthcare->toArray());
         $response['success'] = true;
         $response['status_code'] = 200;
         $response['message'] = "service successfully access.";
         $response['data'] = [
             "user" => $user ? $user : (object) [],
-            "banners" => $bannerArray
+            "banners" => $bannerArray,
+            "nearby_attaractions" => $nearby,
+            "best_offers" => $offerArray,
+            "health_care" => $healthcare
         ];
         return $this->jsonData($response);
     }
