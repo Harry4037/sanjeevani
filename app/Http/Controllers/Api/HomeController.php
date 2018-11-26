@@ -247,7 +247,7 @@ class HomeController extends Controller {
             $user['no_of_rooms'] = "1";
         }
 
-        $nearby = ResortNearbyPlace::select('id', 'name')->where(["is_active" => 1])->get();
+        $nearby = ResortNearbyPlace::where(["is_active" => 1])->get();
 
         $nearbyArray = [];
         foreach ($nearby as $k => $near) {
