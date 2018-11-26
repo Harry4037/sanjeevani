@@ -15,6 +15,7 @@ use App\Models\offer;
 use Carbon\Carbon;
 use App\Models\HealthcateProgram;
 use App\Models\NearbyPlaceImage;
+use App\Models\HealthcateProgramDay;
 
 class HomeController extends Controller {
 
