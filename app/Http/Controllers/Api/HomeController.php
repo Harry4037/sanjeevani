@@ -290,7 +290,7 @@ class HomeController extends Controller {
             }
         }
 
-        $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1, "resort_id" => $request->resort_id])
+        $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
                         ->with([
                             'healthcareImages' => function($query) {
                                 $query->select('id', 'image_name as banner_image_url', 'health_program_id');
