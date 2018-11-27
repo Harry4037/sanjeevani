@@ -152,11 +152,19 @@ class UserController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     * "status": true,
-     * "message": "Profile update succesfully.",
-     * "data": {}
-     * }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "Profile update succesfully.",
+            "data": {
+                "id": 2,
+                "user_name": "Ankit singh",
+                "first_name": "Ankit",
+                "last_name": "singh",
+                "email_id": "hariom4037@gmail.com",
+                "profile_pic_path": "http://sanjeevani.dbaquincy.com/storage/profile_pic/DjD1w0mNPdHNxIO0QWRkkfypRR9vuRpEYL3UeCaM.png"
+            }
+        }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
