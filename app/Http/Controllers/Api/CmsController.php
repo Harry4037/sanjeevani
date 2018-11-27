@@ -122,7 +122,7 @@ class CmsController extends Controller {
      */
     public function contactUsDetail(Request $request) {
         try {
-            $data = "<h3>55 SE. Mechanic St.</h3><br><p>Coventry,</p><br><p> RI 02816</p>";
+            $data = "<h3>55 SE. Mechanic St.</h3><br><p>Coventry,</p><br><p> RI 02816</p><br><p>Toll Free No. 1800 1800 202</p><br><p>Head Office No. +91 9808243372</p>";
             return $this->sendSuccessResponse("contact us found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();

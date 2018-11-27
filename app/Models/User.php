@@ -28,6 +28,10 @@ class User extends Authenticatable {
         'password',
     ];
 
+    public function getProfilePicPathAttribute($name) {
+        return asset('storage/profile_pic/' . $name);
+    }
+
     public function getEmailForPasswordReset() {
         return $this->email_id;
     }

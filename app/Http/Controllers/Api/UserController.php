@@ -216,17 +216,18 @@ class UserController extends Controller {
                     return $this->jsonData($response);
                 }
                 $profile_pic = $request->file("profile_pic");
-                $profile = Storage::disk('public')->put('Profile_pic', $profile_pic);
+                $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
                 $profile_file_name = basename($profile);
 
                 $user->profile_pic_path = $profile_file_name;
             }
 
             if ($user->save()) {
+                $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path')->find($user->id);
                 $response['success'] = true;
                 $response['status_code'] = 200;
                 $response['message'] = "Profile update succesfully.";
-                $response['data'] = (object) [];
+                $response['data'] = $userData;
                 return $this->jsonData($response);
             } else {
                 $response['success'] = false;
