@@ -351,7 +351,7 @@ class AuthController extends Controller {
             $userArray['last_name'] = $user->last_name;
             $userArray['email_id'] = $user->email_id;
             $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
-            $userArray['address'] = $user->address;
+            $userArray['address'] = $user->address1;
             $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
             $userArray['city'] = isset($cityState->city) ? $cityState->city : "";
             $userArray['screen_name'] = $user->screen_name;
