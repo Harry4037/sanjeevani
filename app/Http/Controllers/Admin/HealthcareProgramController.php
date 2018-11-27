@@ -114,19 +114,19 @@ class HealthcareProgramController extends Controller {
                 'vendors/dropzone/dist/dropzone.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
-            return view('admin.activity.create', [
+            return view('admin.healthcare.create', [
                 'js' => $js,
                 'css' => $css,
                 'resorts' => $resorts,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.activity.index')->with('error', $ex->getMessage());
+            return redirect()->route('admin.healthcare.index')->with('error', $ex->getMessage());
         }
     }
 
     public function uploadImages(Request $request) {
         $amenity_image = $request->file("file");
-        $amenity = Storage::disk('public')->put('activity_images', $amenity_image);
+        $amenity = Storage::disk('public')->put('healthcare_images', $amenity_image);
         if ($amenity) {
             $amenity_file_name = basename($amenity);
             return ["status" => true, "id" => time(), "file_name" => $amenity_file_name];
@@ -134,7 +134,7 @@ class HealthcareProgramController extends Controller {
     }
 
     public function deleteImages(Request $request) {
-        @unlink('storage/activity_images/' . $request->record_val);
+        @unlink('storage/healthcare_images/' . $request->record_val);
     }
 
     public function updateStatus(Request $request) {

@@ -11,7 +11,7 @@
                 </div>
                 <h2>Health</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.activity.add') }}">Add Activity</a>
+                    <a class="btn btn-success" href="{{ route('admin.healthcare.add') }}">Add Healthcare Package</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -21,7 +21,7 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>Image</th>
-                            <th>Activity Name</th>
+                            <th>Package Name</th>
                             <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -45,7 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/activity/activities-list",
+            ajax: _baseUrl + "/admin/healthcare/healthcare-list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {

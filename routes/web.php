@@ -160,7 +160,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
      */
     Route::prefix('healthcare')->group(function() {
         Route::get('/', 'HealthcareProgramController@index')->name('admin.healthcare.index');
-        Route::get('/offer-list', 'HealthcareProgramController@healthcareList')->name('admin.healthcare.list');
+        Route::get('/healthcare-list', 'HealthcareProgramController@healthcareList')->name('admin.healthcare.list');
         Route::match(['get', 'post'], '/create', 'HealthcareProgramController@create')->name('admin.healthcare.add');
         Route::post('/update-status', 'HealthcareProgramController@updateStatus')->name('admin.healthcare.status-update');
         Route::post('/upload-images', 'HealthcareProgramController@uploadImages')->name('admin.healthcare.upload-image');
