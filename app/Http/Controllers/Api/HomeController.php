@@ -282,14 +282,14 @@ class HomeController extends Controller {
         if ($offers) {
             foreach ($offers as $key => $offer) {
                 $validity = Carbon::parse($offer->valid_to);
-                    $dataArray[$key]['id'] = $offer->id;
-                    $dataArray[$key]['name'] = $offer->name;
-                    $dataArray[$key]['description'] = $offer->description;
-                    $dataArray[$key]['valid_to'] = $validity->format('M-d-Y');
-                    $dataArray[$key]['price'] = $offer->price;
-                    $dataArray[$key]['discount'] = $offer->discount_percentage . "% OFF";
-                    $dataArray[$key]['discounted_price'] = (int) $offer->price - (int) $offer->calculated_discount;
-                    $dataArray[$key]['offer_images'] = $offer->offerImages;
+                $offerArray[$key]['id'] = $offer->id;
+                $offerArray[$key]['name'] = $offer->name;
+                $offerArray[$key]['description'] = $offer->description;
+                $offerArray[$key]['valid_to'] = $validity->format('M-d-Y');
+                $offerArray[$key]['price'] = $offer->price;
+                $offerArray[$key]['discount'] = $offer->discount_percentage . "% OFF";
+                $offerArray[$key]['discounted_price'] = (int) $offer->price - (int) $offer->calculated_discount;
+                $offerArray[$key]['offer_images'] = $offer->offerImages;
             }
         }
 
