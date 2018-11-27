@@ -71,6 +71,12 @@
                 >
                 <a href="{{ route('admin.offer.index') }}"><i class="fa fa-gift"></i> Offer Management</a>
             </li>
+            <li  @if(in_array(Route::currentRouteName(), ['admin.healthcare.add', 'admin.healthcare.edit']))
+                 {{ "class=current-page" }}
+                 @endif
+                >
+                <a href="{{ route('admin.healthcare.index') }}"><i class="fa fa-plus"></i>Healthcare Management</a>
+            </li>
         </ul>
     </div>
 </div>
