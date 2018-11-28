@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class HealthcateProgramImages extends Model {
 
     public function getImageNameAttribute($name) {
-        return asset('storage/offer_images/' . $name);
+        return asset('storage/healthcare_images/' . $name);
     }
 
     public function getBannerImageUrlAttribute($name) {
-        return asset('storage/offer_images/' . $name);
+        return asset('storage/healthcare_images/' . $name);
     }
 
 }

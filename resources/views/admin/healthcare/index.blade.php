@@ -71,13 +71,13 @@
             }
         });
 
-        $(document).on("click", ".activity_status", function () {
+        $(document).on("click", ".health_status", function () {
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/activity/update-status',
+                url: _baseUrl + '/admin/healthcare/update-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
@@ -100,10 +100,10 @@
 
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
-            bootbox.confirm("Are you sure want to delete this activity?", function (result) {
+            bootbox.confirm("Are you sure want to delete this healthcare package?", function (result) {
                 if (result) {
                     $.ajax({
-                        url: _baseUrl + '/admin/activity/delete',
+                        url: _baseUrl + '/admin/healthcare/delete',
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',

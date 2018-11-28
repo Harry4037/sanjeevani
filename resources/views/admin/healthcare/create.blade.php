@@ -63,9 +63,25 @@
                             <textarea class="form-control" name="package_description" id="package_description" placeholder="Package Description">{{ old('package_description') }}</textarea>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Days</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" id="day_id" name="day_id">
+                                <option value="">Select option</option>
+                                <option value="21">21 days</option>
+                                <option value=14"">14 days</option>
+                                <option value="7">7 days</option>
+                                <option value="3">3 days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Add Days Description</label>
+                    </div>
                     <div class="ln_solid"></div>
-                    
+                    <div id="days_div">
+
+                    </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
@@ -110,8 +126,27 @@ $(document).ready(function () {
             format: 'YYYY/M/DD'
         }
     });
-    
 
+
+    $(document).on("change", "#day_id", function () {
+        var days = parseInt($("#day_id :selected").val());
+        var i;
+        $("#days_div").html('');
+        for (i = 0; i < days; i++) {
+            var day_html = '<div class="form-group">'
+                    + '<label class="control-label col-md-3 col-sm-3 col-xs-12">Day ' + (i + 1) + '</label>'
+                    + '<div class="col-md-8 col-sm-8 col-xs-12">'
+                    + '<textarea class="form-control" name="day_description[]" id="day_description_' + i + '" placeholder="Day description"></textarea>'
+                    + '</div>'
+                    + '</div>';
+            $("#days_div").append(day_html);
+            CKEDITOR.replace('day_description_' + i, {
+                removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
+                removePlugins: 'image, link',
+            });
+        }
+
+    });
 
 //For ckeditor
     CKEDITOR.replace('package_description', {
@@ -170,6 +205,9 @@ $(document).ready(function () {
                 required: true
             },
             package_name: {
+                required: true
+            },
+            day_id: {
                 required: true
             },
         }
