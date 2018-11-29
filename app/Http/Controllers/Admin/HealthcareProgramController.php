@@ -66,42 +66,49 @@ class HealthcareProgramController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'amenity_name' => 'bail|required',
+                            'resort_id' => 'bail|required',
+                            'package_name' => 'bail|required',
+                            'start_from' => 'bail|required',
+                            'end_to' => 'bail|required',
+                            'end_to' => 'bail|required',
+                            'day_id' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                    return redirect()->route('admin.healthcare.index')->withErrors($validator)->withInput();
                 }
-                $amenity = new Activity();
+                $healthcare = new HealthcateProgram();
 
-                $amenity->name = $request->amenity_name;
-                $amenity->description = $request->amenity_description;
-                $amenity->resort_id = $request->resort_id;
-                if ($amenity->save()) {
-                    if ($request->amenity_images) {
-                        foreach ($request->amenity_images as $tempImage) {
-                            $amenityImage = new ActivityImage();
-                            $amenityImage->image_name = $tempImage;
-                            $amenityImage->amenity_id = $amenity->id;
-                            $amenityImage->save();
+                $start_from = Carbon::parse($request->start_from);
+                $end_to = Carbon::parse($request->end_to);
+                $healthcare->resort_id = $request->resort_id;
+                $healthcare->name = $request->package_name;
+                $healthcare->description = $request->package_description;
+                $healthcare->start_from = $start_from->format('Y-m-d');
+                $healthcare->end_to = $end_to->format('Y-m-d');
+
+                if ($healthcare->save()) {
+                    if ($request->healthcare_images) {
+                        foreach ($request->healthcare_images as $tempImage) {
+                            $healthcareImage = new HealthcateProgramImages();
+                            $healthcareImage->image_name = $tempImage;
+                            $healthcareImage->health_program_id = $healthcare->id;
+                            $healthcareImage->save();
                         }
                     }
-                    if ($request->from_time && $request->to_time) {
-                        foreach ($request->from_time as $key => $fromTime) {
-                            $from_time = Carbon::parse($fromTime);
-                            $to_time = Carbon::parse($request->to_time[$key]);
-                            $amenityTimeSlot = new ActivityTimeSlot();
-                            $amenityTimeSlot->amenity_id = $amenity->id;
-                            $amenityTimeSlot->from = $from_time->format("H:s:i");
-                            $amenityTimeSlot->to = $to_time->format("H:s:i");
-                            $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                            $amenityTimeSlot->save();
+                    if ($request->day_description) {
+                        foreach ($request->day_description as $key => $dayDescription) {
+                            $healthcareDay = new HealthcateProgramDay();
+                            $healthcareDay->health_program_id = $healthcare->id;
+                            $healthcareDay->day = $key + 1;
+                            $healthcareDay->description = $dayDescription;
+                            $healthcareDay->save();
                         }
                     }
 
 
-                    return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                    return redirect()->route('admin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
                 } else {
-                    return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('admin.healthcare.index')->with('error', 'Something went be wrong.');
                 }
             }
             $css = [
@@ -140,7 +147,7 @@ class HealthcareProgramController extends Controller {
     public function updateStatus(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $amenity = Activity::findOrFail($request->record_id);
+                $amenity = HealthcateProgram::findOrFail($request->record_id);
                 $amenity->is_active = $request->status;
                 if ($amenity->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
@@ -153,45 +160,48 @@ class HealthcareProgramController extends Controller {
         }
     }
 
-    public function editActivity(Request $request) {
-        $amenity = Activity::find($request->id);
+    public function editHealthcare(Request $request) {
+        $healthcare = HealthcateProgram::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'amenity_name' => 'bail|required',
+                        'package_name' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                return redirect()->route('admin.healthcare.index')->withErrors($validator)->withInput();
             }
-            $amenity->name = $request->amenity_name;
-            $amenity->description = $request->amenity_description;
-            $amenity->resort_id = $request->resort_id;
-            if ($amenity->save()) {
-                if ($request->amenity_images) {
-                    foreach ($request->amenity_images as $tempImage) {
-                        $amenityImage = new ActivityImage();
-                        $amenityImage->image_name = $tempImage;
-                        $amenityImage->amenity_id = $amenity->id;
-                        $amenityImage->save();
+
+            $start_from = Carbon::parse($request->start_from);
+            $end_to = Carbon::parse($request->end_to);
+            $healthcare->resort_id = $request->resort_id;
+            $healthcare->name = $request->package_name;
+            $healthcare->description = $request->package_description;
+            $healthcare->start_from = $start_from->format('Y-m-d');
+            $healthcare->end_to = $end_to->format('Y-m-d');
+
+            if ($healthcare->save()) {
+                if ($request->healthcare_images) {
+                    foreach ($request->healthcare_images as $tempImage) {
+                        $healthcareImage = new HealthcateProgramImages();
+                        $healthcareImage->image_name = $tempImage;
+                        $healthcareImage->health_program_id = $healthcare->id;
+                        $healthcareImage->save();
                     }
                 }
-                if ($request->from_time && $request->to_time) {
-                    ActivityTimeSlot::where("amenity_id", $amenity->id)->delete();
-                    foreach ($request->from_time as $key => $fromTime) {
-                        $from_time = Carbon::parse($fromTime);
-                        $to_time = Carbon::parse($request->to_time[$key]);
-                        $amenityTimeSlot = new ActivityTimeSlot();
-                        $amenityTimeSlot->amenity_id = $amenity->id;
-                        $amenityTimeSlot->from = $from_time->format("H:s:i");
-                        $amenityTimeSlot->to = $to_time->format("H:s:i");
-                        $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                        $amenityTimeSlot->save();
+                if ($request->day_description) {
+                    HealthcateProgramDay::where("health_program_id", $healthcare->id)->delete();
+                    foreach ($request->day_description as $key => $dayDescription) {
+                        $healthcareDay = new HealthcateProgramDay();
+                        $healthcareDay->health_program_id = $healthcare->id;
+                        $healthcareDay->day = $key + 1;
+                        $healthcareDay->description = $dayDescription;
+                        $healthcareDay->save();
                     }
                 }
 
 
-                return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                return redirect()->route('admin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
             } else {
-                return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('admin.healthcare.index')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
@@ -204,45 +214,31 @@ class HealthcareProgramController extends Controller {
             'vendors/dropzone/dist/dropzone.js',
         ];
         $resorts = Resort::where("is_active", 1)->get();
-        $amenityImages = ActivityImage::where("amenity_id", $amenity->id)->get();
-        $timeSlots = ActivityTimeSlot::where("amenity_id", $amenity->id)->get();
-        return view('admin.activity.edit', [
+        $healthcareImages = HealthcateProgramImages::where("health_program_id", $healthcare->id)->get();
+        $healthcareDays = HealthcateProgramDay::where("health_program_id", $healthcare->id)->get();
+        return view('admin.healthcare.edit', [
             'css' => $css,
             'js' => $js,
             'resorts' => $resorts,
-            'amenityImages' => $amenityImages,
-            'amenity' => $amenity,
-            'timeSlots' => $timeSlots,
+            'healthcareImages' => $healthcareImages,
+            'healthcare' => $healthcare,
+            'healthcareDays' => $healthcareDays,
         ]);
     }
 
-    public function deleteActivityImage(Request $request) {
+    public function deleteHealthcareImage(Request $request) {
         try {
-            $amenityImage = ActivityImage::select('image_name as amenity_img')->find($request->record_id);
-            @unlink('storage/activity_images/' . $amenityImage->amenity_img);
-            ActivityImage::find($request->record_id)->delete();
+            $healthcareImage = HealthcateProgramImages::select('image_name as health_img')->find($request->record_id);
+            @unlink('storage/healthcare_images/' . $healthcareImage->health_img);
+            HealthcateProgramImages::find($request->record_id)->delete();
             return ["status" => true];
         } catch (\Exception $ex) {
             dd($ex->getMessage());
         }
     }
 
-    public function deleteTimeSlot(Request $request) {
-        try {
-            $slot = ActivityTimeSlot::find($request->record_id);
-            if ($slot) {
-                $slot->delete();
-                return ["status" => true];
-            } else {
-                return ["status" => false];
-            }
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
-        }
-    }
-
-    public function deleteActivity(Request $request) {
-        $amenity = Activity::find($request->id);
+    public function deleteHealthcare(Request $request) {
+        $amenity = HealthcateProgram::find($request->id);
         if ($amenity->delete()) {
             return ['status' => true];
         } else {

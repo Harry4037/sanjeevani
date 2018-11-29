@@ -154,7 +154,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
 //        Route::post('/delete-time-slot', 'OfferController@deleteTimeSlot')->name('admin.offer.delete-timeslot');
 //        Route::post('/delete', 'OfferController@deleteActivity')->name('admin.offer.delete');
     });
-    
+
     /**
      * Healthcare Program Management
      */
@@ -165,9 +165,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/update-status', 'HealthcareProgramController@updateStatus')->name('admin.healthcare.status-update');
         Route::post('/upload-images', 'HealthcareProgramController@uploadImages')->name('admin.healthcare.upload-image');
         Route::post('/delete-images', 'HealthcareProgramController@deleteImages')->name('admin.healthcare.delete-image');
-//        Route::match(['get', 'post'], '/edit/{id}', 'OfferController@editActivity')->name('admin.healthcare.edit');
-//        Route::post('/delete-activity-images', 'OfferController@deleteActivityImage')->name('admin.healthcare.delete-activity-image');
-//        Route::post('/delete-time-slot', 'OfferController@deleteTimeSlot')->name('admin.healthcare.delete-timeslot');
-//        Route::post('/delete', 'OfferController@deleteActivity')->name('admin.healthcare.delete');
+        Route::match(['get', 'post'], '/edit/{id}', 'HealthcareProgramController@editHealthcare')->name('admin.healthcare.edit');
+        Route::post('/delete-healthcare-images', 'HealthcareProgramController@deleteHealthcareImage')->name('admin.healthcare.delete-activity-image');
+        Route::post('/delete', 'HealthcareProgramController@deletehealthcare')->name('admin.healthcare.delete');
     });
 });
