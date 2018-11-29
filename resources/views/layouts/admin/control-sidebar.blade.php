@@ -6,6 +6,12 @@
             <li>
                 <a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a>
             </li>
+            <li @if(in_array(Route::currentRouteName(), ['admin.room.add','admin.room.edit']))
+                 {{ "class=current-page" }}
+                 @endif
+                 >
+                 <a href="{{ route('admin.room.index') }}"><i class="fa fa-home"></i> Room Management</a>
+            </li>
             <li @if(in_array(Route::currentRouteName(), ['admin.resort.add','admin.resort.edit']))
                  {{ "class=current-page" }}
                  @endif

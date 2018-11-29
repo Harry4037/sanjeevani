@@ -33,6 +33,18 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
 
     /**
+     * Room Management
+     */
+    Route::prefix('room-type')->group(function() {
+        Route::get('/', 'RoomtypeController@index')->name('admin.room.index');
+        Route::get('/rooms-list', 'RoomtypeController@roomList')->name('admin.room.list');
+        Route::match(['get', 'post'], '/create', 'RoomtypeController@create')->name('admin.room.add');
+        Route::post('/update-status', 'RoomtypeController@updateStatus')->name('admin.room.status-update');
+        Route::match(['get', 'post'], '/edit/{id}', 'RoomtypeController@editRoom')->name('admin.room.edit');
+        Route::post('/delete', 'RoomtypeController@deleteRoom')->name('admin.room.delete');
+    });
+    
+    /**
      * Resort Management
      */
     Route::prefix('resort')->group(function() {

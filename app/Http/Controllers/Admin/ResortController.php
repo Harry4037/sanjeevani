@@ -218,7 +218,7 @@ class ResortController extends Controller {
             ];
             $resortImages = ResortImage::where("resort_id", $data->id)->get();
             $dataRooms = $this->resortRoom->where("resort_id", $data->id)->get();
-            $roomTypes = $this->roomType->all();
+            $roomTypes = $this->roomType->where("is_active", 1)->get();
             $states = StateMaster::all();
             $selectedCity = CityMaster::find($data->city_id);
             $cities = CityMaster::where("state_id", $selectedCity->state_id)->get();
