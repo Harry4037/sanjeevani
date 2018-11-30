@@ -40,10 +40,13 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/rooms-list', 'RoomtypeController@roomList')->name('admin.room.list');
         Route::match(['get', 'post'], '/create', 'RoomtypeController@create')->name('admin.room.add');
         Route::post('/update-status', 'RoomtypeController@updateStatus')->name('admin.room.status-update');
+        Route::post('/upload-images', 'RoomtypeController@uploadImages')->name('admin.room.upload-image');
+        Route::post('/delete-images', 'RoomtypeController@deleteImages')->name('admin.room.delete-image');
+        Route::post('/delete-room-images', 'RoomtypeController@deleteRoomImage')->name('admin.room.delete-room-image');
         Route::match(['get', 'post'], '/edit/{id}', 'RoomtypeController@editRoom')->name('admin.room.edit');
         Route::post('/delete', 'RoomtypeController@deleteRoom')->name('admin.room.delete');
     });
-    
+
     /**
      * Resort Management
      */

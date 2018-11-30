@@ -8,6 +8,7 @@ use App\Models\Resort;
 use App\Models\ResortImage;
 use App\Models\ResortRoom;
 use App\Models\RoomType;
+use App\Models\RoomtypeImage;
 
 class ResortController extends Controller {
 
@@ -151,6 +152,13 @@ class ResortController extends Controller {
                         $resortRoomArray[$key]['id'] = $roomType->id;
                         $resortRoomArray[$key]['name'] = $roomType->name;
                         $resortRoomArray[$key]['icon'] = $roomType->icon;
+                        $resortRoomArray[$key]['description'] = $roomType->description;
+                        $roomImages = RoomtypeImage::select('id', 'image_name as banner_image_url')->where("roomtype_id", $resortRoomType->room_type_id)->get();
+                        if($roomImages){
+                            $resortRoomArray[$key]['room_images'] = $roomImages;
+                        }else{
+                            $resortRoomArray[$key]['room_images'] = [];
+                        }
                     }
                 }
 

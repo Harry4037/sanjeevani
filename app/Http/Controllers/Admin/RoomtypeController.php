@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\RoomType;
+use App\Models\RoomtypeImage;
 use Validator;
 
 class RoomtypeController extends Controller {
@@ -36,8 +37,8 @@ class RoomtypeController extends Controller {
             $rooms = $query->take($limit)->offset($offset)->latest()->get();
             $roomsArray = [];
             foreach ($rooms as $key => $room) {
-
-                $img = !empty($room->image) ? $room->image : asset('img/noimage.png');
+                $roomImage = RoomtypeImage::where("roomtype_id", $room->id)->first();
+                $img = !empty($roomImage->image_name) ? $roomImage->image_name : asset('img/noimage.png');
                 $roomsArray[$key]['image'] = "<img class='img-rounded' width=80 height=70 src='" . $img . "'>";
                 $roomsArray[$key]['name'] = $room->name;
                 $checked_status = $room->is_active ? "checked" : '';
@@ -68,13 +69,23 @@ class RoomtypeController extends Controller {
                 $room->name = $request->name;
                 $room->description = $request->description;
 
+                if ($request->file("room_icon")) {
+                    $room_icon = Storage::disk('public')->put('room_icon', $request->file("room_icon"));
+                    if ($room_icon) {
+                        $room_icon_name = basename($room_icon);
+                        $room->icon = $room_icon_name;
+                    }
+                }
+
+
                 if ($room->save()) {
-                    if ($request->file("room_image")) {
-                        $room_image = Storage::disk('public')->put('room_images', $request->file("room_image"));
-                        if ($room_image) {
-                            $room_image_name = basename($room_image);
-                            $room->image = $room_image_name;
-                            $room->save();
+                    if ($request->room_images) {
+                        foreach ($request->room_images as $tempImage) {
+                            $roomImage = new RoomtypeImage();
+                            $roomImage->roomtype_id = $room->id;
+                            $roomImage->image_name = $tempImage;
+                            $roomImage->is_active = 1;
+                            $roomImage->save();
                         }
                     }
 
@@ -85,7 +96,16 @@ class RoomtypeController extends Controller {
                 }
             }
 
-            return view('admin.room.create');
+            $css = [
+                "vendors/dropzone/dist/dropzone.css",
+            ];
+            $js = [
+                'vendors/dropzone/dist/dropzone.js',
+            ];
+            return view('admin.room.create', [
+                'js' => $js,
+                'css' => $css
+            ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.room.index')->with('error', $ex->getMessage());
         }
@@ -107,6 +127,19 @@ class RoomtypeController extends Controller {
         }
     }
 
+    public function uploadImages(Request $request) {
+        $room_image = $request->file("file");
+        $room = Storage::disk('public')->put('room_images', $room_image);
+        if ($room) {
+            $room_file_name = basename($room);
+            return ["status" => true, "id" => time(), "file_name" => $room_file_name];
+        }
+    }
+
+    public function deleteImages(Request $request) {
+        @unlink('storage/room_images/' . $request->record_val);
+    }
+
     public function editRoom(Request $request, $id) {
         try {
             $data = RoomType::find($id);
@@ -114,20 +147,41 @@ class RoomtypeController extends Controller {
 
                 $data->name = $request->name;
                 $data->description = $request->description;
+                if ($request->file("room_icon")) {
+                    $room_icon = Storage::disk('public')->put('room_icon', $request->file("room_icon"));
+                    if ($room_icon) {
+                        $room_icon_name = basename($room_icon);
+                        $data->icon = $room_icon_name;
+                    }
+                }
+
                 if ($data->save()) {
-                    if ($request->file("room_image")) {
-                        $room_image = Storage::disk('public')->put('room_images', $request->file("room_image"));
-                        if ($room_image) {
-                            $room_image_name = basename($room_image);
-                            $data->image = $room_image_name;
-                            $data->save();
+                    if ($request->room_images) {
+                        foreach ($request->room_images as $tempImage) {
+                            $roomImage = new RoomtypeImage();
+                            $roomImage->roomtype_id = $data->id;
+                            $roomImage->image_name = $tempImage;
+                            $roomImage->is_active = 1;
+                            $roomImage->save();
                         }
                     }
                     return redirect()->route('admin.room.edit', $id)->with('status', 'Romm Type has been updated successfully.');
                 }
             }
+
+            $css = [
+                "vendors/dropzone/dist/dropzone.css",
+            ];
+            $js = [
+                'vendors/dropzone/dist/dropzone.js',
+            ];
+            $roomImages = RoomtypeImage::where("roomtype_id", $data->id)->get();
+
             return view('admin.room.edit', [
-                'data' => $data
+                'data' => $data,
+                'css' => $css,
+                'js' => $js,
+                'roomImages' => $roomImages,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.room.index')->with('error', $ex->getMessage());
@@ -140,6 +194,17 @@ class RoomtypeController extends Controller {
             return ['status' => true];
         } else {
             return ['status' => true];
+        }
+    }
+
+    public function deleteRoomImage(Request $request) {
+        try {
+            $roomImage = RoomtypeImage::select('image_name as resort_img')->find($request->record_id);
+            @unlink('storage/room_images/' . $roomImage->resort_img);
+            RoomtypeImage::find($request->record_id)->delete();
+            return ["status" => true];
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
         }
     }
 
