@@ -83,6 +83,18 @@
                 >
                 <a href="{{ route('admin.healthcare.index') }}"><i class="fa fa-plus"></i>Healthcare Management</a>
             </li>
+            <li  @if(in_array(Route::currentRouteName(), ['admin.cms.edit']))
+                 {{ "class=current-page" }}
+                 @endif
+                >
+                <a href="{{ route('admin.cms.index') }}"><i class="fa fa-plus"></i>CMS Management</a>
+            </li>
+            <li  @if(in_array(Route::currentRouteName(), ['admin.sos.view']))
+                 {{ "class=current-page" }}
+                 @endif
+                >
+                <a href="{{ route('admin.sos.index') }}"><i class="fa fa-plus"></i>SOS Management</a>
+            </li>
         </ul>
     </div>
 </div>

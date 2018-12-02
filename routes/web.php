@@ -184,4 +184,22 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/delete-healthcare-images', 'HealthcareProgramController@deleteHealthcareImage')->name('admin.healthcare.delete-activity-image');
         Route::post('/delete', 'HealthcareProgramController@deletehealthcare')->name('admin.healthcare.delete');
     });
+
+    /**
+     * CMS Management
+     */
+    Route::prefix('cms')->group(function() {
+        Route::get('/', 'CmsController@index')->name('admin.cms.index');
+        Route::get('/cms-list', 'CmsController@cmsList')->name('admin.cms.list');
+        Route::match(['get', 'post'], '/edit/{id}', 'CmsController@editCms')->name('admin.cms.edit');
+    });
+
+    /**
+     * CMS Management
+     */
+    Route::prefix('sos')->group(function() {
+        Route::get('/', 'SOSController@index')->name('admin.sos.index');
+        Route::get('/sos-list', 'SOSController@sosList')->name('admin.sos.list');
+        Route::match(['get', 'post'], '/view/{id}', 'SOSController@viewSOS')->name('admin.sos.view');
+    });
 });

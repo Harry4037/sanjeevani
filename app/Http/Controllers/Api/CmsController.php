@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Models\Cms;
+use App\Models\SOS;
 
 class CmsController extends Controller {
 
@@ -32,32 +34,8 @@ class CmsController extends Controller {
      */
     public function termContidion(Request $request) {
         try {
-            $data = "<h1>Terms &amp; Conditions</h1>
-
-<ul>
-	<li>
-	<p>Please read the following terms and conditions carefully as it sets out the terms of a legally binding agreement between you (the reader) and Business Standard Private Limited.</p>
-	</li>
-</ul>
-
-<h2>1) Introduction</h2>
-
-<ul>
-	<li>
-	<p>This following sets out the terms and conditions on which you may use the content on&nbsp;<br />
-	</li>
-</ul>
-
-<h2>2) Registration Access and Use</h2>
-
-<ul>
-	<li>
-	<p>We welcome users to register on our digital platforms. We offer the below mentioned registration services which may be subject to change in the future. All changes will be appended in the terms and conditions page and communicated to existing users by email.</p>
-
-	<p>Registration services are offered for individual subscribers only. If multiple individuals propose to access the same account or for corporate accounts kindly contact or write in to us. Subscription rates will vary for multiple same time access.</p>
-	</li>
-</ul>
-";
+            $cms = Cms::find(1);
+            $data = $cms->content;
             return $this->sendSuccessResponse("term & condition found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
@@ -88,10 +66,8 @@ class CmsController extends Controller {
      */
     public function aboutUs(Request $request) {
         try {
-            $data = "<p><span >About Us</span></p>
-
-<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-";
+            $cms = Cms::find(2);
+            $data = $cms->content;
             return $this->sendSuccessResponse("about us found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
@@ -122,7 +98,8 @@ class CmsController extends Controller {
      */
     public function contactUsDetail(Request $request) {
         try {
-            $data = "<h3>55 SE. Mechanic St.</h3><br><p>Coventry,</p><br><p> RI 02816</p><br><p>Toll Free No. 1800 1800 202</p><br><p>Head Office No. +91 9808243372</p>";
+            $cms = Cms::find(3);
+            $data = $cms->content;
             return $this->sendSuccessResponse("contact us found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
@@ -267,6 +244,12 @@ class CmsController extends Controller {
             if (!$request->longitude) {
                 return $this->sendErrorResponse("Longitude missing", (object) []);
             }
+
+            $SOS = new SOS();
+            $SOS->user_id = $request->user_id;
+            $SOS->latitude = $request->latitude;
+            $SOS->longitude = $request->longitude;
+            $SOS->save();
             return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object) []);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
