@@ -51,8 +51,11 @@ Route::namespace("Api")->group(function () {
     //Offer listing detail
     Route::get('offer-listing', 'OfferController@offerListing');
     
-     //Healthcare Program listing
+    //Healthcare Program listing
     Route::get('health-program-listing', 'HealthcareProgramController@healthcareListing');
+    
+    //Meal listing
+    Route::get('meal-listing', 'MealController@mealListing');
     
     Route::get('terms-conditions', 'CmsController@termContidion');
     

@@ -7,36 +7,13 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Update Activity</h2>
+                <h2>Update Meal</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
-                <div class="form-horizontal form-label-left">
-                    @if($amenityImages)
-                    <div class="form-group">
-                        <label class="col-md-2"></label>
-                        @foreach($amenityImages as $amenityImage)
-                        <div class="col-md-2 col-sm-2 col-xs-6">
-                            <img class="img-rounded" src="{{ $amenityImage->image_name }}" width=100 height=100>
-                            <button style="margin-left: 24px;" class="btn btn-danger btn-xs delete_activity_image" id="{{ $amenityImage->id }}" >Remove</button>
-                        </div>
-                        @endforeach
-                    </div>
-                    @endif
-                    <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Activity Images</label>
-                        <div class="col-md-10 col-sm-10 col-xs-12">
-                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.activity.upload-image') }}">
-                                @csrf
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="ln_solid"></div>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.activity.edit', $amenity->id) }}" method="post" id="addActivityForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.meal.edit', $data->id) }}" method="post" id="editMealForm" enctype="multipart/form-data">
                     @csrf
-                    <div id="activity_images_div"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -45,7 +22,7 @@
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}"
-                                        @if($amenity->resort_id == $resort->id)
+                                        @if($resort->id == $data->resort_id)
                                         {{ "selected" }}
                                         @endif
                                         >{{ $resort->name }}</option>
@@ -55,55 +32,65 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ $amenity->name }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Amenity Name">
+                            <input value="{{ $data->name }}" type="text" class="form-control" name="meal_name" id="meal_name" placeholder="Meal Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Description</label>
-                        <div class="col-md-8 col-sm-8 col-xs-12">
-                            <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Amenity Description">{{ $amenity->description }}</textarea>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ $data->price }}" type="text" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Category</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" id="meal_category_id" name="meal_category_id">
+                                <option value="">Select option</option>
+                                @if($mealCategories)
+                                @foreach($mealCategories as $mealCategory)
+                                <option value="{{ $mealCategory->id }}"
+                                        @if($mealCategory->id == $data->meal_type_id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $mealCategory->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" id="meal_type" name="meal_type">
+                                <option value="">Select option</option>
+                                <option value="V"
+                                        @if($data->category == "V")
+                                        {{ "selected" }}
+                                        @endif
+                                        >Veg</option>
+                                <option value="N"
+                                        @if($data->category == "N")
+                                        {{ "selected" }}
+                                        @endif
+                                        >Non Veg</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Image</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="file" class="form-control" name="meal_image" id="meal_image">
                         </div>
                     </div>
 
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Add Time Slots</label>
-                    </div>
-
-                    <div id="time_slot_div">
-                        @if($timeSlots)
-                        @foreach($timeSlots as $timeSlot)
-                        <div class='form-group'>
-                            <label class='control-label col-md-2 col-sm-2 col-xs-12'>From</label>
-                            <div class='col-md-2 col-sm-2 col-xs-12'>
-                                <input value="{{ $timeSlot->from }}" readonly type='text' class='form-control from_timepicker' name='from_time[]' >
-                            </div>
-                            <label class='control-label col-md-1 col-sm-1 col-xs-12'>To</label>
-                            <div class = 'col-md-2 col-sm-2 col-xs-12'>
-                                <input value="{{ $timeSlot->to }}" readonly type='text' class='form-control to_timepicker' name='to_time[]'>
-                            </div>
-                            <label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>
-                            <div class = 'col-md-2 col-sm-2 col-xs-10'>
-                                <input value="{{ $timeSlot->allow_no_of_member }}" type='number' class='form-control' name='total_people[]'>
-                            </div>
-                            <i style='cursor:pointer' class='fa fa-times delete_time_slot' id="{{ $timeSlot->id }}"></i>
-                        </div>
-                        @endforeach
-                        @endif
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10 col-sm-offset-10 col-xs-offset-10">
-                            <button type="button" class="btn btn-primary" id="add_time_slot">Add Slot</button>
-                        </div>
-                    </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                             <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
                             <button type="reset" class="btn btn-primary">Reset</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
 
@@ -116,179 +103,12 @@
 @endsection
 
 @section('script')
-<script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
-    $(document).on('focus', ".from_timepicker", function () {
-        $(this).daterangepicker({
-            timePicker: true,
-//            timePicker24Hour: true,
-            timePickerIncrement: 1,
-            timePickerSeconds: true,
-            locale: {
-                format: 'hh:mm:ss A'
-            },
-            singleDatePicker: true,
-            singleClasses: "picker_3",
-        }).on('show.daterangepicker', function (ev, picker) {
-            picker.container.find(".calendar-table").hide();
-        });
-    });
-
-    $(document).on('focus', ".to_timepicker", function () {
-        $(this).daterangepicker({
-            timePicker: true,
-//            timePicker24Hour: true,
-            timePickerIncrement: 1,
-            timePickerSeconds: true,
-            locale: {
-                format: 'hh:mm:ss A'
-            },
-            singleDatePicker: true,
-            singleClasses: "picker_3",
-        }).on('show.daterangepicker', function (ev, picker) {
-            picker.container.find(".calendar-table").hide();
-        });
-    });
+   
 
 
-
-//For ckeditor
-    CKEDITOR.replace('amenity_description', {
-        removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
-        removePlugins: 'image, link',
-//        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
-    });
-    CKEDITOR.instances.amenity_description.on('change', function () {
-        if (CKEDITOR.instances.resort_description.getData().length > 0) {
-            $('label[for="amenity_description"]').hide();
-        }
-    });
-
-
-    $(document).on("click", "#add_time_slot", function () {
-
-        var html = "<div class='form-group'>\n\
-                <label class='control-label col-md-2 col-sm-2 col-xs-12'>From</label>\n\
-                <div class='col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control from_timepicker' name='from_time[]' >"
-                + "</div>\n\
-            <label class='control-label col-md-1 col-sm-1 col-xs-12'>To</label>\n\
-            <div class = 'col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control to_timepicker' name='to_time[]'>"
-                + "</div>"
-                + "<label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>\n\
-            <div class = 'col-md-2 col-sm-2 col-xs-10'>"
-                + "<input type='number' class='form-control' name='total_people[]'>"
-                + "</div>"
-                + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
-        $("#time_slot_div").append(html);
-    });
-
-    Dropzone.options.myDropzone = {
-        init: function () {
-            this.on("success", function (file, response) {
-                if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
-                    var hidden_image_html = "<input id='amenity_image_input_" + response.id + "' type='hidden' name='amenity_images[]' value='" + response.file_name + "'>";
-                    var _this = this;
-
-                    removeButton.addEventListener("click", function (e) {
-                        // Make sure the button click doesn't submit the form:
-                        e.preventDefault();
-                        e.stopPropagation();
-                        var record_id = this.id;
-                        var record_val = $(this).attr("data-val");
-                        $.ajax({
-                            url: _baseUrl + '/admin/activity/delete-images',
-                            type: 'post',
-                            data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
-                            success: function (res) {
-                                $("#amenity_image_input_" + record_id).remove();
-                                _this.removeFile(file);
-                            }
-                        });
-                    });
-                    file.previewElement.appendChild(removeButton);
-                    $("#activity_images_div").append(hidden_image_html);
-                }
-            });
-        },
-        dictDefaultMessage: "Drop or Select multiple images for amenity."
-    };
-
-    $("#addActivityForm").validate({
-        ignore: [],
-        rules: {
-//            cktext: {
-//                required: function ()
-//                {
-//                    CKEDITOR.instances.cktext.updateElement();
-//                },
-//            },
-            resort_id: {
-                required: true
-            },
-            amenity_name: {
-                required: true
-            },
-        }
-    });
-
-    $(document).on("click", ".delete_this_div", function () {
-        $(this).parent("div").remove();
-    });
-
-    $(document).on('click', '.delete_activity_image', function () {
-        var record_id = this.id;
-        var _this = $(this);
-        if (record_id) {
-            $.ajax({
-                url: _baseUrl + '/admin/activity/delete-activity-images',
-                type: 'post',
-                data: {record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status)
-                    {
-                        _this.parent("div").remove();
-                    } else {
-                        alert("Something went be wrong");
-                    }
-                }
-            });
-
-        }
-    });
-
-    $(document).on('click', '.delete_time_slot', function () {
-        var record_id = this.id;
-        var _this = $(this);
-        if (record_id) {
-            $.ajax({
-                url: _baseUrl + '/admin/activity/delete-time-slot',
-                type: 'post',
-                data: {record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status)
-                    {
-                        _this.parent("div").remove();
-                    } else {
-                        alert("Something went be wrong");
-                    }
-                }
-            });
-
-        }
-    });
 });
 </script>
 @endsection

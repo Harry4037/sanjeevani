@@ -223,10 +223,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/list', 'MealController@mealList')->name('admin.meal.list');
         Route::match(['get', 'post'], '/create', 'MealController@create')->name('admin.meal.add');
         Route::post('/update-status', 'MealController@updateStatus')->name('admin.meal.status-update');
-        Route::post('/upload-images', 'MealController@uploadImages')->name('admin.meal.upload-image');
-        Route::post('/delete-images', 'MealController@deleteImages')->name('admin.meal.delete-image');
-        Route::post('/delete-meal-images', 'MealController@deleteResortImage')->name('admin.meal.delete-resort-image');
-        Route::match(['get', 'post'], '/edit/{id}', 'MealController@editResort')->name('admin.meal.edit');
-        Route::post('/delete', 'MealController@deleteResort')->name('admin.meal.delete');
+        Route::match(['get', 'post'], '/edit/{id}', 'MealController@editMeal')->name('admin.meal.edit');
+        Route::post('/delete', 'MealController@deleteMeal')->name('admin.meal.delete');
     });
 });

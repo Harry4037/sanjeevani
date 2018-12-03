@@ -18,8 +18,8 @@ class CreateMealItemsTable extends Migration {
             $table->string('image_name')->nullable();
             $table->bigInteger('meal_type_id')->default(0);
             $table->enum('category', ['V', 'N']);
-            $table->float('price');
-            $table->bigInteger('resort_id');
+            $table->float('price')->default(0);
+            $table->bigInteger('resort_id')->default(1);
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);

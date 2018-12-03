@@ -38,18 +38,16 @@ class MealController extends Controller {
             $data['recordsFiltered'] = $query->count();
             $meals = $query->take($limit)->offset($offset)->latest()->get();
             $mealsArray = [];
-            foreach ($meals as $meal) {
-                $resort = Resort::find($amenity->resort_id);
-                $image = ActivityImage::where("amenity_id", $amenity->id)->first();
-                $resortImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
-                $resortsArray[$i]['image'] = '<img src=' . $resortImage . ' height=70 width=100 class="img-rounded">';
-                $resortsArray[$i]['name'] = $amenity->name;
-                $checked_status = $amenity->is_active ? "checked" : '';
-                $resortsArray[$i]['resort_name'] = $resort->name;
-                $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='amenity_status' id=" . $amenity->id . " data-status=" . $amenity->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.activity.edit', $amenity->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $amenity->id . '" ><i class="fa fa-trash"></i> Delete </a>';
-                $i++;
+            foreach ($meals as $key => $meal) {
+                $resort = Resort::find($meal->resort_id);
+                $mealImage = $meal->image_name ? $meal->image_name : asset("img/no-image.jpg");
+                $mealsArray[$key]['image'] = '<img src=' . $mealImage . ' height=70 width=100 class="img-rounded">';
+                $mealsArray[$key]['name'] = $meal->name;
+                $checked_status = $meal->is_active ? "checked" : '';
+                $mealsArray[$key]['resort_name'] = $resort->name;
+                $mealsArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='meal_status' id=" . $meal->id . " data-status=" . $meal->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $mealsArray[$key]['action'] = '<a href="' . route('admin.meal.edit', $meal->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $meal->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
             $data['data'] = $mealsArray;
@@ -117,25 +115,12 @@ class MealController extends Controller {
         }
     }
 
-    public function uploadImages(Request $request) {
-        $amenity_image = $request->file("file");
-        $amenity = Storage::disk('public')->put('activity_images', $amenity_image);
-        if ($amenity) {
-            $amenity_file_name = basename($amenity);
-            return ["status" => true, "id" => time(), "file_name" => $amenity_file_name];
-        }
-    }
-
-    public function deleteImages(Request $request) {
-        @unlink('storage/activity_images/' . $request->record_val);
-    }
-
     public function updateStatus(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $amenity = Activity::findOrFail($request->record_id);
-                $amenity->is_active = $request->status;
-                if ($amenity->save()) {
+                $meal = MealItem::findOrFail($request->record_id);
+                $meal->is_active = $request->status;
+                if ($meal->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
                 }
                 return [];
@@ -146,8 +131,8 @@ class MealController extends Controller {
         }
     }
 
-    public function editActivity(Request $request) {
-        $amenity = Activity::find($request->id);
+    public function editMeal(Request $request) {
+        $data = MealItem::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
                         'amenity_name' => 'bail|required',
@@ -187,56 +172,18 @@ class MealController extends Controller {
                 return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
             }
         }
-        $css = [
-            'vendors/bootstrap-daterangepicker/daterangepicker.css',
-            "vendors/dropzone/dist/dropzone.css",
-        ];
-        $js = [
-            'vendors/moment/min/moment.min.js',
-            'vendors/bootstrap-daterangepicker/daterangepicker.js',
-            'vendors/dropzone/dist/dropzone.js',
-        ];
         $resorts = Resort::where("is_active", 1)->get();
-        $amenityImages = ActivityImage::where("amenity_id", $amenity->id)->get();
-        $timeSlots = ActivityTimeSlot::where("amenity_id", $amenity->id)->get();
-        return view('admin.activity.edit', [
-            'css' => $css,
-            'js' => $js,
+        $mealCategories = MealType::where("is_active", 1)->get();
+        return view('admin.meal.edit', [
             'resorts' => $resorts,
-            'amenityImages' => $amenityImages,
-            'amenity' => $amenity,
-            'timeSlots' => $timeSlots,
+            'mealCategories' => $mealCategories,
+            'data' => $data
         ]);
     }
 
-    public function deleteActivityImage(Request $request) {
-        try {
-            $amenityImage = ActivityImage::select('image_name as amenity_img')->find($request->record_id);
-            @unlink('storage/activity_images/' . $amenityImage->amenity_img);
-            ActivityImage::find($request->record_id)->delete();
-            return ["status" => true];
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
-        }
-    }
-
-    public function deleteTimeSlot(Request $request) {
-        try {
-            $slot = ActivityTimeSlot::find($request->record_id);
-            if ($slot) {
-                $slot->delete();
-                return ["status" => true];
-            } else {
-                return ["status" => false];
-            }
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
-        }
-    }
-
-    public function deleteActivity(Request $request) {
-        $amenity = Activity::find($request->id);
-        if ($amenity->delete()) {
+    public function deleteMeal(Request $request) {
+        $meal = MealItem::find($request->id);
+        if ($meal->delete()) {
             return ['status' => true];
         } else {
             return ['status' => true];

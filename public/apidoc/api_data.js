@@ -1843,6 +1843,102 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/meal-listing",
+    "title": "Category wise meal listing",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetMealList",
+    "group": "Meal",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Meal list found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Meal list found\",\n      \"data\": {\n          \"category_meal\": [\n              {\n                  \"id\": 2,\n                  \"name\": \"Starters\",\n                  \"menu_items\": [\n                      {\n                          \"id\": 4,\n                          \"name\": \"Aloo tikki\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/XxV3OiCh3XC6Js2Q0MAsCLkjpBwnThd4J6L54XTG.jpeg\",\n                          \"meal_type_id\": 2,\n                          \"price\": 500\n                      },\n                      {\n                          \"id\": 5,\n                          \"name\": \"Chees puff\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/MDkVNWyReK39GTIu8gzEdTRcsyXNPrxgCIg4mfse.png\",\n                          \"meal_type_id\": 2,\n                          \"price\": 1200\n                      }\n                  ]\n              },\n              {\n                  \"id\": 3,\n                  \"name\": \"Main Course\",\n                  \"menu_items\": [\n                      {\n                          \"id\": 6,\n                          \"name\": \"Dal Makkhni\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/iqbEho8dXoQ8TzasM6wSjdJAy4H7zs94ZtGHWiZw.jpeg\",\n                          \"meal_type_id\": 3,\n                          \"price\": 200\n                      },\n                      {\n                          \"id\": 7,\n                          \"name\": \"Dal Tadka\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/SdFRP8PvNOkvH7Ohb2fWjwVxYq9fqNrl2tib2WxC.png\",\n                          \"meal_type_id\": 3,\n                          \"price\": 180\n                      },\n                      {\n                          \"id\": 8,\n                          \"name\": \"Matar Paneer\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/SLbPjB8yDlzp5j0KDWkMThSGJ1aRbVrm5Xel06mK.jpeg\",\n                          \"meal_type_id\": 3,\n                          \"price\": 550\n                      }\n                  ]\n              },\n              {\n                  \"id\": 4,\n                  \"name\": \"Breads\",\n                  \"menu_items\": [\n                      {\n                          \"id\": 9,\n                          \"name\": \"Tandoori roti\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/bAYr15Pu7XrODtdK1QHy7eqJMWpdPRVT0iGHuizR.jpeg\",\n                          \"meal_type_id\": 4,\n                          \"price\": 10\n                      },\n                      {\n                          \"id\": 10,\n                          \"name\": \"Tawa roti\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/JOkgivUsvPLzzl2iHrjPjEKeJeR5iAMK3b91rmaD.jpeg\",\n                          \"meal_type_id\": 4,\n                          \"price\": 5\n                      }\n                  ]\n              },\n              {\n                  \"id\": 5,\n                  \"name\": \"Drinks\",\n                  \"menu_items\": [\n                      {\n                          \"id\": 11,\n                          \"name\": \"Sprite\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/UZxxbKeaBDydPIbME6Qi0RySAUqe7r23TvGCODtr.jpeg\",\n                          \"meal_type_id\": 5,\n                          \"price\": 55\n                      },\n                      {\n                          \"id\": 12,\n                          \"name\": \"Furti\",\n                          \"banner_image_url\": \"http://127.0.0.1:8000/storage/meal_images/LJpF4r1MOC20jKgFlUOp6CRX30WhlZD5zbqEkDq5.png\",\n                          \"meal_type_id\": 5,\n                          \"price\": 60\n                      }\n                  ]\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The resort id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"Resort id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/MealController.php",
+    "groupTitle": "Meal"
+  },
+  {
+    "type": "get",
     "url": "/api/notification-list",
     "title": "Notification list",
     "header": {

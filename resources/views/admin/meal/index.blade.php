@@ -21,7 +21,7 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>Image</th>
-                            <th>Activity Name</th>
+                            <th>Name</th>
                             <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -45,7 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/activity/activities-list",
+            ajax: _baseUrl + "/admin/meal/list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -71,13 +71,13 @@
             }
         });
 
-        $(document).on("click", ".activity_status", function () {
+        $(document).on("click", ".meal_status", function () {
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/activity/update-status',
+                url: _baseUrl + '/admin/meal/update-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
@@ -100,10 +100,10 @@
 
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
-            bootbox.confirm("Are you sure want to delete this activity?", function (result) {
+            bootbox.confirm("Are you sure want to delete this meal item?", function (result) {
                 if (result) {
                     $.ajax({
-                        url: _baseUrl + '/admin/activity/delete',
+                        url: _baseUrl + '/admin/meal/delete',
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',
