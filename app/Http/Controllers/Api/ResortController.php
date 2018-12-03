@@ -44,17 +44,50 @@ class ResortController extends Controller {
      *                   {
      *                       "id": 1,
      *                       "name": "Tent",
-     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon"
+     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon",
+     *                       "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s,</p>",
+     *                        "room_images": [
+     *                           {
+     *                               "id": 1,
+     *                               "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/room_images/Q2czItOa8fzuQ25kNsXRYTQxI3AP9CAHrBvVi068.jpeg"
+     *                           },
+     *                           {
+     *                               "id": 2,
+     *                               "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/room_images/WInHZfmKjbhbFL6nsjR1liQGOUKTXWtDth0TR6Bv.jpeg"
+     *                           }
+     *                       ]
      *                   },
      *                   {
      *                       "id": 2,
      *                       "name": "Cottage",
-     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon"
+     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon",
+     *                       "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s,</p>",
+     *                        "room_images": [
+     *                           {
+     *                               "id": 1,
+     *                               "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/room_images/Q2czItOa8fzuQ25kNsXRYTQxI3AP9CAHrBvVi068.jpeg"
+     *                           },
+     *                           {
+     *                               "id": 2,
+     *                               "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/room_images/WInHZfmKjbhbFL6nsjR1liQGOUKTXWtDth0TR6Bv.jpeg"
+     *                           }
+     *                       ]
      *                   },
      *                   {
      *                       "id": 3,
      *                       "name": "Delux Room",
-     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon"
+     *                       "icon": "http://127.0.0.1:8000/storage/room_type_icon",
+     *                       "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s,</p>",
+     *                        "room_images": [
+     *                           {
+     *                               "id": 1,
+     *                               "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/room_images/Q2czItOa8fzuQ25kNsXRYTQxI3AP9CAHrBvVi068.jpeg"
+     *                           },
+     *                           {
+     *                               "id": 2,
+     *                               "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/room_images/WInHZfmKjbhbFL6nsjR1liQGOUKTXWtDth0TR6Bv.jpeg"
+     *                           }
+     *                       ]
      *                   }
      *               ],
      *               "resort_images": [
