@@ -202,4 +202,31 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/sos-list', 'SOSController@sosList')->name('admin.sos.list');
         Route::match(['get', 'post'], '/view/{id}', 'SOSController@viewSOS')->name('admin.sos.view');
     });
+
+    /**
+     * Meal Category Management
+     */
+    Route::prefix('meal-category')->group(function() {
+        Route::get('/', 'MealcategoryController@index')->name('admin.meal-category.index');
+        Route::get('/list', 'MealcategoryController@categoryList')->name('admin.meal-category.list');
+        Route::match(['get', 'post'], '/create', 'MealcategoryController@create')->name('admin.meal-category.add');
+        Route::post('/update-status', 'MealcategoryController@updateStatus')->name('admin.meal-category.status-update');
+        Route::match(['get', 'post'], '/edit/{id}', 'MealcategoryController@editMealcategory')->name('admin.meal-category.edit');
+        Route::post('/delete', 'MealcategoryController@deleteMealcategory')->name('admin.meal-category.delete');
+    });
+
+    /**
+     * Meal Management
+     */
+    Route::prefix('meal')->group(function() {
+        Route::get('/', 'MealController@index')->name('admin.meal.index');
+        Route::get('/list', 'MealController@mealList')->name('admin.meal.list');
+        Route::match(['get', 'post'], '/create', 'MealController@create')->name('admin.meal.add');
+        Route::post('/update-status', 'MealController@updateStatus')->name('admin.meal.status-update');
+        Route::post('/upload-images', 'MealController@uploadImages')->name('admin.meal.upload-image');
+        Route::post('/delete-images', 'MealController@deleteImages')->name('admin.meal.delete-image');
+        Route::post('/delete-meal-images', 'MealController@deleteResortImage')->name('admin.meal.delete-resort-image');
+        Route::match(['get', 'post'], '/edit/{id}', 'MealController@editResort')->name('admin.meal.edit');
+        Route::post('/delete', 'MealController@deleteResort')->name('admin.meal.delete');
+    });
 });

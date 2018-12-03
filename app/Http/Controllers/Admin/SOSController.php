@@ -40,14 +40,14 @@ class SOSController extends Controller {
             $sosArray = [];
             foreach ($sos as $key => $so) {
                 $user = User::find($so->id);
-                $cmsArray[$key]['user_name'] = $user->user_name;
-                $cmsArray[$key]['longitude'] = $so->longitude;
-                $cmsArray[$key]['latitude'] = $so->latitude;
-                $cmsArray[$key]['action'] = '';
+                $sosArray[$key]['user_name'] = $user->user_name;
+                $sosArray[$key]['longitude'] = $so->longitude;
+                $sosArray[$key]['latitude'] = $so->latitude;
+                $sosArray[$key]['action'] = '';
                 // '<a href="' . route('admin.sos.view', $so->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
 
-            $data['data'] = $cmsArray;
+            $data['data'] = $sosArray;
             return $data;
         } catch (\Exception $e) {
             dd($e);

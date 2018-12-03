@@ -41,60 +41,84 @@
             <li @if(in_array(Route::currentRouteName(), ['admin.nearby.add']))
                  {{ "class=current-page" }}
                  @endif>
-                <a href="{{ route('admin.nearby.index') }}"><i class="fa fa-map"></i> Nearby Place Management</a>
+                 <a href="{{ route('admin.nearby.index') }}"><i class="fa fa-map"></i> Nearby Place Management</a>
             </li>
             <li @if(in_array(Route::currentRouteName(), ['admin.banner.add']))
                  {{ "class=current-page" }}
                  @endif
                  >
-                <a href="{{ route('admin.banner.index') }}"><i class="fa fa-flag-checkered"></i> Banner Management</a>
+                 <a href="{{ route('admin.banner.index') }}"><i class="fa fa-flag-checkered"></i> Banner Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.service.add', 'admin.service.edit']))
-                 {{ "class=current-page" }}
-                 @endif
-                
-                >
-                <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i> Services Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+
+                  >
+                  <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i> Services Management</a>
             </li>
             <li>
                 <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i> Request Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.amenity.add', 'admin.amenity.edit']))
-                 {{ "class=current-page" }}
-                 @endif
-                >
-                <a href="{{ route('admin.amenity.index') }}"><i class="fa fa-bars"></i> Amenity Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.amenity.index') }}"><i class="fa fa-bars"></i> Amenity Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.activity.add', 'admin.activity.edit']))
-                 {{ "class=current-page" }}
-                 @endif
-                >
-                <a href="{{ route('admin.activity.index') }}"><i class="fa fa-bars"></i> Activity Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.activity.index') }}"><i class="fa fa-bars"></i> Activity Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.offer.add', 'admin.offer.edit']))
-                 {{ "class=current-page" }}
-                 @endif
-                >
-                <a href="{{ route('admin.offer.index') }}"><i class="fa fa-gift"></i> Offer Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.offer.index') }}"><i class="fa fa-gift"></i> Offer Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.healthcare.add', 'admin.healthcare.edit']))
-                 {{ "class=current-page" }}
-                 @endif
-                >
-                <a href="{{ route('admin.healthcare.index') }}"><i class="fa fa-plus"></i>Healthcare Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.healthcare.index') }}"><i class="fa fa-plus"></i>Healthcare Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.cms.edit']))
-                 {{ "class=current-page" }}
-                 @endif
-                >
-                <a href="{{ route('admin.cms.index') }}"><i class="fa fa-plus"></i>CMS Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.cms.index') }}"><i class="fa fa-reorder"></i>CMS Management</a>
             </li>
             <li  @if(in_array(Route::currentRouteName(), ['admin.sos.view']))
-                 {{ "class=current-page" }}
-                 @endif
-                >
-                <a href="{{ route('admin.sos.index') }}"><i class="fa fa-plus"></i>SOS Management</a>
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.sos.index') }}"><i class="fa fa-plus-square"></i>SOS Management</a>
             </li>
+
+            <li @if(in_array(Route::currentRouteName(), ['admin.meal-category.add', 'admin.meal-category.edit']))
+                 {{ "class=active" }}
+                 @endif>
+                 <a><i class="fa fa-cutlery"></i>Resturant Management<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu"  
+                    @if(in_array(Route::currentRouteName(), ['admin.meal-category.add', 'admin.meal-category.edit']))
+                    {{ "style=display:block;" }}
+                    @endif
+                    >
+                    <li @if(in_array(Route::currentRouteName(), ['admin.meal-category.add','admin.meal-category.edit']))
+                     {{ "class=current-page" }}
+                     @endif
+
+                     ><a href="{{ route('admin.meal-category.index') }}">Meal Category Management</a>
+                    </li>
+                    <li @if(in_array(Route::currentRouteName(), ['admin.meal.edit', 'admin.meal.add','admin.meal.index']))
+                         {{ "class=current-page" }}
+                         @endif
+                         ><a href="{{ route('admin.meal.index') }}">Meal Management</a>
+                    </li>
+                </ul>
+            </li>
+
         </ul>
     </div>
 </div>
