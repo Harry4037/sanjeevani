@@ -226,4 +226,16 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/edit/{id}', 'MealController@editMeal')->name('admin.meal.edit');
         Route::post('/delete', 'MealController@deleteMeal')->name('admin.meal.delete');
     });
+    /**
+     * Meal Package Management
+     */
+    Route::prefix('meal-package')->group(function() {
+        Route::get('/', 'MealpackageController@index')->name('admin.meal-package.index');
+        Route::get('/list', 'MealpackageController@mealpackageList')->name('admin.meal-package.list');
+        Route::match(['get', 'post'], '/create', 'MealpackageController@create')->name('admin.meal-package.add');
+        Route::post('/update-status', 'MealpackageController@updateStatus')->name('admin.meal-package.status-update');
+        Route::match(['get', 'post'], '/edit/{id}', 'MealpackageController@editMealpackage')->name('admin.meal-package.edit');
+        Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('admin.meal-package.delete');
+        Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('admin.meal-package.resort-item');
+    });
 });
