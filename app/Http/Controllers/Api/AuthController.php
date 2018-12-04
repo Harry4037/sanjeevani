@@ -153,6 +153,7 @@ class AuthController extends Controller {
      *        "last_name": "",
      *        "email_id": "hariom4037@gmail.com",
      *        "user_type_id": 3,
+     *        "is_checked_in": false,
      *        "address": null,
      *        "state": "UP",
      *        "city": "Noida",
@@ -351,6 +352,7 @@ class AuthController extends Controller {
             $userArray['last_name'] = $user->last_name;
             $userArray['email_id'] = $user->email_id;
             $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
+            $userArray['is_checked_in'] = $user->aadhar_id ? true : false;
             $userArray['address'] = $user->address1;
             $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
             $userArray['city'] = isset($cityState->city) ? $cityState->city : "";

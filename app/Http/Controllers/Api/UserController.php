@@ -31,10 +31,54 @@ class UserController extends Controller {
      * @apiSuccess {JSON}   data blank array.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *  "status": true,
-     *  "message": "User check-in successfully.",
-     *  "data": []
+     *   {
+     *     "id": 2,
+     *     "salutation_id": 0,
+     *     "user_name": null,
+     *     "first_name": null,
+     *     "mid_name": null,
+     *     "last_name": null,
+     *     "gender": null,
+     *     "user_type_id": 4,
+     *     "designation_id": 0,
+     *     "department_id": 0,
+     *     "city_id": 0,
+     *     "language_id": 0,
+     *     "email_id": null,
+     *     "alternate_email_id": null,
+     *     "screen_name": null,
+     *     "date_of_joining": null,
+     *     "authority_id": "0",
+     *     "user_id_RA": null,
+     *     "date_of_birth": null,
+     *     "profile_pic_path": "http://127.0.0.1:8000/storage/profile_pic",
+     *     "id_card": null,
+     *     "is_user_loked": 0,
+     *     "mobile_number": "9999999999",
+     *     "other_contact_number": null,
+     *     "address1": null,
+     *     "address2": null,
+     *     "address3": null,
+     *     "pincode": null,
+     *     "secuity_question": null,
+     *     "secuity_questio_answer": null,
+     *     "ref_time_zone_id": null,
+     *     "login_expiry_date": null,
+     *     "other_info": null,
+     *     "password": "$2y$10$GqnkutHraNcdrbOw5gFEoe7nR.nJiP9ShiKm2jbtdpELGLLwbbtvK",
+     *     "remember_token": null,
+     *     "aadhar_id": "7SKegf9AESUmVrLhzoWsiEG9xL5RFbwkQyAFPx0J.jpeg",
+     *     "voter_id": null,
+     *     "is_active": 1,
+     *     "domain_id": 0,
+     *     "otp": "9999",
+     *     "oath_token": null,
+     *     "created_by": "0",
+     *     "updated_by": "0",
+     *     "created_at": "2018-12-04 09:05:25",
+     *     "updated_at": "2018-12-04 09:07:07",
+     *     "is_checked_in": true,
+     *     "user_booking_detail": null
      * }
      *  
      * @apiError UserIdMissing The user id missing.
@@ -123,6 +167,7 @@ class UserController extends Controller {
 
                 $user->aadhar_id = $aadhar_file_name;
                 if ($user->save()) {
+                    $user['is_checked_in'] = true;
                     return $this->sendSuccessResponse("User check-in successfully.", $user);
                 } else {
                     return $this->administratorResponse();
