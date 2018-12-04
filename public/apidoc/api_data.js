@@ -2117,6 +2117,148 @@ define({ "api": [
     "groupTitle": "Offer"
   },
   {
+    "type": "post",
+    "url": "/api/add-item-cart",
+    "title": "Add item to cart",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostAddItemCart",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>1=&gt;Meal item, 2=&gt; Meal package Item.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "meal_item_id",
+            "description": "<p>Meal item id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "meal_package_id",
+            "description": "<p>Meal Package Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Quantity.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Item added to cart.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>cart detail.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Item added to cart\",\n      \"data\": {\n          \"cart_count\": 4\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidUser",
+            "description": "<p>The user is invalid.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid user.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/CartController.php",
+    "groupTitle": "Order"
+  },
+  {
     "type": "get",
     "url": "/api/nearby-list-detail",
     "title": "Nearby place list & detail",
@@ -3837,7 +3979,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Profile update succesfully.\",\n      \"data\": {\n      \"id\": 2,\n      \"user_name\": \"Ankit singh\",\n      \"first_name\": \"Ankit\",\n      \"last_name\": \"singh\",\n      \"email_id\": \"hariom4037@gmail.com\",\n      \"profile_pic_path\": \"http://sanjeevani.dbaquincy.com/storage/profile_pic/DjD1w0mNPdHNxIO0QWRkkfypRR9vuRpEYL3UeCaM.png\"\n      }\n      }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Profile update succesfully.\",\n      \"data\": {\n          \"id\": 2,\n          \"user_name\": \"Hariom Gangwar n\",\n          \"first_name\": \"Hariom\",\n          \"last_name\": \"Gangwar\",\n          \"email_id\": \"hariom4037@gmail.com\",\n          \"profile_pic_path\": \"http://127.0.0.1:8000/storage/profile_pic/Kq6zsnPUpHQRWax8bladuQxs9zSxDxr0IE7VkAMI.jpeg\",\n          \"address1\": \"test\",\n          \"pincode\": \"222222\",\n          \"city_id\": 63\n      }\n  }",
           "type": "json"
         }
       ]
