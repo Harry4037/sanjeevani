@@ -3339,6 +3339,70 @@
     "groupTitle": "Staff_Service"
   },
   {
+    "type": "get",
+    "url": "/api/state-city-list",
+    "title": "State City list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetStateCity",
+    "group": "User",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>state and city listing.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>state city array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"state and city listing\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"state_name\": \"Andaman & Nicobar Islands\",\n              \"cities\": [\n                  {\n                      \"id\": 93,\n                      \"city_name\": \"Carnicobar\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 149,\n                      \"city_name\": \"Diglipur\",\n                      \"state\": null\n*                   },\n                  {\n                      \"id\": 174,\n                      \"city_name\": \"Ferrargunj\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 220,\n                      \"city_name\": \"Hut Bay\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 331,\n                      \"city_name\": \"Mayabander\",\n                      \"state\": null\n                  },\n.........",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "post",
     "url": "/api/change-password",
     "title": "Change User Password",
@@ -3704,7 +3768,28 @@
             "type": "String",
             "optional": false,
             "field": "email_id",
-            "description": "<p>Full name.</p>"
+            "description": "<p>Email Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Address.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pincode",
+            "description": "<p>Pincode.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "city_id",
+            "description": "<p>City id.</p>"
           },
           {
             "group": "Parameter",
@@ -3752,7 +3837,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": true,\n            \"status_code\": 200,\n            \"message\": \"Profile update succesfully.\",\n            \"data\": {\n                \"id\": 2,\n                \"user_name\": \"Ankit singh\",\n                \"first_name\": \"Ankit\",\n                \"last_name\": \"singh\",\n                \"email_id\": \"hariom4037@gmail.com\",\n                \"profile_pic_path\": \"http://sanjeevani.dbaquincy.com/storage/profile_pic/DjD1w0mNPdHNxIO0QWRkkfypRR9vuRpEYL3UeCaM.png\"\n            }\n        }",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Profile update succesfully.\",\n      \"data\": {\n      \"id\": 2,\n      \"user_name\": \"Ankit singh\",\n      \"first_name\": \"Ankit\",\n      \"last_name\": \"singh\",\n      \"email_id\": \"hariom4037@gmail.com\",\n      \"profile_pic_path\": \"http://sanjeevani.dbaquincy.com/storage/profile_pic/DjD1w0mNPdHNxIO0QWRkkfypRR9vuRpEYL3UeCaM.png\"\n      }\n      }",
           "type": "json"
         }
       ]

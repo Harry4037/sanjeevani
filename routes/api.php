@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
  */
 
 Route::namespace("Api")->group(function () {
+    //City State list
+    Route::get('state-city-list', 'UserController@stateCityList');
     //Sent OTP
     Route::post('send-otp', 'AuthController@signup');
     //Verify OTP

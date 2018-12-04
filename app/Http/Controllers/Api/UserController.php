@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Banner;
 use Illuminate\Support\Facades\Hash;
+use App\Models\StateMaster;
+use App\Models\CityMaster;
 
 class UserController extends Controller {
 
@@ -142,7 +144,10 @@ class UserController extends Controller {
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} full_name Full name.
-     * @apiParam {String} email_id Full name.
+     * @apiParam {String} email_id Email Id.
+     * @apiParam {String} address Address.
+     * @apiParam {String} pincode Pincode.
+     * @apiParam {String} city_id City id.
      * @apiParam {File} profile_pic Profile Pic.
      * 
      * @apiSuccess {String} success true 
@@ -152,19 +157,22 @@ class UserController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "Profile update succesfully.",
-            "data": {
-                "id": 2,
-                "user_name": "Ankit singh",
-                "first_name": "Ankit",
-                "last_name": "singh",
-                "email_id": "hariom4037@gmail.com",
-                "profile_pic_path": "http://sanjeevani.dbaquincy.com/storage/profile_pic/DjD1w0mNPdHNxIO0QWRkkfypRR9vuRpEYL3UeCaM.png"
-            }
-        }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Profile update succesfully.",
+     *       "data": {
+     *           "id": 2,
+     *           "user_name": "Hariom Gangwar n",
+     *           "first_name": "Hariom",
+     *           "last_name": "Gangwar",
+     *           "email_id": "hariom4037@gmail.com",
+     *           "profile_pic_path": "http://127.0.0.1:8000/storage/profile_pic/Kq6zsnPUpHQRWax8bladuQxs9zSxDxr0IE7VkAMI.jpeg",
+     *           "address1": "test",
+     *           "pincode": "222222",
+     *           "city_id": 63
+     *       }
+     *   }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -214,6 +222,15 @@ class UserController extends Controller {
             if ($request->email_id) {
                 $user->email_id = $request->email_id;
             }
+            if ($request->address) {
+                $user->address1 = $request->address;
+            }
+            if ($request->city_id) {
+                $user->city_id = $request->city_id;
+            }
+            if ($request->pincode) {
+                $user->pincode = $request->pincode;
+            }
 
             if ($request->profile_pic) {
                 if (!$request->hasFile("profile_pic")) {
@@ -231,7 +248,7 @@ class UserController extends Controller {
             }
 
             if ($user->save()) {
-                $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path')->find($user->id);
+                $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path', 'address1', 'pincode', 'city_id')->find($user->id);
                 $response['success'] = true;
                 $response['status_code'] = 200;
                 $response['message'] = "Profile update succesfully.";
@@ -371,6 +388,74 @@ class UserController extends Controller {
         $response['message'] = "Password Changed successfully.";
         $response['data'] = [];
         return $this->jsonData($response);
+    }
+
+    /**
+     * @api {get} /api/state-city-list State City list
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetStateCity
+     * @apiGroup User
+     * 
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message state and city listing.
+     * @apiSuccess {JSON}   data state city array.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "state and city listing",
+     *       "data": [
+     *           {
+     *               "id": 1,
+     *               "state_name": "Andaman & Nicobar Islands",
+     *               "cities": [
+     *                   {
+     *                       "id": 93,
+     *                       "city_name": "Carnicobar",
+     *                       "state": null
+     *                   },
+     *                   {
+     *                       "id": 149,
+     *                       "city_name": "Diglipur",
+     *                       "state": null
+     * *                   },
+     *                   {
+     *                       "id": 174,
+     *                       "city_name": "Ferrargunj",
+     *                       "state": null
+     *                   },
+     *                   {
+     *                       "id": 220,
+     *                       "city_name": "Hut Bay",
+     *                       "state": null
+     *                   },
+     *                   {
+     *                       "id": 331,
+     *                       "city_name": "Mayabander",
+     *                       "state": null
+     *                   },
+     * .........
+     * 
+     * 
+     */
+    public function stateCityList(Request $request) {
+        $states = StateMaster::all();
+        $dataArray = [];
+        if ($states) {
+            foreach ($states as $key => $state) {
+                $cities = CityMaster::select('id', 'city as city_name')->where("state_id", $state->id)->get();
+
+                $dataArray[$key]['id'] = $state->id;
+                $dataArray[$key]['state_name'] = $state->state;
+                $dataArray[$key]['cities'] = $cities;
+            }
+        }
+
+        return $this->sendSuccessResponse("state and city listing", $dataArray);
     }
 
 }
