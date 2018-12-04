@@ -96,7 +96,7 @@
                   <a href="{{ route('admin.sos.index') }}"><i class="fa fa-plus-square"></i>SOS Management</a>
             </li>
 
-            <li @if(in_array(Route::currentRouteName(), ['admin.meal-category.add', 'admin.meal-category.edit']))
+            <li @if(in_array(Route::currentRouteName(), ['admin.meal.edit', 'admin.meal.add','admin.meal.index', 'admin.meal-category.add', 'admin.meal-category.edit', 'admin.meal-package.edit', 'admin.meal-package.add','admin.meal-package.index']))
                  {{ "class=active" }}
                  @endif>
                  <a><i class="fa fa-cutlery"></i>Resturant Management<span class="fa fa-chevron-down"></span></a>
@@ -115,6 +115,11 @@
                          {{ "class=current-page" }}
                          @endif
                          ><a href="{{ route('admin.meal.index') }}">Meal Management</a>
+                    </li>
+                    <li @if(in_array(Route::currentRouteName(), ['admin.meal-package.edit', 'admin.meal-package.add','admin.meal-package.index']))
+                         {{ "class=current-page" }}
+                         @endif
+                         ><a href="{{ route('admin.meal-package.index') }}">MealPackage Management</a>
                     </li>
                 </ul>
             </li>
