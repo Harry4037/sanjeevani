@@ -59,6 +59,9 @@ Route::namespace("Api")->group(function () {
     //Meal listing
     Route::get('meal-listing', 'MealController@mealListing');
     
+    //Invoice listing & Detail
+    Route::get('invoice-list-detail', 'OrderController@invoiceListDetail');
+    
     Route::get('terms-conditions', 'CmsController@termContidion');
     
     Route::get('about-us', 'CmsController@aboutUs');
@@ -103,6 +106,9 @@ Route::namespace("Api")->group(function () {
         
         //My Cart
         Route::get('my-cart', 'CartController@myCart');
+        
+        //My Cart
+        Route::post('create-order', 'OrderController@submitOrder');
         
         Route::post('sos', 'CmsController@sos');
 

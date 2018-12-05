@@ -2118,6 +2118,102 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/invoice-list-detail",
+    "title": "Invoice listing & details",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetInvoiceListDetail",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>invoices list found.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>invoice detail.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Order created succeffully.\",\n      \"data\": {\n          \"total_amount\": 0,\n          \"outstanding_amount\": 0,\n          \"paid_amount\": 0,\n          \"invoices\": [\n              {\n                  \"id\": 5,\n                  \"invoice_id\": \"1544009535\",\n                  \"item_total_amount\": 1175,\n                  \"gst_amount\": 0,\n                  \"total_amount\": 1175,\n                  \"created_on\": \"05-12-2018\",\n                  \"order_items\": [\n                      {\n                          \"id\": 13,\n                          \"meal_item_name\": \"Pepsi\",\n                          \"quantity\": 2,\n                          \"price\": 55,\n                          \"meal_order_id\": 5\n                      },\n                      {\n                          \"id\": 14,\n                          \"meal_item_name\": \"Panner\",\n                          \"quantity\": 3,\n                          \"price\": 120,\n                          \"meal_order_id\": 5\n                      },\n                      {\n                          \"id\": 15,\n                          \"meal_item_name\": \"test\",\n                          \"quantity\": 3,\n                          \"price\": 1000,\n                          \"meal_order_id\": 5\n                      }\n                  ]\n              },\n              {\n                  \"id\": 6,\n                  \"invoice_id\": \"1544009626\",\n                  \"item_total_amount\": 1175,\n                  \"gst_amount\": 0,\n                  \"total_amount\": 1175,\n                  \"created_on\": \"05-12-2018\",\n                  \"order_items\": [\n                      {\n                          \"id\": 16,\n                          \"meal_item_name\": \"Pepsi\",\n                          \"quantity\": 2,\n                          \"price\": 55,\n                          \"meal_order_id\": 6\n                      },\n                      {\n                          \"id\": 17,\n                          \"meal_item_name\": \"Panner\",\n                          \"quantity\": 3,\n                          \"price\": 120,\n                          \"meal_order_id\": 6\n                      },\n                      {\n                          \"id\": 18,\n                          \"meal_item_name\": \"test\",\n                          \"quantity\": 3,\n                          \"price\": 1000,\n                          \"meal_order_id\": 6\n                      }\n                  ]\n              },\n              {\n                  \"id\": 7,\n                  \"invoice_id\": \"1544009691\",\n                  \"item_total_amount\": 1175,\n                  \"gst_amount\": 0,\n                  \"total_amount\": 1175,\n                  \"created_on\": \"05-12-2018\",\n                  \"order_items\": [\n                      {\n                          \"id\": 19,\n                          \"meal_item_name\": \"Pepsi\",\n                          \"quantity\": 2,\n                          \"price\": 55,\n                          \"meal_order_id\": 7\n                      },\n                      {\n                          \"id\": 20,\n                          \"meal_item_name\": \"Panner\",\n                          \"quantity\": 3,\n                          \"price\": 120,\n                          \"meal_order_id\": 7\n                      },\n                      {\n                          \"id\": 21,\n                          \"meal_item_name\": \"test\",\n                          \"quantity\": 3,\n                          \"price\": 1000,\n                          \"meal_order_id\": 7\n                      }\n                  ]\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "get",
     "url": "/api/my-cart",
     "title": "My cart",
     "header": {
@@ -2370,6 +2466,120 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/CartController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "post",
+    "url": "/api/create-order",
+    "title": "Create Order",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostCreateOrder",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Order create successfully.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>invoice Id.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Order created succeffully.\",\n   \"data\": {\n       \"invoice_id\": 1544009691,\n       \"total_amount\": 1175\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidUser",
+            "description": "<p>The user is invalid.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid user.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/OrderController.php",
     "groupTitle": "Order"
   },
   {
