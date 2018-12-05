@@ -1122,7 +1122,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"OTP verified successfully.\",\n   \"data\": {\n       \"id\": 2,\n       \"user_name\": \"Hariom\",\n       \"first_name\": \"Hariom\",\n       \"mid_name\": null,\n       \"last_name\": \"\",\n       \"email_id\": \"hariom4037@gmail.com\",\n       \"user_type_id\": 3,\n       \"is_checked_in\": false,\n       \"address\": null,\n       \"state\": \"UP\",\n       \"city\": \"Noida\",\n       \"screen_name\": null,\n       \"profile_pic_path\": null,\n       \"mobile_number\": \"9808243372\",\n       \"token_type\": \"Bearer\",\n       \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijg2ZjM5ZTA0ZjQxN2\n         QwNDNhZmRkYWY4NDJlNTNlNTQ3NjMxYzJkMTdkMThmZDVlM2VhMTk1OTc3MGZmZjQzMWE2NjI1ZjI\n0YzE5NDk1ZjllIn0.eyJhdWQiOiIxIiwianRpIjoiODZmMzllMDRmNDE3ZDA0M2FmZGRhZjg0MmU1M2U1NDc2M\nzFjMmQxN2QxOGZkNWUzZWExOTU5NzcwZmZmNDMxYTY2MjVmMjRjMTk0OTVmOWUiLCJpYXQiOjE1NDIyNTU5MDY\nsIm5iZiI6MTU0MjI1NTkwNiwiZXhwIjoxNTczNzkxOTA2LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.qnRi5ZXrBR\nYk2DJdNi8GbsRkb9g3g26MoBinbHJdGYS0hEfYiItve5yAhRmvQhPiIW_GXIhKRKPAcGmy1tHsneiUEScDjD35EW\nZwd39bpQGDx_VQAGp5JlM2rlj5KOVv52BqFiyLiod8621eevI7SvduWm7VojLFXPRqsWbCilVcQQB5WPIFdTNfor\ng3giro7Qa_nzmEZH_iUl0_955HWHx9L9XmuSg9pznePzcDqbyG4M7gB6guJUk0hIUP3cO3Aueu91LZtsA-jGXRkj\ndT2S9ONpVRWewl1aksPzjYFxtdUSfH2PQveGWsCMCka85i1B5v1JlyqDb38gNeWbB3Gqy8-2rV9AYS5gYy1lAgCv\nxrR9XoElyyguLU_BHQCMuU7_-034A1UbHZfg9_r3IR85_u25McRvSTHiZWPQXVDD2tHh5zLyhyDJjcD_Bh9jMxSE\n9E3b9HruJiJv8DVhTkvW6re95astIZe5X7oW8j7fDHvwWBUMdBfSnnBcyCp-6HVl6nByxevw3-OV_ugsCDuhsOKWw\njaUT4KkyJFxFjKjmbSQautj2FBum3Vy85fOMkgye_8rfYADsKXw81RQjixkflRfmifP4Ii68tES77apdXGqxJricNc\nVSBPzBiUThcnPCd_X8f4-vuQwp3KM-Jn8-rC0RT1lUHhlnHPyEzAmQ\",\n       \"source_name\": \"Make my trip\",\n       \"source_id\": \"QWERT123456\",\n       \"resort_room_no\": 1,\n       \"room_type\": \"Delux\",\n       \"check_in_date\": \"15-Nov-2018\",\n       \"check_in_time\": \"00:00 AM\",\n       \"check_out_date\": \"17-Nov-2018\",\n       \"check_out_time\": \"00:00 AM\",\n       \"booking_id\": 1,\n       \"no_of_guest\": \"1 Adult and 2 Child\",\n       \"guest_detail\": [\n           {\n               \"id\": 1,\n               \"person_name\": \"Ankit\",\n               \"person_age\": \"25\",\n               \"person_type\": \"Adult\"\n           },\n           {\n               \"id\": 2,\n               \"person_name\": \"Anshu\",\n               \"person_age\": \"5\",\n               \"person_type\": \"Child\"\n           },\n           {\n               \"id\": 3,\n               \"person_name\": \"om\",\n               \"person_age\": \"10\",\n               \"person_type\": \"Child\"\n           }\n       ],\n       \"resort\": {\n           \"id\": 1,\n           \"name\": \"Parth Inn\",\n           \"description\": \"<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>\",\n           \"contact_number\": \"9808243372\",\n           \"other_contact_number\": null,\n           \"address_1\": \"Sector 66\",\n           \"address_2\": null,\n           \"address_3\": null,\n           \"pincode\": 243601,\n           \"city_id\": 50,\n           \"latitude\": 0,\n           \"longitude\": 0,\n           \"is_active\": 1,\n           \"domain_id\": 0,\n           \"created_by\": \"1\",\n           \"updated_by\": \"1\",\n           \"created_at\": \"2018-11-14 13:51:50\",\n           \"updated_at\": \"2018-11-14 13:52:58\"\n       }\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"OTP verified successfully.\",\n   \"data\": {\n       \"id\": 2,\n       \"user_name\": \"Hariom\",\n       \"first_name\": \"Hariom\",\n       \"mid_name\": null,\n       \"last_name\": \"\",\n       \"email_id\": \"hariom4037@gmail.com\",\n       \"user_type_id\": 3,\n       \"is_checked_in\": false,\n       \"address\": null,\n       \"state\": \"UP\",\n       \"city\": \"Noida\",\n       \"pincode\": \"201301\",\n       \"screen_name\": null,\n       \"profile_pic_path\": null,\n       \"mobile_number\": \"9808243372\",\n       \"token_type\": \"Bearer\",\n       \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijg2ZjM5ZTA0ZjQxN2\n         QwNDNhZmRkYWY4NDJlNTNlNTQ3NjMxYzJkMTdkMThmZDVlM2VhMTk1OTc3MGZmZjQzMWE2NjI1ZjI\n0YzE5NDk1ZjllIn0.eyJhdWQiOiIxIiwianRpIjoiODZmMzllMDRmNDE3ZDA0M2FmZGRhZjg0MmU1M2U1NDc2M\nzFjMmQxN2QxOGZkNWUzZWExOTU5NzcwZmZmNDMxYTY2MjVmMjRjMTk0OTVmOWUiLCJpYXQiOjE1NDIyNTU5MDY\nsIm5iZiI6MTU0MjI1NTkwNiwiZXhwIjoxNTczNzkxOTA2LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.qnRi5ZXrBR\nYk2DJdNi8GbsRkb9g3g26MoBinbHJdGYS0hEfYiItve5yAhRmvQhPiIW_GXIhKRKPAcGmy1tHsneiUEScDjD35EW\nZwd39bpQGDx_VQAGp5JlM2rlj5KOVv52BqFiyLiod8621eevI7SvduWm7VojLFXPRqsWbCilVcQQB5WPIFdTNfor\ng3giro7Qa_nzmEZH_iUl0_955HWHx9L9XmuSg9pznePzcDqbyG4M7gB6guJUk0hIUP3cO3Aueu91LZtsA-jGXRkj\ndT2S9ONpVRWewl1aksPzjYFxtdUSfH2PQveGWsCMCka85i1B5v1JlyqDb38gNeWbB3Gqy8-2rV9AYS5gYy1lAgCv\nxrR9XoElyyguLU_BHQCMuU7_-034A1UbHZfg9_r3IR85_u25McRvSTHiZWPQXVDD2tHh5zLyhyDJjcD_Bh9jMxSE\n9E3b9HruJiJv8DVhTkvW6re95astIZe5X7oW8j7fDHvwWBUMdBfSnnBcyCp-6HVl6nByxevw3-OV_ugsCDuhsOKWw\njaUT4KkyJFxFjKjmbSQautj2FBum3Vy85fOMkgye_8rfYADsKXw81RQjixkflRfmifP4Ii68tES77apdXGqxJricNc\nVSBPzBiUThcnPCd_X8f4-vuQwp3KM-Jn8-rC0RT1lUHhlnHPyEzAmQ\",\n       \"source_name\": \"Make my trip\",\n       \"source_id\": \"QWERT123456\",\n       \"resort_room_no\": 1,\n       \"room_type\": \"Delux\",\n       \"check_in_date\": \"15-Nov-2018\",\n       \"check_in_time\": \"00:00 AM\",\n       \"check_out_date\": \"17-Nov-2018\",\n       \"check_out_time\": \"00:00 AM\",\n       \"booking_id\": 1,\n       \"no_of_guest\": \"1 Adult and 2 Child\",\n       \"guest_detail\": [\n           {\n               \"id\": 1,\n               \"person_name\": \"Ankit\",\n               \"person_age\": \"25\",\n               \"person_type\": \"Adult\"\n           },\n           {\n               \"id\": 2,\n               \"person_name\": \"Anshu\",\n               \"person_age\": \"5\",\n               \"person_type\": \"Child\"\n           },\n           {\n               \"id\": 3,\n               \"person_name\": \"om\",\n               \"person_age\": \"10\",\n               \"person_type\": \"Child\"\n           }\n       ],\n       \"resort\": {\n           \"id\": 1,\n           \"name\": \"Parth Inn\",\n           \"description\": \"<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>\",\n           \"contact_number\": \"9808243372\",\n           \"other_contact_number\": null,\n           \"address_1\": \"Sector 66\",\n           \"address_2\": null,\n           \"address_3\": null,\n           \"pincode\": 243601,\n           \"city_id\": 50,\n           \"latitude\": 0,\n           \"longitude\": 0,\n           \"is_active\": 1,\n           \"domain_id\": 0,\n           \"created_by\": \"1\",\n           \"updated_by\": \"1\",\n           \"created_at\": \"2018-11-14 13:51:50\",\n           \"updated_at\": \"2018-11-14 13:52:58\"\n       }\n   }\n}",
           "type": "json"
         }
       ]
@@ -2115,6 +2115,120 @@
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/OfferController.php",
     "groupTitle": "Offer"
+  },
+  {
+    "type": "get",
+    "url": "/api/my-cart",
+    "title": "My cart",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetMyCart",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>my cart list.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>cart detail.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n      {\n          \"status\": true,\n          \"status_code\": 200,\n          \"message\": \"my cart list\",\n          \"data\": {\n              \"cart_items\": [\n                  {\n                      \"id\": 1,\n                      \"type\": 1,\n                      \"item_id\": 1,\n                      \"image_url\": \"http://127.0.0.1:8000/storage/meal_images/yo3fjabmiRMkZJORW2vK3hiUuZd8MrCTM7pQBVlM.jpeg\",\n                      \"item_name\": \"Pepsi\",\n                      \"item_price\": 55,\n                      \"quantity\": 2\n                  },\n                  {\n                      \"id\": 2,\n                      \"type\": 1,\n                      \"item_id\": 2,\n                      \"image_url\": \"http://127.0.0.1:8000/storage/meal_images/eJN5RZidujhG0OYqg0l9Sk62BZu3WYnhThLGZAOn.jpeg\",\n                      \"item_name\": \"Panner\",\n                      \"item_price\": 120,\n                      \"quantity\": 3\n                  },\n                  {\n                      \"id\": 3,\n                      \"type\": 2,\n                      \"item_id\": 1,\n                      \"image_url\": \"http://127.0.0.1:8000/storage/meal_package_images/wS2vOgqhIl4uzR3UZBcuXQBbaPohOtA85eXE9k2Z.jpeg\",\n                      \"item_name\": \"test\",\n                      \"item_price\": 1000,\n                      \"quantity\": 3\n                  }\n              ],\n              \"total_no_item\": 3,\n              \"item_amount\": 1175,\n              \"gst\": 0,\n              \"total_amount\": 1175\n          }\n      }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidUser",
+            "description": "<p>The user is invalid.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid user.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/CartController.php",
+    "groupTitle": "Order"
   },
   {
     "type": "post",
@@ -3979,7 +4093,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Profile update succesfully.\",\n      \"data\": {\n          \"id\": 2,\n          \"user_name\": \"Hariom Gangwar n\",\n          \"first_name\": \"Hariom\",\n          \"last_name\": \"Gangwar\",\n          \"email_id\": \"hariom4037@gmail.com\",\n          \"profile_pic_path\": \"http://127.0.0.1:8000/storage/profile_pic/Kq6zsnPUpHQRWax8bladuQxs9zSxDxr0IE7VkAMI.jpeg\",\n          \"address1\": \"test\",\n          \"pincode\": \"222222\",\n          \"city_id\": 63\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Profile update succesfully.\",\n      \"data\": {\n          \"id\": 2,\n          \"user_name\": \"Hariom Gangwar n\",\n          \"first_name\": \"Hariom\",\n          \"last_name\": \"Gangwar\",\n          \"email_id\": \"hariom4037@gmail.com\",\n          \"profile_pic_path\": \"http://127.0.0.1:8000/storage/profile_pic/Kq6zsnPUpHQRWax8bladuQxs9zSxDxr0IE7VkAMI.jpeg\",\n          \"address1\": \"test\",\n          \"pincode\": \"222222\",\n          \"city_id\": 63,\n          \"state\": \"West Bengal\",\n          \"city\": \"Asansol\"\n      }\n  }",
           "type": "json"
         }
       ]

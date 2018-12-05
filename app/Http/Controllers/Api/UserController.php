@@ -215,7 +215,9 @@ class UserController extends Controller {
      *           "profile_pic_path": "http://127.0.0.1:8000/storage/profile_pic/Kq6zsnPUpHQRWax8bladuQxs9zSxDxr0IE7VkAMI.jpeg",
      *           "address1": "test",
      *           "pincode": "222222",
-     *           "city_id": 63
+     *           "city_id": 63,
+     *           "state": "West Bengal",
+     *           "city": "Asansol"
      *       }
      *   }
      * 
@@ -294,6 +296,9 @@ class UserController extends Controller {
 
             if ($user->save()) {
                 $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path', 'address1', 'pincode', 'city_id')->find($user->id);
+                $cityState = CityMaster::find($userData->city_id);
+                $userData['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
+                $userData['city'] = isset($cityState->city) ? $cityState->city : "";
                 $response['success'] = true;
                 $response['status_code'] = 200;
                 $response['message'] = "Profile update succesfully.";

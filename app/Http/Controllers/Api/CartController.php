@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Cart;
+use App\Models\MealItem;
+use App\Models\MealPackage;
 
 class CartController extends Controller {
 
@@ -107,6 +109,137 @@ class CartController extends Controller {
                 return $this->sendSuccessResponse("Item added to cart", $data);
             } else {
                 return $this->sendErrorResponse("Something went be wrong, Please try later", (object) []);
+            }
+        } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {get} /api/my-cart My cart
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetMyCart
+     * @apiGroup Order
+     * 
+     * @apiParam {String} user_id User id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message my cart list.
+     * @apiSuccess {JSON}   data cart detail.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *       {
+     *           "status": true,
+     *           "status_code": 200,
+     *           "message": "my cart list",
+     *           "data": {
+     *               "cart_items": [
+     *                   {
+     *                       "id": 1,
+     *                       "type": 1,
+     *                       "item_id": 1,
+     *                       "image_url": "http://127.0.0.1:8000/storage/meal_images/yo3fjabmiRMkZJORW2vK3hiUuZd8MrCTM7pQBVlM.jpeg",
+     *                       "item_name": "Pepsi",
+     *                       "item_price": 55,
+     *                       "quantity": 2
+     *                   },
+     *                   {
+     *                       "id": 2,
+     *                       "type": 1,
+     *                       "item_id": 2,
+     *                       "image_url": "http://127.0.0.1:8000/storage/meal_images/eJN5RZidujhG0OYqg0l9Sk62BZu3WYnhThLGZAOn.jpeg",
+     *                       "item_name": "Panner",
+     *                       "item_price": 120,
+     *                       "quantity": 3
+     *                   },
+     *                   {
+     *                       "id": 3,
+     *                       "type": 2,
+     *                       "item_id": 1,
+     *                       "image_url": "http://127.0.0.1:8000/storage/meal_package_images/wS2vOgqhIl4uzR3UZBcuXQBbaPohOtA85eXE9k2Z.jpeg",
+     *                       "item_name": "test",
+     *                       "item_price": 1000,
+     *                       "quantity": 3
+     *                   }
+     *               ],
+     *               "total_no_item": 3,
+     *               "item_amount": 1175,
+     *               "gst": 0,
+     *               "total_amount": 1175
+     *           }
+     *       }
+     * 
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError InvalidUser The user is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Invalid user.",
+     *  "data": {}
+     * }
+     * 
+     * 
+     * 
+     * 
+     */
+    public function myCart(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+
+            $carts = Cart::where(["user_id" => $request->user_id])
+                    ->get();
+            $cartDataArray = [];
+            if ($carts) {
+                $total = 0;
+                $gst = 0;
+                foreach ($carts as $key => $cart) {
+                    if ($cart->meal_item_id > 0) {
+                        $mealItem = MealItem::find($cart->meal_item_id);
+                        $itemType = 1;
+                    } else {
+                        $mealItem = MealPackage::find($cart->meal_package_id);
+                        $itemType = 2;
+                    }
+                    $cartDataArray['cart_items'][$key]['id'] = $cart->id;
+                    $cartDataArray['cart_items'][$key]['type'] = $itemType;
+                    $cartDataArray['cart_items'][$key]['item_id'] = $mealItem->id;
+                    $cartDataArray['cart_items'][$key]['image_url'] = $mealItem->image_name;
+                    $cartDataArray['cart_items'][$key]['item_name'] = $mealItem->name;
+                    $cartDataArray['cart_items'][$key]['item_price'] = $mealItem->price;
+                    $cartDataArray['cart_items'][$key]['quantity'] = $cart->quantity;
+                    $total += $mealItem->price;
+                }
+                $cartDataArray['total_no_item'] = count($cartDataArray['cart_items']);
+                $cartDataArray['item_amount'] = $total;
+                $cartDataArray['gst'] = $gst;
+                $cartDataArray['total_amount'] = $total - $gst;
+
+                return $this->sendSuccessResponse("my cart list", $cartDataArray);
+            } else {
+                $cartDataArray['cart_items'] = [];
+                $cartDataArray['total_no_item'] = 0;
+                $cartDataArray['item_amount'] = 0;
+                $cartDataArray['gst'] = 0;
+                $cartDataArray['total_amount'] = 0;
+                return $this->sendErrorResponse("empty cart", $cartDataArray);
             }
         } catch (\Exception $ex) {
             return $this->administratorResponse();

@@ -157,6 +157,7 @@ class AuthController extends Controller {
      *        "address": null,
      *        "state": "UP",
      *        "city": "Noida",
+     *        "pincode": "201301",
      *        "screen_name": null,
      *        "profile_pic_path": null,
      *        "mobile_number": "9808243372",
@@ -356,6 +357,7 @@ class AuthController extends Controller {
             $userArray['address'] = $user->address1;
             $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
             $userArray['city'] = isset($cityState->city) ? $cityState->city : "";
+            $userArray['pincode'] = $user->pincode;
             $userArray['screen_name'] = $user->screen_name;
             $userArray['profile_pic_path'] = $user->profile_pic_path;
             $userArray['mobile_number'] = $user->mobile_number;
