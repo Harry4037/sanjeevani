@@ -78,10 +78,18 @@ class CartController extends Controller {
                 if (!$request->meal_item_id) {
                     return $this->sendErrorResponse("Meal item id missing.", (object) []);
                 }
+                $mealDetail = MealItem::find($request->meal_item_id);
+                if (!$mealDetail) {
+                    return $this->sendErrorResponse("Invalid meal id.", (object) []);
+                }
             }
             if ($request->type == 2) {
                 if (!$request->meal_package_id) {
                     return $this->sendErrorResponse("Meal package id missing.", (object) []);
+                }
+                $mealPackageDetail = MealPackage::find($request->meal_package_id);
+                if (!$mealPackageDetail) {
+                    return $this->sendErrorResponse("Invalid meal package id.", (object) []);
                 }
             }
 
