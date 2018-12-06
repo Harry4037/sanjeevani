@@ -36,7 +36,8 @@ class CartController extends Controller {
      *       "status_code": 200,
      *       "message": "Item added to cart",
      *       "data": {
-     *           "cart_count": 4
+     *           "cart_count": 4,
+     *           "quantity_count": 2
      *       }
      *   }
      * 
@@ -114,6 +115,7 @@ class CartController extends Controller {
             $cart->meal_item_id = $request->meal_item_id ? $request->meal_item_id : 0;
             if ($cart->save()) {
                 $data['cart_count'] = Cart::where("user_id", $request->user_id)->count();
+                $data['quantity_count'] = $cart->quantity;
                 return $this->sendSuccessResponse("Item added to cart", $data);
             } else {
                 return $this->sendErrorResponse("Something went be wrong, Please try later", (object) []);
