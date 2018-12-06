@@ -1766,6 +1766,198 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/my-health-program",
+    "title": "My Healthcare Package",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetMyHealthcarePackage",
+    "group": "Healthcare_Program",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>My Health Package.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"My Health Package\",\n      \"data\": {\n          \"id\": 2,\n          \"name\": \"Healthcare Package\",\n          \"description\": \"<p>Testing</p>\",\n          \"start_from\": \"28-11-2018\",\n          \"end_to\": \"28-11-2018\",\n          \"healthcare_images\": [\n              {\n                  \"id\": 2,\n                  \"banner_image_url\": \"http://127.0.0.1:8000/storage/healthcare_images/58PUwfdKYmUzP4hO8WdQMLLrhuhUAbXXp5WoNgNO.jpeg\",\n                  \"health_program_id\": 2\n              },\n              {\n                  \"id\": 3,\n                  \"banner_image_url\": \"http://127.0.0.1:8000/storage/healthcare_images/m9MW1Nb8LWCMrZa992hcHoLSPgBlMkkjw9fsKAri.jpeg\",\n                  \"health_program_id\": 2\n              }\n          ],\n          \"healthcare_days\": [\n              {\n                  \"id\": 4,\n                  \"day\": \"1\",\n                  \"description\": \"<p>Testing</p>\",\n                  \"health_program_id\": 2\n              },\n              {\n                  \"id\": 5,\n                  \"day\": \"2\",\n                  \"description\": \"<p>Testing</p>\",\n                  \"health_program_id\": 2\n              },\n              {\n                  \"id\": 6,\n                  \"day\": \"3\",\n                  \"description\": \"<p>Testing</p>\",\n                  \"health_program_id\": 2\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"User id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/HealthcareProgramController.php",
+    "groupTitle": "Healthcare_Program"
+  },
+  {
+    "type": "get",
+    "url": "/api/my-upcoming-complete-program",
+    "title": "My Upcoming & Completed Healthcare Package",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetMyUpcomingCompleteHealthcarePackage",
+    "group": "Healthcare_Program",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Upcoming &amp; Completed Health Package.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>response.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Health Package found\",\n      \"data\": {\n          \"upcoming\": [\n              {\n                  \"id\": 2,\n                  \"name\": \"Healthcare Package\",\n                  \"duration\": \"28-11-2018 to 28-11-2018\",\n                  \"status\": \"Booking Confirmed\"\n              }\n          ],\n          \"complete\": [\n              {\n                  \"id\": 2,\n                  \"name\": \"Healthcare Package\",\n                  \"duration\": \"28-11-2018 to 28-11-2018\",\n                  \"status\": \"Booking Confirmed\"\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n  {\n      \"status\": false,\n      \"status_code\": 404,\n      \"message\": \"User id missing.\",\n      \"data\": {}\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/HealthcareProgramController.php",
+    "groupTitle": "Healthcare_Program"
+  },
+  {
+    "type": "get",
     "url": "/api/home",
     "title": "Home",
     "header": {
@@ -2413,7 +2605,7 @@ define({ "api": [
             "type": "boolean",
             "optional": false,
             "field": "flag",
-            "description": "<p>Increment or add =&gt; true, Decrement =&gt; false.</p>"
+            "description": "<p>Increment or add =&gt; 1, Decrement =&gt; 2.</p>"
           }
         ]
       }

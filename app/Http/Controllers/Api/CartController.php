@@ -23,7 +23,7 @@ class CartController extends Controller {
      * @apiParam {String} meal_item_id Meal item id.
      * @apiParam {String} meal_package_id Meal Package Id.
      * @apiParam {String} quantity Quantity.
-     * @apiParam {boolean} flag Increment or add => true, Decrement => false.
+     * @apiParam {boolean} flag Increment or add => 1, Decrement => 2.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -100,7 +100,7 @@ class CartController extends Controller {
             }
 
             if (!$request->flag) {
-                return $this->sendErrorResponse("decrement or increment flag missing.", (object) []);
+                return $this->sendErrorResponse("flag missing.", (object) []);
             }
             $cart = Cart::where(["user_id" => $request->user_id])
                     ->where(function($q) use($request) {
@@ -110,7 +110,7 @@ class CartController extends Controller {
                     ->first();
 
             if ($cart) {
-                if ($request->flag) {
+                if ($request->flag == 1) {
                     $cart->quantity = $cart->quantity + $request->quantity;
                 } else {
                     $cart->quantity = $cart->quantity - $request->quantity;
