@@ -2407,6 +2407,13 @@
             "optional": false,
             "field": "quantity",
             "description": "<p>Quantity.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "boolean",
+            "optional": false,
+            "field": "flag",
+            "description": "<p>Increment or add =&gt; true, Decrement =&gt; false.</p>"
           }
         ]
       }
@@ -2447,7 +2454,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Item added to cart\",\n      \"data\": {\n          \"cart_count\": 4\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Item added to cart\",\n      \"data\": {\n          \"cart_count\": 4,\n          \"quantity_count\": 2\n      }\n  }",
           "type": "json"
         }
       ]
