@@ -218,7 +218,7 @@ class HealthcareProgramController extends Controller {
                                             $query->select('id', 'day', 'description', 'health_program_id');
                                         }
                                     ])->first();
-
+                                    dd($healthcare);
                     if ($healthcare) {
                         return $this->sendSuccessResponse("My Health Package", $healthcare);
                     } else {
