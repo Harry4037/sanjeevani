@@ -130,6 +130,7 @@ class CartController extends Controller {
                 return $this->sendErrorResponse("Something went be wrong, Please try later", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
