@@ -207,6 +207,7 @@ class HealthcareProgramController extends Controller {
             $user = User::find($request->user_id);
             if ($user) {
                 if (isset($user->userBookingDetail->package_id) && ($user->userBookingDetail->package_id > 0)) {
+                    dd($user->userBookingDetail->package_id);
                     $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["id" => $user->userBookingDetail->package_id])
                                     ->with([
                                         'healthcareImages' => function($query) {
