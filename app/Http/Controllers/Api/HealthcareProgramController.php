@@ -207,8 +207,8 @@ class HealthcareProgramController extends Controller {
             $user = User::find($request->user_id);
             if ($user) {
                 if (isset($user->userBookingDetail->package_id) && ($user->userBookingDetail->package_id > 0)) {
-                   
-                    $healthcare = HealthcateProgram::selectRaw(DB::raw('id, nam, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["id" => $user->userBookingDetail->package_id])
+
+                    $healthcare = HealthcateProgram::selectRaw(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["id" => $user->userBookingDetail->package_id])
                                     ->with([
                                         'healthcareImages' => function($query) {
                                             $query->select('id', 'image_name as banner_image_url', 'health_program_id');
@@ -219,18 +219,16 @@ class HealthcareProgramController extends Controller {
                                             $query->select('id', 'day', 'description', 'health_program_id');
                                         }
                                     ])->first();
-                                    dd($healthcare);
                     if ($healthcare) {
                         return $this->sendSuccessResponse("My Health Package", $healthcare);
                     } else {
-                        return $this->sendErrorResponse("My Health Package not found", $healthcare);
+                        return $this->sendErrorResponse("My Health Package not found", (object) []);
                     }
                 }
             } else {
                 return $this->sendErrorResponse("Invalid User", (object) []);
             }
         } catch (\Exception $ex) {
-            dd($ex);
             return $this->administratorResponse();
         }
     }
