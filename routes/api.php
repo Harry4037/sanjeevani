@@ -49,42 +49,38 @@ Route::namespace("Api")->group(function () {
     Route::get('resort-listing', 'ResortController@resortListing');
     //Resort detail
     Route::get('resort-detail', 'ResortController@resortDetail');
-    
+
     //Offer listing detail
     Route::get('offer-listing', 'OfferController@offerListing');
-    
+
     //Healthcare Program listing
     Route::get('health-program-listing', 'HealthcareProgramController@healthcareListing');
-    
+
     //My Healthcare Program Detail
     Route::get('my-health-program', 'HealthcareProgramController@myHealthcareProgram');
-    
+
     //My Healthcare Program Detail
     Route::get('my-upcoming-complete-program', 'HealthcareProgramController@myUpcomingCompleteProgram');
-    
+
     //Meal listing
     Route::get('meal-listing', 'MealController@mealListing');
-    
+
     //Invoice listing & Detail
     Route::get('invoice-list-detail', 'OrderController@invoiceListDetail');
-    
+
     Route::get('terms-conditions', 'CmsController@termContidion');
-    
+
     Route::get('about-us', 'CmsController@aboutUs');
-    
+
     Route::get('contact-us', 'CmsController@contactUsDetail');
-    
+
     Route::post('submit-contact-us', 'CmsController@contactUsSubmit');
-    
-        
+
+
     Route::post('referesh-token', 'AuthController@refereshToken');
     Route::post('forget-password', 'UserController@forgetPassword');
-    
+
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
-
-
-        //Add Item cart
-        Route::post('add-item-cart', 'CartController@addCartItem');
 
     Route::middleware('auth:api')->group(function () {
         //Raise service request (by user)
@@ -107,15 +103,16 @@ Route::namespace("Api")->group(function () {
 
         //Book amenity
         Route::post('book-activities', 'ActivityController@bookAmenities');
-        
 
-        
+        //Add Item cart
+        Route::post('add-item-cart', 'CartController@addCartItem');
+
         //My Cart
         Route::get('my-cart', 'CartController@myCart');
-        
+
         //My Cart
         Route::post('create-order', 'OrderController@submitOrder');
-        
+
         Route::post('sos', 'CmsController@sos');
 
         Route::post('check-in', 'UserController@checkIn');

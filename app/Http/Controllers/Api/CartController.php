@@ -108,7 +108,7 @@ class CartController extends Controller {
                         ->orWhere("meal_item_id", $request->meal_item_id);
                     })
                     ->first();
-            dd($cart);
+
             if ($cart) {
                 if ($request->flag == 1) {
                     $cart->quantity = $cart->quantity + $request->quantity;
@@ -130,7 +130,6 @@ class CartController extends Controller {
                 return $this->sendErrorResponse("Something went be wrong, Please try later", (object) []);
             }
         } catch (\Exception $ex) {
-            dd($ex);
             return $this->administratorResponse();
         }
     }
