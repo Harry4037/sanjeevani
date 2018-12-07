@@ -230,6 +230,7 @@ class HealthcareProgramController extends Controller {
                 return $this->sendErrorResponse("Invalid User", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
