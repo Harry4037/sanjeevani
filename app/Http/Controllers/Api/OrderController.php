@@ -85,7 +85,7 @@ class OrderController extends Controller {
                     $cartDataArray[$key]['item_name'] = $mealItem->name;
                     $cartDataArray[$key]['item_price'] = $mealItem->price;
                     $cartDataArray[$key]['quantity'] = $cart->quantity;
-                    $total += $mealItem->price;
+                    $total += ($mealItem->price * $cart->quantity);
                 }
 
                 $mealOrder = new MealOrder();
