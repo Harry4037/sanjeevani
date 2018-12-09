@@ -107,7 +107,7 @@ class OrderController extends Controller {
                 $data['invoice_id'] = $mealOrder->invoice_id;
                 $data['total_amount'] = $mealOrder->total_amount;
                 Cart::where(["user_id" => $request->user_id])->delete();
-                $this->generateNotification($request->user_id, "Meal Order", "You meal ordered with $mealOrder->invoice_id ", 2);
+                $this->generateNotification($request->user_id, "Meal Order", "You meal ordered with invoice Id $mealOrder->invoice_id ", 2);
                 return $this->sendSuccessResponse("Order created succeffully.", $data);
             } else {
                 Cart::where(["user_id" => $request->user_id])->delete();

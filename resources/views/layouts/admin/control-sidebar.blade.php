@@ -129,7 +129,12 @@
                   >
                   <a href="{{ route('admin.order.index') }}"><i class="fa fa-shopping-basket"></i>Order Management</a>
             </li>
-
+            <li  @if(in_array(Route::currentRouteName(), ['admin.notification.index']))
+                  {{ "class=current-page" }}
+                  @endif
+                  >
+                  <a href="{{ route('admin.notification.index') }}"><i class="fa fa-newspaper-o"></i>Notification Management</a>
+            </li>
         </ul>
     </div>
 </div>

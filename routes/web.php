@@ -254,4 +254,10 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
 //        Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('admin.meal-package.delete');
 //        Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('admin.meal-package.resort-item');
     });
+    /**
+     * Notification Management
+     */
+    Route::prefix('notification')->group(function() {
+        Route::get('/', 'NotificationController@index')->name('admin.notification.index');
+    });
 });
