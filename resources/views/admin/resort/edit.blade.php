@@ -18,8 +18,8 @@
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"></label>
                         @foreach($resortImages as $resortImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
-                            <img src="{{ $resortImage->image_name }}" width=150 height=150>
-                            <button style="margin-left: 30px;" class="btn btn-info btn-xs delete_resort_image" id="{{ $resortImage->id }}" >Remove</button>
+                            <img src="{{ $resortImage->image_name }}" class="img-pre">
+                            <button style="margin-left: 40px;" class="btn btn-info btn-xs delete_resort_image" id="{{ $resortImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="ln_solid"></div>
-                <form class="form-horizontal form-label-left" action="" method="post" id="editResortForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.resort.edit', $data->id) }}" method="post" id="editResortForm" enctype="multipart/form-data">
                     @csrf
                     <div id="resort_images_div"></div>
                     <div class="form-group">
@@ -102,6 +102,18 @@
                             <input type="text" class="form-control" name="edit_pin_code" id="edit_pin_code" placeholder="Pincode" value="{{ $data->pincode }}">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ $data->latitude }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ $data->longitude }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
+                        </div>
+                    </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
@@ -143,8 +155,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.resort.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>

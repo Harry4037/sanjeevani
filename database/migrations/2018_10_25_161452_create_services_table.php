@@ -4,15 +4,14 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServicesTable extends Migration
-{
+class CreateServicesTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('services', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
@@ -24,6 +23,7 @@ class CreateServicesTable extends Migration
             $table->string('created_by')->default(1);
             $table->string('updated_by')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -32,8 +32,8 @@ class CreateServicesTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('services');
     }
+
 }

@@ -18,6 +18,8 @@ class CreateActivitiesTable extends Migration {
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->text('address')->nullable();
+            $table->float('latitude', 8, 6)->default(0);
+            $table->float('longitude', 8, 6)->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(0);

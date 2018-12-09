@@ -135,41 +135,31 @@ class MealController extends Controller {
         $data = MealItem::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'amenity_name' => 'bail|required',
+                        'resort_id' => 'bail|required',
+                        'meal_name' => 'bail|required',
+                        'meal_price' => 'bail|required',
+                        'meal_category_id' => 'bail|required',
+                        'meal_type' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                return redirect()->route('admin.meal.index')->withErrors($validator)->withInput();
             }
-            $amenity->name = $request->amenity_name;
-            $amenity->description = $request->amenity_description;
-            $amenity->resort_id = $request->resort_id;
-            if ($amenity->save()) {
-                if ($request->amenity_images) {
-                    foreach ($request->amenity_images as $tempImage) {
-                        $amenityImage = new ActivityImage();
-                        $amenityImage->image_name = $tempImage;
-                        $amenityImage->amenity_id = $amenity->id;
-                        $amenityImage->save();
-                    }
-                }
-                if ($request->from_time && $request->to_time) {
-                    ActivityTimeSlot::where("amenity_id", $amenity->id)->delete();
-                    foreach ($request->from_time as $key => $fromTime) {
-                        $from_time = Carbon::parse($fromTime);
-                        $to_time = Carbon::parse($request->to_time[$key]);
-                        $amenityTimeSlot = new ActivityTimeSlot();
-                        $amenityTimeSlot->amenity_id = $amenity->id;
-                        $amenityTimeSlot->from = $from_time->format("H:s:i");
-                        $amenityTimeSlot->to = $to_time->format("H:s:i");
-                        $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                        $amenityTimeSlot->save();
-                    }
-                }
+            $data->name = $request->meal_name;
+            $data->meal_type_id = $request->meal_category_id;
+            $data->category = $request->meal_type;
+            $data->name = $request->meal_name;
+            $data->price = $request->meal_price;
+            if ($request->hasFile("meal_image")) {
+                $icon_image = $request->file("meal_image");
+                $icon = Storage::disk('public')->put('meal_images', $icon_image);
+                $icon_file_name = basename($icon);
+                $data->image_name = $icon_file_name;
+            }
 
-
-                return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+            if ($data->save()) {
+                return redirect()->route('admin.meal.edit', $data->id)->with('status', 'Meal has been updated successfully.');
             } else {
-                return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('admin.meal.index')->with('error', 'Something went be wrong.');
             }
         }
         $resorts = Resort::where("is_active", 1)->get();

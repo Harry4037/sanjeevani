@@ -85,8 +85,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.healthcare.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -188,7 +187,13 @@ $(document).ready(function () {
                     $("#healthcare_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                alert(message);
+                this.removeFile(file);
+            });
         },
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
         dictDefaultMessage: "Drop or Select multiple images for healthcare packages."
     };
 

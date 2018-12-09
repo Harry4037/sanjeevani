@@ -8,7 +8,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Resorts</h2>
+                <h2>Resort Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.resort.add') }}">Add Resort</a>
                 </div>

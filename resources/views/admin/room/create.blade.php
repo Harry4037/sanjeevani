@@ -14,7 +14,7 @@
                 <br>
                 <div class="form-horizontal form-label-left">
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Room Images</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Images</label>
                         <div class="col-md-10 col-sm-10 col-xs-12">
                             <form id="my-dropzone" class="dropzone" action="{{ route('admin.room.upload-image') }}">
                                 @csrf
@@ -27,7 +27,7 @@
                     @csrf
                     <div id="room_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('name') }}" type="text" class="form-control" name="name" id="name" placeholder="Room Type">
                         </div>
@@ -47,8 +47,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.room.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -102,15 +101,19 @@ $(document).ready(function () {
                                 _this.removeFile(file);
                             }
                         });
-
-
                     });
                     file.previewElement.appendChild(removeButton);
                     $("#room_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                alert(message);
+                this.removeFile(file);
+            });
         },
-        dictDefaultMessage: "Drop or Select multiple images for resort."
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
+        dictDefaultMessage: "Drop or Select multiple images for room type images."
     };
 
     $("#addRoomForm").validate({
@@ -119,6 +122,15 @@ $(document).ready(function () {
             name: {
                 required: true
             },
+            room_icon: {
+                required: true,
+                accept: "image/*",
+            },
+        },
+        messages: {
+            room_icon: {
+                accept: "Not valid image type"
+            }
         }
     });
 

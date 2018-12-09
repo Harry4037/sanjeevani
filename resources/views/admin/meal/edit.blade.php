@@ -84,12 +84,17 @@
                             <input type="file" class="form-control" name="meal_image" id="meal_image">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Image Preview</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <img src="{{ $data->image_name }}" width="350" height="200" class="img-rounded" >
+                        </div>
+                    </div>
 
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.meal.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -104,11 +109,32 @@
 
 @section('script')
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
 
-   
+        $("#editMealForm").validate({
+            ignore: [],
+            rules: {
+                resort_id: {
+                    required: true
+                },
+                meal_name: {
+                    required: true
+                },
+                meal_price: {
+                    required: true
+                },
+                meal_category_id: {
+                    required: true
+                },
+                meal_type: {
+                    required: true
+                },
+                meal_type: {
+                    required: true
+                },
+            },
+        });
 
-
-});
+    });
 </script>
 @endsection

@@ -89,7 +89,7 @@ class AmenityController extends Controller {
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
-        $amenities = Amenity::select('id', 'name', 'description')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
+        $amenities = Amenity::select('id', 'name', 'description', 'address')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
                     'amenityImages' => function($query) {
                         $query->select('id', 'image_name as banner_image_url', 'amenity_id');
                     }
@@ -99,7 +99,6 @@ class AmenityController extends Controller {
             foreach ($amenities as $key => $amenity) {
                 $slots = AmenityTimeSlot::where('amenity_id', $amenity->id)->count();
                 $dataArray[$key] = $amenity;
-                $dataArray[$key]['address'] = "sector 62, Noida, UP";
                 $dataArray[$key]['is_booking_avaliable'] = $slots > 0 ? true : false;
             }
 

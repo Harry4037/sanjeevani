@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Amenities</h2>
+                <h2>Activites Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.activity.add') }}">Add Activity</a>
                 </div>

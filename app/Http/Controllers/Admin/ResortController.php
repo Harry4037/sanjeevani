@@ -83,6 +83,8 @@ class ResortController extends Controller {
                             'address' => 'bail|required',
                             'pin_code' => 'bail|required|numeric',
                             'city' => 'bail|required|numeric',
+                            'latitude' => 'bail|required',
+                            'longitude' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.resort.add')->withErrors($validator)->withInput();
@@ -95,6 +97,8 @@ class ResortController extends Controller {
                 $resort->address_1 = $request->address;
                 $resort->pincode = $request->pin_code;
                 $resort->city_id = $request->city;
+                $resort->latitude = $request->latitude;
+                $resort->longitude = $request->longitude;
                 if ($resort->save()) {
                     if ($request->resort_images) {
                         foreach ($request->resort_images as $tempImage) {
@@ -106,14 +110,12 @@ class ResortController extends Controller {
                         }
                     }
                     if ($request->room_type && $request->room_no) {
-                        $i = 0;
-                        foreach ($request->room_type as $room) {
+                        foreach ($request->room_type as $k => $room) {
                             $resortRoom = new ResortRoom();
                             $resortRoom->resort_id = $resort->id;
                             $resortRoom->room_type_id = $room;
-                            $resortRoom->room_no = $request->room_no[$i];
+                            $resortRoom->room_no = $request->room_no[$k];
                             $resortRoom->save();
-                            $i++;
                         }
                     }
 
@@ -175,23 +177,24 @@ class ResortController extends Controller {
         try {
             $data = $this->resort->find($id);
             if ($request->isMethod("post")) {
+                
                 $data->name = $request->edit_resort_name;
                 $data->contact_number = $request->edit_contact_no;
                 $data->description = $request->edit_resort_description;
                 $data->address_1 = $request->edit_address;
                 $data->pincode = $request->edit_pin_code;
                 $data->city_id = $request->city;
+                $data->latitude = $request->latitude;
+                $data->longitude = $request->longitude;
                 if ($data->save()) {
                     if ($request->room_type && $request->room_no) {
                         ResortRoom::where("resort_id", $data->id)->delete();
-                        $i = 0;
-                        foreach ($request->room_type as $room) {
+                        foreach ($request->room_type as $k => $room) {
                             $resortRoom = new ResortRoom();
                             $resortRoom->resort_id = $data->id;
                             $resortRoom->room_type_id = $room;
-                            $resortRoom->room_no = $request->room_no[$i];
+                            $resortRoom->room_no = $request->room_no[$k];
                             $resortRoom->save();
-                            $i++;
                         }
                     }
 

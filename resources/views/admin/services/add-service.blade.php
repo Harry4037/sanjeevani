@@ -70,12 +70,12 @@
                                 <input class="flat" type="checkbox" name="service_question[]" value="{{ $ques->id }}"  
                                        @if(isset(old('service_question')[$key]))
                                        @if(old('service_question')[$key] == $ques->id)
-                                        {{ "checked" }}
-                                        @endif
-                                        @endif
-                                       
+                                       {{ "checked" }}
+                                       @endif
+                                       @endif
+
                                        > {{ $ques->name }}
-                                <br>
+                                       <br>
                                 @endforeach
                                 @endif
                             <p>
@@ -84,9 +84,8 @@
 
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
+                            <a class="btn btn-default" href="{{ route('admin.service.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -108,13 +107,19 @@
                     required: true
                 },
                 service_icon: {
-                    required: true
+                    required: true,
+                    accept: "image/*",
                 },
                 service_type: {
                     required: true
                 },
                 resort_id: {
                     required: true
+                }
+            },
+            messages: {
+                service_icon: {
+                    accept: "Not valid image type"
                 }
             }
         });

@@ -148,48 +148,47 @@ class MealpackageController extends Controller {
         $data = MealPackage::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'amenity_name' => 'bail|required',
+                        'name' => 'bail|required',
+                        'price' => 'bail|required',
+                        'category' => 'bail|required',
+                        'resort_id' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                return redirect()->route('admin.meal-package.index')->withErrors($validator)->withInput();
             }
-            $amenity->name = $request->amenity_name;
-            $amenity->description = $request->amenity_description;
-            $amenity->resort_id = $request->resort_id;
-            if ($amenity->save()) {
-                if ($request->amenity_images) {
-                    foreach ($request->amenity_images as $tempImage) {
-                        $amenityImage = new ActivityImage();
-                        $amenityImage->image_name = $tempImage;
-                        $amenityImage->amenity_id = $amenity->id;
-                        $amenityImage->save();
-                    }
-                }
-                if ($request->from_time && $request->to_time) {
-                    ActivityTimeSlot::where("amenity_id", $amenity->id)->delete();
-                    foreach ($request->from_time as $key => $fromTime) {
-                        $from_time = Carbon::parse($fromTime);
-                        $to_time = Carbon::parse($request->to_time[$key]);
-                        $amenityTimeSlot = new ActivityTimeSlot();
-                        $amenityTimeSlot->amenity_id = $amenity->id;
-                        $amenityTimeSlot->from = $from_time->format("H:s:i");
-                        $amenityTimeSlot->to = $to_time->format("H:s:i");
-                        $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                        $amenityTimeSlot->save();
+            $data->name = $request->name;
+            $data->category = $request->category;
+            $data->price = $request->price;
+            $data->resort_id = $request->resort_id;
+            if ($request->hasFile("image_name")) {
+                $icon_image = $request->file("image_name");
+                $icon = Storage::disk('public')->put('meal_package_images', $icon_image);
+                $icon_file_name = basename($icon);
+                $data->image_name = $icon_file_name;
+            }
+
+            if ($data->save()) {
+                if ($request->meal_item) {
+                    foreach ($request->meal_item as $item) {
+                        MealPackageItem::where("meal_package_id", $data->id)->delete();
+                        $mealPackageItem = new MealPackageItem();
+                        $mealPackageItem->meal_package_id = $data->id;
+                        $mealPackageItem->meal_item_id = $item;
+                        $mealPackageItem->save();
                     }
                 }
 
-
-                return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                return redirect()->route('admin.meal-package.index')->with('status', 'Package has been updated successfully.');
             } else {
-                return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('admin.meal-package.index')->with('error', 'Something went be wrong.');
             }
         }
-        $resorts = Resort::where("is_active", 1)->get();
 
-        return view('admin.meal.edit', [
+        $resorts = Resort::where("is_active", 1)->get();
+        $resortMeals = MealItem::where("resort_id", $data->resort_id)->get();
+        return view('admin.meal-package.edit', [
             'resorts' => $resorts,
-            'mealCategories' => $mealCategories,
+            'resortMeals' => $resortMeals,
             'data' => $data
         ]);
     }

@@ -79,6 +79,7 @@ class AmenityController extends Controller {
                 $amenity->name = $request->amenity_name;
                 $amenity->description = $request->amenity_description;
                 $amenity->resort_id = $request->resort_id;
+                $amenity->address = $request->address;
                 if ($amenity->save()) {
                     if ($request->amenity_images) {
                         foreach ($request->amenity_images as $tempImage) {
@@ -171,6 +172,7 @@ class AmenityController extends Controller {
             $amenity->name = $request->amenity_name;
             $amenity->description = $request->amenity_description;
             $amenity->resort_id = $request->resort_id;
+            $amenity->address = $request->address;
             if ($amenity->save()) {
                 if ($request->amenity_images) {
                     foreach ($request->amenity_images as $tempImage) {

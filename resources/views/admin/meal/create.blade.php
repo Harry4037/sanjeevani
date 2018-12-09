@@ -36,7 +36,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ old('meal_price') }}" type="text" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
+                            <input value="{{ old('meal_price') }}" type="number" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
                         </div>
                     </div>
                     <div class="form-group">
@@ -72,8 +72,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.meal.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -88,33 +87,42 @@
 
 @section('script')
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
 
-    $("#addMealForm").validate({
-        ignore: [],
-        rules: {
-            resort_id: {
-                required: true
+        $("#addMealForm").validate({
+            ignore: [],
+            rules: {
+                resort_id: {
+                    required: true
+                },
+                meal_name: {
+                    required: true
+                },
+                meal_price: {
+                    required: true
+                },
+                meal_category_id: {
+                    required: true
+                },
+                meal_type: {
+                    required: true
+                },
+                meal_type: {
+                    required: true
+                },
+                meal_image: {
+                    required: true,
+                    accept: "image/*"
+                },
             },
-            meal_name: {
-                required: true
-            },
-            meal_price: {
-                required: true
-            },
-            meal_category_id: {
-                required: true
-            },
-            meal_type: {
-                required: true
-            },
-            meal_type: {
-                required: true
-            },
-        }
+            messages: {
+                meal_image: {
+                    accept: "Please select valid image type."
+                },
+            }
+        });
+
+
     });
-
-
-});
 </script>
 @endsection

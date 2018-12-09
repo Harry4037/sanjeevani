@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Resorts Nearby</h2>
+                <h2>Nearby Place Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.nearby.add') }}">Add Nearby</a>
                 </div>
@@ -90,7 +90,7 @@
                         $(".msg").css("display", "block");
                         setTimeout(function () {
                             $(".msg").fadeOut();
-                        }, 5000);
+                        }, 2000);
                     }
                 }
             });

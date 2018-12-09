@@ -7,12 +7,12 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Update Meal</h2>
+                <h2>Update Meal Package</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.meal.edit', $data->id) }}" method="post" id="editMealForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.meal-package.edit', $data->id) }}" method="post" id="editMealpackageForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
@@ -22,8 +22,8 @@
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}"
-                                        @if($resort->id == $data->resort_id)
-                                        {{ "selected" }}
+                                        @if($data->resort_id == $resort->id)
+                                        {{ "selected" }} 
                                         @endif
                                         >{{ $resort->name }}</option>
                                 @endforeach
@@ -32,64 +32,64 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ $data->name }}" type="text" class="form-control" name="meal_name" id="meal_name" placeholder="Meal Name">
+                            <input value="{{ $data->name }}" type="text" class="form-control" name="name" id="name" placeholder="Meal Package Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ $data->price }}" type="text" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Category</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="meal_category_id" name="meal_category_id">
-                                <option value="">Select option</option>
-                                @if($mealCategories)
-                                @foreach($mealCategories as $mealCategory)
-                                <option value="{{ $mealCategory->id }}"
-                                        @if($mealCategory->id == $data->meal_type_id)
-                                        {{ "selected" }}
-                                        @endif
-                                        >{{ $mealCategory->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
+                            <input value="{{ $data->price }}" type="text" class="form-control" name="price" id="price" placeholder="Meal Package Price">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="meal_type" name="meal_type">
+                            <select class="form-control" id="category" name="category">
                                 <option value="">Select option</option>
-                                <option value="V"
-                                        @if($data->category == "V")
-                                        {{ "selected" }}
-                                        @endif
-                                        >Veg</option>
-                                <option value="N"
-                                        @if($data->category == "N")
-                                        {{ "selected" }}
-                                        @endif
-                                        >Non Veg</option>
+                                <option value="V" @if($data->category == "V"){{ "selected" }} @endif>Veg</option>
+                                <option value="N" @if($data->category == "N"){{ "selected" }} @endif>Non Veg</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Image</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Image</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="file" class="form-control" name="meal_image" id="meal_image">
+                            <input type="file" class="form-control" name="image_name" id="image_name">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Image Preview</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <img src="{{ $data->image_name }}" class="img-rounded" width="300" height="150">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Items</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div id="resort_meal_items">
+                                <p style="padding: 5px;">
+                                    @if($resortMeals)
+                                    @foreach($resortMeals as $key => $item)
+                                    <input class="flat" type="checkbox" name="meal_item[]" value="{{ $item->id }}"  
+                                           @if(isset(old('meal_item')[$key]))
+                                           @if(old('meal_item')[$key] == $item->id)
+                                           {{ "checked" }}
+                                           @endif
+                                           @endif
 
+                                           > {{ $item->name }}
+                                           @endforeach
+                                           @endif
+                                <p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.meal-package.index') }}">Cancle</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -104,11 +104,46 @@
 
 @section('script')
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
 
-   
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
+        $("#editMealpackageForm").validate({
+            ignore: [],
+            rules: {
+                name: {
+                    required: true
+                },
+                price: {
+                    required: true
+                },
+                category: {
+                    required: true
+                },
+                resort_id: {
+                    required: true
+                }
+            }
+        });
 
-});
+        $(document).on("change", "#resort_id", function () {
+            var record_id = $("#resort_id :selected").val();
+            if (record_id) {
+                $.ajax({
+                    url: _baseUrl + '/admin/meal-package/meal-items',
+                    type: 'post',
+                    data: {record_id: record_id},
+                    dataType: 'html',
+                    success: function (res) {
+                        $("#resort_meal_items").html(res);
+                    }
+                });
+            }
+        });
+    });
 </script>
 @endsection

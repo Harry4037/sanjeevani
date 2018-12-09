@@ -63,7 +63,7 @@ class ActivityController extends Controller {
         if (!$request->resort_id) {
             return $this->sendErrorResponse("Resort id missing", (object) []);
         }
-        $amenities = Activity::select('id', 'name', 'description')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
+        $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
                     'activityImages' => function($query) {
                         $query->select('id', 'image_name as banner_image_url', 'amenity_id');
                     }
@@ -73,9 +73,6 @@ class ActivityController extends Controller {
             foreach ($amenities as $key => $amenity) {
                 $slots = ActivityTimeSlot::where('amenity_id', $amenity->id)->count();
                 $dataArray[$key] = $amenity;
-                $dataArray[$key]['address'] = "sector 62, Noida, UP";
-                $dataArray[$key]['latitude'] = "28.608510";
-                $dataArray[$key]['longitude'] = "77.347370";
                 $dataArray[$key]['is_booking_avaliable'] = $slots > 0 ? true : false;
             }
 

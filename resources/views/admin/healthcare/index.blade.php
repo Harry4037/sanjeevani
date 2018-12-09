@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Health</h2>
+                <h2>Healthcare Package Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.healthcare.add') }}">Add Healthcare Package</a>
                 </div>

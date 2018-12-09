@@ -18,7 +18,6 @@ class ResortController extends Controller {
      * @apiName GetResortDetail
      * @apiGroup Resort
      * 
-     * @apiParam {String} user_id User id.
      * @apiParam {String} resort_id Resort id*.
      * 
      * @apiSuccess {String} success true 
@@ -38,8 +37,8 @@ class ResortController extends Controller {
      *               "name": "Parth Inn",
      *               "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>",
      *               "address": "sector 63",
-     *               "latitude": "sector 63",
-     *               "longitude": "sector 63",
+     *               "latitude": "12.124565",
+     *               "longitude": "13.213245",
      *               "room_types": [
      *                   {
      *                       "id": 1,

@@ -36,7 +36,8 @@ class MealController extends Controller {
      *       "data": {
      *           "meal_packages": [
      *               {
-     *                   "id": "package 1",
+     *                   "id": 1,
+     *                   "name": "Package 1",
      *                   "image_url": "http://127.0.0.1:8000/storage/meal_package_images/bJfZEM2qedVLzQSHaPNLCezULofRgDol14MEjak8.jpeg",
      *                   "price": 1100,
      *                   "meal_items": [
@@ -61,7 +62,8 @@ class MealController extends Controller {
      *                   ]
      *               },
      *               {
-     *                   "id": "Package 2",
+     *                   "id": 2,
+     *                   "name": "Package 2",
      *                   "image_url": "http://127.0.0.1:8000/storage/meal_package_images/IMfrpkKB0EE4cSmWD848vD3VOjgf2Lp7JYMnKvJF.png",
      *                   "price": 850,
      *                   "meal_items": [
@@ -216,7 +218,8 @@ class MealController extends Controller {
                 $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
                         ->with("mealItem")
                         ->get();
-                $packageData[$key]['id'] = $mealPackage->name;
+                $packageData[$key]['id'] = $mealPackage->id;
+                $packageData[$key]['name'] = $mealPackage->name;
                 $packageData[$key]['image_url'] = $mealPackage->image_name;
                 $packageData[$key]['price'] = $mealPackage->price;
                 if ($mealPackageItems) {

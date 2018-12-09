@@ -12,6 +12,7 @@ use App\Models\UserBookingDetail;
 use App\Models\Resort;
 use App\Models\RoomBooking;
 use App\Models\CityMaster;
+use App\Models\Cart;
 
 class AuthController extends Controller {
 
@@ -343,10 +344,12 @@ class AuthController extends Controller {
                 $userRoom = RoomBooking::find($userBookingDetail->id);
             }
             $cityState = CityMaster::find($user->city_id);
+            $cart = Cart::where(["user_id" => $user->id])->count();
 //            dd($cityState->toArray());
             $userArray['id'] = $user->id;
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
+            $userArray['cart_count'] = $cart;
             $userArray['user_name'] = $userBookingDetail ? $user->user_name : "Welcom guest";
             $userArray['first_name'] = $user->first_name;
             $userArray['mid_name'] = $user->mid_name;

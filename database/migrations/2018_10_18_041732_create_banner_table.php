@@ -20,6 +20,7 @@ class CreateBannerTable extends Migration {
             $table->string('updated_by')->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

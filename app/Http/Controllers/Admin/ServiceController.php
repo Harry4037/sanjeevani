@@ -47,12 +47,13 @@ class ServiceController extends Controller {
             $servicesArray = [];
             foreach ($services as $service) {
                 $stype = ServiceType::find($service->type_id);
-                $servicesArray[$i]['icon'] = '<img width=50 height=50 src='.$service->icon.' >';
+                $servicesArray[$i]['icon'] = '<img width=50 height=50 src=' . $service->icon . ' >';
                 $servicesArray[$i]['name'] = $service->name;
                 $servicesArray[$i]['type'] = $stype ? $stype->name : '';
                 $checked_status = $service->is_active ? "checked" : '';
                 $servicesArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='service_status' id=" . $service->id . " data-status=" . $service->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $servicesArray[$i]['action'] = '<a href="' . route('admin.service.edit', $service->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                $servicesArray[$i]['action'] = '<a href="' . route('admin.service.edit', $service->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $service->id . '" ><i class="fa fa-trash"></i> Delete </a>';
                 $i++;
             }
             $data['recordsTotal'] = $this->service->count();
@@ -119,7 +120,13 @@ class ServiceController extends Controller {
         $serviceType = ServiceType::where("is_active", 1)->get();
         $resort = Resort::where("is_active", 1)->get();
         $question = Question::all();
-        return view('admin.services.add-service', ['js' => $js, 'css' => $css, 'serviceType' => $serviceType, 'resort' => $resort, 'question' => $question]);
+        return view('admin.services.add-service', [
+            'js' => $js,
+            'css' => $css,
+            'serviceType' => $serviceType,
+            'resort' => $resort,
+            'question' => $question
+        ]);
     }
 
     public function updateServiceStatus(Request $request) {
@@ -191,6 +198,15 @@ class ServiceController extends Controller {
             'questions' => $questions,
             'qSArray' => $qSArray,
         ]);
+    }
+
+    public function deleteService(Request $request) {
+        $service = Service::find($request->id);
+        if ($service->delete()) {
+            return ['status' => true];
+        } else {
+            return ['status' => true];
+        }
     }
 
 }

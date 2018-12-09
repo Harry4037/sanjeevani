@@ -18,8 +18,8 @@
                         <label class="col-md-2"></label>
                         @foreach($healthcareImages as $healthcareImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
-                            <img class="img-rounded" src="{{ $healthcareImage->image_name }}" width=100 height=100>
-                            <button style="margin-left: 24px;" class="btn btn-danger btn-xs delete_healthcare_image" id="{{ $healthcareImage->id }}" >Remove</button>
+                            <img class="img-pre" src="{{ $healthcareImage->image_name }}" >
+                            <button style="margin-left: 40px;" class="btn btn-danger btn-xs delete_healthcare_image" id="{{ $healthcareImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
@@ -123,7 +123,7 @@
 CKEDITOR.replace({{ "day_description_".$key }}, {
 removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
         removePlugins: 'image, link',
-        });
+});
                         </script>
                         @endforeach
                         @endif
@@ -131,9 +131,8 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <a class="btn btn-default" href="{{ route('admin.healthcare.index') }}">Cancel</a>
+                            <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
 
@@ -252,28 +251,26 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
                     },
             }
     });
-    
     $(document).on('click', '.delete_healthcare_image', function () {
-        var record_id = this.id;
-        var _this = $(this);
-        if (record_id) {
-        $.ajax({
-            url: _baseUrl + '/admin/healthcare/delete-healthcare-images',
+    var record_id = this.id;
+    var _this = $(this);
+    if (record_id) {
+    $.ajax({
+    url: _baseUrl + '/admin/healthcare/delete-healthcare-images',
             type: 'post',
             data: {record_id: record_id},
             dataType: 'json',
             success: function (res) {
-                    if (res.status)
-                    {
-                    _this.parent("div").remove();
-                    } else {
-                        alert("Something went be wrong");
-                    }
-                }
-            });
+            if (res.status)
+            {
+            _this.parent("div").remove();
+            } else {
+            alert("Something went be wrong");
             }
-        });
-    
+            }
+    });
+    }
+    });
     });
 </script>
 @endsection

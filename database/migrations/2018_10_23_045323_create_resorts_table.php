@@ -23,8 +23,8 @@ class CreateResortsTable extends Migration {
             $table->string('address_3')->nullable();
             $table->integer('pincode')->default(0);
             $table->bigInteger('city_id')->default(0);
-            $table->integer('latitude')->default(0);
-            $table->integer('longitude')->default(0);
+            $table->float('latitude', 8, 6)->default(0);
+            $table->float('longitude', 8, 6)->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);

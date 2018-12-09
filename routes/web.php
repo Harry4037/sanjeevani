@@ -65,6 +65,21 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     });
 
     /**
+     * Resort Nearby Management
+     */
+    Route::prefix('nearby')->group(function() {
+        Route::get('/', 'NearbyController@index')->name('admin.nearby.index');
+        Route::get('/nearby-list', 'NearbyController@nearbyList')->name('admin.nearby.list');
+        Route::match(['get', 'post'], '/create', 'NearbyController@create')->name('admin.nearby.add');
+        Route::post('/update-status', 'NearbyController@updateStatus')->name('admin.nearby.status-update');
+        Route::post('/upload-images', 'NearbyController@uploadImages')->name('admin.nearby.upload-image');
+        Route::post('/delete-images', 'NearbyController@deleteImages')->name('admin.nearby.delete-image');
+        Route::match(['get', 'post'], '/edit/{id}', 'NearbyController@editNearby')->name('admin.nearby.edit');
+        Route::post('/delete-nearby-images', 'NearbyController@deleteNearbyImage')->name('admin.nearby.delete-nearby-image');
+        Route::post('/delete', 'NearbyController@deleteNearby')->name('admin.nearby.delete');
+    });
+
+    /**
      * Users Management
      */
     Route::get('/users', 'UsersController@index')->name('admin.users.index');
@@ -74,7 +89,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::get('/user/detail/{id}', 'UsersController@viewUser')->name('admin.users.detail');
     Route::match(['get', 'post'], '/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
     /**
-     * Users Management
+     * Staff Management
      */
     Route::prefix('staff')->group(function() {
 
@@ -92,6 +107,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::get('/banners-list', 'BannerController@bannersList')->name('admin.banner.list');
     Route::match(['get', 'post'], '/banner-add', 'BannerController@bannerAdd')->name('admin.banner.add');
     Route::post('/banner-status', 'BannerController@updateBannerStatus')->name('admin.banner.status');
+    Route::match(['get', 'post'], '/baner-edit/{id}', 'BannerController@editBanner')->name('admin.banner.edit');
+    Route::post('banner/delete', 'BannerController@deleteBanner')->name('admin.banner.delete');
 
     /**
      * Service Management
@@ -101,21 +118,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::match(['get', 'post'], '/service-add', 'ServiceController@serviceAdd')->name('admin.service.add');
     Route::post('/service-status', 'ServiceController@updateServiceStatus')->name('admin.service.status');
     Route::match(['get', 'post'], '/service/edit/{id}', 'ServiceController@edit')->name('admin.service.edit');
+    Route::post('services/delete', 'ServiceController@deleteService')->name('admin.service.delete');
 
-    /**
-     * Resort Nearby Management
-     */
-    Route::prefix('nearby')->group(function() {
-        Route::get('/', 'NearbyController@index')->name('admin.nearby.index');
-        Route::get('/nearby-list', 'NearbyController@nearbyList')->name('admin.nearby.list');
-        Route::match(['get', 'post'], '/create', 'NearbyController@create')->name('admin.nearby.add');
-        Route::post('/update-status', 'NearbyController@updateStatus')->name('admin.nearby.status-update');
-        Route::post('/upload-images', 'NearbyController@uploadImages')->name('admin.nearby.upload-image');
-        Route::post('/delete-images', 'NearbyController@deleteImages')->name('admin.nearby.delete-image');
-        Route::match(['get', 'post'], '/edit/{id}', 'NearbyController@editNearby')->name('admin.nearby.edit');
-        Route::post('/delete-nearby-images', 'NearbyController@deleteNearbyImage')->name('admin.nearby.delete-nearby-image');
-        Route::post('/delete', 'NearbyController@deleteNearby')->name('admin.nearby.delete');
-    });
     /**
      * Jobs Management
      */
@@ -164,10 +168,9 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/update-status', 'OfferController@updateStatus')->name('admin.offer.status-update');
         Route::post('/upload-images', 'OfferController@uploadImages')->name('admin.offer.upload-image');
         Route::post('/delete-images', 'OfferController@deleteImages')->name('admin.offer.delete-image');
-//        Route::match(['get', 'post'], '/edit/{id}', 'OfferController@editActivity')->name('admin.offer.edit');
-//        Route::post('/delete-activity-images', 'OfferController@deleteActivityImage')->name('admin.offer.delete-activity-image');
-//        Route::post('/delete-time-slot', 'OfferController@deleteTimeSlot')->name('admin.offer.delete-timeslot');
-//        Route::post('/delete', 'OfferController@deleteActivity')->name('admin.offer.delete');
+        Route::match(['get', 'post'], '/edit/{id}', 'OfferController@editOffer')->name('admin.offer.edit');
+        Route::post('/delete-offer-images', 'OfferController@deleteOfferImage')->name('admin.offer.delete-offer-image');
+        Route::post('/delete', 'OfferController@deleteOffer')->name('admin.offer.delete');
     });
 
     /**
@@ -237,5 +240,18 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/edit/{id}', 'MealpackageController@editMealpackage')->name('admin.meal-package.edit');
         Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('admin.meal-package.delete');
         Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('admin.meal-package.resort-item');
+    });
+
+    /**
+     * Order Management
+     */
+    Route::prefix('order')->group(function() {
+        Route::get('/', 'OrderController@index')->name('admin.order.index');
+        Route::get('/list', 'OrderController@OrderList')->name('admin.order.list');
+//        Route::match(['get', 'post'], '/create', 'MealpackageController@create')->name('admin.meal-package.add');
+//        Route::post('/update-status', 'MealpackageController@updateStatus')->name('admin.meal-package.status-update');
+//        Route::match(['get', 'post'], '/edit/{id}', 'MealpackageController@editMealpackage')->name('admin.meal-package.edit');
+//        Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('admin.meal-package.delete');
+//        Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('admin.meal-package.resort-item');
     });
 });

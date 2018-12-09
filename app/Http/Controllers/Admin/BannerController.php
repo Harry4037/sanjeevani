@@ -37,15 +37,15 @@ class BannerController extends Controller {
 
             $query = $this->banner->query();
             $banners = $query->get();
-            $i = 0;
             $bannersArray = [];
-            foreach ($banners as $banner) {
+            foreach ($banners as $k => $banner) {
                 $resort = Resort::find($banner->resort_id);
-                $bannersArray[$i]['banner'] = '<img height="100" width="200" src=' . $banner->name . '>';
-                $bannersArray[$i]['resort_name'] = $resort->name;
+                $bannersArray[$k]['banner'] = '<img height="100" width="200" src=' . $banner->name . '>';
+                $bannersArray[$k]['resort_name'] = $resort->name;
                 $checked_status = $banner->is_active ? "checked" : '';
-                $bannersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='banner_status' id=" . $banner->id . " data-status=" . $banner->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $i++;
+                $bannersArray[$k]['status'] = "<label class='switch'><input  type='checkbox' class='banner_status' id=" . $banner->id . " data-status=" . $banner->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $bannersArray[$k]['action'] = '<a href="' . route('admin.banner.edit', $banner->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                        . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $banner->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
             $data['recordsTotal'] = $this->banner->count();
             $data['recordsFiltered'] = $this->banner->count();
@@ -103,6 +103,48 @@ class BannerController extends Controller {
             return [];
         } catch (\Exception $e) {
             dd($e);
+        }
+    }
+
+    public function editBanner(Request $request, $id) {
+        try {
+            $data = Banner::find($id);
+            if ($request->isMethod("post")) {
+                $banner_image = $request->file("banner_image");
+                $banner = Storage::disk('public')->put('banner_images', $banner_image);
+                $banner_file_name = basename($banner);
+
+                $data->name = $banner_file_name;
+                $data->resort_id = $request->resort_id;
+                $data->is_active = $request->banner_status;
+
+                if ($data->save()) {
+                    return redirect()->route('admin.banner.index')->with('status', 'Banner has been updated successfully.');
+                } else {
+                    return redirect()->route('admin.banner.index')->with('error', 'Something went be wrong.');
+                }
+            }
+            $js = [
+                'vendors/datatables.net/js/jquery.dataTables.min.js',
+                'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+            ];
+            $resorts = Resort::where("is_active", 1)->get();
+            return view('admin.banners.edit', [
+                'js' => $js,
+                'resorts' => $resorts,
+                'data' => $data,
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.banner.edit')->with('error', $ex->getMessage());
+        }
+    }
+
+    public function deleteBanner(Request $request) {
+        $banner = Banner::find($request->id);
+        if ($banner->delete()) {
+            return ['status' => true];
+        } else {
+            return ['status' => true];
         }
     }
 

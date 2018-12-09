@@ -18,6 +18,7 @@ use App\Models\RoomType;
 use App\Models\ResortRoom;
 use App\Models\UserhealthDetail;
 use Validator;
+use App\Models\HealthcateProgram;
 
 class UsersController extends Controller {
 
@@ -246,7 +247,14 @@ class UsersController extends Controller {
         ];
         $resorts = Resort::where("is_active", 1)->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
-        return view('admin.users.add-user', ['js' => $js, 'css' => $css, 'resorts' => $resorts, 'roomTypes' => $roomTypes]);
+        $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
+        return view('admin.users.add-user', [
+            'js' => $js,
+            'css' => $css,
+            'resorts' => $resorts,
+            'roomTypes' => $roomTypes,
+            'healcarePackages' => $healcarePackages,
+        ]);
     }
 
     public function editUser(Request $request, $id) {
@@ -307,7 +315,6 @@ class UsersController extends Controller {
                         $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
                         $doc_file_name = basename($medical_doc);
                     }
-
                     $userHealthDetail = UserhealthDetail::where("user_id", $user->id)->first();
                     if (!$userHealthDetail) {
                         $userHealthDetail = new UserhealthDetail();
@@ -373,6 +380,7 @@ class UsersController extends Controller {
                 'vendors/datatables.net/js/jquery.dataTables.min.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
+            $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
             return view('admin.users.edit-user', [
                 'js' => $js,
                 'css' => $css,
@@ -384,10 +392,10 @@ class UsersController extends Controller {
                 'resortRooms' => isset($resortRooms) ? $resortRooms : [],
                 'roomBooking' => isset($roomBooking) ? $roomBooking : [],
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
+                'healcarePackages' => $healcarePackages,
                     ]
             );
         } catch (\Exception $ex) {
-//            dd($ex);
             return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
         }
     }

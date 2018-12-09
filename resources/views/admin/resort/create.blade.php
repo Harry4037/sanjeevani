@@ -7,14 +7,14 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Add Banner</h2>
+                <h2>Add Resort</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
                 <div class="form-horizontal form-label-left">
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Resort Images</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Images</label>
                         <div class="col-md-10 col-sm-10 col-xs-12">
                             <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
                                 @csrf
@@ -27,7 +27,7 @@
                     @csrf
                     <div id="resort_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('resort_name') }}" type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name">
                         </div>
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description">{{ old('resort_description') }}</textarea>
                         </div>
@@ -80,6 +80,18 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('pin_code') }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('latitude') }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('longitude') }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -123,8 +135,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.resort.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -209,7 +220,13 @@ $(document).ready(function () {
                     $("#resort_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                alert(message);
+                this.removeFile(file);
+            });
         },
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
         dictDefaultMessage: "Drop or Select multiple images for resort."
     };
 
@@ -229,9 +246,6 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-//            resort_description: {
-//                required: true
-//            },
             address: {
                 required: true
             },
@@ -242,6 +256,12 @@ $(document).ready(function () {
                 required: true
             },
             city: {
+                required: true
+            },
+            latitude: {
+                required: true
+            },
+            longitude: {
                 required: true
             },
         }

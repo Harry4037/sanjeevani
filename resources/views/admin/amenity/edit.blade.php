@@ -66,7 +66,12 @@
                             <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Amenity Description">{{ $amenity->description }}</textarea>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <textarea class="form-control" name="address" id="address" placeholder="Address">{{ $amenity->address }}</textarea>
+                        </div>
+                    </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Add Time Slots</label>
@@ -101,8 +106,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.amenity.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -210,7 +214,13 @@ $(document).ready(function () {
                     $("#amenity_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                alert(message);
+                this.removeFile(file);
+            });
         },
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
         dictDefaultMessage: "Drop or Select multiple images for amenity."
     };
 

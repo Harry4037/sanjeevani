@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Services</h2>
+                <h2>Services Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.service.add') }}">Add Service</a>
                 </div>
@@ -42,9 +42,8 @@
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-            ordering: true,
             processing: true,
-//        serverSide: true,
+            serverSide: true,
             ajax: _baseUrl + "/admin/services-list",
             "columns": [
                 {"data": null,
@@ -52,7 +51,7 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "icon"},
+                {"data": "icon", sortable: false},
                 {"data": "name"},
                 {"data": "type"},
                 {"data": null,
@@ -61,7 +60,7 @@
                         return row['status'];
                     }
                 },
-                {"data": "action"},
+                {"data": "action", sortable: false},
             ]
         });
 
@@ -97,6 +96,28 @@
                 }
             });
 
+        });
+
+        $(document).on("click", ".delete", function () {
+            var record_id = this.id;
+            bootbox.confirm("Are you sure want to delete this service?", function (result) {
+                if (result) {
+                    $.ajax({
+                        url: _baseUrl + '/admin/services/delete',
+                        type: 'post',
+                        data: {id: record_id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.status)
+                            {
+                                t.draw();
+                            } else {
+                                alert("something went be wrong.")
+                            }
+                        }
+                    });
+                }
+            });
         });
     });
 </script>

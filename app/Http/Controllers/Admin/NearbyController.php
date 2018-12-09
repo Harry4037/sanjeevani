@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Validator;
 use App\Models\Resort;
 use App\Models\ResortNearbyPlace;
 use App\Models\NearbyPlaceImage;
 use App\Models\StateMaster;
+use App\Models\CityMaster;
 
 class NearbyController extends Controller {
 
@@ -49,8 +51,23 @@ class NearbyController extends Controller {
     public function create(Request $request) {
         try {
             if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'resort_id' => 'bail|required',
+                            'name' => 'bail|required',
+                            'distance_from_resort' => 'bail|required',
+                            'description' => 'bail|required',
+                            'precautions' => 'bail|required',
+                            'address_1' => 'bail|required',
+                            'city_id' => 'bail|required',
+                            'latitude' => 'bail|required',
+                            'longitude' => 'bail|required',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.nearby.add')->withErrors($validator)->withInput();
+                }
+
+
                 $place = new ResortNearbyPlace();
-                $place->resort_id = $request->resort_id;
                 $place->name = $request->place_name;
                 $place->resort_id = $request->resort_id;
                 $place->distance_from_resort = $request->distance;
@@ -59,6 +76,8 @@ class NearbyController extends Controller {
                 $place->address_1 = $request->address;
                 $place->pincode = $request->pin_code;
                 $place->city_id = $request->city;
+                $place->latitude = $request->latitude;
+                $place->longitude = $request->longitude;
                 if ($place->save()) {
                     if ($request->nearby_images) {
                         foreach ($request->nearby_images as $tempImage) {
@@ -138,6 +157,8 @@ class NearbyController extends Controller {
                 $data->address_1 = $request->address;
                 $data->pincode = $request->pin_code;
                 $data->city_id = $request->city;
+                $data->latitude = $request->latitude;
+                $data->longitude = $request->longitude;
                 if ($data->save()) {
                     if ($request->nearby_images) {
                         foreach ($request->nearby_images as $tempImage) {
@@ -162,6 +183,8 @@ class NearbyController extends Controller {
             ];
             $resorts = Resort::where("is_active", 1)->get();
             $states = StateMaster::all();
+            $selectedCity = CityMaster::find($data->city_id);
+            $cities = CityMaster::where("state_id", $selectedCity->state_id)->get();
             $nearbyImages = NearbyPlaceImage::where("nearby_place_id", $data->id)->get();
             return view('admin.nearby.edit-nearby', [
                 'css' => $css,
@@ -170,6 +193,8 @@ class NearbyController extends Controller {
                 'resorts' => $resorts,
                 'states' => $states,
                 'nearbyImages' => $nearbyImages,
+                'selectedCity' => $selectedCity,
+                'cities' => $cities,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.nearby.index', $id)->with('error', $ex->getMessage());

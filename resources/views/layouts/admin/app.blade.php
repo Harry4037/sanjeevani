@@ -65,6 +65,7 @@
         <!-- jQuery Sparklines -->
         <script src="{{ asset("vendors/jquery-sparkline/dist/jquery.sparkline.min.js") }}"></script>
         <script src="{{ asset("js/jquery.validate.js") }}"></script>  
+        <script src="{{ asset("js/additional.validate.js") }}"></script>  
         <script src="{{ asset("js/admin/bootbox.min.js") }}"></script>  
 
         <!--         Flot 
@@ -112,6 +113,10 @@
                 });
 //        }
             })
+
+            setTimeout(function () {
+                $(".alert").fadeOut();
+            }, 1000);
         </script>
     </body>
 </html>

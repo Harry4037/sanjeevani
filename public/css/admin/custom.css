@@ -4303,3 +4303,32 @@ input:checked + .slider:before {
 .alert{
     text-align: center;
 }
+
+.sidebar-scroll{
+    height: 800px;
+    overflow-x: auto;
+}
+/* width */
+.sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+.sidebar-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+/* Handle */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+.img-pre{
+    border: 1px solid #7b7b7b;
+    width: 135px;
+    height: 125px;
+}

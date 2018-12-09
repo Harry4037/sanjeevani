@@ -3,11 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Banner extends Model{
+class Banner extends Model {
+
     protected $table = 'banner';
 
-    public function getNameAttribute($name){
-        return asset('storage/banner_images/'.$name);
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
+    public function getNameAttribute($name) {
+        return asset('storage/banner_images/' . $name);
     }
+
 }

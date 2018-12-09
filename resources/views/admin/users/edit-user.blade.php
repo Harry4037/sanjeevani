@@ -7,7 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Edit User </h2>
+                <h2>Udate User Details</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -243,10 +243,15 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="package_id" id="package_id">
                                 <option value="">Choose option</option>
-                                <option value="1" selected>Health Package 1</option>
-                                <option value="2">Health 2</option>
-                                <option value="3">Health 3</option>
-                                <option value="4">Health 4</option>
+                                @if($healcarePackages)
+                                @foreach($healcarePackages as $healcarePackage)
+                                <option value="{{ $healcarePackage->id }}"
+                                        @if(isset($userBooking->package_id) && $userBooking->package_id == $healcarePackage->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $healcarePackage->name }}</option>
+                                @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -287,8 +292,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.users.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>

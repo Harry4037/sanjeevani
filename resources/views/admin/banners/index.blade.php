@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Banners</h2>
+                <h2>Banner Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.banner.add') }}">Add Banner</a>
                 </div>
@@ -21,9 +21,9 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>Banner</th>
-                            <th>Resort Namer</th>
+                            <th>Resort Name</th>
                             <th>Status</th>
-                            <!--<th>Action</th>-->
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -48,7 +48,6 @@
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
-//            ordering: true,
             processing: true,
             serverSide: true,
             ajax: _baseUrl + "/admin/banners-list",
@@ -58,7 +57,7 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "banner"},
+                {"data": "banner",sortable: false},
                 {"data": "resort_name"},
                 {"data": null,
                     sortable: false,
@@ -66,6 +65,7 @@
                         return row['status'];
                     }
                 },
+                {"data": "action",sortable: false},
             ]
         });
 
@@ -91,7 +91,7 @@
                         $(".msg").css("display", "block");
                         setTimeout(function () {
                             $(".msg").fadeOut();
-                        }, 5000);
+                        }, 2000);
                     }
                 }
             });

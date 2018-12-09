@@ -23,7 +23,7 @@ class CartController extends Controller {
      * @apiParam {String} meal_item_id Meal item id.
      * @apiParam {String} meal_package_id Meal Package Id.
      * @apiParam {String} quantity Quantity.
-     * @apiParam {boolean} flag Increment or add => 1, Decrement => 2.
+     * @apiParam {String} flag Increment or add => 1, Decrement => 2.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -94,14 +94,13 @@ class CartController extends Controller {
                     return $this->sendErrorResponse("Invalid meal package id.", (object) []);
                 }
             }
-
             if (!$request->quantity) {
                 return $this->sendErrorResponse("quantity missing.", (object) []);
             }
-
             if (!$request->flag) {
                 return $this->sendErrorResponse("flag missing.", (object) []);
             }
+
             $cart = Cart::where(["user_id" => $request->user_id])
                     ->where(function($q) use($request) {
                         $q->where("meal_package_id", $request->meal_package_id)
@@ -113,9 +112,20 @@ class CartController extends Controller {
                 if ($request->flag == 1) {
                     $cart->quantity = $cart->quantity + $request->quantity;
                 } else {
+                    if ($cart->quantity == 1) {
+                        $cart->delete();
+                        $data['cart_count'] = Cart::where("user_id", $request->user_id)->count();
+                        $data['quantity_count'] = 0;
+                        return $this->sendSuccessResponse("Item added to cart", $data);
+                    }
                     $cart->quantity = $cart->quantity - $request->quantity;
                 }
             } else {
+                if ($request->flag == 2) {
+                    $data['cart_count'] = Cart::where("user_id", $request->user_id)->count();
+                    $data['quantity_count'] = 0;
+                    return $this->sendErrorResponse("This item not found in cart.", $data);
+                }
                 $cart = new Cart();
                 $cart->quantity = $request->quantity;
             }

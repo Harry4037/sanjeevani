@@ -32,8 +32,8 @@ class RoomtypeController extends Controller {
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
-            $data['recordsTotal'] = RoomType::count();
-            $data['recordsFiltered'] = RoomType::count();
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
             $rooms = $query->take($limit)->offset($offset)->latest()->get();
             $roomsArray = [];
             foreach ($rooms as $key => $room) {
@@ -57,9 +57,9 @@ class RoomtypeController extends Controller {
     public function create(Request $request) {
         try {
             if ($request->isMethod("post")) {
-
                 $validator = Validator::make($request->all(), [
                             'name' => 'bail|required',
+                            'room_icon' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.room.add')->withErrors($validator)->withInput();
@@ -68,7 +68,6 @@ class RoomtypeController extends Controller {
                 $room = new RoomType();
                 $room->name = $request->name;
                 $room->description = $request->description;
-
                 if ($request->file("room_icon")) {
                     $room_icon = Storage::disk('public')->put('room_icon', $request->file("room_icon"));
                     if ($room_icon) {
@@ -76,8 +75,6 @@ class RoomtypeController extends Controller {
                         $room->icon = $room_icon_name;
                     }
                 }
-
-
                 if ($room->save()) {
                     if ($request->room_images) {
                         foreach ($request->room_images as $tempImage) {
@@ -88,20 +85,13 @@ class RoomtypeController extends Controller {
                             $roomImage->save();
                         }
                     }
-
-
                     return redirect()->route('admin.room.index')->with('status', 'Room Type has been added successfully.');
                 } else {
                     return redirect()->route('admin.room.add')->with('error', 'Something went be wrong.');
                 }
             }
-
-            $css = [
-                "vendors/dropzone/dist/dropzone.css",
-            ];
-            $js = [
-                'vendors/dropzone/dist/dropzone.js',
-            ];
+            $css = ["vendors/dropzone/dist/dropzone.css",];
+            $js = ['vendors/dropzone/dist/dropzone.js',];
             return view('admin.room.create', [
                 'js' => $js,
                 'css' => $css
@@ -119,11 +109,11 @@ class RoomtypeController extends Controller {
                 if ($room->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
                 }
-                return [];
+                return ['status' => false];
             }
             return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false];
         }
     }
 
@@ -144,7 +134,6 @@ class RoomtypeController extends Controller {
         try {
             $data = RoomType::find($id);
             if ($request->isMethod("post")) {
-
                 $data->name = $request->name;
                 $data->description = $request->description;
                 if ($request->file("room_icon")) {
@@ -154,7 +143,6 @@ class RoomtypeController extends Controller {
                         $data->icon = $room_icon_name;
                     }
                 }
-
                 if ($data->save()) {
                     if ($request->room_images) {
                         foreach ($request->room_images as $tempImage) {
@@ -168,7 +156,6 @@ class RoomtypeController extends Controller {
                     return redirect()->route('admin.room.edit', $id)->with('status', 'Romm Type has been updated successfully.');
                 }
             }
-
             $css = [
                 "vendors/dropzone/dist/dropzone.css",
             ];

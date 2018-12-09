@@ -51,6 +51,24 @@
                             <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Amenity Description">{{ old('amenity_description') }}</textarea>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <textarea class="form-control" name="address" id="address" placeholder="Address">{{ old('address') }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('latitude') }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input value="{{ old('longitude') }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
+                        </div>
+                    </div>
 
                     <div class="ln_solid"></div>
                     <div class="form-group">
@@ -93,8 +111,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.activity.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -212,8 +229,14 @@ $(document).ready(function () {
                     $("#activity_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                alert(message);
+                this.removeFile(file);
+            });
         },
-        dictDefaultMessage: "Drop or Select multiple images for amenity."
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
+        dictDefaultMessage: "Drop or Select multiple images for activites."
     };
 
     $("#addActivityForm").validate({
@@ -229,6 +252,15 @@ $(document).ready(function () {
                 required: true
             },
             amenity_name: {
+                required: true
+            },
+            address: {
+                required: true
+            },
+            latitude: {
+                required: true
+            },
+            longitude: {
                 required: true
             },
         }

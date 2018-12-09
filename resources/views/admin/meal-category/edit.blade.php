@@ -22,8 +22,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('admin.meal-category.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>

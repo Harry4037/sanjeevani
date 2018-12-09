@@ -18,14 +18,14 @@
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"></label>
                         @foreach($roomImages as $roomImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
-                            <img src="{{ $roomImage->image_name }}" width=150 height=150>
-                            <button style="margin-left: 30px;" class="btn btn-info btn-xs delete_room_image" id="{{ $roomImage->id }}" >Remove</button>
+                            <img src="{{ $roomImage->image_name }}" class="img-rounded img-pre">
+                            <button style="margin-left: 40px;" class="btn btn-info btn-xs delete_room_image" id="{{ $roomImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
                     @endif
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Room Images</label>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Images</label>
                         <div class="col-md-10 col-sm-10 col-xs-12">
                             <form id="my-dropzone" class="dropzone" action="{{ route('admin.room.upload-image') }}">
                                 @csrf
@@ -38,7 +38,7 @@
                     @csrf
                     <div id="room_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->name }}" type="text" class="form-control" name="name" id="name" placeholder="Room Type">
                         </div>
@@ -46,9 +46,17 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Icon</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="file" class="form-control" name="room_icom" id="room_icon">
+                            <input type="file" class="form-control" name="room_icon" id="room_icon">
                         </div>
                     </div>
+                    @if($data->icon)
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Icon Preview</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <img src="{{ $data->icon }}" style="height: 50px; width: 50px;border: 1px bold #7b7b7b;">
+                        </div>
+                    </div>
+                    @endif
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
@@ -58,9 +66,8 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <a class="btn btn-default" href="{{ route('admin.room.index') }}">Cancel</a>
+                            <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
 
@@ -139,7 +146,6 @@ $(document).ready(function () {
                             url: _baseUrl + '/admin/room-type/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
                             success: function (res) {
                                 console.log(res);
                                 $("#room_image_input_" + record_id).remove();
@@ -153,8 +159,14 @@ $(document).ready(function () {
                     $("#room_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                alert(message);
+                this.removeFile(file);
+            });
         },
-        dictDefaultMessage: "Drop or Select multiple images for resort."
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
+        dictDefaultMessage: "Drop or Select multiple images for room type images."
     };
 
 });

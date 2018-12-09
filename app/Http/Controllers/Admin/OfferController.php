@@ -49,7 +49,7 @@ class OfferController extends Controller {
                 $checked_status = $offer->is_active ? "checked" : '';
                 $offerArray[$key]['resort_name'] = $resort->name;
                 $offerArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='amenity_status' id=" . $offer->id . " data-status=" . $offer->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $offerArray[$key]['action'] = '<a href="' . route('admin.activity.edit', $offer->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                $offerArray[$key]['action'] = '<a href="' . route('admin.offer.edit', $offer->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $offer->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -148,45 +148,38 @@ class OfferController extends Controller {
         }
     }
 
-    public function editActivity(Request $request) {
-        $amenity = Activity::find($request->id);
+    public function editOffer(Request $request) {
+        $amenity = offer::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'amenity_name' => 'bail|required',
+                        'offer_name' => 'bail|required',
+                        'price' => 'bail|required',
+                        'discount' => 'bail|required',
+                        'valid_to' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                return redirect()->route('admin.offer.index')->withErrors($validator)->withInput();
             }
-            $amenity->name = $request->amenity_name;
-            $amenity->description = $request->amenity_description;
+
+            $amenity->name = $request->offer_name;
+            $amenity->description = $request->offer_description;
             $amenity->resort_id = $request->resort_id;
+            $amenity->price = $request->price;
+            $amenity->discount_percentage = $request->discount;
+            $amenity->calculated_discount = (((int) $request->price) * ((int) $request->discount / 100));
+            $amenity->valid_to = $request->valid_to;
             if ($amenity->save()) {
-                if ($request->amenity_images) {
-                    foreach ($request->amenity_images as $tempImage) {
-                        $amenityImage = new ActivityImage();
-                        $amenityImage->image_name = $tempImage;
-                        $amenityImage->amenity_id = $amenity->id;
-                        $amenityImage->save();
+                if ($request->offer_images) {
+                    foreach ($request->offer_images as $tempImage) {
+                        $offerImage = new offerImage();
+                        $offerImage->image_name = $tempImage;
+                        $offerImage->offer_id = $amenity->id;
+                        $offerImage->save();
                     }
                 }
-                if ($request->from_time && $request->to_time) {
-                    ActivityTimeSlot::where("amenity_id", $amenity->id)->delete();
-                    foreach ($request->from_time as $key => $fromTime) {
-                        $from_time = Carbon::parse($fromTime);
-                        $to_time = Carbon::parse($request->to_time[$key]);
-                        $amenityTimeSlot = new ActivityTimeSlot();
-                        $amenityTimeSlot->amenity_id = $amenity->id;
-                        $amenityTimeSlot->from = $from_time->format("H:s:i");
-                        $amenityTimeSlot->to = $to_time->format("H:s:i");
-                        $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                        $amenityTimeSlot->save();
-                    }
-                }
-
-
-                return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                return redirect()->route('admin.offer.index')->with('status', 'Offer has been updated successfully.');
             } else {
-                return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('admin.offer.index')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
@@ -199,45 +192,29 @@ class OfferController extends Controller {
             'vendors/dropzone/dist/dropzone.js',
         ];
         $resorts = Resort::where("is_active", 1)->get();
-        $amenityImages = ActivityImage::where("amenity_id", $amenity->id)->get();
-        $timeSlots = ActivityTimeSlot::where("amenity_id", $amenity->id)->get();
-        return view('admin.activity.edit', [
+        $amenityImages = offerImage::where("offer_id", $amenity->id)->get();
+        return view('admin.offer.edit', [
             'css' => $css,
             'js' => $js,
             'resorts' => $resorts,
             'amenityImages' => $amenityImages,
             'amenity' => $amenity,
-            'timeSlots' => $timeSlots,
         ]);
     }
 
-    public function deleteActivityImage(Request $request) {
+    public function deleteOfferImage(Request $request) {
         try {
-            $amenityImage = ActivityImage::select('image_name as amenity_img')->find($request->record_id);
-            @unlink('storage/activity_images/' . $amenityImage->amenity_img);
-            ActivityImage::find($request->record_id)->delete();
+            $amenityImage = offerImage::select('image_name as amenity_img')->find($request->record_id);
+            @unlink('storage/offer_images/' . $amenityImage->amenity_img);
+            offerImage::find($request->record_id)->delete();
             return ["status" => true];
         } catch (\Exception $ex) {
             dd($ex->getMessage());
         }
     }
 
-    public function deleteTimeSlot(Request $request) {
-        try {
-            $slot = ActivityTimeSlot::find($request->record_id);
-            if ($slot) {
-                $slot->delete();
-                return ["status" => true];
-            } else {
-                return ["status" => false];
-            }
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
-        }
-    }
-
-    public function deleteActivity(Request $request) {
-        $amenity = Activity::find($request->id);
+    public function deleteOffer(Request $request) {
+        $amenity = offer::find($request->id);
         if ($amenity->delete()) {
             return ['status' => true];
         } else {

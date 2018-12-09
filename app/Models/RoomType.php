@@ -12,7 +12,7 @@ class RoomType extends Model {
     protected $dates = ['deleted_at'];
 
     public function getIconAttribute($name) {
-        return asset('storage/room_type_icon/' . $name);
+        return asset('storage/room_icon/' . $name);
     }
     
     public function getImageAttribute($name) {
