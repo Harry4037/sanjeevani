@@ -299,6 +299,7 @@ class ServiceController extends Controller {
                 $serviceRequest->question_id = $request->question_id ? $request->question_id : 0;
                 $serviceRequest->request_status_id = 1;
                 if ($serviceRequest->save()) {
+                    $this->generateNotification($serviceRequest->user_id, "Order & Request created", "$service->name raised succesfully. Our staff will contact you soon.", 1);
                     return $this->sendSuccessResponse("Request successfully created.", (object) []);
                 } else {
                     return $this->sendErrorResponse("Something went be wrong.", (object) []);
