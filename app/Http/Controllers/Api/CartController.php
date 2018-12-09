@@ -254,7 +254,7 @@ class CartController extends Controller {
                     $cartDataArray['cart_items'][$key]['item_name'] = $mealItem->name;
                     $cartDataArray['cart_items'][$key]['item_price'] = $mealItem->price;
                     $cartDataArray['cart_items'][$key]['quantity'] = $cart->quantity;
-                    $total += $mealItem->price;
+                    $total += ($mealItem->price * $cart->quantity);
                 }
                 $cartDataArray['total_no_item'] = count($cartDataArray['cart_items']);
                 $cartDataArray['item_amount'] = $total;

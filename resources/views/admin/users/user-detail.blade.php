@@ -78,7 +78,11 @@
                     <div class="ln_solid"></div>
                     <div class="row">
                         <label class="col-md-2 col-sm-2 col-xs-6">Source Name</label>
-                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->source_name }}</div>
+                        <div class="col-md-2 col-sm-2 col-xs-6">
+                            @if(isset($userBooking->source_name))
+                            {{ $userBooking->source_name }}
+                            @endif
+                        </div>
                         <label class="col-md-2 col-sm-2 col-xs-6">Source Id</label>
                         <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->source_id }}</div>
                         <!--                        <label class="col-m-2 col-sm-2 col-xs-6">HBA1C</label>
