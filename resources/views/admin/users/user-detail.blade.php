@@ -68,7 +68,7 @@
                     <div class="row">
                         <div class="col-12">
                             <label class="col-4">Medical Document</label>
-                            <img width="200" height="150" src="{{ $userHealth->medical_documents }}" class="img-rounded img-thumbnail">
+                            <img width="200" height="150" src="" class="img-rounded img-thumbnail">
                         </div>
                     </div>-->
                     <div class="clearfix"></div>
