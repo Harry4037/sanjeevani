@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 
 class LoginController extends Controller {
@@ -106,6 +107,35 @@ class LoginController extends Controller {
         $this->guard()->logout();
         $request->session()->invalidate();
         return redirect()->route('admin.login');
+    }
+
+    public function profile(Request $request) {
+        if ($request->isMethod("post")) {
+            $user = User::find($request->get('record_id'));
+            $user->user_name = $request->get("user_name");
+            $user->email_id = $request->get("email_id");
+            if ($request->hasFile("profile_pic")) {
+                $profile_pic = $request->file("profile_pic");
+                $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
+                $profile_file_name = basename($profile);
+                $user->profile_pic_path = $profile_file_name;
+            }
+            $user->save();
+            return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
+        }
+        return view('admin.profile.index');
+    }
+    
+    public function changePassword(Request $request) {
+//        if ($request->isMethod("post")) {
+//            $user = User::find($request->get('record_id'));
+//            $user->user_name = $request->get("user_name");
+//            $user->email_id = $request->get("email_id");
+//            
+//            $user->save();
+//            return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
+//        }
+        return view('admin.profile.change-password');
     }
 
 }
