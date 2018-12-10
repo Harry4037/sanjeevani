@@ -259,5 +259,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
      */
     Route::prefix('notification')->group(function() {
         Route::get('/', 'NotificationController@index')->name('admin.notification.index');
+        Route::get('/user-list', 'NotificationController@userList')->name('admin.notification.userlist');
+        Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
     });
 });
