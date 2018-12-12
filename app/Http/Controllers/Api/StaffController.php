@@ -9,6 +9,7 @@ use App\Models\Resort;
 use App\Models\ServiceRequest;
 use App\Models\MealOrder;
 use App\Models\MealOrderItem;
+use App\Models\MealItem;
 
 class StaffController extends Controller {
 
@@ -32,26 +33,42 @@ class StaffController extends Controller {
      *    "status_code": 200,
      *    "message": "Service request found.",
      *    "data": {
-     *       "services": [
+     *       "services": {
+     *            "services": [
+     *               {
+     *                    "id": 1,
+     *                    "service_name": "Do Not Disturbe",
+     *                    "service_comment": "",
+     *                    "service_icon": "http://127.0.0.1:8000/storage/Service_icon/XfNlJoZ3L4Pj0dbM8lJIyIXtkqTK4FXaANlUwwOo.jpeg",
+     *                    "user_name": "Hariom Gangwar",
+     *                    "room_no": "300",
+     *                    "created_at": "17:11 pm"
+     *                }
+     *            ]
+     *        },
+     *        "meal_orders": [
      *            {
      *                "id": 1,
-     *                "service_name": "Service 1",
-     *                "service_comment": "",
-     *                "service_icon": "http://127.0.0.1:8000/storage/Service_icon/Qv5jlMXXoYvDdd7T2ZjFUwhg5FGF0MsZKqDE0Pz5.jpeg",
-     *                "user_name": "Hariom G",
-     *                "room_no": "100",
-     *                "created_at": "03:42 am"
-     *            },
-     *            {
-     *                "id": 2,
-     *                "service_name": "Service 1",
-     *                "service_comment": "",
-     *                "service_icon": "http://127.0.0.1:8000/storage/Service_icon/7GLrLWnn6JTsZp2iOcbXFChkykMqlv62Ok4m0dcv.jpeg",
-     *                "user_name": "Hariom G",
-     *                "room_no": "100",
-     *                "created_at": "03:43 am"
-     *           }
-     *       ]
+     *                "invoice_id": "1544634201",
+     *                "item_total_amount": 240.6,
+     *                "gst_amount": 0,
+     *                "total_amount": 240.6,
+     *                "user_name": "Hariom Gangwar",
+     *                "room_no": "300",
+     *                "created_at": "17:03 pm",
+     *                "meal_item_count": 1,
+     *                "meal_items": [
+     *                    {
+     *                        "id": 1,
+     *                        "meal_item_name": "sadsad",
+     *                        "price": 120,
+     *                        "quantity": 2,
+     *                        "image_url": ""
+     *                    }
+     *                ]
+     *            }
+     *        ],
+     *        "amenities": []
      *    }
      * }
      * 
@@ -111,24 +128,59 @@ class StaffController extends Controller {
                     ])->latest()
                     ->get();
 
-//            $mealOrder = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])->get();
-//            dd($mealOrder);
-            if ($newServices) {
-                $dataArray = [];
-                foreach ($newServices as $k => $newService) {
-                    $created_at = Carbon::parse($newService->created_at);
-                    $dataArray["services"][$k]["id"] = $newService->id;
-                    $dataArray["services"][$k]["service_name"] = $newService->serviceDetail->name;
-                    $dataArray["services"][$k]["service_comment"] = $newService->comment;
-                    $dataArray["services"][$k]["service_icon"] = $newService->serviceDetail->icon;
-                    $dataArray["services"][$k]["user_name"] = $newService->userDetail->user_name;
-                    $dataArray["services"][$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
-                    $dataArray["services"][$k]["created_at"] = $created_at->format('H:i a');
+            $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])
+                    ->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
+                    ])->latest()
+                    ->get();
+            $mealDataArray = [];
+            foreach ($mealOrders as $j => $mealOrder) {
+                $mealItems = MealOrderItem::where("meal_order_id", $mealOrder->id)->get();
+                $meal_created_at = Carbon::parse($mealOrder->created_at);
+                $mealDataArray[$j]["id"] = $mealOrder->id;
+                $mealDataArray[$j]["invoice_id"] = $mealOrder->invoice_id;
+                $mealDataArray[$j]["item_total_amount"] = $mealOrder->item_total_amount;
+                $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
+                $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
+                $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
+                $mealDataArray[$j]["room_no"] = $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
+                $mealDataArray[$j]["meal_item_count"] = count($mealItems);
+                if ($mealItems) {
+                    foreach ($mealItems as $f => $mealItem) {
+                        $mealImage = MealItem::find($mealItem->meal_item_id);
+                        $mealDataArray[$j]["meal_items"][$f]["id"] = $mealItem->id;
+                        $mealDataArray[$j]["meal_items"][$f]["meal_item_name"] = $mealItem->meal_item_name;
+                        $mealDataArray[$j]["meal_items"][$f]["price"] = $mealItem->price;
+                        $mealDataArray[$j]["meal_items"][$f]["quantity"] = $mealItem->quantity;
+                        $mealDataArray[$j]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
+                    }
                 }
-                return $this->sendSuccessResponse("Service request found.", $dataArray);
-            } else {
-                return $this->sendErrorResponse("No service request found.", []);
             }
+
+            $dataArray = [];
+            foreach ($newServices as $k => $newService) {
+                $created_at = Carbon::parse($newService->created_at);
+                $dataArray["services"][$k]["id"] = $newService->id;
+                $dataArray["services"][$k]["service_name"] = $newService->serviceDetail->name;
+                $dataArray["services"][$k]["service_comment"] = $newService->comment;
+                $dataArray["services"][$k]["service_icon"] = $newService->serviceDetail->icon;
+                $dataArray["services"][$k]["user_name"] = $newService->userDetail->user_name;
+                $dataArray["services"][$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $dataArray["services"][$k]["created_at"] = $created_at->format('H:i a');
+            }
+
+            $data["services"] = $dataArray;
+            $data["meal_orders"] = $mealDataArray;
+            $data["amenities"] = [];
+            return $this->sendSuccessResponse("Service request found.", $data);
         } catch (\Exception $ex) {
             dd($ex);
             return $this->administratorResponse();
@@ -238,78 +290,13 @@ class StaffController extends Controller {
      *    "data": {
      *        "ongoing_jobs": [
      *            {
-     *                "id": 1,
-     *                "comment": "",
-     *                "question_id": 1,
-     *                "service_id": 1,
-     *                "request_status_id": 2,
-     *                "user_id": 2,
-     *                "service_detail": {
-     *                    "id": 1,
-     *                    "name": "Air conditioner",
-     *                    "type_id": 1,
-     *                    "service_type": {
-     *                        "id": 1,
-     *                        "name": "Housekeeping"
-     *                    }
-     *                },
-     *                "question_detail": {
-     *                    "id": 1,
-     *                    "name": "question 1"
-     *                },
-     *                "request_status": {
-     *                    "id": 2,
-     *                    "status": "On going"
-     *                },
-     *                "user_detail": {
-     *                    "id": 2,
-     *                    "user_name": "Hariom Gangwar",
-     *                    "email_id": "hariom4037@gmail.com",
-     *                    "mobile_number": "9999999999",
-     *                    "user_booking_detail": {
-     *                        "id": 1,
-     *                        "user_id": 2,
-     *                        "source_name": "Makemy trip",
-     *                        "source_id": "QWERTY12345",
-     *                        "resort_id": 1,
-     *                        "resort": {
-     *                            "id": 1,
-     *                            "name": "Parth Inn",
-     *                            "description": "<p>Lorem ipsum</p>",
-     *                            "contact_number": "9999999999",
-     *                            "address_1": "sector 63"
-     *                        },
-     *                        "room_booking": {
-     *                            "id": 1,
-     *                            "check_in": "2018-11-06 00:00:00",
-     *                            "check_out": "2018-11-06 00:00:00",
-     *                            "room_type_id": 2,
-     *                            "resort_room_id": 3,
-     *                            "room_type": {
-     *                                "id": 2,
-     *                                "name": "Cottage"
-     *                            },
-     *                            "resort_room": {
-     *                                "id": 3,
-     *                                "room_no": "105"
-     *                            }
-     *                        },
-     *                        "bookingpeople_accompany": [
-     *                            {
-     *                                "id": 1,
-     *                                "person_name": "Ankit",
-     *                                "person_age": "25",
-     *                                "person_type": "Adult"
-     *                            },
-     *                            {
-     *                                "id": 2,
-     *                                "person_name": "Anshi",
-     *                                "person_age": "5",
-     *                                "person_type": "Child"
-     *                            }
-     *                        ]
-     *                    }
-     *                }
+     *               "id": 1,
+     *               "service_name": "Do Not Disturbe",
+     *               "service_comment": "",
+     *               "service_icon": "http://127.0.0.1:8000/storage/Service_icon",
+     *               "user_name": "Hariom Gangwar",
+     *               "room_no": "300",
+     *               "created_at": "18:22 pm"
      *            }
      *        ],
      *        "under_approval_jobs": [],
@@ -342,7 +329,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
 
-            $jobs['ongoing_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
+            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'type_id');
@@ -367,7 +354,19 @@ class StaffController extends Controller {
                     ])
                     ->get();
 
-            $jobs['under_approval_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
+            $ongoingJobArray = [];
+            foreach ($ongoing_jobs as $k => $ongoing_job) {
+                $created_at = Carbon::parse($ongoing_job->created_at);
+                $ongoingJobArray[$k]["id"] = $ongoing_job->id;
+                $ongoingJobArray[$k]["service_name"] = $ongoing_job->serviceDetail->name;
+                $ongoingJobArray[$k]["service_comment"] = $ongoing_job->comment;
+                $ongoingJobArray[$k]["service_icon"] = $ongoing_job->serviceDetail->icon;
+                $ongoingJobArray[$k]["user_name"] = $ongoing_job->userDetail->user_name;
+                $ongoingJobArray[$k]["room_no"] = $ongoing_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $ongoingJobArray[$k]["created_at"] = $created_at->format('H:i a');
+            }
+
+            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'type_id');
@@ -391,7 +390,19 @@ class StaffController extends Controller {
                         }
                     ])
                     ->get();
-            $jobs['completed_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
+
+            $underApprovalJobArray = [];
+            foreach ($under_approval_jobs as $j => $under_approval_job) {
+                $created_at = Carbon::parse($under_approval_job->created_at);
+                $underApprovalJobArray[$j]["id"] = $under_approval_job->id;
+                $underApprovalJobArray[$j]["service_name"] = $under_approval_job->serviceDetail->name;
+                $underApprovalJobArray[$j]["service_comment"] = $under_approval_job->comment;
+                $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail->icon;
+                $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail->user_name;
+                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $underApprovalJobArray[$j]["created_at"] = $created_at->format('H:i a');
+            }
+            $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'type_id');
@@ -415,7 +426,21 @@ class StaffController extends Controller {
                         }
                     ])
                     ->get();
-            return $this->sendSuccessResponse("My jobs.", $jobs);
+            $completedJobArray = [];
+            foreach ($completed_jobs as $i => $completed_job) {
+                $created_at = Carbon::parse($completed_job->created_at);
+                $completedJobArray[$i]["id"] = $completed_job->id;
+                $completedJobArray[$i]["service_name"] = $completed_job->serviceDetail->name;
+                $completedJobArray[$i]["service_comment"] = $completed_job->comment;
+                $completedJobArray[$i]["service_icon"] = $completed_job->serviceDetail->icon;
+                $completedJobArray[$i]["user_name"] = $completed_job->userDetail->user_name;
+                $completedJobArray[$i]["room_no"] = $completed_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $completedJobArray[$i]["created_at"] = $created_at->format('H:i a');
+            }
+            $data["ongoing_jobs"] = $ongoingJobArray;
+            $data["under_approval_jobs"] = $underApprovalJobArray;
+            $data["completed_jobs"] = $completedJobArray;
+            return $this->sendSuccessResponse("My jobs.", $data);
         } catch (Exception $ex) {
             return $this->administratorResponse();
         }

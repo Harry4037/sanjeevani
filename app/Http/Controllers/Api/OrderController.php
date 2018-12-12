@@ -126,6 +126,7 @@ class OrderController extends Controller {
                     foreach ($cartDataArray as $cartData) {
                         $mealOrderItem = new MealOrderItem();
                         $mealOrderItem->meal_order_id = $mealOrder->id;
+                        $mealOrderItem->meal_item_id = $cartData['meal_package_id'] == 0 ? $cartData['meal_item_id'] : $cartData['meal_package_id'];
                         $mealOrderItem->meal_item_name = $cartData['item_name'];
                         $mealOrderItem->price = $cartData['item_price'];
                         $mealOrderItem->quantity = $cartData['quantity'];
