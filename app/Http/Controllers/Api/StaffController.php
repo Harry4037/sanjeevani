@@ -108,7 +108,7 @@ class StaffController extends Controller {
                                 }
                             ]);
                         }
-                    ])
+                    ])->latest()
                     ->get();
 
 //            $mealOrder = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])->get();
