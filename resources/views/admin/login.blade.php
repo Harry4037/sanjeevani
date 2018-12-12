@@ -26,8 +26,9 @@
                 <br />
 
                 <div>
+                    <!--<img src="{{asset("img/Rindex_Logo.jpg") }}" >-->
                     <h1><i class="fa fa-anchor"></i> Sanjeevani</h1>
-                    <p>©2018 All Rights Reserved. Sanjeev.</p>
+                    <p>©2018 All Rights Reserved. Rindex.</p>
                 </div>
             </div>
         </form>

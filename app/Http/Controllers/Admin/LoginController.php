@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class LoginController extends Controller {
@@ -125,16 +126,18 @@ class LoginController extends Controller {
         }
         return view('admin.profile.index');
     }
-    
+
     public function changePassword(Request $request) {
-//        if ($request->isMethod("post")) {
-//            $user = User::find($request->get('record_id'));
-//            $user->user_name = $request->get("user_name");
-//            $user->email_id = $request->get("email_id");
-//            
-//            $user->save();
-//            return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
-//        }
+        if ($request->isMethod("post")) {
+            $user = User::find($request->get('record_id'));
+            if (Hash::check($request->get("old_password"), $user->password)) {
+                $user->password = bcrypt($request->get("new_password"));
+                $user->save();
+                return redirect()->route('admin.change-password')->with('status', 'Password has been updated successfully.');
+            } else {
+                return redirect()->route('admin.change-password')->with('error', 'Old password incorrect.');
+            }
+        }
         return view('admin.profile.change-password');
     }
 

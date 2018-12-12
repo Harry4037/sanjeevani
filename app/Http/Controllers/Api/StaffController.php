@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Resort;
 use App\Models\ServiceRequest;
 
@@ -135,7 +136,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
 
-            $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
+            $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id', 'created_at')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
                     ->with([
                         'questionDetail' => function($query) {
                             $query->select('id', 'name as question');
@@ -158,6 +159,16 @@ class StaffController extends Controller {
                     ])
                     ->get();
             if ($newServices) {
+//                $dataArray = [];
+//                foreach($newServices as $k => $newService){
+//                    $created_at = Carbon::parse($newService->created_at);
+//                    $dataArray[$k]["id"] = $newService->id;
+//                    $dataArray[$k]["service_name"] = $newService->service_detail->name;
+//                    $dataArray[$k]["service_icon"] = $newService->service_detail->icon;
+//                    $dataArray[$k]["user_name"] = $newService->user_detail->user_name;
+//                    $dataArray[$k]["created_at"] = $created_at->format('Y-m-d');
+//                    
+//                }
                 return $this->sendSuccessResponse("Service request found.", $newServices);
             } else {
                 return $this->sendErrorResponse("No service request found.", []);
