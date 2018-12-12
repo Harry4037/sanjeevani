@@ -25,83 +25,33 @@ class StaffController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
+     *{
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Service request found.",
-     *    "data": [
-     *        {
-     *            "id": 1,
-     *            "comment": "",
-     *            "service_id": 1,
-     *            "user_id": 2,
-     *            "question_id": 1,
-     *            "question_detail": {
+     *    "data": {
+     *       "services": [
+     *            {
      *                "id": 1,
-     *                "question": "question 1"
+     *                "service_name": "Service 1",
+     *                "service_comment": "",
+     *                "service_icon": "http://127.0.0.1:8000/storage/Service_icon/Qv5jlMXXoYvDdd7T2ZjFUwhg5FGF0MsZKqDE0Pz5.jpeg",
+     *                "user_name": "Hariom G",
+     *                "room_no": "100",
+     *                "created_at": "03:42 am"
      *            },
-     *            "service_detail": {
-     *                "id": 1,
-     *                "name": "Air conditioner",
-     *                "icon": "http://127.0.0.1:8000/storage/Service_icon/se9y9nUSeTSmoYw90EloODuyFUDyF1w86h3ngTll.jpeg",
-     *                "type_id": 1,
-     *                "service_type": {
-     *                    "id": 1,
-     *                    "name": "Housekeeping"
-     *                }
-     *            },
-     *            "user_detail": {
+     *            {
      *                "id": 2,
-     *                "user_name": "Hariom Gangwar",
-     *                "email_id": "hariom4037@gmail.com",
-     *                "mobile_number": "9999999999",
-     *                "user_booking_detail": {
-     *                    "id": 1,
-     *                    "user_id": 2,
-     *                    "source_name": "Makemy trip",
-     *                    "source_id": "QWERTY12345",
-     *                    "resort_id": 1,
-     *                   "resort": {
-     *                        "id": 1,
-     *                        "name": "Parth Inn",
-     *                        "description": "<p>Lorem ipsum</p>",
-     *                        "contact_number": "9999999999",
-     *                        "address_1": "sector 63"
-     *                    },
-     *                    "room_booking": {
-     *                        "id": 1,
-     *                        "check_in": "2018-11-06 00:00:00",
-     *                        "check_out": "2018-11-06 00:00:00",
-     *                        "room_type_id": 2,
-     *                        "resort_room_id": 3,
-     *                        "room_type": {
-     *                            "id": 2,
-     *                            "name": "Cottage"
-     *                        },
-     *                       "resort_room": {
-     *                            "id": 3,
-     *                            "room_no": "105"
-     *                        }
-     *                    },
-     *                   "bookingpeople_accompany": [
-     *                        {
-     *                            "id": 1,
-     *                            "person_name": "Ankit",
-     *                            "person_age": "25",
-     *                            "person_type": "Adult"
-     *                        },
-     *                        {
-     *                            "id": 2,
-     *                            "person_name": "Anshi",
-     *                            "person_age": "5",
-     *                            "person_type": "Child"
-     *                       }
-     *                   ]
-     *               }
+     *                "service_name": "Service 1",
+     *                "service_comment": "",
+     *                "service_icon": "http://127.0.0.1:8000/storage/Service_icon/7GLrLWnn6JTsZp2iOcbXFChkykMqlv62Ok4m0dcv.jpeg",
+     *                "user_name": "Hariom G",
+     *                "room_no": "100",
+     *                "created_at": "03:43 am"
      *           }
-     *        }
-     *    ]
-     * }
+     *       ]
+     *    }
+     *}
      * 
      * 
      * @apiError ResortIdMissing The resort id was missing.
@@ -158,22 +108,26 @@ class StaffController extends Controller {
                         }
                     ])
                     ->get();
+                    
+                    
             if ($newServices) {
-//                $dataArray = [];
-//                foreach($newServices as $k => $newService){
-//                    $created_at = Carbon::parse($newService->created_at);
-//                    $dataArray[$k]["id"] = $newService->id;
-//                    $dataArray[$k]["service_name"] = $newService->service_detail->name;
-//                    $dataArray[$k]["service_icon"] = $newService->service_detail->icon;
-//                    $dataArray[$k]["user_name"] = $newService->user_detail->user_name;
-//                    $dataArray[$k]["created_at"] = $created_at->format('Y-m-d');
-//                    
-//                }
-                return $this->sendSuccessResponse("Service request found.", $newServices);
+                $dataArray = [];
+                foreach($newServices as $k => $newService){
+                    $created_at = Carbon::parse($newService->created_at);
+                    $dataArray["services"][$k]["id"] = $newService->id;
+                    $dataArray["services"][$k]["service_name"] = $newService->serviceDetail->name;
+                    $dataArray["services"][$k]["service_comment"] = $newService->comment;
+                    $dataArray["services"][$k]["service_icon"] = $newService->serviceDetail->icon;
+                    $dataArray["services"][$k]["user_name"] = $newService->userDetail->user_name;
+                    $dataArray["services"][$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                    $dataArray["services"][$k]["created_at"] = $created_at->format('H:i a');
+                }
+                return $this->sendSuccessResponse("Service request found.", $dataArray);
             } else {
                 return $this->sendErrorResponse("No service request found.", []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
