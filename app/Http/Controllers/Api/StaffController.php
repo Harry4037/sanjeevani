@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Resort;
 use App\Models\ServiceRequest;
+use App\Models\MealOrder;
+use App\Models\MealOrderItem;
 
 class StaffController extends Controller {
 
@@ -25,7 +27,7 @@ class StaffController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Service request found.",
@@ -51,7 +53,7 @@ class StaffController extends Controller {
      *           }
      *       ]
      *    }
-     *}
+     * }
      * 
      * 
      * @apiError ResortIdMissing The resort id was missing.
@@ -108,11 +110,12 @@ class StaffController extends Controller {
                         }
                     ])
                     ->get();
-                    
-                    
+
+//            $mealOrder = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])->get();
+//            dd($mealOrder);
             if ($newServices) {
                 $dataArray = [];
-                foreach($newServices as $k => $newService){
+                foreach ($newServices as $k => $newService) {
                     $created_at = Carbon::parse($newService->created_at);
                     $dataArray["services"][$k]["id"] = $newService->id;
                     $dataArray["services"][$k]["service_name"] = $newService->serviceDetail->name;
@@ -228,7 +231,7 @@ class StaffController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "My jobs.",
@@ -312,7 +315,7 @@ class StaffController extends Controller {
      *        "under_approval_jobs": [],
      *        "completed_jobs": []
      *    }
-     *}
+     * }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -363,7 +366,7 @@ class StaffController extends Controller {
                         }
                     ])
                     ->get();
-            
+
             $jobs['under_approval_jobs'] = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {

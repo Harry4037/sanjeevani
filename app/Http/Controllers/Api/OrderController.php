@@ -10,6 +10,7 @@ use App\Models\MealItem;
 use App\Models\MealPackage;
 use App\Models\MealOrder;
 use App\Models\MealOrderItem;
+use App\Models\Resort;
 
 class OrderController extends Controller {
 
@@ -21,6 +22,7 @@ class OrderController extends Controller {
      * @apiGroup Order
      * 
      * @apiParam {String} user_id User id*.
+     * @apiParam {String} resort_id Resort id*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -58,6 +60,24 @@ class OrderController extends Controller {
      *  "data": {}
      * }
      * 
+     * @apiError ResortIdMissing The resort id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Resort id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError InvalidResort The resort is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Invalid resort.",
+     *  "data": {}
+     * }
+     * 
      * 
      */
     public function submitOrder(Request $request) {
@@ -67,6 +87,13 @@ class OrderController extends Controller {
             }
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            if (!$request->resort_id) {
+                return $this->sendErrorResponse("Resort id missing.", (object) []);
+            }
+            $resort = Resort::find($request->resort_id);
+            if (!$resort) {
+                return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
             $carts = Cart::where(["user_id" => $request->user_id])->get();
             $cartDataArray = [];
@@ -90,6 +117,7 @@ class OrderController extends Controller {
 
                 $mealOrder = new MealOrder();
                 $mealOrder->invoice_id = time();
+                $mealOrder->resort_id = $request->resort_id;
                 $mealOrder->user_id = $request->user_id;
                 $mealOrder->item_total_amount = $total;
                 $mealOrder->gst_amount = $gst;
