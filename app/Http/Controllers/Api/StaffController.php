@@ -111,8 +111,8 @@ class StaffController extends Controller {
                     ])
                     ->get();
 
-            $mealOrder = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])->get();
-            dd($mealOrder);
+//            $mealOrder = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])->get();
+//            dd($mealOrder);
             if ($newServices) {
                 $dataArray = [];
                 foreach ($newServices as $k => $newService) {
