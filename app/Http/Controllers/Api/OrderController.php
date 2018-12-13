@@ -104,9 +104,13 @@ class OrderController extends Controller {
                     if ($cart->meal_item_id > 0) {
                         $mealItem = MealItem::find($cart->meal_item_id);
                         $itemType = 1;
+                        $cartDataArray[$key]['meal_item_id'] = $mealItem->id;
+                        $cartDataArray[$key]['meal_package_id'] = 0;
                     } else {
                         $mealItem = MealPackage::find($cart->meal_package_id);
                         $itemType = 2;
+                        $cartDataArray[$key]['meal_item_id'] = 0;
+                        $cartDataArray[$key]['meal_package_id'] = $mealItem->id;
                     }
                     $cartDataArray[$key]['id'] = $cart->id;
                     $cartDataArray[$key]['item_name'] = $mealItem->name;
@@ -127,6 +131,7 @@ class OrderController extends Controller {
                         $mealOrderItem = new MealOrderItem();
                         $mealOrderItem->meal_order_id = $mealOrder->id;
                         $mealOrderItem->meal_item_id = $cartData['meal_package_id'] == 0 ? $cartData['meal_item_id'] : $cartData['meal_package_id'];
+                        $mealOrderItem->item_type = $itemType;
                         $mealOrderItem->meal_item_name = $cartData['item_name'];
                         $mealOrderItem->price = $cartData['item_price'];
                         $mealOrderItem->quantity = $cartData['quantity'];
@@ -143,6 +148,7 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("Cart is empty", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }

@@ -12,6 +12,13 @@ use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Models\ServiceType;
 use App\Models\Resort;
+use App\Models\MealOrder;
+use App\Models\MealOrderItem;
+use App\Models\Amenity;
+use App\Models\AmenityRequest;
+use App\Models\Activity;
+use App\Models\ActivityRequest;
+use Carbon\Carbon;
 
 class ServiceController extends Controller {
 
@@ -325,49 +332,65 @@ class ServiceController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *    "status": true,
-     *    "status_code": 200,
-     *    "message": "Order & Request found.",
-     *    "data": {
-     *        "order_request": [
-     *           {
-     *                "id": 1,
-     *                "comment": "",
-     *                "service_id": 1,
-     *                "question_id": 1,
-     *                "request_status_id": 1,
-     *                "accepted_by_id": 1,
-     *                "date": "15-11-2018",
-     *                "time": "04:31:35 AM",
-     *                "service_detail": {
-     *                    "id": 1,
-     *                    "name": "Iron",
-     *                    "type_id": 1,
-     *                    "icon": "http://127.0.0.1:8000/storage/Service_icon/O43z5c9J2lUhL1iRmQHNietloHjRLHbpiD842V2X.jpeg",
-     *                    "service_type": {
-     *                        "id": 1,
-     *                        "name": "Housekeeping"
-     *                    }
-     *                },
-     *                "question_detail": {
-     *                    "id": 1,
-     *                    "name": "Lorem Ipsum is simply dummy text"
-     *                },
-     *                "request_status": {
-     *                    "id": 1,
-     *                    "status": "Pending"
-     *                },
-     *                "accepted_by": {
-     *                    "id": 1,
-     *                    "user_name": "Admin",
-     *                    "first_name": "Admin",
-     *                    "last_name": null
-     *                }
-     *            }
-     *        ]
-     *    }
-     * }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Services list",
+     *       "data": {
+     *           "ongoing_services": [],
+     *           "complete_services": [
+     *               {
+     *                   "id": 1,
+     *                   "name": "Do Not Disturbe",
+     *                   "icon": "http://127.0.0.1:8000/storage/Service_icon/XfNlJoZ3L4Pj0dbM8lJIyIXtkqTK4FXaANlUwwOo.jpeg",
+     *                   "date": "13-12-2018",
+     *                   "time": "04:53:09 PM",
+     *                   "status_id": 4,
+     *                   "status": "Completed",
+     *                   "acceptd_by": "",
+     *                   "type": 1
+     *               },
+     *               {
+     *                   "id": 1,
+     *                   "record_id": 2,
+     *                   "name": "sadsaGym",
+     *                   "icon": "",
+     *                   "date": "13-12-2018",
+     *                   "time": "17:48 pm",
+     *                   "status_id": 1,
+     *                   "status": "Booked",
+     *                   "acceptd_by": "",
+     *                   "type": 2
+     *               },
+     *               {
+     *                   "id": 1,
+     *                   "record_id": 1,
+     *                   "name": "Gym",
+     *                   "icon": "",
+     *                   "date": "13-12-2018",
+     *                   "time": "19:05 pm",
+     *                   "status_id": 1,
+     *                   "status": "Booked",
+     *                   "acceptd_by": "",
+     *                   "type": 3
+     *               },
+     *               {
+     *                   "id": 1,
+     *                   "record_id": 1,
+     *                   "name": "1544722346",
+     *                   "icon": "",
+     *                   "date": "13-12-2018",
+     *                   "time": "17:32 pm",
+     *                   "total_item_count": 1,
+     *                   "total_amount": 240.6,
+     *                   "status_id": 1,
+     *                   "status": "Confirmed",
+     *                   "acceptd_by": "",
+     *                   "type": 4
+     *               }
+     *           ]
+     *       }
+     *   }
      * 
      * @apiError OrderRequestNotFound The Order & Request not found.
      * @apiErrorExample Error-Response:
@@ -404,12 +427,14 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
+            $ongoingServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
+//            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
                             ->where(["user_id" => $request->user_id])
                             ->where(function($q) {
-                                $q->where("request_status_id", 3)
-                                ->orWhere("request_status_id", 1)
-                                ->orWhere("request_status_id", 2);
+                                $q->where("request_status_id", 1)
+                                ->orWhere("request_status_id", 2)
+                                ->orWhere("request_status_id", 3)
+                                ->orWhere("request_status_id", 5);
                             })
                             ->with([
                                 'serviceDetail' => function($query) {
@@ -429,7 +454,48 @@ class ServiceController extends Controller {
                         }
                     ])->get();
 
-            $serviceRequest['order_request']['completed_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))->where(["user_id" => $request->user_id, "request_status_id" => 4])
+            $ongoingDataArray = [];
+            $i = 0;
+            foreach ($ongoingServices as $ongoingService) {
+                $ongoingDataArray[$i]["id"] = $ongoingService->id;
+                $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail->name;
+                $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail->icon;
+                $ongoingDataArray[$i]["date"] = $ongoingService->date;
+                $ongoingDataArray[$i]["time"] = $ongoingService->time;
+                $ongoingDataArray[$i]["status_id"] = $ongoingService->requestStatus->id;
+                $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus->status;
+                $ongoingDataArray[$i]["acceptd_by"] = isset($ongoingService->acceptedBy->user_name) ? $ongoingService->acceptedBy->user_name : "";
+                $ongoingDataArray[$i]["type"] = 1;
+                $i++;
+            }
+
+            $ongoingMealOrders = MealOrder::where(["user_id" => $request->user_id])
+                    ->where(function($q) {
+                        $q->where("status", 0)
+                        ->orWhere("status", -1);
+                    })
+                    ->get();
+            foreach ($ongoingMealOrders as $ongoingMealOrder) {
+                $createdAt = Carbon::parse($ongoingMealOrder->created_at);
+                $totalItem = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->count();
+                $ongoingDataArray[$i]["id"] = $ongoingMealOrder->id;
+                $ongoingDataArray[$i]["record_id"] = $ongoingMealOrder->id;
+                $ongoingDataArray[$i]["name"] = $ongoingMealOrder->invoice_id;
+                $ongoingDataArray[$i]["icon"] = "";
+                $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
+                $ongoingDataArray[$i]["time"] = $createdAt->format("H:i a");
+                $ongoingDataArray[$i]["total_item_count"] = $totalItem;
+                $ongoingDataArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
+                $ongoingDataArray[$i]["status_id"] = $ongoingMealOrder->status;
+                $ongoingDataArray[$i]["status"] = $ongoingMealOrder->status == 0 ? "Pending" : "Rejected";
+                $ongoingDataArray[$i]["acceptd_by"] = "";
+                $ongoingDataArray[$i]["type"] = 4;
+                $i++;
+            }
+
+
+            $completedServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
+                            ->where(["user_id" => $request->user_id, "request_status_id" => 4])
                             ->with([
                                 'serviceDetail' => function($query) {
                                     $query->select('id', 'name', 'type_id', 'icon');
@@ -448,21 +514,76 @@ class ServiceController extends Controller {
                         }
                     ])->get();
 
-            if ($serviceRequest['order_request']) {
-                return response()->json([
-                            'status' => true,
-                            'status_code' => 200,
-                            'message' => "Order & Request found.",
-                            'data' => $serviceRequest
-                ]);
-            } else {
-                return response()->json([
-                            'status' => false,
-                            'status_code' => 404,
-                            'message' => "Order & Request not found.",
-                            'data' => $serviceRequest
-                ]);
+            $completedDataArray = [];
+            $j = 0;
+            foreach ($completedServices as $completedService) {
+                $completedDataArray[$j]["id"] = $completedService->id;
+                $completedDataArray[$j]["name"] = $completedService->serviceDetail->name;
+                $completedDataArray[$j]["icon"] = $completedService->serviceDetail->icon;
+                $completedDataArray[$j]["date"] = $completedService->date;
+                $completedDataArray[$j]["time"] = $completedService->time;
+                $completedDataArray[$j]["status_id"] = $completedService->requestStatus->id;
+                $completedDataArray[$j]["status"] = $completedService->requestStatus->status;
+                $completedDataArray[$j]["acceptd_by"] = isset($completedService->acceptedBy->user_name) ? $completedService->acceptedBy->user_name : "";
+                $completedDataArray[$j]["type"] = 1;
+                $j++;
             }
+
+            $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])->get();
+            foreach ($completedAmenities as $completedAmenity) {
+                $createdAt = Carbon::parse($completedAmenity->created_at);
+                $amenity = Amenity::find($completedAmenity->amenity_id);
+                $completedDataArray[$j]["id"] = $completedAmenity->id;
+                $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
+                $completedDataArray[$j]["name"] = $amenity->name;
+                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
+                $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["status_id"] = 1;
+                $completedDataArray[$j]["status"] = "Booked";
+                $completedDataArray[$j]["acceptd_by"] = "";
+                $completedDataArray[$j]["type"] = 2;
+                $j++;
+            }
+            $completedActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])->get();
+            foreach ($completedActivities as $completedActivity) {
+                $createdAt = Carbon::parse($completedActivity->created_at);
+                $activity = Activity::find($completedActivity->amenity_id);
+                $completedDataArray[$j]["id"] = $completedActivity->id;
+                $completedDataArray[$j]["record_id"] = $completedActivity->amenity_id;
+                $completedDataArray[$j]["name"] = $activity->name;
+                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
+                $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["status_id"] = 1;
+                $completedDataArray[$j]["status"] = "Booked";
+                $completedDataArray[$j]["acceptd_by"] = "";
+                $completedDataArray[$j]["type"] = 3;
+                $j++;
+            }
+
+            $completedMealOrders = MealOrder::where(["user_id" => $request->user_id, "status" => 1])
+                    ->get();
+            foreach ($completedMealOrders as $completedMealOrder) {
+                $createdAt = Carbon::parse($completedMealOrder->created_at);
+                $totalItem = MealOrderItem::where("meal_order_id", $completedMealOrder->id)->count();
+                $completedDataArray[$j]["id"] = $completedMealOrder->id;
+                $completedDataArray[$j]["record_id"] = $completedMealOrder->id;
+                $completedDataArray[$j]["name"] = $completedMealOrder->invoice_id;
+                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
+                $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["total_item_count"] = $totalItem;
+                $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
+                $completedDataArray[$j]["status_id"] = $completedMealOrder->status;
+                $completedDataArray[$j]["status"] = "Confirmed";
+                $completedDataArray[$j]["acceptd_by"] = "";
+                $completedDataArray[$j]["type"] = 4;
+                $j++;
+            }
+            $data["ongoing_services"] = $ongoingDataArray;
+            $data["complete_services"] = $completedDataArray;
+            return $this->sendSuccessResponse("Services list", $data);
         } catch (\Exception $ex) {
             return response()->json([
                         'status' => false,

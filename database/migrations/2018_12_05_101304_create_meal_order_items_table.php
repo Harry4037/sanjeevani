@@ -15,7 +15,8 @@ class CreateMealOrderItemsTable extends Migration {
         Schema::create('meal_order_items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('meal_order_id')->default(1);
-            $table->bigInteger('meal_item_id')->default();
+            $table->bigInteger('meal_item_id')->default(0);
+            $table->tinyInteger('item_type')->default(0);
             $table->string('meal_item_name')->nullable();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(0);

@@ -40,6 +40,7 @@ class MealController extends Controller {
      *                   "name": "Package 1",
      *                   "image_url": "http://127.0.0.1:8000/storage/meal_package_images/bJfZEM2qedVLzQSHaPNLCezULofRgDol14MEjak8.jpeg",
      *                   "price": 1100,
+     *                   "quantity_count": 0,
      *                   "meal_items": [
      *                       {
      *                           "id": 1,
@@ -66,6 +67,7 @@ class MealController extends Controller {
      *                   "name": "Package 2",
      *                   "image_url": "http://127.0.0.1:8000/storage/meal_package_images/IMfrpkKB0EE4cSmWD848vD3VOjgf2Lp7JYMnKvJF.png",
      *                   "price": 850,
+     *                   "quantity_count": 0,
      *                   "meal_items": [
      *                       {
      *                           "id": 4,
@@ -215,6 +217,7 @@ class MealController extends Controller {
         if ($mealPackages) {
             $packageData = [];
             foreach ($mealPackages as $key => $mealPackage) {
+                $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
                 $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
                         ->with("mealItem")
                         ->get();
@@ -222,6 +225,7 @@ class MealController extends Controller {
                 $packageData[$key]['name'] = $mealPackage->name;
                 $packageData[$key]['image_url'] = $mealPackage->image_name;
                 $packageData[$key]['price'] = $mealPackage->price;
+                $packageData[$key]['quantity_count'] = isset($userCartPackage->quantity) && $userCartPackage->quantity ? $userCartPackage->quantity : 0;
                 if ($mealPackageItems) {
                     foreach ($mealPackageItems as $k => $mealPackageItem) {
                         $packageData[$key]['meal_items'][$k]['id'] = $mealPackageItem->id;

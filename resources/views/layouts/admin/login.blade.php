@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <link rel="icon" href="{{ asset("img/fav.ico") }}" type="image/x-icon"/>
         <title>{{ config('app.name') }}</title>
 
         <!-- Bootstrap -->
@@ -20,7 +20,7 @@
 
         <!-- Custom Theme Style -->
         <link href="{{ asset("css/admin/custom.css") }}" rel="stylesheet">
-        
+
         <script src="{{ asset("vendors/jquery/dist/jquery.min.js") }}"></script>
         <script src="{{ asset("vendors/bootstrap/dist/js/bootstrap.min.js") }}"></script>
         <script src="{{ asset("vendors/fastclick/lib/fastclick.js") }}"></script>

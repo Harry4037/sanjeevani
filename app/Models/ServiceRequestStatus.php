@@ -9,16 +9,18 @@ class ServiceRequestStatus extends Model
 {
     public function scopeUserRequestStatus($query){
         $query->addSelect(DB::raw("(CASE "
-                . "WHEN (request_status = 'New') THEN 'Pending' "
-                . "WHEN (request_status = 'Accepted') THEN 'In Progress' "
-                . "WHEN (request_status = 'Under Approval') THEN 'Your Approval Needed' "
-                . "ELSE 'Completed' END) as status"));
+                . "WHEN (id = '1') THEN 'Pending' "
+                . "WHEN (id = '2') THEN 'In Progress' "
+                . "WHEN (id = '3') THEN 'Your Approval Needed' "
+                . "WHEN (id = '4') THEN 'Completed' "
+                . "ELSE 'Not Resolve' END) as status"));
     }
     public function scopeStaffRequestStatus($query){
         $query->addSelect(DB::raw("(CASE "
-                . "WHEN (request_status = 'New') THEN 'New' "
-                . "WHEN (request_status = 'Accepted') THEN 'On going' "
-                . "WHEN (request_status = 'Under Approval') THEN 'Under approval' "
-                . "ELSE 'Completed' END) as status"));
+                . "WHEN (id = '1') THEN 'New' "
+                . "WHEN (id = '2') THEN 'On going' "
+                . "WHEN (id = '3') THEN 'Under approval' "
+                . "WHEN (id = '4') THEN 'Completed' "
+                . "ELSE 'Not Resolve' END) as status"));
     }
 }
