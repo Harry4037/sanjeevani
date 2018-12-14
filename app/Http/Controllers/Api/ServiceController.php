@@ -341,6 +341,7 @@ class ServiceController extends Controller {
      *           "complete_services": [
      *               {
      *                   "id": 1,
+     *                   "record_id": 1,
      *                   "name": "Do Not Disturbe",
      *                   "icon": "http://127.0.0.1:8000/storage/Service_icon/XfNlJoZ3L4Pj0dbM8lJIyIXtkqTK4FXaANlUwwOo.jpeg",
      *                   "date": "13-12-2018",
@@ -518,6 +519,7 @@ class ServiceController extends Controller {
             $j = 0;
             foreach ($completedServices as $completedService) {
                 $completedDataArray[$j]["id"] = $completedService->id;
+                $completedDataArray[$j]["record_id"] = $completedService->service_id;
                 $completedDataArray[$j]["name"] = $completedService->serviceDetail->name;
                 $completedDataArray[$j]["icon"] = $completedService->serviceDetail->icon;
                 $completedDataArray[$j]["date"] = $completedService->date;
