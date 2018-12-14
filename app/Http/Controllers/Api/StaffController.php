@@ -33,7 +33,6 @@ class StaffController extends Controller {
      *    "status_code": 200,
      *    "message": "Service request found.",
      *    "data": {
-     *       "services": {
      *            "services": [
      *               {
      *                    "id": 1,
@@ -44,8 +43,7 @@ class StaffController extends Controller {
      *                    "room_no": "300",
      *                    "created_at": "17:11 pm"
      *                }
-     *            ]
-     *        },
+     *            ],
      *        "meal_orders": [
      *            {
      *                "id": 1,
@@ -168,13 +166,13 @@ class StaffController extends Controller {
             $dataArray = [];
             foreach ($newServices as $k => $newService) {
                 $created_at = Carbon::parse($newService->created_at);
-                $dataArray["services"][$k]["id"] = $newService->id;
-                $dataArray["services"][$k]["service_name"] = $newService->serviceDetail->name;
-                $dataArray["services"][$k]["service_comment"] = $newService->comment;
-                $dataArray["services"][$k]["service_icon"] = $newService->serviceDetail->icon;
-                $dataArray["services"][$k]["user_name"] = $newService->userDetail->user_name;
-                $dataArray["services"][$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
-                $dataArray["services"][$k]["created_at"] = $created_at->format('H:i a');
+                $dataArray[$k]["id"] = $newService->id;
+                $dataArray[$k]["service_name"] = $newService->serviceDetail->name;
+                $dataArray[$k]["service_comment"] = $newService->comment;
+                $dataArray[$k]["service_icon"] = $newService->serviceDetail->icon;
+                $dataArray[$k]["user_name"] = $newService->userDetail->user_name;
+                $dataArray[$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $dataArray[$k]["created_at"] = $created_at->format('H:i a');
             }
 
             $data["services"] = $dataArray;
