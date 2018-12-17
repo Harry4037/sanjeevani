@@ -407,7 +407,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["icon"] = "";
                 $ongoingJobArray[$i]["date"] = $createdAt->format("d-m-Y");
                 $ongoingJobArray[$i]["time"] = $createdAt->format("H:i a");
-                $ongoingJobArray[$i]["total_item_count"] = count($totalItem);
+                $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
