@@ -295,6 +295,21 @@ class StaffController extends Controller {
      *               "user_name": "Hariom Gangwar",
      *               "room_no": "300",
      *               "created_at": "18:22 pm"
+     *               "type": 1
+     *            },
+     *            {
+     *                "id": 1,
+     *                "record_id": 1,
+     *                "name": "1544722346",
+     *                "icon": "",
+     *                "date": "13-12-2018",
+     *                "time": "17:32 pm",
+     *                "total_item_count": 1,
+     *                "total_amount": 240.6,
+     *                "status_id": 1,
+     *                "status": "Confirmed",
+     *                "acceptd_by": "",
+     *                "type": 4
      *            }
      *        ],
      *        "under_approval_jobs": [],
@@ -353,15 +368,42 @@ class StaffController extends Controller {
                     ->get();
 
             $ongoingJobArray = [];
-            foreach ($ongoing_jobs as $k => $ongoing_job) {
+            $i = 0;
+            foreach ($ongoing_jobs as $ongoing_job) {
                 $created_at = Carbon::parse($ongoing_job->created_at);
-                $ongoingJobArray[$k]["id"] = $ongoing_job->id;
-                $ongoingJobArray[$k]["service_name"] = $ongoing_job->serviceDetail->name;
-                $ongoingJobArray[$k]["service_comment"] = $ongoing_job->comment;
-                $ongoingJobArray[$k]["service_icon"] = $ongoing_job->serviceDetail->icon;
-                $ongoingJobArray[$k]["user_name"] = $ongoing_job->userDetail->user_name;
-                $ongoingJobArray[$k]["room_no"] = $ongoing_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
-                $ongoingJobArray[$k]["created_at"] = $created_at->format('H:i a');
+                $ongoingJobArray[$i]["id"] = $ongoing_job->id;
+                $ongoingJobArray[$i]["service_name"] = $ongoing_job->serviceDetail->name;
+                $ongoingJobArray[$i]["service_comment"] = $ongoing_job->comment;
+                $ongoingJobArray[$i]["service_icon"] = $ongoing_job->serviceDetail->icon;
+                $ongoingJobArray[$i]["user_name"] = $ongoing_job->userDetail->user_name;
+                $ongoingJobArray[$i]["room_no"] = $ongoing_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $ongoingJobArray[$i]["created_at"] = $created_at->format('H:i a');
+                $ongoingJobArray[$i]["type"] = 1;
+                $i++;
+            }
+
+            $ongoingMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
+                    ->where(function($q) {
+                        $q->where("status", 1)
+                        ->orWhere("status", -1);
+                    })
+                    ->get();
+            foreach ($ongoingMealOrders as $ongoingMealOrder) {
+                $createdAt = Carbon::parse($ongoingMealOrder->created_at);
+                $totalItem = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->count();
+                $ongoingJobArray[$i]["id"] = $ongoingMealOrder->id;
+                $ongoingJobArray[$i]["record_id"] = $ongoingMealOrder->id;
+                $ongoingJobArray[$i]["name"] = $ongoingMealOrder->invoice_id;
+                $ongoingJobArray[$i]["icon"] = "";
+                $ongoingJobArray[$i]["date"] = $createdAt->format("d-m-Y");
+                $ongoingJobArray[$i]["time"] = $createdAt->format("H:i a");
+                $ongoingJobArray[$i]["total_item_count"] = $totalItem;
+                $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
+                $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
+                $ongoingJobArray[$i]["status"] = $ongoingMealOrder->status == 0 ? "Pending" : "Rejected";
+                $ongoingJobArray[$i]["acceptd_by"] = "";
+                $ongoingJobArray[$i]["type"] = 4;
+                $i++;
             }
 
             $under_approval_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
