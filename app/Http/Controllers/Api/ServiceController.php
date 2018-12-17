@@ -459,6 +459,7 @@ class ServiceController extends Controller {
             $i = 0;
             foreach ($ongoingServices as $ongoingService) {
                 $ongoingDataArray[$i]["id"] = $ongoingService->id;
+                $ongoingDataArray[$i]["record_id"] = $ongoingService->service_id;
                 $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail->name;
                 $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail->icon;
                 $ongoingDataArray[$i]["date"] = $ongoingService->date;

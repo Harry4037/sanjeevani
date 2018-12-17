@@ -383,26 +383,49 @@ class StaffController extends Controller {
             }
 
             $ongoingMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
+                    ->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
+                    ])
                     ->where(function($q) {
                         $q->where("status", 1)
                         ->orWhere("status", -1);
-                    })
+                    })->latest()
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
                 $createdAt = Carbon::parse($ongoingMealOrder->created_at);
-                $totalItem = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->count();
+                $mealItems = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->get();
                 $ongoingJobArray[$i]["id"] = $ongoingMealOrder->id;
                 $ongoingJobArray[$i]["record_id"] = $ongoingMealOrder->id;
                 $ongoingJobArray[$i]["name"] = $ongoingMealOrder->invoice_id;
                 $ongoingJobArray[$i]["icon"] = "";
                 $ongoingJobArray[$i]["date"] = $createdAt->format("d-m-Y");
                 $ongoingJobArray[$i]["time"] = $createdAt->format("H:i a");
-                $ongoingJobArray[$i]["total_item_count"] = $totalItem;
+                $ongoingJobArray[$i]["total_item_count"] = count($totalItem);
+                $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
+                $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
                 $ongoingJobArray[$i]["status"] = $ongoingMealOrder->status == 0 ? "Pending" : "Rejected";
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
+                if ($mealItems) {
+                    foreach ($mealItems as $f => $mealItem) {
+                        $mealImage = MealItem::find($mealItem->meal_item_id);
+                        $ongoingJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
+                        $ongoingJobArray[$i]["meal_items"][$f]["meal_item_name"] = $mealItem->meal_item_name;
+                        $ongoingJobArray[$i]["meal_items"][$f]["price"] = $mealItem->price;
+                        $ongoingJobArray[$i]["meal_items"][$f]["quantity"] = $mealItem->quantity;
+                        $ongoingJobArray[$i]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
+                    }
+                }
                 $i++;
             }
 
