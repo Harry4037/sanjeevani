@@ -126,7 +126,7 @@ class StaffController extends Controller {
                     ])->latest()
                     ->get();
 
-            $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])
+            $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 0])
                     ->with([
                         'userDetail' => function($query) {
                             $query->select('id', 'user_name', 'email_id', 'mobile_number')
