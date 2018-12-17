@@ -521,6 +521,86 @@ class StaffController extends Controller {
     }
 
     /**
+     * @api {post} /api/job-mark-notresolve My Job mark as not resolve
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName POSTMyjobMarkNotResolve
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id Staff user id(required).
+     * @apiParam {String} job_id Job Id(required).
+     * @apiParam {String} reasons Reasons (with comma separated).
+     * @apiParam {String} comment Comment.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Your job status has been changed.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "status": true,
+     *   "status_code": 200,
+     *   "message": "Your job status has been changed.",
+     *   "data": {}
+     * }
+     * 
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *   "status": false,
+     *   "status_code": 404,
+     *   "message": "User id missing.",
+     *   "data": {}
+     * }
+     * 
+     * 
+     * @apiError JobIdMissing The job id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Job id missing.",
+     *    "data": {}
+     * }
+     * 
+     * 
+     */
+    public function markasNotResolve(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            if (!$request->job_id) {
+                return $this->sendErrorResponse("Job id missing", (object) []);
+            }
+            $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
+            ;
+            if (!$job) {
+                return $this->sendErrorResponse("Invalid job", (object) []);
+            }
+
+            $job->request_status_id = 5;
+//            $job->reasons = $request->reasons;
+//            $job->comment = $request->comment;
+            if ($job->save()) {
+                return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
+            } else {
+                return $this->administratorResponse();
+            }
+        } catch (Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
      * @api {post} /api/accept-reject-meal-order Accept/Reject meal order.
      * @apiHeader {String} Authorization Users unique access-token.
      * @apiHeader {String} Accept application/json.

@@ -97,6 +97,9 @@ Route::namespace("Api")->group(function () {
 
         //Myjob mark as complete (staff member)
         Route::post('job-mark-complete', 'StaffController@markasComplete');
+        
+        //Myjob mark as complete (staff member)
+        Route::post('job-mark-notresolve', 'StaffController@markasNotResolve');
 
         //Book amenity
         Route::post('book-amenities', 'AmenityController@bookAmenities');
@@ -118,7 +121,7 @@ Route::namespace("Api")->group(function () {
         //Update device token
         Route::post('update-device-token', 'UserController@updateDeviceToken');
 
-        //Order accepted or rejected
+        //Order accepted or rejected(staff member)
         Route::post('accept-reject-meal-order', 'StaffController@acceptRejectOrder');
 
         Route::post('check-in', 'UserController@checkIn');
