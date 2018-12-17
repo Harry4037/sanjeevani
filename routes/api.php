@@ -115,6 +115,12 @@ Route::namespace("Api")->group(function () {
 
         Route::post('sos', 'CmsController@sos');
 
+        //Update device token
+        Route::post('update-device-token', 'UserController@updateDeviceToken');
+
+        //Order accepted or rejected
+        Route::post('accept-reject-meal-order', 'StaffController@acceptRejectOrder');
+
         Route::post('check-in', 'UserController@checkIn');
         Route::get('logout', 'AuthController@logout');
         Route::post('update-profile', 'UserController@updateProfile');

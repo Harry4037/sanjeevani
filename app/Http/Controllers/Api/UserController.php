@@ -508,4 +508,60 @@ class UserController extends Controller {
         return $this->sendSuccessResponse("state and city listing", $dataArray);
     }
 
+    /**
+     * @api {post} /api/update-device-token Update Device Token
+     * @apiHeader {String} Accept application/json. 
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName PostUpdateDeviceToken
+     * @apiGroup User
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} device_token Device Token*.
+     * @apiParam {String} device_type Device Type*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Device token updated successfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *{
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Device token updated successfully.",
+     *    "data": {}
+     *}
+     * 
+     * 
+     */
+    public function updateDeviceToken(Request $request) {
+        if (!$request->user_id) {
+            return $this->sendErrorResponse("User id missing.", (object) []);
+        }
+        if (!$request->device_token) {
+            return $this->sendErrorResponse("Device token missing.", (object) []);
+        }
+        if (!$request->device_type) {
+            return $this->sendErrorResponse("Device type missing.", (object) []);
+        }
+        if ($request->user_id != $request->user()->id) {
+            return $this->sendErrorResponse("Unauthorized user.", (object) []);
+        }
+
+        $user = User::find($request->user_id);
+        if ($user) {
+            $user->device_token = $request->device_token;
+            $user->device_type = $request->device_type;
+
+            if ($user->save()) {
+                return $this->sendSuccessResponse("Device token updated successfully.", (object) []);
+            } else {
+                return $this->sendErrorResponse("Something went be wrong.", (object) []);
+            }
+        } else {
+            return $this->sendErrorResponse("User object not found", (object) []);
+        }
+    }
+
 }

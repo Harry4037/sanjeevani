@@ -520,4 +520,70 @@ class StaffController extends Controller {
         }
     }
 
+    /**
+     * @api {post} /api/accept-reject-meal-order Accept/Reject meal order.
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName POSTAcceptRejectMealOrer
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} order_id Order id*.
+     * @apiParam {String} status 1=>Accepted order, -1=> Rejected Order .
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Order accepted successfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "status": true,
+     *   "status_code": 200,
+     *   "message": "Order accepted successfully.",
+     *   "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function acceptRejectOrder(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if (!$request->status) {
+                return $this->sendErrorResponse("Status missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            if (!$request->order_id) {
+                return $this->sendErrorResponse("Order id missing", (object) []);
+            }
+            $order = MealOrder::find($request->order_id);
+            if (!$order) {
+                return $this->sendErrorResponse("Invalid order", (object) []);
+            }
+
+            $order->status = $request->status;
+            $order->accepted_by = $request->user_id;
+            if ($order->save()) {
+                $msg = "Invalid status.";
+                if ($order->status == -1) {
+                    $msg = "Order rejected succeffully.";
+                }
+                if ($order->status == 1) {
+                    $msg = "Order accepted succeffully.";
+                }
+                return $this->sendSuccessResponse($msg, (object) []);
+            } else {
+                return $this->administratorResponse();
+            }
+        } catch (Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
 }

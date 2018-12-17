@@ -50,6 +50,8 @@ class CreateUsersTable extends Migration {
             $table->string('remember_token')->nullable();
             $table->string('aadhar_id')->nullable();
             $table->string('voter_id')->nullable();
+            $table->string('device_token')->nullable();
+            $table->string('device_type')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('otp')->nullable();
