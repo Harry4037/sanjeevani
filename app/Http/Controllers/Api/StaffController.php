@@ -10,6 +10,9 @@ use App\Models\ServiceRequest;
 use App\Models\MealOrder;
 use App\Models\MealOrderItem;
 use App\Models\MealItem;
+use App\Models\Amenity;
+use App\Models\AmenityRequest;
+use App\Models\AmenityTimeSlot;
 
 class StaffController extends Controller {
 
@@ -66,7 +69,20 @@ class StaffController extends Controller {
      *                ]
      *            }
      *        ],
-     *        "amenities": []
+     *       "amenities": [
+     *           {
+     *               "id": 2,
+     *               "name": "sadsaGym",
+     *               "icon": null,
+     *               "booking_count": 1
+     *           },
+     *           {
+     *               "id": 1,
+     *               "name": "Gym",
+     *               "icon": null,
+     *               "booking_count": 0
+     *           }
+     *       ]
      *    }
      * }
      * 
@@ -175,9 +191,20 @@ class StaffController extends Controller {
                 $dataArray[$k]["created_at"] = $created_at->format('H:i a');
             }
 
+            $amenities = Amenity::where(["resort_id" => $request->resort_id, "is_active" => 1])
+                    ->latest()
+                    ->get();
+            $amenitiesDataArray = [];
+            foreach ($amenities as $z => $amenitie) {
+                $amenitiesBookingCount = AmenityRequest::where(["amenity_id" => $amenitie->id, "booking_date" => date("Y-m-d")])->count();
+                $amenitiesDataArray[$z]["id"] = $amenitie->id;
+                $amenitiesDataArray[$z]["name"] = $amenitie->name;
+                $amenitiesDataArray[$z]["icon"] = $amenitie->icon;
+                $amenitiesDataArray[$z]["booking_count"] = $amenitiesBookingCount;
+            }
             $data["services"] = $dataArray;
             $data["meal_orders"] = $mealDataArray;
-            $data["amenities"] = [];
+            $data["amenities"] = $amenitiesDataArray;
             return $this->sendSuccessResponse("Service request found.", $data);
         } catch (\Exception $ex) {
             dd($ex);
@@ -727,6 +754,83 @@ class StaffController extends Controller {
                 return $this->administratorResponse();
             }
         } catch (Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {get} /api/amenities-bookings-details Amenity bookings detail.
+     * @apiHeader {String} Accept application/json.
+     * @apiName getAmenityBookingsDetail
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} amenity_id Amenity id*.
+     * @apiParam {String} booking_date Booking date id* (format yy-mm-dd).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message bookings details
+     * @apiSuccess {JSON}   data array.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "booking detail",
+     *       "data": [
+     *           {
+     *               "slot": "04:00-05:00",
+     *               "bookings": [
+     *                   {
+     *                       "id": 1,
+     *                       "user_name": "Hariom Gangwar",
+     *                       "room_no": "100",
+     *                       "created_at": "13-12-18 05:48 PM"
+     *                   }
+     *               ]
+     *           }
+     *       ]
+     *   }
+     * 
+     * 
+     * 
+     */
+    public function amenitiesBooking(Request $request) {
+        try {
+            if (!$request->amenity_id) {
+                return $this->sendErrorResponse("amenity id missing.", (object) []);
+            }
+            $amenity = Amenity::find($request->amenity_id);
+            if (!$amenity) {
+                return $this->sendErrorResponse("Invalid amenity.", (object) []);
+            }
+            $amenitySlots = AmenityTimeSlot::where(["amenity_id" => $request->amenity_id, "is_active" => 1])->get();
+            $amenitySlotData = [];
+            foreach ($amenitySlots as $i => $amenitySlot) {
+                $amenitiesRequests = AmenityRequest::where(["amenity_id" => $request->amenity_id, "from" => $amenitySlot->from, "to" => $amenitySlot->to, "booking_date" => $request->booking_date])
+                        ->with("userDetail")
+                        ->get();
+                $from = Carbon::parse($amenitySlot->from);
+                $to = Carbon::parse($amenitySlot->to);
+                $amenitySlotData[$i]['slot'] = $from->format("H:i") . "-" . $to->format("H:i");
+                if ($amenitiesRequests) {
+                    $amenitySlotData[$i]['bookings'] = [];
+                    foreach ($amenitiesRequests as $j => $amenitiesRequest) {
+                        $created_at = Carbon::parse($amenitiesRequest->created_at);
+                        $amenitySlotData[$i]['bookings'][$j]["id"] = $amenitiesRequest->id;
+                        $amenitySlotData[$i]['bookings'][$j]["user_name"] = $amenitiesRequest->userDetail->user_name;
+                        $amenitySlotData[$i]['bookings'][$j]["room_no"] = "100";
+                        $amenitySlotData[$i]['bookings'][$j]["created_at"] = $created_at->format("d-m-y h:i A");
+                    }
+                } else {
+                    $amenitySlotData[$i]['bookings'] = [];
+                }
+            }
+
+            return $this->sendSuccessResponse("booking detail", $amenitySlotData);
+        } catch (Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }

@@ -81,6 +81,8 @@ Route::namespace("Api")->group(function () {
     Route::post('forget-password', 'UserController@forgetPassword');
 
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
+    
+    Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
 
     Route::middleware('auth:api')->group(function () {
         //Raise service request (by user)
