@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
  */
 
 Route::namespace("Api")->group(function () {
+    if(\Request::segment(1) == "api"){
     $myfile = fopen(__DIR__."/../storage/input_data.txt", "a") or die("Unable to open file!");
     fwrite($myfile, "----------------------------------------------------");
     fwrite($myfile, "\n" . json_encode(date("d-m-Y H:i:s")));
@@ -24,6 +25,7 @@ Route::namespace("Api")->group(function () {
     fwrite($myfile, "\n");
     fwrite($myfile, "----------------------------------------------------");
     fclose($myfile);
+    }
 
     //City State list
     Route::get('state-city-list', 'UserController@stateCityList');
