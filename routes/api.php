@@ -14,6 +14,15 @@ use Illuminate\Http\Request;
  */
 
 Route::namespace("Api")->group(function () {
+    $myfile = fopen(__DIR__."/../storage/input_data.txt", "a") or die("Unable to open file!");
+    fwrite($myfile, "----------------------------------------------------");
+    fwrite($myfile, "\n" . json_encode($_REQUEST));
+    fwrite($myfile, "\n");
+    fwrite($myfile, "----------------------------------------------------");
+    fwrite($myfile, "\n");
+    fwrite($myfile, "----------------------------------------------------");
+    fclose($myfile);
+
     //City State list
     Route::get('state-city-list', 'UserController@stateCityList');
     //Sent OTP
@@ -81,7 +90,7 @@ Route::namespace("Api")->group(function () {
     Route::post('forget-password', 'UserController@forgetPassword');
 
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
-    
+
     Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
 
     Route::middleware('auth:api')->group(function () {
@@ -99,7 +108,7 @@ Route::namespace("Api")->group(function () {
 
         //Myjob mark as complete (staff member)
         Route::post('job-mark-complete', 'StaffController@markasComplete');
-        
+
         //Myjob mark as complete (staff member)
         Route::post('job-mark-notresolve', 'StaffController@markasNotResolve');
 
