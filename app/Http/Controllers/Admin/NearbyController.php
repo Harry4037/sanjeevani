@@ -53,12 +53,13 @@ class NearbyController extends Controller {
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
                             'resort_id' => 'bail|required',
-                            'name' => 'bail|required',
-                            'distance_from_resort' => 'bail|required',
-                            'description' => 'bail|required',
-                            'precautions' => 'bail|required',
-                            'address_1' => 'bail|required',
-                            'city_id' => 'bail|required',
+                            'place_name' => 'bail|required',
+                            'distance' => 'bail|required',
+                            'place_description' => 'bail|required',
+                            'place_precaution' => 'bail|required',
+                            'address' => 'bail|required',
+                            'city' => 'bail|required',
+                            'pin_code' => 'bail|required',
                             'latitude' => 'bail|required',
                             'longitude' => 'bail|required',
                 ]);
