@@ -4237,7 +4237,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Service request found.\",\n   \"data\": {\n           \"services\": [\n              {\n                   \"id\": 1,\n                   \"service_name\": \"Do Not Disturbe\",\n                   \"service_comment\": \"\",\n                   \"service_icon\": \"http://127.0.0.1:8000/storage/Service_icon/XfNlJoZ3L4Pj0dbM8lJIyIXtkqTK4FXaANlUwwOo.jpeg\",\n                   \"user_name\": \"Hariom Gangwar\",\n                   \"room_no\": \"300\",\n                   \"created_at\": \"17:11 pm\"\n               }\n           ],\n       \"meal_orders\": [\n           {\n               \"id\": 1,\n               \"invoice_id\": \"1544634201\",\n               \"item_total_amount\": 240.6,\n               \"gst_amount\": 0,\n               \"total_amount\": 240.6,\n               \"user_name\": \"Hariom Gangwar\",\n               \"room_no\": \"300\",\n               \"created_at\": \"17:03 pm\",\n               \"meal_item_count\": 1,\n               \"meal_items\": [\n                   {\n                       \"id\": 1,\n                       \"meal_item_name\": \"sadsad\",\n                       \"price\": 120,\n                       \"quantity\": 2,\n                       \"image_url\": \"\"\n                   }\n               ]\n           }\n       ],\n       \"amenities\": []\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"status\": true,\n   \"status_code\": 200,\n   \"message\": \"Service request found.\",\n   \"data\": {\n           \"services\": [\n              {\n                   \"id\": 1,\n                   \"service_name\": \"Do Not Disturbe\",\n                   \"service_comment\": \"\",\n                   \"service_icon\": \"http://127.0.0.1:8000/storage/Service_icon/XfNlJoZ3L4Pj0dbM8lJIyIXtkqTK4FXaANlUwwOo.jpeg\",\n                   \"user_name\": \"Hariom Gangwar\",\n                   \"room_no\": \"300\",\n                   \"created_at\": \"17:11 pm\"\n               }\n           ],\n       \"meal_orders\": [\n           {\n               \"id\": 1,\n               \"invoice_id\": \"1544634201\",\n               \"item_total_amount\": 240.6,\n               \"gst_amount\": 0,\n               \"total_amount\": 240.6,\n               \"user_name\": \"Hariom Gangwar\",\n               \"room_no\": \"300\",\n               \"created_at\": \"17:03 pm\",\n               \"meal_item_count\": 1,\n               \"meal_items\": [\n                   {\n                       \"id\": 1,\n                       \"meal_item_name\": \"sadsad\",\n                       \"price\": 120,\n                       \"quantity\": 2,\n                       \"image_url\": \"\"\n                   }\n               ]\n           }\n       ],\n      \"amenities\": [\n          {\n              \"id\": 2,\n              \"name\": \"sadsaGym\",\n              \"icon\": null,\n              \"booking_count\": 1\n          },\n          {\n              \"id\": 1,\n              \"name\": \"Gym\",\n              \"icon\": null,\n              \"booking_count\": 0\n          }\n      ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -4268,6 +4268,90 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": false,\n  \"status_code\": 404,\n  \"message\": \"Invalid resort.\",\n  \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
+    "groupTitle": "Staff_Service"
+  },
+  {
+    "type": "get",
+    "url": "/api/amenities-bookings-details",
+    "title": "Amenity bookings detail.",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "getAmenityBookingsDetail",
+    "group": "Staff_Service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "amenity_id",
+            "description": "<p>Amenity id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_date",
+            "description": "<p>Booking date id* (format yy-mm-dd).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>bookings details</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"booking detail\",\n      \"data\": [\n          {\n              \"slot\": \"04:00-05:00\",\n              \"bookings\": [\n                  {\n                      \"id\": 1,\n                      \"user_name\": \"Hariom Gangwar\",\n                      \"room_no\": \"100\",\n                      \"created_at\": \"13-12-18 05:48 PM\"\n                  }\n              ]\n          }\n      ]\n  }",
           "type": "json"
         }
       ]
