@@ -682,7 +682,7 @@ class ServiceController extends Controller {
                 return $this->sendErrorResponse("Invalid user.", (object) []);
             }
 
-            $serviceRequest = ServiceRequest::where(["id" => $request->service_id, "request_status_id" => 3, "is_active" => 1])->first();
+            $serviceRequest = ServiceRequest::where(["service_id" => $request->service_id, "request_status_id" => 3, "is_active" => 1])->first();
             if (!$serviceRequest) {
                 return $this->sendErrorResponse("Invalid service & order.", (object) []);
             }
