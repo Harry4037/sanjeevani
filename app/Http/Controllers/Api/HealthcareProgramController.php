@@ -320,4 +320,63 @@ class HealthcareProgramController extends Controller {
         }
     }
 
+    /**
+     * @api {post} /api/cancel-package  Cancel Healthcare Package
+     * @apiHeader {String} Accept application/json. 
+     * @apiName PostCancelHealthcareProgram
+     * @apiGroup Healthcare Program
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} health_care_package_id Package id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Upcoming & Completed Health Package.
+     * @apiSuccess {JSON} data response.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Healthcare package cancelled successsfully",
+     *       "data": {}
+     *   }
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "User id missing.",
+     *       "data": {}
+     *   } 
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *   {
+     *       "status": false,
+     *       "status_code": 404,
+     *       "message": "Health care package id missing.",
+     *       "data": {}
+     *   } 
+     * 
+     */
+    public function cancelHealthcareProgram(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing", (object) []);
+            }
+            if (!$request->health_care_package_id) {
+                return $this->sendErrorResponse("Health care package id missing", (object) []);
+            }
+
+            return $this->sendSuccessResponse("Healthcare package cancelled successsfully", (object) []);
+        } catch (Exception $ex) {
+            
+        }
+    }
+
 }

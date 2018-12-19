@@ -14,17 +14,17 @@ use Illuminate\Http\Request;
  */
 
 Route::namespace("Api")->group(function () {
-    if(\Request::segment(1) == "api"){
-    $myfile = fopen(__DIR__."/../storage/input_data.txt", "a") or die("Unable to open file!");
-    fwrite($myfile, "----------------------------------------------------");
-    fwrite($myfile, "\n" . json_encode(date("d-m-Y H:i:s")));
-    fwrite($myfile, "\n" . json_encode(\Request::segment(2)));
-    fwrite($myfile, "\n" . json_encode($_REQUEST));
-    fwrite($myfile, "\n");
-    fwrite($myfile, "----------------------------------------------------");
-    fwrite($myfile, "\n");
-    fwrite($myfile, "----------------------------------------------------");
-    fclose($myfile);
+    if (\Request::segment(1) == "api") {
+        $myfile = fopen(__DIR__ . "/../storage/input_data.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, "----------------------------------------------------");
+        fwrite($myfile, "\n" . json_encode(date("d-m-Y H:i:s")));
+        fwrite($myfile, "\n" . json_encode(\Request::segment(2)));
+        fwrite($myfile, "\n" . json_encode($_REQUEST));
+        fwrite($myfile, "\n");
+        fwrite($myfile, "----------------------------------------------------");
+        fwrite($myfile, "\n");
+        fwrite($myfile, "----------------------------------------------------");
+        fclose($myfile);
     }
 
     //City State list
@@ -138,6 +138,8 @@ Route::namespace("Api")->group(function () {
 
         //Order accepted or rejected(staff member)
         Route::post('accept-reject-meal-order', 'StaffController@acceptRejectOrder');
+        //Cancel HealthcarePackage
+        Route::post('cancel-package', 'HealthcareProgramController@cancelHealthcareProgram');
 
         Route::post('check-in', 'UserController@checkIn');
         Route::get('logout', 'AuthController@logout');
