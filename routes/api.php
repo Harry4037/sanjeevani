@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::namespace("Api")->group(function () {
     $myfile = fopen(__DIR__."/../storage/input_data.txt", "a") or die("Unable to open file!");
     fwrite($myfile, "----------------------------------------------------");
-    fwrite($myfile, "\n" . json_encode(data("d-m-y H:i")));
+    fwrite($myfile, "\n" . json_encode(date("d-m-y H:i")));
     fwrite($myfile, "\n" . json_encode(\Request::segment(2)));
     fwrite($myfile, "\n" . json_encode($_REQUEST));
     fwrite($myfile, "\n");
