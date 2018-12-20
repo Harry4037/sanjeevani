@@ -13,6 +13,7 @@ use App\Models\MealItem;
 use App\Models\Amenity;
 use App\Models\AmenityRequest;
 use App\Models\AmenityTimeSlot;
+use App\Models\User;
 
 class StaffController extends Controller {
 
@@ -283,6 +284,8 @@ class StaffController extends Controller {
             $serviceRequest->request_status_id = 2;
             $serviceRequest->accepted_by_id = $request->user_id;
             if ($serviceRequest->save()) {
+                $user = User::find($serviceRequest->user_id);
+                $this->androidPushNotification(3, "Service Request", "Your request is accepted by our staff member.", $user->device_token, 1, $serviceRequest->service_id);
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
             } else {
                 return $this->sendErrorResponse("Something went be wrong.", (object) []);
