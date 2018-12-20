@@ -293,7 +293,7 @@
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
                             <a class="btn btn-default" href="{{ route('admin.users.index') }}">Cancel</a>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
 
@@ -314,6 +314,7 @@
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
+            startDate: new Date("{{ $roomBooking->check_in }}"),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
@@ -323,7 +324,7 @@
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            startDate: moment().startOf('hour').add(24, 'hour'),
+            startDate: new Date("{{ $roomBooking->check_out }}"),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
