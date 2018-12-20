@@ -166,7 +166,7 @@ class StaffController extends Controller {
                 $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
                 $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                 $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
-                $mealDataArray[$j]["room_no"] = $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $mealDataArray[$j]["room_no"] = $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room == null ? "1" : $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
                 $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                 if ($mealItems) {
@@ -189,7 +189,7 @@ class StaffController extends Controller {
                 $dataArray[$k]["service_comment"] = $newService->comment;
                 $dataArray[$k]["service_icon"] = $newService->serviceDetail->icon;
                 $dataArray[$k]["user_name"] = $newService->userDetail->user_name;
-                $dataArray[$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $dataArray[$k]["room_no"] = $newService->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $newService->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $dataArray[$k]["created_at"] = $created_at->format('H:i a');
             }
 
