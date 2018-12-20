@@ -157,8 +157,7 @@ class StaffController extends Controller {
                     ->get();
                    
             $mealDataArray = [];
-            foreach ($mealOrders as $j => $mealOrder) {
-                dd($mealOrder->userDetail->userBookingDetail->roomBooking->resort_room); 
+            foreach ($mealOrders as $j => $mealOrder) { 
                 $mealItems = MealOrderItem::where("meal_order_id", $mealOrder->id)->get();
                 $meal_created_at = Carbon::parse($mealOrder->created_at);
                 $mealDataArray[$j]["id"] = $mealOrder->id;
@@ -167,7 +166,7 @@ class StaffController extends Controller {
                 $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
                 $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                 $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
-                $mealDataArray[$j]["room_no"] = isset($mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no) ? $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no : "";
+                $mealDataArray[$j]["room_no"] = $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
                 $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                 if ($mealItems) {
