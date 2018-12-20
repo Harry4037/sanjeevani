@@ -3,46 +3,43 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Validator;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class NotificationController extends Controller {
 
     public function index() {
-
-        return view('admin.notification.index');
-    }
-
-    public function userList(Request $request) {
-        $users = User::where("is_active", 1)->get();
-        return view('admin.notification.user-list', [
-            'users' => $users
-        ]);
+        $users = User::where("is_active", 1)->where('user_type_id','!=',1)->get();
+        return view('admin.notification.index', compact('users'));
     }
 
     public function sendNotification(Request $request) {
-        $usertype = $request->get('user_type');
-        $notifyUser = $request->get('notify_user');
-        $message = $request->get('message');
-        if (!$usertype) {
-            return $this->sendErrorResponse("Please select user type", (object) []);
-        }
-        if ($usertype == 2) {
-            if ($notifyUser == null) {
-                return $this->sendErrorResponse("Please select user's", (object) []);
-            }
+        $validator = Validator::make($request->all(),[
+            'title'   =>  'required',
+            'message'   =>  'required',
+            'notify_user'   =>  'required_if:user_type,2',
+            'user_type'   =>  'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendErrorResponse($validator->errors()->all()[0], (object) [],200);
         }
 
-        if ($usertype == 1) {
-            $user = User::where("is_active", 1)->pluck("id");
-            return $this->sendSuccessResponse("Notification send successfully", (object) []);
-        } elseif ($usertype == 2) {
-            $user = User::whereIn("id", $notifyUser)->pluck("id");
-            return $this->sendSuccessResponse("Notification send successfully", (object) []);
-        } else {
-            return $this->sendErrorResponse("Something went be wrong", (object) []);
+        $tokens = User::where("is_active", 1)
+        ->where('user_type_id','!=',1)
+        ->where("device_token",'!=',null)
+        ->when($request->user_type == 2,function($query) use($request){
+            return $query->whereIn('id',$request->notify_user);
+        })
+        ->pluck("device_token")->toArray();
+
+        if (count($tokens)) {
+            $this->androidPushNotification(3, $request->title, $request->message, $tokens,123,0);
         }
+
+        return $this->sendSuccessResponse("Notification send successfully", (object) [],200);
     }
+
 
 }

@@ -60,8 +60,10 @@ class UsersController extends Controller {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
-//            dd($request->get('order'));
-            $query = $this->user->query();
+
+            $query = $this->user->query()->with(['payments','mealOrders'=> function($query){
+                $query->accepted();
+            }]);
             if ($searchKeyword) {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
@@ -75,10 +77,11 @@ class UsersController extends Controller {
                 $usersArray[$key]['email'] = $user->email_id;
                 $usersArray[$key]['mobileno'] = $user->mobile_number;
                 $usersArray[$key]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
+                $usersArray[$key]['outstanding'] = number_format(($user->mealOrders->sum('total_amount') - $user->payments->sum('amount')),2);
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 if ($user->user_type_id == 3) {
-                    $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                    $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a><a href="' . route('admin.users.payments', $user->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-dollar"></i> Payments </a>';
                 } else {
                     $usersArray[$key]['action'] = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 }
@@ -139,31 +142,31 @@ class UsersController extends Controller {
 
         if ($request->isMethod("post")) {
             $userExist = User::where("mobile_number", $request->mobile_number)
-                    ->where("user_type_id", 3)
-                    ->first();
+            ->where("user_type_id", 3)
+            ->first();
             if ($userExist) {
                 return redirect()->route('admin.users.add')->with('error', 'User already exists with thin mobile number');
             } else {
 
                 $validator = Validator::make($request->all(), [
-                            'user_name' => 'bail|required',
-                            'mobile_number' => 'bail|required|numeric',
-                            'email_id' => 'bail|required|email',
-                            'is_diabeties' => 'bail|required',
-                            'is_ppa' => 'bail|required',
-                            'hba_1c' => 'bail|required',
-                            'fasting' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'insullin_dependency' => 'bail|required',
-                            'medical_documents' => 'bail|required',
-                            'booking_source_name' => 'bail|required',
-                            'booking_source_id' => 'bail|required',
-                            'resort_id' => 'bail|required',
-                            'package_id' => 'bail|required',
-                            'resort_room_id' => 'bail|required',
-                            'check_in' => 'bail|required',
-                            'check_out' => 'bail|required',
+                    'user_name' => 'bail|required',
+                    'mobile_number' => 'bail|required|numeric',
+                    'email_id' => 'bail|required|email',
+                    'is_diabeties' => 'bail|required',
+                    'is_ppa' => 'bail|required',
+                    'hba_1c' => 'bail|required',
+                    'fasting' => 'bail|required',
+                    'bp' => 'bail|required',
+                    'bp' => 'bail|required',
+                    'insullin_dependency' => 'bail|required',
+                    'medical_documents' => 'bail|required',
+                    'booking_source_name' => 'bail|required',
+                    'booking_source_id' => 'bail|required',
+                    'resort_id' => 'bail|required',
+                    'package_id' => 'bail|required',
+                    'resort_room_id' => 'bail|required',
+                    'check_in' => 'bail|required',
+                    'check_out' => 'bail|required',
 //                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
                 ]);
                 if ($validator->fails()) {
@@ -272,29 +275,29 @@ class UsersController extends Controller {
                 $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
                 $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
                 $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id,
-                            "room_type_id" => $roomBooking->room_type_id
-                        ])->get();
+                    "room_type_id" => $roomBooking->room_type_id
+                ])->get();
             }
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'user_name' => 'bail|required',
-                            'mobile_number' => 'bail|required|numeric',
-                            'email_id' => 'bail|required|email',
-                            'is_diabeties' => 'bail|required',
-                            'is_ppa' => 'bail|required',
-                            'hba_1c' => 'bail|required',
-                            'fasting' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'insullin_dependency' => 'bail|required',
+                    'user_name' => 'bail|required',
+                    'mobile_number' => 'bail|required|numeric',
+                    'email_id' => 'bail|required|email',
+                    'is_diabeties' => 'bail|required',
+                    'is_ppa' => 'bail|required',
+                    'hba_1c' => 'bail|required',
+                    'fasting' => 'bail|required',
+                    'bp' => 'bail|required',
+                    'bp' => 'bail|required',
+                    'insullin_dependency' => 'bail|required',
 //                            'medical_documents' => 'bail|required',
-                            'booking_source_name' => 'bail|required',
-                            'booking_source_id' => 'bail|required',
-                            'resort_id' => 'bail|required',
-                            'package_id' => 'bail|required',
-                            'resort_room_id' => 'bail|required',
-                            'check_in' => 'bail|required',
-                            'check_out' => 'bail|required',
+                    'booking_source_name' => 'bail|required',
+                    'booking_source_id' => 'bail|required',
+                    'resort_id' => 'bail|required',
+                    'package_id' => 'bail|required',
+                    'resort_room_id' => 'bail|required',
+                    'check_in' => 'bail|required',
+                    'check_out' => 'bail|required',
 //                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
                 ]);
                 if ($validator->fails()) {
@@ -397,11 +400,51 @@ class UsersController extends Controller {
                 'roomBooking' => isset($roomBooking) ? $roomBooking : [],
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
                 'healcarePackages' => $healcarePackages,
-                    ]
-            );
+            ]
+        );
         } catch (\Exception $ex) {
             return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
         }
     }
 
+
+    public function viewPayments(User $user)
+    {
+        $user->load(['payments','mealOrders'    =>  function($query){
+            $query->accepted();
+        }]);
+
+        $total = $user->mealOrders->sum('total_amount');
+        $paid = $user->payments->sum('amount');
+        $outstanding = $total - $paid;
+
+        return view('admin.users.payments',compact('user','total','paid','outstanding'));
+    }
+
+    public function payOutstading(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(),[
+                'user_id'   =>  'required',
+                'amount'    =>  'required|numeric',
+            ],[
+                'user_id.required'  =>  'Required Parameters are missing'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendErrorResponse($validator->errors()->all()[0], (object) [], 200);
+            }
+
+            $user = User::findOrFail($request->user_id);
+
+            $user->payments()->create([
+                'amount'    =>  $request->amount
+            ]);            
+
+            return $this->sendSuccessResponse("Payment Successfull.", (object) []);
+        } catch (\Exception $e) {
+            return $this->sendErrorResponse($e->getMessage(), (object) [], 200);
+        }
+    }
 }

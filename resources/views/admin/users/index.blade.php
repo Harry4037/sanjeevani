@@ -24,6 +24,7 @@
                             <th>Name</th>
                             <th>Email Address</th>
                             <th>User Type</th>
+                            <th>Outstanding</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -47,24 +48,25 @@
             serverSide: true,
             ajax: _baseUrl + "/admin/users-list",
             "columns": [
-                {"data": null,
-                    render: function (data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                },
-                {"data": "mobileno", sortable: true},
-                {"data": "name", sortable: true},
-                {"data": "email", sortable: true},
-                {"data": "user_type", sortable: true},
-                {"data": null,
-                    sortable: false,
-                    render: function (data, type, row, meta) {
-                        return row['status'];
-                    }
-                },
-                {"data": "action", sortable: false},
-            ]
-        });
+            {"data": null,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {"data": "mobileno", sortable: true},
+        {"data": "name", sortable: true},
+        {"data": "email", sortable: true},
+        {"data": "user_type", sortable: true},
+        {"data": "outstanding", sortable: false},
+        {"data": null,
+        sortable: false,
+        render: function (data, type, row, meta) {
+            return row['status'];
+        }
+    },
+    {"data": "action", sortable: false},
+    ]
+});
 
         $.ajaxSetup({
             headers: {
