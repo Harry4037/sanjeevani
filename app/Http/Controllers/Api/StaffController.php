@@ -690,6 +690,8 @@ class StaffController extends Controller {
 //            $job->reasons = $request->reasons;
 //            $job->comment = $request->comment;
             if ($job->save()) {
+                $user = User::find($job->user_id);
+                $this->androidPushNotification(3, "Service Request", "Sorry! Your request is not resolved by our staff member.", $user->device_token, 1, $job->service_id);
                 return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
             } else {
                 return $this->administratorResponse();
