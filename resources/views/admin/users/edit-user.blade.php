@@ -310,7 +310,8 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        var check_in = "@if(isset($roomBooking->check_in)){{ $roomBooking->check_in }} @endif"
+        var check_in = "@if(isset($roomBooking->check_in)){{ $roomBooking->check_in }} @endif";
+        var check_out = "@if(isset($roomBooking->check_out)){{ $roomBooking->check_out }} @endif";
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
@@ -325,7 +326,7 @@
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-//            startDate: new Date("{{ $roomBooking->check_out }}"),
+            startDate: new Date(check_out),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
