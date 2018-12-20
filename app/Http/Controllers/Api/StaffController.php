@@ -155,9 +155,10 @@ class StaffController extends Controller {
                         }
                     ])->latest()
                     ->get();
-            dd($mealOrders->toArray());        
+                   
             $mealDataArray = [];
             foreach ($mealOrders as $j => $mealOrder) {
+                dd($mealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no); 
                 $mealItems = MealOrderItem::where("meal_order_id", $mealOrder->id)->get();
                 $meal_created_at = Carbon::parse($mealOrder->created_at);
                 $mealDataArray[$j]["id"] = $mealOrder->id;
