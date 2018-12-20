@@ -155,9 +155,9 @@ class StaffController extends Controller {
                         }
                     ])->latest()
                     ->get();
-                   
+
             $mealDataArray = [];
-            foreach ($mealOrders as $j => $mealOrder) { 
+            foreach ($mealOrders as $j => $mealOrder) {
                 $mealItems = MealOrderItem::where("meal_order_id", $mealOrder->id)->get();
                 $meal_created_at = Carbon::parse($mealOrder->created_at);
                 $mealDataArray[$j]["id"] = $mealOrder->id;
@@ -286,6 +286,7 @@ class StaffController extends Controller {
             $serviceRequest->accepted_by_id = $request->user_id;
             if ($serviceRequest->save()) {
                 $user = User::find($serviceRequest->user_id);
+                $this->generateNotification($user->id, "Order & Request accepted", "$service->name request accepted by our staff member. Our staff will contact you soon.", 1);
                 $this->androidPushNotification(3, "Service Request", "Your request is accepted by our staff member.", $user->device_token, 1, $serviceRequest->service_id);
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
             } else {
@@ -607,6 +608,8 @@ class StaffController extends Controller {
 
             $job->request_status_id = 3;
             if ($job->save()) {
+                $user = User::find($job->user_id);
+                $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
                 return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
             } else {
                 return $this->administratorResponse();

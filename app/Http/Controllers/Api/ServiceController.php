@@ -307,7 +307,6 @@ class ServiceController extends Controller {
                 $serviceRequest->request_status_id = 1;
                 if ($serviceRequest->save()) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                    $this->generateNotification($serviceRequest->user_id, "Order & Request raised", "$service->name request raised succesfully. Our staff will contact you soon.", 1);
                     $this->androidPushNotification(2, "Servie Raised", "$service->name request raised by customer", $staffDeviceTokens, 1, $service->id);
                     return $this->sendSuccessResponse("Request successfully created.", (object) []);
                 } else {
