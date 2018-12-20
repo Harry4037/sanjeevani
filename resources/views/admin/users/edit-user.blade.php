@@ -314,7 +314,7 @@
     singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            @if (isset($roomBooking - > check_in))
+            @if (isset($roomBooking->check_in))
             startDate: new Date("{{ $roomBooking->check_in }}"),
             @endif
             locale: {
@@ -325,7 +325,7 @@
     singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            @if (isset($roomBooking - > check_out))
+            @if (isset($roomBooking->check_out))
             startDate: new Date("{{ $roomBooking->check_out }}"),
             @endif
             locale: {
