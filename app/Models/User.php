@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class User extends Authenticatable {
 
     use HasApiTokens,
-        Notifiable;
+    Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +42,14 @@ class User extends Authenticatable {
 
     public function userBookingDetail() {
         return $this->hasOne('App\Models\UserBookingDetail', 'user_id');
+    }
+
+    public function mealOrders() {
+        return $this->hasMany('App\Models\MealOrder', 'user_id');
+    }
+
+    public function payments() {
+        return $this->hasMany('App\Models\PaidAmount', 'user_id');
     }
 
     public function getUserTypeIdAttribute($value) {

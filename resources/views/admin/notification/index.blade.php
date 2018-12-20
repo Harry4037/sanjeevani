@@ -27,7 +27,19 @@
                     <div class="form-group" style="display:none;" id="users_list_div">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Users</label>
                         <div class="col-md-6 col-sm-6 col-xs-12" id="users_list">
-
+                            <p style="padding: 5px;">
+                                @foreach($users as $key => $user)
+                                <input class="flat" type="checkbox" name="notify_user[]" value="{{ $user->id }}"> 
+                                {{ ucwords($user->user_name) }}
+                                @endforeach
+                            </p>
+                            <span id="users_list_div_error"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Title</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" class="form-control" name="title" placeholder="Title">
                         </div>
                     </div>
                     <div class="form-group">
@@ -43,10 +55,10 @@
                             <button type="submit" class="btn btn-success">Send</button>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @endsection
@@ -57,19 +69,11 @@
         $(document).on("change", "#user_type", function () {
             var record_id = $("#user_type :selected").val();
             if (record_id == 2) {
-                $.ajax({
-                    url: _baseUrl + '/admin/notification/user-list',
-                    type: 'get',
-                    dataType: 'html',
-                    success: function (res) {
-                        $("#users_list").html(res);
-                        $("#users_list_div").css("display", "block");
-                    }
-                });
-            } else {
-                $("#users_list_div").css("display", "none");
-            }
-        });
+              $("#users_list_div").css("display", "block");
+          } else {
+            $("#users_list_div").css("display", "none");
+        }
+    }); 
 
         $("#sendNotificationForm").validate({
             ignore: [],
@@ -77,21 +81,62 @@
                 user_type: {
                     required: true
                 },
+                title: {
+                    required: true,
+                    maxlength:50,
+                },
+                "notify_user[]":{
+                    required:function(){
+                        return $("#user_type").val() == 2
+                    }
+                },
                 message: {
-                    required: true
+                    required: true,
+                    maxlength:100,
+                },
+            },
+
+            errorPlacement:function(error,el){
+                if ($(el).attr('type') == 'checkbox') {
+                    error.appendTo("#users_list_div_error");
+                }else{
+                    error.insertAfter(el);
+                }
+            },
+
+            messages:{
+                user_type:{
+                    required:"Please select a user type."
+                },
+                title:{
+                    required:"Please enter the title."
+                },
+                "notify_user[]":{
+                    required:"Please select at least one user."
+                },
+                message:{
+                    required:"Please enter the message."
                 },
             },
             submitHandler: function (form) {
+
+                let btn = $(form).find('button[type="submit"]');
+
+                btn.text('Sending . . .').attr('disabled','disabled');
+
                 $.ajax({
                     url: form.action,
                     type: form.method,
                     data: $(form).serialize(),
                     success: function (response) {
+                        btn.text('Send').removeAttr('disabled');
+
                         if (response.status_code == 200) {
                             $(".msg").html(response.message);
                             $(".msg").removeClass("alert-danger");
                             $(".msg").addClass("alert-success");
                             $(".msg").css("display", "block");
+                            $(form).get(0).reset();
                         } else {
                             $(".msg").html(response.message);
                             $(".msg").removeClass("alert-success");
@@ -101,6 +146,10 @@
                         setTimeout(function () {
                             $(".msg").fadeOut();
                         }, 2000);
+                    },
+
+                    error:function(){
+                        btn.text('Send').removeAttr('disabled');
                     }
                 });
             }
