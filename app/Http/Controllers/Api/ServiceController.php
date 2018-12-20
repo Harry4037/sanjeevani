@@ -428,7 +428,7 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $ongoingServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
+            $ongoingServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
 //            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
                             ->where(["user_id" => $request->user_id])
                             ->where(function($q) {
@@ -464,6 +464,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail->icon;
                 $ongoingDataArray[$i]["date"] = $ongoingService->date;
                 $ongoingDataArray[$i]["time"] = $ongoingService->time;
+                $ongoingDataArray[$i]["date_time"] = $ongoingService->created_timestamp;
                 $ongoingDataArray[$i]["status_id"] = $ongoingService->requestStatus->id;
                 $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus->status;
                 $ongoingDataArray[$i]["acceptd_by"] = isset($ongoingService->acceptedBy->user_name) ? $ongoingService->acceptedBy->user_name : "";
@@ -486,6 +487,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["icon"] = "";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
                 $ongoingDataArray[$i]["time"] = $createdAt->format("H:i a");
+                $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $ongoingDataArray[$i]["total_item_count"] = $totalItem;
                 $ongoingDataArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingDataArray[$i]["status_id"] = $ongoingMealOrder->status;
@@ -496,7 +498,7 @@ class ServiceController extends Controller {
             }
 
 
-            $completedServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
+            $completedServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
                             ->where(["user_id" => $request->user_id, "request_status_id" => 4])
                             ->with([
                                 'serviceDetail' => function($query) {
@@ -525,6 +527,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["icon"] = $completedService->serviceDetail->icon;
                 $completedDataArray[$j]["date"] = $completedService->date;
                 $completedDataArray[$j]["time"] = $completedService->time;
+                $completedDataArray[$j]["date_time"] = $completedService->created_timestamp;
                 $completedDataArray[$j]["status_id"] = $completedService->requestStatus->id;
                 $completedDataArray[$j]["status"] = $completedService->requestStatus->status;
                 $completedDataArray[$j]["acceptd_by"] = isset($completedService->acceptedBy->user_name) ? $completedService->acceptedBy->user_name : "";
@@ -542,6 +545,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
                 $completedDataArray[$j]["status"] = "Booked";
                 $completedDataArray[$j]["acceptd_by"] = "";
@@ -558,6 +562,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
                 $completedDataArray[$j]["status"] = "Booked";
                 $completedDataArray[$j]["acceptd_by"] = "";
@@ -576,6 +581,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["total_item_count"] = $totalItem;
                 $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
                 $completedDataArray[$j]["status_id"] = $completedMealOrder->status;
@@ -584,6 +590,17 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["type"] = 4;
                 $j++;
             }
+
+            usort($ongoingDataArray, function ($a, $b) {
+                $t1 = strtotime($a['date_time']);
+                $t2 = strtotime($b['date_time']);
+                return $t2 - $t1;
+            });
+            usort($completedDataArray, function ($a, $b) {
+                $t1 = strtotime($a['date_time']);
+                $t2 = strtotime($b['date_time']);
+                return $t2 - $t1;
+            });
             $data["ongoing_services"] = $ongoingDataArray;
             $data["complete_services"] = $completedDataArray;
             return $this->sendSuccessResponse("Services list", $data);

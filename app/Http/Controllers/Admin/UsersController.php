@@ -77,7 +77,11 @@ class UsersController extends Controller {
                 $usersArray[$key]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                if ($user->user_type_id == 3) {
+                    $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a><a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                } else {
+                    $usersArray[$key]['action'] = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                }
             }
             $data['data'] = $usersArray;
             return $data;
