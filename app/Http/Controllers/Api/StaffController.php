@@ -293,6 +293,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Something went be wrong.", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
