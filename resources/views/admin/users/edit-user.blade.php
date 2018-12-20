@@ -310,123 +310,120 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        var check_in = "@if(isset($roomBooking->check_in)){{ $roomBooking->check_in }} @endif";
-        var check_out = "@if(isset($roomBooking->check_out)){{ $roomBooking->check_out }} @endif";
-        $('#check_in').daterangepicker({
-            singleDatePicker: true,
+    $('#check_in').daterangepicker({
+    singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            startDate: new Date(check_in),
+            @if (isset($roomBooking - > check_in))
+            startDate: new Date("{{ $roomBooking->check_in }}"),
+            @endif
             locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
+            format: 'YYYY/M/DD hh:mm:ss A'
             }
-        });
-
-        $('#check_out').daterangepicker({
-            singleDatePicker: true,
+    });
+    $('#check_out').daterangepicker({
+    singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            startDate: new Date(check_out),
+            @if (isset($roomBooking - > check_out))
+            startDate: new Date("{{ $roomBooking->check_out }}"),
+            @endif
             locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
+            format: 'YYYY/M/DD hh:mm:ss A'
             }
-        });
-
-        $(document).on("click", "#add_more_member", function () {
-            var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
-                    + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
-                    + "<input type='text' class='form-control' name='person_age[]'></div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Type</label><div class='col-md-2 col-sm-2 col-xs-12'>"
-                    + "<select class='form-control' name='person_type[]'><option value='Adult'>Adult</option><option value='Child'>Children</option></select>"
-                    + "</div></div>";
-            $("#member_div").append(member_html);
-        });
-
-        $("#editUserForm").validate({
-            rules: {
-                booking_source_name: {
-                    required: true
-                },
-                booking_source_id: {
-                    required: true
-                },
-                user_name: {
-                    required: true
-                },
-                mobile_number: {
-                    required: true
-                },
-                email_id: {
-                    required: true
-                },
-                check_in: {
-                    required: true
-                },
-                check_out: {
-                    required: true
-                },
-                resort_id: {
-                    required: true
-                },
-                resort_room_type: {
-                    required: true
-                },
-                resort_room_id: {
-                    required: true
-                },
-                package_id: {
-                    required: true
-                },
-                is_diabeties: {
-                    required: true
-                },
-                is_ppa: {
-                    required: true
-                },
-                hba_1c: {
-                    required: true
-                },
-                fasting: {
-                    required: true
-                },
-                bp: {
-                    required: true
-                },
-                insullin_dependency: {
-                    required: true
-                },
+    });
+    $(document).on("click", "#add_more_member", function () {
+    var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
+            + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+            + "<input type='text' class='form-control' name='person_age[]'></div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Type</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+            + "<select class='form-control' name='person_type[]'><option value='Adult'>Adult</option><option value='Child'>Children</option></select>"
+            + "</div></div>";
+    $("#member_div").append(member_html);
+    });
+    $("#editUserForm").validate({
+    rules: {
+    booking_source_name: {
+    required: true
+    },
+            booking_source_id: {
+            required: true
+            },
+            user_name: {
+            required: true
+            },
+            mobile_number: {
+            required: true
+            },
+            email_id: {
+            required: true
+            },
+            check_in: {
+            required: true
+            },
+            check_out: {
+            required: true
+            },
+            resort_id: {
+            required: true
+            },
+            resort_room_type: {
+            required: true
+            },
+            resort_room_id: {
+            required: true
+            },
+            package_id: {
+            required: true
+            },
+            is_diabeties: {
+            required: true
+            },
+            is_ppa: {
+            required: true
+            },
+            hba_1c: {
+            required: true
+            },
+            fasting: {
+            required: true
+            },
+            bp: {
+            required: true
+            },
+            insullin_dependency: {
+            required: true
+            },
 //                medical_documents: {
 //                    required: true
 //                },
+    }
+    });
+    $.ajaxSetup({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+    });
+    $(document).on("change", "#resort_room_type", function () {
+    var resort = $("#resort_id :selected").val();
+    var resort_room = $("#resort_room_type :selected").val();
+    if (!resort) {
+    alert("Please select resort.")
+            return false;
+    } else if (!resort_room) {
+    alert("Please select resort room type.")
+            return false;
+    } else {
+    $.ajax({
+    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
+            type: 'get',
+            dataType: 'html',
+            success: function (res) {
+            $("#resort_room_id").html(res);
             }
-        });
+    });
+    }
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $(document).on("change", "#resort_room_type", function () {
-            var resort = $("#resort_id :selected").val();
-            var resort_room = $("#resort_room_type :selected").val();
-            if (!resort) {
-                alert("Please select resort.")
-                return false;
-            } else if (!resort_room) {
-                alert("Please select resort room type.")
-                return false;
-            } else {
-                $.ajax({
-                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
-                    type: 'get',
-                    dataType: 'html',
-                    success: function (res) {
-                        $("#resort_room_id").html(res);
-                    }
-                });
-            }
-
-        });
+    });
     });
 </script>
 
