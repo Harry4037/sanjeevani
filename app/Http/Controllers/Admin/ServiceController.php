@@ -40,9 +40,15 @@ class ServiceController extends Controller {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
 
             $query = $this->service->query();
-            $services = $query->get();
+            if ($searchKeyword) {
+                $query->where("name", "LIKE", "%$searchKeyword%");
+            }
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $services = $query->take($limit)->offset($offset)->latest()->get();
             $i = 0;
             $servicesArray = [];
             foreach ($services as $service) {
@@ -56,8 +62,6 @@ class ServiceController extends Controller {
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $service->id . '" ><i class="fa fa-trash"></i> Delete </a>';
                 $i++;
             }
-            $data['recordsTotal'] = $this->service->count();
-            $data['recordsFiltered'] = $this->service->count();
             $data['data'] = $servicesArray;
             return $data;
         } catch (\Exception $e) {

@@ -47,7 +47,7 @@
 
         var t = $('#list').DataTable({
             lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
-            searching: true,
+            searching: false,
             processing: true,
             serverSide: true,
             ajax: _baseUrl + "/admin/banners-list",

@@ -34,9 +34,13 @@ class BannerController extends Controller {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
 
             $query = $this->banner->query();
-            $banners = $query->get();
+            $data['recordsTotal'] = $this->banner->count();
+            $data['recordsFiltered'] = $this->banner->count();
+            $banners = $query->take($limit)->offset($offset)->latest()->get();
+            
             $bannersArray = [];
             foreach ($banners as $k => $banner) {
                 $resort = Resort::find($banner->resort_id);
@@ -47,8 +51,7 @@ class BannerController extends Controller {
                 $bannersArray[$k]['action'] = '<a href="' . route('admin.banner.edit', $banner->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $banner->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
-            $data['recordsTotal'] = $this->banner->count();
-            $data['recordsFiltered'] = $this->banner->count();
+
             $data['data'] = $bannersArray;
             return $data;
         } catch (\Exception $e) {

@@ -26,8 +26,16 @@ class NearbyController extends Controller {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
 
-            $nearbys = ResortNearbyPlace::all();
+            $query = ResortNearbyPlace::query();
+            if ($searchKeyword) {
+                $query->where("name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("distance_from_resort", "LIKE", "%$searchKeyword%");
+            }
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $nearbys = $query->take($limit)->offset($offset)->latest()->get();
             $nearbyArray = [];
             foreach ($nearbys as $key => $nearby) {
                 $resort = Resort::find($nearby->resort_id);
@@ -39,8 +47,6 @@ class NearbyController extends Controller {
                 $nearbyArray[$key]['action'] = '<a href="' . route('admin.nearby.edit', $nearby->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $nearby->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
-            $data['recordsTotal'] = ResortNearbyPlace::count();
-            $data['recordsFiltered'] = ResortNearbyPlace::count();
             $data['data'] = $nearbyArray;
             return $data;
         } catch (\Exception $e) {
