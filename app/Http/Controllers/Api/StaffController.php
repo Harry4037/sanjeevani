@@ -209,6 +209,7 @@ class StaffController extends Controller {
             $data["amenities"] = $amenitiesDataArray;
             return $this->sendSuccessResponse("Service request found.", $data);
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
