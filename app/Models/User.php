@@ -76,11 +76,5 @@ class User extends Authenticatable {
     public function getAddress1Attribute($value) {
         return $value == null ? "" : $value;
     }
-    public function getUserHealthDetailAttribute($value) {
-        return $value == null ? [] : $value;
-    }
-    public function getUserBookingDetailAttribute($value) {
-        return $value == null ? [] : $value;
-    }
 
 }
