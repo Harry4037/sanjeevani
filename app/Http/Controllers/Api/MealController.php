@@ -244,7 +244,7 @@ class MealController extends Controller {
                         'menuItems' => function ($query) use($request) {
                             $query->select('id', 'name', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
                         }
-                    ])->where('resort_id', $request->resort_id)->get();
+                    ])->where('menuItems.resort_id', $request->resort_id)->get();
             dd($mealCategories);
             $mealCatData = [];
             if ($mealCategories) {
