@@ -214,8 +214,8 @@ class MealController extends Controller {
 
         //For meal packages
         $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
+        $packageData = [];
         if ($mealPackages) {
-            $packageData = [];
             foreach ($mealPackages as $key => $mealPackage) {
                 $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
                 $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
@@ -233,10 +233,10 @@ class MealController extends Controller {
                         $packageData[$key]['meal_items'][$k]['image_url'] = $mealPackageItem->mealItem->image_name;
                         $packageData[$key]['meal_items'][$k]['price'] = $mealPackageItem->mealItem->price;
                     }
+                }else{
+                    $packageData[$key]['meal_items'] = [];
                 }
             }
-        } else {
-            $packageData = [];
         }
 
         $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems')->with([
