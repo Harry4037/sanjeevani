@@ -413,7 +413,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["type"] = 1;
                 $i++;
             }
-
+die;
             $ongoingMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
                     ->with([
                         'userDetail' => function($query) {
@@ -537,7 +537,6 @@ class StaffController extends Controller {
             $data["completed_jobs"] = $completedJobArray;
             return $this->sendSuccessResponse("My jobs.", $data);
         } catch (Exception $ex) {
-            dd($ex);
             return $this->administratorResponse();
         }
     }
