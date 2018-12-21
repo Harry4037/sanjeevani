@@ -408,7 +408,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["service_comment"] = $ongoing_job->comment;
                 $ongoingJobArray[$i]["service_icon"] = $ongoing_job->serviceDetail->icon;
                 $ongoingJobArray[$i]["user_name"] = $ongoing_job->userDetail->user_name;
-                $ongoingJobArray[$i]["room_no"] = $ongoing_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $ongoingJobArray[$i]["room_no"] = $ongoing_job->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $ongoing_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $ongoingJobArray[$i]["created_at"] = $created_at->format('H:i a');
                 $ongoingJobArray[$i]["type"] = 1;
                 $i++;
@@ -441,7 +441,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["time"] = $createdAt->format("H:i a");
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
@@ -494,7 +494,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["service_comment"] = $under_approval_job->comment;
                 $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail->icon;
                 $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail->user_name;
-                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room ? "" : $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $underApprovalJobArray[$j]["created_at"] = $created_at->format('H:i a');
             }
             $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
@@ -529,7 +529,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["service_comment"] = $completed_job->comment;
                 $completedJobArray[$i]["service_icon"] = $completed_job->serviceDetail->icon;
                 $completedJobArray[$i]["user_name"] = $completed_job->userDetail->user_name;
-                $completedJobArray[$i]["room_no"] = $completed_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $completedJobArray[$i]["room_no"] = $completed_job->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $completed_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $completedJobArray[$i]["created_at"] = $created_at->format('H:i a');
             }
             $data["ongoing_jobs"] = $ongoingJobArray;
@@ -537,7 +537,6 @@ class StaffController extends Controller {
             $data["completed_jobs"] = $completedJobArray;
             return $this->sendSuccessResponse("My jobs.", $data);
         } catch (Exception $ex) {
-            dd($ex);
             return $this->administratorResponse();
         }
     }
