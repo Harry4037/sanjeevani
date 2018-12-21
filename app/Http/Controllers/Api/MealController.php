@@ -204,70 +204,74 @@ class MealController extends Controller {
      * 
      */
     public function mealListing(Request $request) {
-        if (!$request->resort_id) {
-            return $this->sendErrorResponse("Resort id missing", (object) []);
-        }
-        if (!$request->user_id) {
-            return $this->sendErrorResponse("User id missing", (object) []);
-        }
+        try {
+            if (!$request->resort_id) {
+                return $this->sendErrorResponse("Resort id missing", (object) []);
+            }
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing", (object) []);
+            }
 
 
-        //For meal packages
-        $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
-        $packageData = [];
-        if ($mealPackages) {
-            foreach ($mealPackages as $key => $mealPackage) {
-                $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
-                $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
-                        ->with("mealItem")
-                        ->get();
-                $packageData[$key]['id'] = $mealPackage->id;
-                $packageData[$key]['name'] = $mealPackage->name;
-                $packageData[$key]['image_url'] = $mealPackage->image_name;
-                $packageData[$key]['price'] = $mealPackage->price;
-                $packageData[$key]['quantity_count'] = isset($userCartPackage->quantity) && $userCartPackage->quantity ? $userCartPackage->quantity : 0;
-                if (count($mealPackageItems) > 0) {
-                    foreach ($mealPackageItems as $k => $mealPackageItem) {
-                        $packageData[$key]['meal_items'][$k]['id'] = $mealPackageItem->id;
-                        $packageData[$key]['meal_items'][$k]['name'] = $mealPackageItem->mealItem->name;
-                        $packageData[$key]['meal_items'][$k]['image_url'] = $mealPackageItem->mealItem->image_name;
-                        $packageData[$key]['meal_items'][$k]['price'] = $mealPackageItem->mealItem->price;
+            //For meal packages
+            $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
+            $packageData = [];
+            if ($mealPackages) {
+                foreach ($mealPackages as $key => $mealPackage) {
+                    $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
+                    $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
+                            ->with("mealItem")
+                            ->get();
+                    $packageData[$key]['id'] = $mealPackage->id;
+                    $packageData[$key]['name'] = $mealPackage->name;
+                    $packageData[$key]['image_url'] = $mealPackage->image_name;
+                    $packageData[$key]['price'] = $mealPackage->price;
+                    $packageData[$key]['quantity_count'] = isset($userCartPackage->quantity) && $userCartPackage->quantity ? $userCartPackage->quantity : 0;
+                    if (count($mealPackageItems) > 0) {
+                        foreach ($mealPackageItems as $k => $mealPackageItem) {
+                            $packageData[$key]['meal_items'][$k]['id'] = $mealPackageItem->id;
+                            $packageData[$key]['meal_items'][$k]['name'] = $mealPackageItem->mealItem->name;
+                            $packageData[$key]['meal_items'][$k]['image_url'] = $mealPackageItem->mealItem->image_name;
+                            $packageData[$key]['meal_items'][$k]['price'] = $mealPackageItem->mealItem->price;
+                        }
+                    } else {
+                        $packageData[$key]['meal_items'] = [];
                     }
-                }else{
-                    $packageData[$key]['meal_items'] = [];
                 }
             }
-        }
 
-        $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems')->with([
-                    'menuItems' => function ($query) use($request) {
-                        $query->select('id', 'name', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+            $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems')->with([
+                        'menuItems' => function ($query) use($request) {
+                            $query->select('id', 'name', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+                        }
+                    ])->where('resort_id', $request->resort_id)->get();
+            dd($mealCategories);
+            $mealCatData = [];
+            if ($mealCategories) {
+                foreach ($mealCategories as $m => $mealCategory) {
+                    $mealCatData[$m]['id'] = $mealCategory->id;
+                    $mealCatData[$m]['name'] = $mealCategory->name;
+                    if ($mealCategory->menuItems) {
+                        foreach ($mealCategory->menuItems as $j => $mitems) {
+                            $userCart = Cart::where(["user_id" => $request->user_id, "meal_item_id" => $mitems->id])->first();
+                            $mealCatData[$m]['menu_items'][$j]['id'] = $mitems->id;
+                            $mealCatData[$m]['menu_items'][$j]['name'] = $mitems->name;
+                            $mealCatData[$m]['menu_items'][$j]['banner_image_url'] = $mitems->banner_image_url;
+                            $mealCatData[$m]['menu_items'][$j]['price'] = $mitems->price;
+                            $mealCatData[$m]['menu_items'][$j]['quantity_count'] = isset($userCart->quantity) && $userCart->quantity ? $userCart->quantity : 0;
+                        }
+                    } else {
+                        $mealCatData[$m]['menu_items'] = [];
                     }
-                ])->get();
-                dd($mealCategories);
-        $mealCatData = [];
-        if ($mealCategories) {
-            foreach ($mealCategories as $m => $mealCategory) {
-                $mealCatData[$m]['id'] = $mealCategory->id;
-                $mealCatData[$m]['name'] = $mealCategory->name;
-                if ($mealCategory->menuItems) {
-                    foreach ($mealCategory->menuItems as $j => $mitems) {
-                        $userCart = Cart::where(["user_id" => $request->user_id, "meal_item_id" => $mitems->id])->first();
-                        $mealCatData[$m]['menu_items'][$j]['id'] = $mitems->id;
-                        $mealCatData[$m]['menu_items'][$j]['name'] = $mitems->name;
-                        $mealCatData[$m]['menu_items'][$j]['banner_image_url'] = $mitems->banner_image_url;
-                        $mealCatData[$m]['menu_items'][$j]['price'] = $mitems->price;
-                        $mealCatData[$m]['menu_items'][$j]['quantity_count'] = isset($userCart->quantity) && $userCart->quantity ? $userCart->quantity : 0;
-                    }
-                } else {
-                    $mealCatData[$m]['menu_items'] = [];
                 }
             }
-        }
 
-        $data['meal_packages'] = $packageData;
-        $data['category_meal'] = $mealCatData;
-        return $this->sendSuccessResponse("Meal list found", $data);
+            $data['meal_packages'] = $packageData;
+            $data['category_meal'] = $mealCatData;
+            return $this->sendSuccessResponse("Meal list found", $data);
+        } catch (Exception $ex) {
+            return $this->administratorResponse();
+        }
     }
 
 }
