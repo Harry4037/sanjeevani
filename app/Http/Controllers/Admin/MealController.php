@@ -144,6 +144,7 @@ class MealController extends Controller {
             if ($validator->fails()) {
                 return redirect()->route('admin.meal.index')->withErrors($validator)->withInput();
             }
+            $data->resort_id = $request->resort_id;
             $data->name = $request->meal_name;
             $data->meal_type_id = $request->meal_category_id;
             $data->category = $request->meal_type;
