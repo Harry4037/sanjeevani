@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class User extends Authenticatable {
 
     use HasApiTokens,
-    Notifiable;
+        Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -58,6 +58,29 @@ class User extends Authenticatable {
         } else {
             return $value;
         }
+    }
+
+    public function getUserNameAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    
+    public function getEmailIdAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getVoterIdAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getAadharIdAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getAddress1Attribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getUserHealthDetailAttribute($value) {
+        return $value == null ? [] : $value;
+    }
+    public function getUserBookingDetailAttribute($value) {
+        return $value == null ? [] : $value;
     }
 
 }
