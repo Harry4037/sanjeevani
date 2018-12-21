@@ -494,7 +494,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["service_comment"] = $under_approval_job->comment;
                 $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail->icon;
                 $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail->user_name;
-                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room ? "" : $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $underApprovalJobArray[$j]["created_at"] = $created_at->format('H:i a');
             }
             $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
