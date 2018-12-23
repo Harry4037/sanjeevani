@@ -477,7 +477,8 @@ class ServiceController extends Controller {
             $ongoingMealOrders = MealOrder::where(["user_id" => $request->user_id])
                     ->where(function($q) {
                         $q->where("status", 0)
-                        ->orWhere("status", -1);
+                        ->orWhere("status", 1)
+                        ->orWhere("status", 2);
                     })
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
