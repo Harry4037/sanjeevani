@@ -482,6 +482,16 @@ class ServiceController extends Controller {
                     })
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
+                $stat = "";
+                if($ongoingMealOrder->status == 0){
+                    $stat = "Pending";
+                }elseif($ongoingMealOrder->status == 1){
+                    $stat = "Accepted";
+                }elseif($ongoingMealOrder->status == 2){
+                  $stat =  "Your approval needed";
+                }else{
+                    $stat = "Invalid status";
+                }
                 $createdAt = Carbon::parse($ongoingMealOrder->created_at);
                 $totalItem = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->count();
                 $ongoingDataArray[$i]["id"] = $ongoingMealOrder->id;
@@ -494,7 +504,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["total_item_count"] = $totalItem;
                 $ongoingDataArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingDataArray[$i]["status_id"] = $ongoingMealOrder->status;
-                $ongoingDataArray[$i]["status"] = $ongoingMealOrder->status == 0 ? "Pending" : "Rejected";
+                $ongoingDataArray[$i]["status"] = $stat;
                 $ongoingDataArray[$i]["acceptd_by"] = "";
                 $ongoingDataArray[$i]["type"] = 4;
                 $i++;
