@@ -265,4 +265,12 @@
       Route::get('/', 'NotificationController@index')->name('admin.notification.index');
       Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
     });
+
+    /**
+     * Notification Management
+     */
+    Route::prefix('booking')->group(function() {
+      Route::get('/', 'BookingController@index')->name('admin.booking.index');
+      Route::post('/user-booking-list', 'BookingController@userBookings')->name('admin.booking.userBooking');
+    });
   });

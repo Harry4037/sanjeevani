@@ -600,6 +600,10 @@ class StaffController extends Controller {
             if (!$request->job_id) {
                 return $this->sendErrorResponse("Job id missing", (object) []);
             }
+            if (!$request->type) {
+                return $this->sendErrorResponse("Job id missing", (object) []);
+            }
+            if($request->type == 1){
             $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
             ;
             if (!$job) {
@@ -614,6 +618,24 @@ class StaffController extends Controller {
             } else {
                 return $this->administratorResponse();
             }
+        }elseif($request->type == 4){
+            $job = MealOrder::where(['id' => $request->job_id, 'status' => 1])->first();
+            ;
+            if (!$job) {
+                return $this->sendErrorResponse("Invalid job", (object) []);
+            }
+
+            $job->status = 2;
+            if ($job->save()) {
+                $user = User::find($job->user_id);
+                // $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
+                return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
+            } else {
+                return $this->administratorResponse();
+            }
+        }else{
+            return $this->sendErrorResponse("Invalid type.", (object) []);
+        }
         } catch (Exception $ex) {
             return $this->administratorResponse();
         }
