@@ -729,7 +729,7 @@ class ServiceController extends Controller {
                 return $this->administratorResponse();
             }
         }elseif($request->type == 4){
-            $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 2, "is_active" => 1])->first();
+            $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 3, "is_active" => 1])->first();
             if (!$serviceRequest) {
                 return $this->sendErrorResponse("Invalid service & order.", (object) []);
             }
