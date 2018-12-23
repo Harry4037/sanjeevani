@@ -124,7 +124,7 @@ class OrderController extends Controller {
                 $mealOrder->invoice_id = time();
                 $mealOrder->resort_id = $request->resort_id;
                 $mealOrder->user_id = $request->user_id;
-                $mealOrder->status = 0;
+                $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
                 $mealOrder->gst_amount = $gst;
                 $mealOrder->total_amount = $total - $gst;

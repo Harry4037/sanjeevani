@@ -143,7 +143,7 @@ class StaffController extends Controller {
                     ])->latest()
                     ->get();
 
-            $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 0])
+            $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])
                     ->with([
                         'userDetail' => function($query) {
                             $query->select('id', 'user_name', 'email_id', 'mobile_number')
@@ -426,7 +426,7 @@ class StaffController extends Controller {
                         }
                     ])
                     ->where(function($q) {
-                        $q->where("status", 1);
+                        $q->where("status", 2);
                     })->latest()
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
@@ -618,13 +618,13 @@ class StaffController extends Controller {
                 return $this->administratorResponse();
             }
         }elseif($request->type == 4){
-            $job = MealOrder::where(['id' => $request->job_id, 'status' => 1])->first();
+            $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
             ;
             if (!$job) {
                 return $this->sendErrorResponse("Invalid job", (object) []);
             }
 
-            $job->status = 2;
+            $job->status = 3;
             if ($job->save()) {
                 $user = User::find($job->user_id);
                 // $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
@@ -795,7 +795,7 @@ class StaffController extends Controller {
                 if ($order->status == -1) {
                     $msg = "Order rejected succeffully.";
                 }
-                if ($order->status == 1) {
+                if ($order->status == 2) {
                     $msg = "Order accepted succeffully.";
                 }
                 return $this->sendSuccessResponse($msg, (object) []);

@@ -476,18 +476,18 @@ class ServiceController extends Controller {
 
             $ongoingMealOrders = MealOrder::where(["user_id" => $request->user_id])
                     ->where(function($q) {
-                        $q->where("status", 0)
-                        ->orWhere("status", 1)
-                        ->orWhere("status", 2);
+                        $q->where("status", 1)
+                        ->orWhere("status", 2)
+                        ->orWhere("status", 3);
                     })
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
                 $stat = "";
-                if($ongoingMealOrder->status == 0){
+                if($ongoingMealOrder->status == 1){
                     $stat = "Pending";
-                }elseif($ongoingMealOrder->status == 1){
-                    $stat = "Accepted";
                 }elseif($ongoingMealOrder->status == 2){
+                    $stat = "Accepted";
+                }elseif($ongoingMealOrder->status == 3){
                   $stat =  "Your approval needed";
                 }else{
                     $stat = "Invalid status";
@@ -713,7 +713,7 @@ class ServiceController extends Controller {
             if (!$request->record_id) {
                 return $this->sendErrorResponse("record id missing.", (object) []);
             }
-            if($request->user_id == 1){
+            if($request->type == 1){
             
 
             $serviceRequest = ServiceRequest::where(["id" => $request->record_id, "request_status_id" => 3, "is_active" => 1])->first();
@@ -728,7 +728,7 @@ class ServiceController extends Controller {
             } else {
                 return $this->administratorResponse();
             }
-        }elseif($request->user_id == 4){
+        }elseif($request->type == 4){
             $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 2, "is_active" => 1])->first();
             if (!$serviceRequest) {
                 return $this->sendErrorResponse("Invalid service & order.", (object) []);
