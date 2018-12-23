@@ -303,7 +303,7 @@ class HomeController extends Controller {
                             'healthcareDays' => function($query) {
                                 $query->select('id', 'day', 'description', 'health_program_id');
                             }
-                        ])->get();
+                        ])->take(5)->latest()->get();
         $dataHealthArray = [];
         if (count($healthcare) > 0) {
             foreach ($healthcare as $key => $health) {
