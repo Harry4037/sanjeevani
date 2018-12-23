@@ -11,6 +11,7 @@ use App\Models\MealPackage;
 use App\Models\MealOrder;
 use App\Models\MealOrderItem;
 use App\Models\Resort;
+use App\Models\User;
 
 class OrderController extends Controller {
 
@@ -293,6 +294,10 @@ class OrderController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
+            $user = User::find($request->user_id);
+         $user->load(['payments','mealOrders'    =>  function($query){
+                    $query->accepted();
+                }]);
 
             $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["user_id" => $request->user_id])
                     ->with([
@@ -301,9 +306,9 @@ class OrderController extends Controller {
                         }
                     ])
                     ->get();
-            $data['total_amount'] = 0;
-            $data['outstanding_amount'] = 0;
-            $data['paid_amount'] = 0;
+            $data['total_amount'] = $user->mealOrders->sum('total_amount');
+            $data['paid_amount'] = $user->payments->sum('amount');
+            $data['outstanding_amount'] = $data['total_amount'] - $data['paid_amount'];
             $data['invoices'] = [];
             if ($invoices) {
                 $data['invoices'] = $invoices;
