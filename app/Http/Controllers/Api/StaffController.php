@@ -601,7 +601,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Job id missing", (object) []);
             }
             if (!$request->type) {
-                return $this->sendErrorResponse("Job id missing", (object) []);
+                return $this->sendErrorResponse("Type missing", (object) []);
             }
             if($request->type == 1){
             $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
