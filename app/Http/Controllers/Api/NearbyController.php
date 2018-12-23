@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ResortNearbyPlace;
 use App\Models\NearbyPlaceImage;
+use App\Models\User;
 
 class NearbyController extends Controller {
 
@@ -82,12 +83,12 @@ class NearbyController extends Controller {
      * 
      */
     public function nearbyListDetail(Request $request) {
-//        if (!$request->user_id) {
-//            $response['success'] = false;
-//            $response['message'] = "User id missing.";
-//            $response['data'] = (object) [];
-//            return $this->jsonData($response);
-//        }
+       if (!$request->user_id) {
+           $response['success'] = false;
+           $response['message'] = "User id missing.";
+           $response['data'] = (object) [];
+           return $this->jsonData($response);
+       }
         if (!$request->resort_id) {
             $response['success'] = false;
             $response['status_code'] = 404;
@@ -95,7 +96,49 @@ class NearbyController extends Controller {
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
+        $user = User::find($request->user_id);
+        if($user->user_type_id == 4){
+          $nearby = ResortNearbyPlace::where(["resort_id" => $request->resort_id, "is_active" => 1])take(5)->latest()->get();
+        if ($nearby) {
+            $data['nearby'] = [];
+            $i = 0;
+            foreach ($nearby as $near) {
+                $nearbyImages = NearbyPlaceImage::where("nearby_place_id", $near->id)->get();
+                $data['nearby'][$i]['id'] = $near->id;
+                $data['nearby'][$i]['name'] = $near->name;
+                $data['nearby'][$i]['description'] = $near->description;
+                $data['nearby'][$i]['distance'] = $near->distance_from_resort;
+                $data['nearby'][$i]['precautions'] = $near->precautions;
+                $data['nearby'][$i]['address'] = $near->address_1;
+                $data['nearby'][$i]['latitude'] = "28.608510";
+                $data['nearby'][$i]['longitude'] = "77.347370";
+                if ($nearbyImages) {
+                    $j = 0;
+                    foreach ($nearbyImages as $nearbyImage) {
+                        $data['nearby'][$i]['images'][$j]['id'] = $nearbyImage->id;
+                        $data['nearby'][$i]['images'][$j]['banner_image_url'] = $nearbyImage->name;
+                        $j++;
+                    }
+                } else {
+                    $data['nearby'][$i]['images'][$j] = [];
+                }
+                $i++;
+            }
 
+            $response['success'] = true;
+            $response['status_code'] = 200;
+            $response['message'] = "Nearby places found.";
+            $response['data'] = $data;
+            return $this->jsonData($response);
+        } else {
+            $response['success'] = false;
+            $response['status_code'] = 404;
+            $response['message'] = "Nearby places not found.";
+            $response['data'] = ["nearby" => []];
+            return $this->jsonData($response);
+        }
+
+        }else{
         $nearby = ResortNearbyPlace::where(["resort_id" => $request->resort_id, "is_active" => 1])->get();
         if ($nearby) {
             $data['nearby'] = [];
@@ -135,6 +178,7 @@ class NearbyController extends Controller {
             $response['data'] = ["nearby" => []];
             return $this->jsonData($response);
         }
+     }
     }
 
 }
