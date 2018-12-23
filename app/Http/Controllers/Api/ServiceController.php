@@ -461,7 +461,7 @@ class ServiceController extends Controller {
             $i = 0;
             foreach ($ongoingServices as $ongoingService) {
                 $ongoingDataArray[$i]["id"] = $ongoingService->id;
-                $ongoingDataArray[$i]["record_id"] = $ongoingService->service_id;
+                $ongoingDataArray[$i]["record_id"] = $ongoingService->id;
                 $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail->name;
                 $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail->icon;
                 $ongoingDataArray[$i]["date"] = $ongoingService->date;
@@ -535,7 +535,7 @@ class ServiceController extends Controller {
             $j = 0;
             foreach ($completedServices as $completedService) {
                 $completedDataArray[$j]["id"] = $completedService->id;
-                $completedDataArray[$j]["record_id"] = $completedService->service_id;
+                $completedDataArray[$j]["record_id"] = $completedService->id;
                 $completedDataArray[$j]["name"] = $completedService->serviceDetail->name;
                 $completedDataArray[$j]["icon"] = $completedService->serviceDetail->icon;
                 $completedDataArray[$j]["date"] = $completedService->date;
@@ -703,16 +703,20 @@ class ServiceController extends Controller {
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
             }
-            if (!$request->service_id) {
-                return $this->sendErrorResponse("service id missing.", (object) []);
-            }
-
             $user = User::where(["id" => $request->user_id, "is_active" => 1])->first();
             if (!$user) {
                 return $this->sendErrorResponse("Invalid user.", (object) []);
             }
+            if (!$request->type) {
+                return $this->sendErrorResponse("Type missing.", (object) []);
+            }
+            if (!$request->record_id) {
+                return $this->sendErrorResponse("record id missing.", (object) []);
+            }
+            if($request->user_id == 1){
+            
 
-            $serviceRequest = ServiceRequest::where(["service_id" => $request->service_id, "request_status_id" => 3, "is_active" => 1])->first();
+            $serviceRequest = ServiceRequest::where(["id" => $request->record_id, "request_status_id" => 3, "is_active" => 1])->first();
             if (!$serviceRequest) {
                 return $this->sendErrorResponse("Invalid service & order.", (object) []);
             }
@@ -724,6 +728,22 @@ class ServiceController extends Controller {
             } else {
                 return $this->administratorResponse();
             }
+        }elseif($request->user_id == 4){
+            $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 2, "is_active" => 1])->first();
+            if (!$serviceRequest) {
+                return $this->sendErrorResponse("Invalid service & order.", (object) []);
+            }
+            $serviceRequest->status = 4;
+            if ($serviceRequest->save()) {
+                // $staff = User::find($serviceRequest->accepted_by_id);
+                // $this->androidPushNotification(2, "Service Request", "Great! your Service approved by customer.", $staff->device_token, 1, $serviceRequest->service_id);
+                return $this->sendSuccessResponse("Service approved successfully", (object) []);
+            } else {
+                return $this->administratorResponse();
+            }
+        }else{
+            return $this->sendErrorResponse("Invalid service & order.", (object) []);
+        }
         } catch (\Exception $ex) {
             return $this->administratorResponse();
         }
