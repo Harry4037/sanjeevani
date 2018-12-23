@@ -31,6 +31,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="resort_id" name="resort_id">
                                 <option value="">Select option</option>
+                                <option value="-1">Generalized Offer</option>
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}">{{ $resort->name }}</option>
