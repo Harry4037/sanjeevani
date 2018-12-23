@@ -248,7 +248,7 @@ class HomeController extends Controller {
             $user['no_of_rooms'] = "1";
         }
 
-        $nearby = ResortNearbyPlace::where(["is_active" => 1])->get();
+        $nearby = ResortNearbyPlace::where(["is_active" => 1])->take(5)->latest()->get();
 
         $nearbyArray = [];
         foreach ($nearby as $k => $near) {
@@ -277,7 +277,7 @@ class HomeController extends Controller {
                     'offerImages' => function($query) {
                         $query->select('id', 'image_name as banner_image_url', 'offer_id');
                     }
-                ])->get();
+                ])->take(5)->latest()->get();
         $offerArray = [];
         if ($offers) {
             foreach ($offers as $key => $offer) {
