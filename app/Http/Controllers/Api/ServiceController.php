@@ -290,14 +290,14 @@ class ServiceController extends Controller {
             if (!$service) {
                 return $this->sendErrorResponse("Invalid service.", (object) []);
             }
-            // $existingServiceRequest = ServiceRequest::where([
-            //             "user_id" => $request->user_id,
-            //             "resort_id" => $request->resort_id,
-            //             "service_id" => $request->service_id,
-            //         ])->where("request_status_id", "!=", 4)->first();
-            // if ($existingServiceRequest) {
-            //     return $this->sendErrorResponse("Request already raised.", (object) []);
-            // } else {
+            $existingServiceRequest = ServiceRequest::where([
+                        "user_id" => $request->user_id,
+                        "resort_id" => $request->resort_id,
+                        "service_id" => $request->service_id,
+                    ])->where("request_status_id", 1)->orWhere("request_status_id", 2)->first();
+            if ($existingServiceRequest) {
+                return $this->sendErrorResponse("Request already raised.", (object) []);
+            } else {
                 $serviceRequest = new ServiceRequest();
                 $serviceRequest->resort_id = $request->resort_id;
                 $serviceRequest->user_id = $request->user_id;
@@ -308,11 +308,12 @@ class ServiceController extends Controller {
                 if ($serviceRequest->save()) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
                     $this->androidPushNotification(2, "Servie Raised", "$service->name request raised by customer", $staffDeviceTokens, 1, $service->id);
+                    $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                     return $this->sendSuccessResponse("Request successfully created.", (object) []);
                 } else {
                     return $this->sendErrorResponse("Something went be wrong.", (object) []);
                 }
-            // }
+            }
         } catch (\Exception $ex) {
             dd($ex);
             return $this->administratorResponse();
