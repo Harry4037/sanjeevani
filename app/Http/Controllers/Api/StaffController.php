@@ -445,7 +445,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
-                $ongoingJobArray[$i]["status"] = $ongoingMealOrder->status == 0 ? "Pending" : "Rejected";
+                $ongoingJobArray[$i]["status"] = "Pending" ;
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
@@ -487,7 +487,8 @@ class StaffController extends Controller {
                     ->get();
 
             $underApprovalJobArray = [];
-            foreach ($under_approval_jobs as $j => $under_approval_job) {
+            $j=0;
+            foreach ($under_approval_jobs as  $under_approval_job) {
                 $created_at = Carbon::parse($under_approval_job->created_at);
                 $underApprovalJobArray[$j]["id"] = $under_approval_job->id;
                 $underApprovalJobArray[$j]["service_name"] = $under_approval_job->serviceDetail->name;
@@ -496,7 +497,56 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail->user_name;
                 $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $under_approval_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $underApprovalJobArray[$j]["created_at"] = $created_at->format('H:i a');
+                $underApprovalJobArray[$j]["type"] = 1;
+                $j++;
             }
+
+            $underMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
+                    ->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
+                    ])
+                    ->where(function($q) {
+                        $q->where("status", 3);
+                    })->latest()
+                    ->get();
+            foreach ($underMealOrders as $ongoingMealOrder) {
+                $createdAt = Carbon::parse($ongoingMealOrder->created_at);
+                $mealItems = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->get();
+                $underApprovalJobArray[$j]["id"] = $ongoingMealOrder->id;
+                $underApprovalJobArray[$j]["record_id"] = $ongoingMealOrder->id;
+                $underApprovalJobArray[$j]["name"] = $ongoingMealOrder->invoice_id;
+                $underApprovalJobArray[$j]["icon"] = "";
+                $underApprovalJobArray[$j]["date"] = $createdAt->format("d-m-Y");
+                $underApprovalJobArray[$j]["time"] = $createdAt->format("H:i a");
+                $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
+                $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
+                $underApprovalJobArray[$j]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $underApprovalJobArray[$j]["gst_amount"] = $ongoingMealOrder->gst_amount;
+                $underApprovalJobArray[$j]["total_amount"] = $ongoingMealOrder->total_amount;
+                $underApprovalJobArray[$j]["status_id"] = $ongoingMealOrder->status;
+                $underApprovalJobArray[$j]["status"] = "Under Apporval";
+                $underApprovalJobArray[$j]["acceptd_by"] = "";
+                $underApprovalJobArray[$j]["type"] = 4;
+                if ($mealItems) {
+                    foreach ($mealItems as $f => $mealItem) {
+                        $mealImage = MealItem::find($mealItem->meal_item_id);
+                        $underApprovalJobArray[$j]["meal_items"][$f]["id"] = $mealItem->id;
+                        $underApprovalJobArray[$j]["meal_items"][$f]["meal_item_name"] = $mealItem->meal_item_name;
+                        $underApprovalJobArray[$j]["meal_items"][$f]["price"] = $mealItem->price;
+                        $underApprovalJobArray[$j]["meal_items"][$f]["quantity"] = $mealItem->quantity;
+                        $underApprovalJobArray[$j]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
+                    }
+                }
+                $j++;
+            }
+
             $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
