@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Amenity;
 use App\Models\AmenityTimeSlot;
 use App\Models\AmenityRequest;
+use App\Models\User;
 
 class AmenityController extends Controller {
 
@@ -251,6 +252,8 @@ class AmenityController extends Controller {
                 $bookingRequest->from = $request->from_time;
                 $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
+                    $user = User::find($request->user_id);
+                    $this->androidPushNotification(2, "Booked Amenity", "$amenity->name booked by customer", $user->device_token, 2, $request->amenity_id);
                     return $this->sendSuccessResponse("Anemity booking created", (object) []);
                 } else {
                     return $this->administratorResponse();
