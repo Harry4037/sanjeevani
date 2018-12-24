@@ -733,7 +733,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid job", (object) []);
             }
 
-            $job->status = 4;
+            $job->status = 5;
             if ($job->save()) {
                 $user = User::find($job->user_id);
                 $this->generateNotification($user->id, "Meal Order", "Sorry! your meal order request rejected by our staff member.", 1);
