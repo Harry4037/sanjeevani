@@ -630,7 +630,7 @@ class StaffController extends Controller {
             if ($job->save()) {
                  $user = User::find($job->user_id);
                 $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
-                
+
                 $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
                 return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
             } else {
@@ -735,9 +735,10 @@ class StaffController extends Controller {
 
             $job->status = 4;
             if ($job->save()) {
-                // $user = User::find($job->user_id);
-                // $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
-                // $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
+                $user = User::find($job->user_id);
+                $this->generateNotification($user->id, "Meal Order", "Sorry! your meal order request rejected by our staff member.", 1);
+                
+                $this->androidPushNotification(3, "Meal Order", "Sorry! your meal order request rejected by our staff member.", $user->device_token, 1, $job->id);
                 return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
             } else {
                 return $this->administratorResponse();
