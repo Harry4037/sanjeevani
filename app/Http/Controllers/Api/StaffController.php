@@ -628,8 +628,10 @@ class StaffController extends Controller {
 
             $job->status = 3;
             if ($job->save()) {
-                $user = User::find($job->user_id);
-                // $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
+                 $user = User::find($job->user_id);
+                $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
+                
+                $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
                 return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
             } else {
                 return $this->administratorResponse();
@@ -733,9 +735,9 @@ class StaffController extends Controller {
 
             $job->status = 4;
             if ($job->save()) {
-                $user = User::find($job->user_id);
-                $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
-                $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
+                // $user = User::find($job->user_id);
+                // $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
+                // $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
                 return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
             } else {
                 return $this->administratorResponse();
