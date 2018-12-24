@@ -286,8 +286,8 @@ class StaffController extends Controller {
             $serviceRequest->accepted_by_id = $request->user_id;
             if ($serviceRequest->save()) {
                 $user = User::find($serviceRequest->user_id);
-               $this->generateNotification($user->id, "Service accepted", "$service->name request accepted by our staff member. Our staff will contact you soon.", 1);
-               
+               $this->generateNotification($user->id, "Service accepted", "Your service request accepted by our staff member. Our staff will contact you soon.", 1);
+
                 $this->androidPushNotification(3, "Service Request", "Your request is accepted by our staff member.", $user->device_token, 1, $serviceRequest->service_id);
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
             } else {
