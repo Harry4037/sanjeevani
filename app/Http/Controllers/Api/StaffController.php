@@ -635,6 +635,7 @@ class StaffController extends Controller {
             $data["completed_jobs"] = $completedJobArray;
             return $this->sendSuccessResponse("My jobs.", $data);
         } catch (Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
