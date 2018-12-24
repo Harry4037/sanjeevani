@@ -276,11 +276,20 @@ class HomeController extends Controller {
             }
         }
 
-        $offers = offer::where(["is_active" => 1])->with([
+if(isset($user->userBookingDetail->resort_id)){
+$offers = offer::where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->with([
                     'offerImages' => function($query) {
                         $query->select('id', 'image_name as banner_image_url', 'offer_id');
                     }
                 ])->take(5)->latest()->get();
+}else{
+  $offers = offer::where(["is_active" => 1])->with([
+                    'offerImages' => function($query) {
+                        $query->select('id', 'image_name as banner_image_url', 'offer_id');
+                    }
+                ])->take(5)->latest()->get();
+}
+        
         $offerArray = [];
         if ($offers) {
             foreach ($offers as $key => $offer) {
@@ -296,7 +305,22 @@ class HomeController extends Controller {
             }
         }
 
-        $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
+if(isset($user->userBookingDetail->resort_id)){
+
+        $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))
+                        ->with([
+                            'healthcareImages' => function($query) {
+                                $query->select('id', 'image_name as banner_image_url', 'health_program_id');
+                            }
+                        ])
+                        ->with([
+                            'healthcareDays' => function($query) {
+                                $query->select('id', 'day', 'description', 'health_program_id');
+                            }
+                        ])->where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->take(5)->latest()->get();
+
+}else{
+          $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
                         ->with([
                             'healthcareImages' => function($query) {
                                 $query->select('id', 'image_name as banner_image_url', 'health_program_id');
@@ -307,6 +331,8 @@ class HomeController extends Controller {
                                 $query->select('id', 'day', 'description', 'health_program_id');
                             }
                         ])->take(5)->latest()->get();
+}
+
         $dataHealthArray = [];
         if (count($healthcare) > 0) {
             foreach ($healthcare as $key => $health) {
