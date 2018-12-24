@@ -16,6 +16,6 @@ class MealOrder extends Model {
 
 	public function scopeAccepted($query)
 	{
-		return $query->where('status',1);
+		return $query->where('status',4);
 	}
 }
