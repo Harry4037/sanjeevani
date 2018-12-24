@@ -572,7 +572,8 @@ class StaffController extends Controller {
                     ])
                     ->get();
             $completedJobArray = [];
-            foreach ($completed_jobs as $i => $completed_job) {
+            $i=0;
+            foreach ($completed_jobs as $completed_job) {
                 $created_at = Carbon::parse($completed_job->created_at);
                 $completedJobArray[$i]["id"] = $completed_job->id;
                 $completedJobArray[$i]["service_name"] = $completed_job->serviceDetail->name;
@@ -581,6 +582,53 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["user_name"] = $completed_job->userDetail->user_name;
                 $completedJobArray[$i]["room_no"] = $completed_job->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $completed_job->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
                 $completedJobArray[$i]["created_at"] = $created_at->format('H:i a');
+                $i++
+            }
+
+            $completedMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
+                    ->with([
+                        'userDetail' => function($query) {
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
+                    ])
+                    ->where(function($q) {
+                        $q->where("status", 4);
+                    })->latest()
+                    ->get();
+            foreach ($completedMealOrders as $ongoingMealOrder) {
+                $createdAt = Carbon::parse($ongoingMealOrder->created_at);
+                $mealItems = MealOrderItem::where("meal_order_id", $ongoingMealOrder->id)->get();
+                $completedJobArray[$i]["id"] = $ongoingMealOrder->id;
+                $completedJobArray[$i]["record_id"] = $ongoingMealOrder->id;
+                $completedJobArray[$i]["name"] = $ongoingMealOrder->invoice_id;
+                $completedJobArray[$i]["icon"] = "";
+                $completedJobArray[$i]["date"] = $createdAt->format("d-m-Y");
+                $completedJobArray[$i]["time"] = $createdAt->format("H:i a");
+                $completedJobArray[$i]["total_item_count"] = count($mealItems);
+                $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
+                $completedJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room == null ? "" : $ongoingMealOrder->userDetail->userBookingDetail->roomBooking->resort_room->room_no;
+                $completedJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
+                $completedJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
+                $completedJobArray[$i]["status_id"] = $ongoingMealOrder->status;
+                $completedJobArray[$i]["status"] = "Under Apporval";
+                $completedJobArray[$i]["acceptd_by"] = "";
+                $completedJobArray[$i]["type"] = 4;
+                if ($mealItems) {
+                    foreach ($mealItems as $l => $mealItem) {
+                        $mealImage = MealItem::find($mealItem->meal_item_id);
+                        $completedJobArray[$i]["meal_items"][$l]["id"] = $mealItem->id;
+                        $completedJobArray[$i]["meal_items"][$l]["meal_item_name"] = $mealItem->meal_item_name;
+                        $completedJobArray[$i]["meal_items"][$l]["price"] = $mealItem->price;
+                        $completedJobArray[$i]["meal_items"][$l]["quantity"] = $mealItem->quantity;
+                        $completedJobArray[$i]["meal_items"][$l]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
+                    }
+                }
+                $i++;
             }
             $data["ongoing_jobs"] = $ongoingJobArray;
             $data["under_approval_jobs"] = $underApprovalJobArray;
