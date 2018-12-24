@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Activity;
 use App\Models\ActivityTimeSlot;
 use App\Models\ActivityRequest;
+use App\Models\User;
 
 class ActivityController extends Controller {
 
@@ -227,6 +228,7 @@ class ActivityController extends Controller {
                 if ($bookingRequest->save()) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
                     $this->androidPushNotification(2, "Booked Activity", "$amenity->name booked by customer", $staffDeviceTokens, 1, $request->activity_id);
+
                     return $this->sendSuccessResponse("Activity booking created", (object) []);
                 } else {
                     return $this->administratorResponse();
