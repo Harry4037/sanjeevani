@@ -225,6 +225,8 @@ class ActivityController extends Controller {
                 $bookingRequest->from = $request->from_time;
                 $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
+                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
+                    $this->androidPushNotification(2, "Booked Activity", "$amenity->name booked by customer", $staffDeviceTokens, 1, $request->activity_id);
                     return $this->sendSuccessResponse("Activity booking created", (object) []);
                 } else {
                     return $this->administratorResponse();
