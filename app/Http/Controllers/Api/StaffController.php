@@ -613,6 +613,7 @@ class StaffController extends Controller {
             $job->request_status_id = 3;
             if ($job->save()) {
                 $user = User::find($job->user_id);
+                $this->generateNotification($job->user_id, "Service Request", "Your service completed by staff member. Please provide your apporval.", 1);
                 $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
                 return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
             } else {
