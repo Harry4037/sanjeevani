@@ -37,14 +37,14 @@ class OrderRequestController extends Controller {
                         }
                     ])->with([
                         'userDetail'
-                    ])->get();
+                    ])->latest()->get();
             
             $dataArray = [];
             foreach ($serviceRequests as $key => $serviceRequest) {
                 $dataArray[$key]['service_type'] = $serviceRequest->serviceDetail->serviceType->name;
                 $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail->name;
                 $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
-                $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
+                $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room == null ? "" : $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
                 $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
             }
             $data['recordsTotal'] = count($serviceRequests);
