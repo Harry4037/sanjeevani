@@ -728,7 +728,7 @@ class StaffController extends Controller {
                 return $this->administratorResponse();
             }
         }elseif($request->type == 4){
-             $job = MealOrder::where(['id' => $request->job_id, 'status' => 1])->first();
+             $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
             if (!$job) {
                 return $this->sendErrorResponse("Invalid job", (object) []);
             }
