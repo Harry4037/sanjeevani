@@ -801,7 +801,7 @@ class StaffController extends Controller {
                 }
                 if ($order->status == 2) {
                     $user = User::find($order->usere_id);
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by our staff member", 4);
+                    // $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by our staff member", 4);
                     $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by our staff member", $user->device_token, 4, $order->id);
                     $msg = "Order accepted succeffully.";
                 }
