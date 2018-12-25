@@ -130,6 +130,7 @@
     Route::prefix('order-request')->group(function() {
       Route::get('/', 'OrderRequestController@index')->name('admin.order-request.index');
       Route::get('/order-request-list', 'OrderRequestController@orderRequestList')->name('admin.order-request.list');
+      Route::match(['get', 'post'], '/view-detail/{id}', 'OrderRequestController@viewDetail')->name('admin.order-request.view');
     });
 
     /**
@@ -271,6 +272,7 @@
      */
     Route::prefix('booking')->group(function() {
       Route::get('/', 'BookingController@index')->name('admin.booking.index');
-      Route::post('/user-booking-list', 'BookingController@userBookings')->name('admin.booking.userBooking');
+      Route::get('/booking-list/{id}', 'BookingController@userBookings')->name('admin.booking.list');
+      Route::match(['get', 'post'], '/create-booking', 'BookingController@createBooking')->name('admin.booking.create');
     });
   });

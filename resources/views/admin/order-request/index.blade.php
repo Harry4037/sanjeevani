@@ -25,6 +25,7 @@
                             <th>Customer Name</th>
                             <th>Room No.</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -57,6 +58,7 @@
                 {"data": "customer_name"},
                 {"data": "room_no"},
                 {"data": "status"},
+                {"data": "action", sortable: false, },
             ]
         });
         $.ajaxSetup({

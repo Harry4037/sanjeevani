@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Validator;
 use App\Models\ServiceRequest;
+
 
 class OrderRequestController extends Controller {
 
@@ -46,6 +48,7 @@ class OrderRequestController extends Controller {
                 $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
                 $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room == null ? "" : $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
                 $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
+                $dataArray[$key]['action'] = '<a href="' . route('admin.order-request.view', $serviceRequest->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
             $data['recordsTotal'] = count($serviceRequests);
             $data['recordsFiltered'] = count($serviceRequests);
@@ -56,99 +59,47 @@ class OrderRequestController extends Controller {
         }
     }
 
-    public function create(Request $request) {
 
+    public function viewDetail(Request $request, $id){
         if ($request->isMethod("post")) {
-
-            $place = new ResortNearbyPlace();
-            $place->resort_id = $request->resort_id;
-            $place->name = $request->place_name;
-            $place->resort_id = $request->resort_id;
-            $place->distance_from_resort = $request->distance;
-            $place->description = $request->place_description;
-            $place->precautions = $request->place_precaution;
-            $place->address_1 = $request->address;
-            $place->pincode = $request->pin_code;
-            $place->city_id = $request->city;
-            if ($place->save()) {
-                if ($request->nearby_images) {
-                    foreach ($request->nearby_images as $tempImage) {
-                        $resortImage = new NearbyPlaceImage();
-                        $resortImage->nearby_place_id = $place->id;
-                        $resortImage->name = $tempImage;
-                        $resortImage->is_active = 1;
-                        $resortImage->save();
-                    }
-                }
-
-                return redirect()->route('admin.nearby.index')->with('status', 'Nearby place has been added successfully.');
-            } else {
-                return redirect()->route('admin.nearby.add')->with('error', 'Something went be wrong.');
+            $sRequest = ServiceRequest::find($id);
+            if(!$sRequest){
+            return redirect()->route('admin.order-request.view')->with('error', 'Record Not found.');
             }
-        }
-        $css = [
-            "vendors/dropzone/dist/dropzone.css",
-        ];
-        $js = [
-            'vendors/datatables.net/js/jquery.dataTables.min.js',
-            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
-            'vendors/dropzone/dist/dropzone.js',
-        ];
-        $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.nearby.create-nearby', ['js' => $js, 'css' => $css, 'resorts' => $resorts]);
-    }
-
-    public function uploadImages(Request $request) {
-
-        $image = $request->file("file");
-        $resort = Storage::disk('public')->put('Nearby', $image);
-        if ($resort) {
-            $file_name = basename($resort);
-            return ["status" => true, "id" => time(), "file_name" => $file_name];
-        }
-    }
-
-    public function deleteImages(Request $request) {
-        $data = TempImages::find($request->record_id);
-        if ($data) {
-            $data->delete();
-        }
-    }
-
-    public function updateStatus(Request $request) {
-        try {
-            if ($request->isMethod('post')) {
-                $nearby = ResortNearbyPlace::findOrFail($request->record_id);
-                $nearby->is_active = $request->status;
-                if ($nearby->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
-                }
-                return [];
+            $validator = Validator::make($request->all(), [
+                        'seleted_status' => 'bail|required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('admin.order-request.view', $id)->withErrors($validator)->withInput();
             }
-            return [];
-        } catch (\Exception $e) {
-            dd($e);
-        }
-    }
-
-    public function editNearby(Request $request, $id) {
-        $data = ResortNearbyPlace::find($id);
-        if ($request->isMethod("post")) {
-            $data->resort_id = $request->resort_id;
-            $data->name = $request->place_name;
-            $data->distance_from_resort = $request->distance;
-            $data->description = $request->place_description;
-            $data->precautions = $request->place_precaution;
-            $data->address_1 = $request->address;
-            $data->pincode = $request->pin_code;
-            $data->city_id = $request->city;
-            if ($data->save()) {
-                return redirect()->route('admin.nearby.edit', $id)->with('status', 'Nearby place has been updated successfully.');
-            }
+            $sRequest->request_status_id = $request->seleted_status;
+            $sRequest->save();
+            return redirect()->route('admin.order-request.view', $id)->with("status", "Status updated successfully.");
         }
 
-        $resorts = Resort::where("is_active", 1)->get();
-        return view('admin.nearby.edit-nearby', ['data' => $data, 'resorts' => $resorts]);
-    }
+        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'question_id', 'request_status_id', 'user_id')
+                            ->with([
+                                'serviceDetail' => function($query) {
+                                    $query->select('id', 'name', 'type_id');
+                                }
+                            ])->with([
+                        'questionDetail' => function($query) {
+                            $query->select('id', 'name');
+                        }
+                    ])->with([
+                        'requestStatus' => function($query) {
+                            $query->select('id')->userRequestStatus();
+                        }
+                    ])->with([
+                        'userDetail'
+                    ])->where("id", $id)->first();
+        if(!$serviceRequest){
+            return redirect()->route('admin.order-request.index')->with('error', 'Record Not found.');
+        }
 
+        return view("admin.order-request.view_detail",[
+            "serviceRequest" => $serviceRequest
+        ]);
+
+    }
 }
