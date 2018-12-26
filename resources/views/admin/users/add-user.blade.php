@@ -170,10 +170,15 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="package_id" id="package_id">
                                 <option value="">Choose option</option>
-                                <option value="1" @if(old('package_id') == 1){{ "selected" }}@endif>Health Package 1</option>
-                                <option value="2">Health 2</option>
-                                <option value="3">Health 3</option>
-                                <option value="4">Health 4</option>
+                                @if($healcarePackages)
+                                @foreach($healcarePackages as $healcarePackage)
+                                <option value="{{ $healcarePackage->id }}"
+                                        @if(isset($userBooking->package_id) && $userBooking->package_id == $healcarePackage->id)
+                                        {{ "selected" }}
+                                        @endif
+                                        >{{ $healcarePackage->name }}</option>
+                                @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>

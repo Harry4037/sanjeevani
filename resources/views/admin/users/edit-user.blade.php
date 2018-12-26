@@ -140,7 +140,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
                     <div class="ln_solid"></div>
@@ -254,7 +254,7 @@
                                 @endif
                             </select>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-2">People Accompanying</label>

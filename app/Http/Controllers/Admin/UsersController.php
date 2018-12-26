@@ -291,13 +291,13 @@ class UsersController extends Controller {
                     'bp' => 'bail|required',
                     'insullin_dependency' => 'bail|required',
 //                            'medical_documents' => 'bail|required',
-                    'booking_source_name' => 'bail|required',
-                    'booking_source_id' => 'bail|required',
-                    'resort_id' => 'bail|required',
-                    'package_id' => 'bail|required',
-                    'resort_room_id' => 'bail|required',
-                    'check_in' => 'bail|required',
-                    'check_out' => 'bail|required',
+//                    'booking_source_name' => 'bail|required',
+//                    'booking_source_id' => 'bail|required',
+//                    'resort_id' => 'bail|required',
+//                    'package_id' => 'bail|required',
+//                    'resort_room_id' => 'bail|required',
+//                    'check_in' => 'bail|required',
+//                    'check_out' => 'bail|required',
 //                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
                 ]);
                 if ($validator->fails()) {
@@ -334,30 +334,30 @@ class UsersController extends Controller {
                     $userHealthDetail->insullin_dependency = $request->insullin_dependency;
                     $userHealthDetail->medical_documents = $doc_file_name;
                     $userHealthDetail->user_id = $user->id;
-                    $userHealthDetail->save();
+                    if($userHealthDetail->save()){
 
-                    $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
-                    if (!$userBooking) {
-                        $userBooking = new UserBookingDetail();
-                    }
-                    $userBooking->source_name = $request->booking_source_name;
-                    $userBooking->source_id = $request->booking_source_id;
-                    $userBooking->user_id = $user->id;
-                    $userBooking->resort_id = $request->resort_id;
-                    $userBooking->package_id = $request->package_id;
-                    if ($userBooking->save()) {
-                        $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
-                        if (!$roomBooking) {
-                            $roomBooking = new RoomBooking();
-                        }
-                        $roomBooking->booking_id = $userBooking->id;
-                        $roomBooking->room_type_id = $request->resort_room_type;
-                        $roomBooking->resort_room_id = $request->resort_room_id;
-                        $check_in_date = Carbon::parse($request->check_in);
-                        $roomBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
-                        $check_out_date = Carbon::parse($request->check_out);
-                        $roomBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
-                        $roomBooking->save();
+//                    $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
+//                    if (!$userBooking) {
+//                        $userBooking = new UserBookingDetail();
+//                    }
+//                    $userBooking->source_name = $request->booking_source_name;
+//                    $userBooking->source_id = $request->booking_source_id;
+//                    $userBooking->user_id = $user->id;
+//                    $userBooking->resort_id = $request->resort_id;
+//                    $userBooking->package_id = $request->package_id;
+//                    if ($userBooking->save()) {
+//                        $roomBooking = RoomBooking::where("booking_id", $userBooking->id)->first();
+//                        if (!$roomBooking) {
+//                            $roomBooking = new RoomBooking();
+//                        }
+//                        $roomBooking->booking_id = $userBooking->id;
+//                        $roomBooking->room_type_id = $request->resort_room_type;
+//                        $roomBooking->resort_room_id = $request->resort_room_id;
+//                        $check_in_date = Carbon::parse($request->check_in);
+//                        $roomBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
+//                        $check_out_date = Carbon::parse($request->check_out);
+//                        $roomBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
+//                        $roomBooking->save();
 
                         if (!empty($request->person_name) && !empty($request->person_age)) {
                             BookingpeopleAccompany::where("booking_id", $userBooking->id)->delete();

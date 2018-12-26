@@ -43,11 +43,14 @@
                 <h2>Bookings</h2>
                 <div class="clearfix"></div>
             </div>
+            {{date("d-m-Y h:i:s A")}}
             <div class="x_content">
                 <table id="list" class="table table-striped table-bordered table-responsive text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
+                            <th>Source Name</th>
+                            <th>Source Id</th>
                             <th>Resort Name</th>
                             <th>Check In</th>
                             <th>Check Out</th>
@@ -82,6 +85,8 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
+                {"data": "source_name"},
+                {"data": "source_id"},
                 {"data": "resort"},
                 {"data": "check_in"},
                 {"data": "check_out"},
