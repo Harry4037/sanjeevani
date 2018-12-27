@@ -144,7 +144,7 @@ class OrderController extends Controller {
                 $data['total_amount'] = $mealOrder->total_amount;
                 Cart::where(["user_id" => $request->user_id])->delete();
                 $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                $this->androidPushNotification(2, "Servie Raised", "Meal order raised by customer", $staffDeviceTokens, 1, $mealOrder->id);
+                $this->androidPushNotification(2, "Servie Raised", "Meal order raised by customer", $staffDeviceTokens, 4, $mealOrder->id);
                 $this->generateNotification($request->user_id, "Meal Order", "You meal ordered with invoice Id $mealOrder->invoice_id ", 4);
                 return $this->sendSuccessResponse("Order created succeffully.", $data);
             } else {
