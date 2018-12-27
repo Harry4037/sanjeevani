@@ -41,11 +41,12 @@ class User extends Authenticatable {
     }
 
     public function userBookingDetail() {
-        $bookingIds = UserBookingDetail::where("user_id", $this->id)->pluck("id");
-        $booking = RoomBooking::where("check_out", ">=", date("Y-m-d H:i:s"))
-                ->whereIn("booking_id", $bookingIds)
-                ->first();
-        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("id", isset($booking->booking_id) ? $booking->booking_id : 0);
+        return $this->hasOne('App\Models\UserBookingDetail', 'user_id');
+//        $bookingIds = UserBookingDetail::where("user_id", $this->id)->pluck("id");
+//        $booking = RoomBooking::where("check_out", ">=", date("Y-m-d H:i:s"))
+//                ->whereIn("booking_id", $bookingIds)
+//                ->first();
+//        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("id", isset($booking->booking_id) ? $booking->booking_id : 0);
     }
 
     public function mealOrders() {
