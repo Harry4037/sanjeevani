@@ -12,22 +12,9 @@
             </div>
             <div class="x_content">
                 <br>
-                
-                <form class="form-horizontal form-label-left" action="{{ route('admin.booking.create') }}" method="post" id="addBookingForm">
+
+                <form class="form-horizontal form-label-left" action="{{ route('admin.users.booking-create', $user_id) }}" method="post" id="addBookingForm">
                     @csrf
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select User</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="user" name="user">
-                                <option value="">Choose option</option>
-                                @if($users)
-                                @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->mobile_number." (". $user->user_name.")"  }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -67,7 +54,7 @@
                             </select>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_type" id="resort_room_type">
@@ -101,16 +88,26 @@
                                 <option value="{{ $healcarePackage->id }}">{{ $healcarePackage->name }}</option>
                                 @endforeach
                                 @endif
-                                
+
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-2">People Accompanying</label>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div id="member_div">
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
+                            <button type="button" class="btn btn-primary" id="add_more_member">Add Members</button>
+                        </div>
+                    </div>
 
-                    
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route('admin.booking.index') }}">Cancel</a>
+                            <a class="btn btn-default" href="{{ route('admin.users.booking', $user_id) }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -125,9 +122,9 @@
 
 @section('script')
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
 
-$('#check_in').daterangepicker({
+        $('#check_in').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
@@ -147,6 +144,14 @@ $('#check_in').daterangepicker({
                 format: 'YYYY/M/DD hh:mm:ss A'
             }});
 
+        $(document).on("click", "#add_more_member", function () {
+            var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
+                    + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                    + "<input type='text' class='form-control' name='person_age[]'></div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Type</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                    + "<select class='form-control' name='person_type[]'><option value='Adult'>Adult</option><option value='Child'>Children</option></select>"
+                    + "</div></div>";
+            $("#member_div").append(member_html);
+        });
 
         $(document).on("change", "#resort_room_type", function () {
             var resort = $("#resort_id :selected").val();
@@ -174,40 +179,40 @@ $('#check_in').daterangepicker({
             $("#resort_room_id_hidden").val(record_val);
         });
 
-    $("#addBookingForm").validate({
-        ignore: [],
-        rules: {
-            user: {
-                required: true
-            },
-            booking_source_name: {
-                required: true
-            },
-            booking_source_id: {
-                required: true
-            },
-            check_in: {
-                required: true
-            },
-            check_out: {
-                required: true
-            },
-            resort_id:{
-                required: true
-            },
-            resort_room_type:{
-                required: true
-            },
-            resort_room_id:{
-                required: true
-            },
-            package_id:{
-                required: true
-            },
-        }
+        $("#addBookingForm").validate({
+            ignore: [],
+            rules: {
+                user: {
+                    required: true
+                },
+                booking_source_name: {
+                    required: true
+                },
+                booking_source_id: {
+                    required: true
+                },
+                check_in: {
+                    required: true
+                },
+                check_out: {
+                    required: true
+                },
+                resort_id: {
+                    required: true
+                },
+                resort_room_type: {
+                    required: true
+                },
+                resort_room_id: {
+                    required: true
+                },
+                package_id: {
+                    required: true
+                },
+            }
+        });
+
+
     });
-
-
-});
 </script>
 @endsection

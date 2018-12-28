@@ -10,7 +10,6 @@ use Validator;
 use Carbon\Carbon;
 use App\Models\UserBookingDetail;
 use App\Models\Resort;
-use App\Models\RoomBooking;
 use App\Models\CityMaster;
 use App\Models\Cart;
 
@@ -326,8 +325,9 @@ class AuthController extends Controller {
 //        $token->expires_at = Carbon::now()->addWeeks(1);
             $token->save();
 
-            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)->first();
-            $userRoom = [];
+            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
+                    ->where("check_in", "<=", date("Y-m-d H:i:s"))
+                    ->first();
             $adultNo = 0;
             $childNo = 0;
             if ($userBookingDetail) {
@@ -341,21 +341,20 @@ class AuthController extends Controller {
                     }
                 }
                 $userResort = Resort::find($userBookingDetail->resort_id);
-                $userRoom = RoomBooking::find($userBookingDetail->id);
             }
             $cityState = CityMaster::find($user->city_id);
             $cart = Cart::where(["user_id" => $user->id])->count();
-//            dd($cityState->toArray());
+
             $userArray['id'] = $user->id;
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
             $userArray['cart_count'] = $cart;
-            $userArray['user_name'] = $userBookingDetail ? $user->user_name : "Welcom guest";
+            $userArray['user_name'] = $user->user_name != "" ? $user->user_name : "Welcom guest";
             $userArray['first_name'] = $user->first_name;
             $userArray['mid_name'] = $user->mid_name;
             $userArray['last_name'] = $user->last_name;
             $userArray['email_id'] = $user->email_id;
-            $userArray['user_type_id'] = $userBookingDetail ? 3 : 4;
+            $userArray['user_type_id'] = $user->user_type_id;
             $userArray['is_checked_in'] = $user->aadhar_id ? true : false;
             $userArray['address'] = $user->address1;
             $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
@@ -367,17 +366,19 @@ class AuthController extends Controller {
             $userArray['mobile_number'] = $user->mobile_number;
             $userArray['token_type'] = $user->token_type;
             $userArray['access_token'] = $user->access_token;
+
             $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
             $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
-            $userArray['resort_room_no'] = $userRoom ? $userRoom->resort_room_id : '';
-            $userArray['room_type'] = "Delux";
-            $userArray['check_in_date'] = $userRoom ? Carbon::parse($userRoom->check_in)->format('d-M-Y') : '';
-            $userArray['check_in_time'] = $userRoom ? Carbon::parse($userRoom->check_in)->format('H:i A') : '';
-            $userArray['check_out_date'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('d-M-Y') : '';
-            $userArray['check_out_time'] = $userRoom ? Carbon::parse($userRoom->check_out)->format('H:i A') : '';
+            $userArray['resort_room_no'] = ($userBookingDetail) && ($userBookingDetail->room_detail != null) ? $userBookingDetail->room_detail->room_no : "Not available";
+            $userArray['room_type'] = ($userBookingDetail) && ($userBookingDetail->room_type_detail != null) ? $userBookingDetail->room_type_detail->name : "Not available";
+            $userArray['check_in_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('d-M-Y') : '';
+            $userArray['check_in_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('H:i A') : '';
+            $userArray['check_out_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('d-M-Y') : '';
+            $userArray['check_out_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('H:i A') : '';
             $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->id : "";
             $userArray['no_of_guest'] = $adultNo . " Adult and " . $childNo . " Child";
             $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
+
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;
             } else {

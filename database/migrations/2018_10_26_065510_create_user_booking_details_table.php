@@ -19,6 +19,10 @@ class CreateUserBookingDetailsTable extends Migration {
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('resort_id')->default(0);
             $table->bigInteger('package_id')->default(0);
+            $table->bigInteger('room_type_id')->default(0);
+            $table->bigInteger('resort_room_id')->default(0);
+            $table->datetime('check_in')->nullable();
+            $table->datetime('check_out')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(0);

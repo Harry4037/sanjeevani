@@ -29,7 +29,8 @@ class User extends Authenticatable {
     ];
 
     public function getProfilePicPathAttribute($name) {
-        return asset('storage/profile_pic/' . $name);
+        
+        return $name ? asset('storage/profile_pic/' . $name) : "";
     }
 
     public function getEmailForPasswordReset() {
@@ -41,12 +42,7 @@ class User extends Authenticatable {
     }
 
     public function userBookingDetail() {
-        return $this->hasOne('App\Models\UserBookingDetail', 'user_id');
-//        $bookingIds = UserBookingDetail::where("user_id", $this->id)->pluck("id");
-//        $booking = RoomBooking::where("check_out", ">=", date("Y-m-d H:i:s"))
-//                ->whereIn("booking_id", $bookingIds)
-//                ->first();
-//        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("id", isset($booking->booking_id) ? $booking->booking_id : 0);
+        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("check_in", "<=", date("Y-m-d H:i:s"));
     }
 
     public function mealOrders() {
@@ -58,8 +54,12 @@ class User extends Authenticatable {
     }
 
     public function getUserTypeIdAttribute($value) {
+        $booking = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s"))
+                ->where("user_id", $this->id)
+                ->first();
+
         if ($value == 3) {
-            return $this->userBookingDetail ? 3 : 4;
+            return $booking ? 3 : 4;
         } else {
             return $value;
         }
@@ -68,17 +68,24 @@ class User extends Authenticatable {
     public function getUserNameAttribute($value) {
         return $value == null ? "" : $value;
     }
-    
+
     public function getEmailIdAttribute($value) {
         return $value == null ? "" : $value;
     }
+
     public function getVoterIdAttribute($value) {
         return $value == null ? "" : $value;
     }
+
     public function getAadharIdAttribute($value) {
         return $value == null ? "" : $value;
     }
+
     public function getAddress1Attribute($value) {
+        return $value == null ? "" : $value;
+    }
+    
+    public function getPincodeAttribute($value) {
         return $value == null ? "" : $value;
     }
 

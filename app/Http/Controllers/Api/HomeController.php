@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Banner;
-use App\Models\RoomBooking;
 use App\Models\UserBookingDetail;
 use App\Models\Resort;
 use Illuminate\Http\Request;
@@ -34,181 +33,237 @@ class HomeController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-      "status": true,
-      "status_code": 200,
-      "message": "service successfully access.",
-      "data": {
-      "user": {
-      "id": 3,
-      "user_name": "Amit Singh",
-      "mobile_number": "8888888888",
-      "email_id": "amit@mail.com",
-      "voter_id": null,
-      "aadhar_id": null,
-      "address1": null,
-      "city_id": 87,
-      "user_type_id": 3,
-      "no_of_rooms": "1",
-      "user_health_detail": {
-      "id": 2,
-      "user_id": 3,
-      "medical_documents": "http://sanjeevani.dbaquincy.com/storage/medical_document/rU4C2wTS2oMnTakZpfFf8zd7LNS6Oe4b3ISx7pxP.jpeg",
-      "fasting": "Fasting",
-      "bp": "BP",
-      "insullin_dependency": "insuline",
-      "diabeties": "yes",
-      "ppa": "yes",
-      "hba_1c": "yes"
-      },
-      "user_booking_detail": {
-      "id": 2,
-      "user_id": 3,
-      "booking_id": "ZXC12345",
-      "source_name": "Makemy trip",
-      "resort_id": 2,
-      "package_id": 1,
-      "resort": {
-      "id": 2,
-      "name": "Royal Heritage Resor",
-      "description": "<p>There are six independent hut style accomodations, which come with double occupancy rooms and living cum dining areas. There are 12 standard rooms as well, and each room comes with various amenities such as high speed internet access, Bose CD System and much more.</p>",
-      "contact_number": "9808243372",
-      "address_1": "city center of Leh"
-      },
-      "room_booking": {
-      "id": 2,
-      "check_in": "16-11-2018",
-      "check_in_time": "12:00:00 AM",
-      "check_out": "22-11-2018",
-      "check_out_time": "12:00:00 AM",
-      "room_type_id": 1,
-      "resort_room_id": 21,
-      "room_type": {
-      "id": 1,
-      "name": "Tent"
-      },
-      "resort_room": null
-      },
-      "bookingpeople_accompany": [
-      {
-      "id": 4,
-      "person_name": "Maan singh",
-      "person_age": "35",
-      "person_type": "Adult"
-      },
-      {
-      "id": 5,
-      "person_name": "Pratiraksha",
-      "person_age": "5",
-      "person_type": "Child"
-      }
-      ]
-      }
-      },
-      "banners": [
-      {
-      "id": 1,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/banner_images/fozc4dLglmoMnMFr9XADAjgZrRJt6MM339LBtOof.jpeg"
-      },
-      {
-      "id": 2,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/banner_images/pQH8non1kv3GsVNmTUo8u0q2NKWfL9K6z5Zau8Wq.jpeg"
-      },
-      {
-      "id": 3,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/banner_images/qN0RhbeOvz93GmXi2pJrfzffwyslrVXEXDdk6lxZ.jpeg"
-      },
-      {
-      "id": 4,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/banner_images/VcdwF9xCFN7FnlxFQWIFv1YVAbSOLq9WANUHxmzD.jpeg"
-      },
-      {
-      "id": 5,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/banner_images/ZgI7mMDQuvSODcIwcKGi00xcdLlZe721WO6PeLJW.jpeg"
-      }
-      ],
-      "nearby_attaractions": [
-      {
-      "id": 1,
-      "name": "Water Fall"
-      },
-      {
-      "id": 2,
-      "name": "Nilgiri Forest"
-      },
-      {
-      "id": 3,
-      "name": "Bird sanctuary"
-      },
-      {
-      "id": 4,
-      "name": "Water Fall New"
-      },
-      {
-      "id": 5,
-      "name": "Nilgiri Forest"
-      }
-      ],
-      "best_offers": [
-      {
-      "id": 1,
-      "name": "3 Days, 3 Nights",
-      "price": 2100,
-      "discount": "10% OFF",
-      "discounted_price": 1890,
-      "offer_images": [
-      {
-      "id": 1,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/offer_images/AvgLdM35wzdYPDGf6qshxzwBXXbxEznofnIwx2Br.jpeg",
-      "offer_id": 1
-      },
-      {
-      "id": 2,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/offer_images/Hav6f0MNfvvqHW0ppsROIBDLcwlhFgfxRKhZELkC.jpeg",
-      "offer_id": 1
-      }
-      ]
-      },
-      {
-      "id": 2,
-      "name": "3 Days, 2 Nights",
-      "price": 5000,
-      "discount": "20% OFF",
-      "discounted_price": 4000,
-      "offer_images": [
-      {
-      "id": 3,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/offer_images/hJvW1nKfqDArBg4zjJPtnSozN63WOBD7fkcNC0V2.jpeg",
-      "offer_id": 2
-      },
-      {
-      "id": 4,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/offer_images/i9ny0wdWBuJMrRI0n0pevbZHS2SdMrmy4vQ4DTUK.jpeg",
-      "offer_id": 2
-      }
-      ]
-      }
-      ],
-      "health_care": [
-      {
-      "id": 1,
-      "name": "Diabetes Program",
-      "healthcare_images": [
-      {
-      "id": 1,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/offer_images/AvgLdM35wzdYPDGf6qshxzwBXXbxEznofnIwx2Br.jpeg",
-      "health_program_id": 1
-      },
-      {
-      "id": 2,
-      "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/offer_images/Hav6f0MNfvvqHW0ppsROIBDLcwlhFgfxRKhZELkC.jpeg",
-      "health_program_id": 1
-      }
-      ]
-      }
-      ]
-      }
-     *   }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "service successfully access.",
+            "data": {
+                "user": {
+                    "id": 5,
+                    "user_name": "Ankit gangwar",
+                    "mobile_number": "5555555555",
+                    "email_id": "ankit@mail.com",
+                    "voter_id": "",
+                    "aadhar_id": "",
+                    "address1": "",
+                    "city_id": 0,
+                    "user_type_id": 3,
+                    "no_of_rooms": "1",
+                    "user_health_detail": {
+                        "id": 1,
+                        "user_id": 5,
+                        "medical_documents": "http://127.0.0.1:8000/storage/medical_document/xEQs2e8AiANXf0cRvUNSfdTG4Jzr47c3WoDd1oNm.jpeg",
+                        "fasting": "fasting",
+                        "bp": "BP",
+                        "insullin_dependency": "Insuline",
+                        "diabeties": "yes",
+                        "ppa": "yes",
+                        "hba_1c": "yes"
+                    },
+                    "user_booking_detail": {
+                        "id": 1,
+                        "room_type_id": 1,
+                        "resort_room_id": 1,
+                        "user_id": 5,
+                        "booking_id": "QWERTY12345",
+                        "source_name": "Makemy trip",
+                        "resort_id": 1,
+                        "package_id": 1,
+                        "check_in": "23-12-2018",
+                        "check_in_time": "12:00:00 AM",
+                        "check_out": "31-12-2018",
+                        "check_out_time": "01:00:00 AM",
+                        "resort": {
+                            "id": 1,
+                            "name": "Grand Dragon Ladakh",
+                            "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took</p>",
+                            "contact_number": "9808243372",
+                            "address_1": "city center of Leh"
+                        },
+                        "bookingpeople_accompany": [
+                            {
+                                "id": 1,
+                                "person_name": "Ankit",
+                                "person_age": "25",
+                                "person_type": "Adult"
+                            }
+                        ],
+                        "room_type_detail": {
+                            "id": 1,
+                            "name": "Tent",
+                            "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took</p>",
+                            "icon": "http://127.0.0.1:8000/storage/room_icon/uQHZEASJzM7ovwjcO9kLMJ0mcSRvZAOqDKEf74MU.png",
+                            "is_active": 1,
+                            "domain_id": 0,
+                            "created_by": "1",
+                            "updated_by": "1",
+                            "created_at": "2018-12-19 18:50:41",
+                            "updated_at": "2018-12-19 18:50:41",
+                            "deleted_at": null
+                        },
+                        "room_detail": {
+                            "id": 1,
+                            "resort_id": 1,
+                            "room_type_id": 1,
+                            "room_no": "100",
+                            "other_detail": null,
+                            "is_active": 1,
+                            "domain_id": 0,
+                            "created_by": "1",
+                            "updated_by": "1",
+                            "created_at": "2018-12-19 18:52:55",
+                            "updated_at": "2018-12-19 18:52:55"
+                        }
+                    }
+                },
+                "banners": [
+                    {
+                        "id": 1,
+                        "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/YhliQQRrsZwnFVanTfxCWa0w2z9PyMQax4c4KLuX.jpeg"
+                    },
+                    {
+                        "id": 2,
+                        "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/KKL4cFe51jnyavdwSjOqu5SjMrXXqxczAHc476bj.jpeg"
+                    },
+                    {
+                        "id": 3,
+                        "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/km3wD8615JmSVxILarH4D49RBtQJ6yzpLbAHmf2L.jpeg"
+                    },
+                    {
+                        "id": 4,
+                        "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/jDHvovp4xMjhPhSVVEXRzTqg6GScme1l2gn9bnej.jpeg"
+                    },
+                    {
+                        "id": 5,
+                        "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/e0CvLts9IZj3zOELnukXtDBaX06wDxfqAr8kpVrL.jpeg"
+                    },
+                    {
+                        "id": 6,
+                        "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/QbCKc9qNOOlJ8rgOCyXTuYRSt5RkXFIWGc6LtQdC.jpeg"
+                    }
+                ],
+                "nearby_attaractions": [
+                    {
+                        "id": 6,
+                        "name": "iouoiyiuyoiuy",
+                        "description": "<p>,mnm,nuoijlk</p>",
+                        "distance": 56,
+                        "precautions": "<p>iuiyugbvhjvhjff</p>",
+                        "address": "oiuyryerwsresxdf",
+                        "latitude": "28.608510",
+                        "longitude": "77.347370",
+                        "images": [
+                            {
+                                "id": 6,
+                                "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/NnsTbodWaaavDkF4TTT8uCwNhzknzja4wEXBqblF.jpeg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 5,
+                        "name": "nbvctryfghj",
+                        "description": "<p>nbv hgifyutg</p>",
+                        "distance": 54,
+                        "precautions": "<p>yutyugfvngcvbcvb</p>",
+                        "address": "uyutyuyu",
+                        "latitude": "28.608510",
+                        "longitude": "77.347370",
+                        "images": [
+                            {
+                                "id": 5,
+                                "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/0OM7dJUc4hvee6XODrTEz1do3QnpetWDMlHbTlC9.jpeg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "name": "tyutuu",
+                        "description": "<p>,mnbnlj;olkm.,</p>",
+                        "distance": 67,
+                        "precautions": "<p>lkjhvbnm</p>",
+                        "address": "oiuupo",
+                        "latitude": "28.608510",
+                        "longitude": "77.347370",
+                        "images": [
+                            {
+                                "id": 4,
+                                "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/InbCIqWMFZv2Fd4is9xuYu7Y0tIVt2cmUar2lIbu.jpeg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "name": "ghfuytyutyi",
+                        "description": "<p>&#39;lkjhkiuyoiuhjlkn,m</p>",
+                        "distance": 54,
+                        "precautions": "<p>kjlllpoilkj.,m</p>",
+                        "address": "poiuyoi",
+                        "latitude": "28.608510",
+                        "longitude": "77.347370",
+                        "images": [
+                            {
+                                "id": 3,
+                                "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/nDdH33B6epsxxb6UnVNDQNy9dEfk0enThmOL5Ng7.jpeg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "name": "Sonbhadra",
+                        "description": "<p>dfdsfd;lkjh</p>",
+                        "distance": 123,
+                        "precautions": "<p>lkjhvvbn ,m.</p>",
+                        "address": "city center of Leh",
+                        "latitude": "28.608510",
+                        "longitude": "77.347370",
+                        "images": [
+                            {
+                                "id": 2,
+                                "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/gpUMWc6KUQIOtsNDPkaqyBqqb6dyUiEi2dY4l8GK.jpeg"
+                            }
+                        ]
+                    }
+                ],
+                "best_offers": [],
+                "health_care": [
+                    {
+                        "id": 1,
+                        "name": "Healthcare Package",
+                        "description": "<p>dfsdsadsa</p>",
+                        "start_from": "26-12-2018",
+                        "end_to": "26-12-2018",
+                        "total_days": 3,
+                        "healthcare_images": [
+                            {
+                                "id": 1,
+                                "banner_image_url": "http://127.0.0.1:8000/storage/healthcare_images/ss8zkcOBsoRl09sn3BaMWclhigzKNWeX7GurYiFj.jpeg",
+                                "health_program_id": 1
+                            }
+                        ],
+                        "healthcare_days": [
+                            {
+                                "id": 1,
+                                "day": "1",
+                                "description": "<p>ersfsd</p>",
+                                "health_program_id": 1
+                            },
+                            {
+                                "id": 2,
+                                "day": "2",
+                                "description": "<p>kjhkjhkl</p>",
+                                "health_program_id": 1
+                            },
+                            {
+                                "id": 3,
+                                "day": "3",
+                                "description": "<p>hlkj</p>",
+                                "health_program_id": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
      * 
      * 
      * 
@@ -230,7 +285,7 @@ class HomeController extends Controller {
                 ])
                 ->with([
                     'userBookingDetail' => function($query) {
-                        $query->select('id', 'user_id', 'source_id as booking_id', 'source_name', 'resort_id', 'package_id');
+                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
                     }
                 ])
                 ->first();

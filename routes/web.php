@@ -92,6 +92,9 @@
     Route::match(['get', 'post'], '/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
     Route::get('payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
     Route::post('pay-outstanding', 'UsersController@payOutstading')->name('admin.users.pay_outstanding');
+    Route::get('user-booking/{id}', 'UsersController@booking')->name('admin.users.booking');
+    Route::get('user-booking-list/{id}', 'UsersController@bookingList')->name('admin.users.booking-list');
+    Route::match(['get','post'], 'user-booking-create/{id}', 'UsersController@bookingCreate')->name('admin.users.booking-create');
     /**
      * Staff Management
      */
@@ -267,12 +270,4 @@
       Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
     });
 
-    /**
-     * Notification Management
-     */
-    Route::prefix('booking')->group(function() {
-      Route::get('/', 'BookingController@index')->name('admin.booking.index');
-      Route::get('/booking-list/{id}', 'BookingController@userBookings')->name('admin.booking.list');
-      Route::match(['get', 'post'], '/create-booking', 'BookingController@createBooking')->name('admin.booking.create');
-    });
   });

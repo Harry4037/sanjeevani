@@ -90,9 +90,9 @@
                     </div>
                     <div class="row">
                         <label class="col-md-2 col-sm-2 col-xs-6">Check In</label>
-                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $roomBooking->check_in }}</div>
+                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->check_in }}</div>
                         <label class="col-md-2 col-sm-2 col-xs-6">Check out</label>
-                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $roomBooking->check_out }}</div>
+                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->check_out }}</div>
                     </div>
                     <div class="clearfix"></div>
                     <div class="form-group">
@@ -109,9 +109,9 @@
                     </div>
                     <div class="row">
                         <label class="col-md-2 col-sm-2 col-xs-6">Check In</label>
-                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $roomBooking->check_in }}</div>
+                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->check_in }}</div>
                         <label class="col-md-2 col-sm-2 col-xs-6">Check out</label>
-                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $roomBooking->check_out }}</div>
+                        <div class="col-md-2 col-sm-2 col-xs-6">{{ $userBooking->check_out }}</div>
                     </div>
                 </div>
 

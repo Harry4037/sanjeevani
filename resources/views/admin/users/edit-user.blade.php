@@ -256,7 +256,7 @@
                         </div>
                     </div>-->
 
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-2">People Accompanying</label>
                     </div>
                     <div class="ln_solid"></div>
@@ -288,7 +288,7 @@
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
                             <button type="button" class="btn btn-primary" id="add_more_member">Add Members</button>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">

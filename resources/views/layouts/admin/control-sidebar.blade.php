@@ -6,12 +6,6 @@
       <li>
         <a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
       </li>
-      <li @if(in_array(Route::currentRouteName(), ['admin.booking.index','admin.booking.userBooking']))
-      {{ "class=current-page" }}
-      @endif
-      >
-      <a href="{{ route('admin.booking.index') }}"><i class="fa fa-university"></i>Booking Management</a>
-    </li>
       <li @if(in_array(Route::currentRouteName(), ['admin.room.add','admin.room.edit']))
       {{ "class=current-page" }}
       @endif
@@ -29,16 +23,16 @@
   @endif>
   <a href="{{ route('admin.nearby.index') }}"><i class="fa fa-map"></i>Nearby Place Management</a>
 </li>
-<li @if(in_array(Route::currentRouteName(), ['admin.staff.edit', 'admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
+<li @if(in_array(Route::currentRouteName(), ['admin.users.booking-create', 'admin.users.booking', 'admin.staff.edit', 'admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
 {{ "class=active" }}
 @endif>
 <a><i class="fa fa-users"></i> User Management <span class="fa fa-chevron-down"></span></a>
 <ul class="nav child_menu"  
-@if(in_array(Route::currentRouteName(), ['admin.staff.edit', 'admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
+@if(in_array(Route::currentRouteName(), ['admin.users.booking-create', 'admin.users.booking', 'admin.staff.edit', 'admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
 {{ "style=display:block;" }}
 @endif
 >
-<li @if(in_array(Route::currentRouteName(), ['admin.users.add','admin.users.edit','admin.users.detail']))
+<li @if(in_array(Route::currentRouteName(), ['admin.users.booking-create', 'admin.users.booking', 'admin.users.add','admin.users.edit','admin.users.detail']))
 {{ "class=current-page" }}
 @endif
 
