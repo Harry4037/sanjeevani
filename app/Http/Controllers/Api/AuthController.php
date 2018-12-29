@@ -98,26 +98,40 @@ class AuthController extends Controller {
             $userExist = User::where("mobile_number", $request->mobile_number)
                     ->where("user_type_id", $request->user_type)
                     ->first();
-            if (!$userExist) {
-                $user = new User([
-                    'mobile_number' => $request->mobile_number,
-                    'user_type_id' => $request->user_type,
-                    'otp' => 9999,
-                    'password' => bcrypt(9999)
-                ]);
-                if ($user->save()) {
-                    return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+
+            if ($request->user_type == 3) {
+                if ($userExist) {
+                    $userExist->otp = 9999;
+                    $userExist->password = bcrypt(9999);
+                    if ($userExist->save()) {
+                        return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+                    } else {
+                        return $this->administratorResponse();
+                    }
                 } else {
-                    return $this->administratorResponse();
+                    return $this->sendErrorResponse("User doesn't exist in our record.", (object) []);
                 }
             } else {
-                $userExist->otp = 9999;
-                $userExist->password = bcrypt(9999);
-                $userExist->save();
-                if ($userExist->save()) {
-                    return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+                if (!$userExist) {
+                    $user = new User([
+                        'mobile_number' => $request->mobile_number,
+                        'user_type_id' => $request->user_type,
+                        'otp' => 9999,
+                        'password' => bcrypt(9999)
+                    ]);
+                    if ($user->save()) {
+                        return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+                    } else {
+                        return $this->administratorResponse();
+                    }
                 } else {
-                    return $this->administratorResponse();
+                    $userExist->otp = 9999;
+                    $userExist->password = bcrypt(9999);
+                    if ($userExist->save()) {
+                        return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
+                    } else {
+                        return $this->administratorResponse();
+                    }
                 }
             }
         } catch (\Exception $e) {
