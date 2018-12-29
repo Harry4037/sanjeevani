@@ -465,7 +465,7 @@ class UsersController extends Controller {
                 if ($currentDataTime > $checkOutTime) {
                     $stat = "<span class='label label-primary'>Completed</span>";
                 } elseif ($currentDataTime < $checkInTime) {
-                    $stat = "<span class='label label-info'>Ongoing</span>";
+                    $stat = "<span class='label label-info'>Upcoming</span>";
                 } else {
                     $stat = "<span class='label label-success'>Current</span>";
                 }
