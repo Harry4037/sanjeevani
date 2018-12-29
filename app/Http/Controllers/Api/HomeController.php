@@ -290,17 +290,16 @@ class HomeController extends Controller {
                         }
                     ])
                     ->first()->toArray();
-                    $user['user_booking_detail']['room_booking']['id'] =  $user['user_booking_detail']['id'];
-                    $user['user_booking_detail']['room_booking']['check_in'] = $user['user_booking_detail']['check_in'];
-                    $user['user_booking_detail']['room_booking']['check_in_time'] =  $user['user_booking_detail']['check_in_time'];
-                    $user['user_booking_detail']['room_booking']['check_out'] =  $user['user_booking_detail']['check_out'];
-                    $user['user_booking_detail']['room_booking']['check_out_time'] =  $user['user_booking_detail']['check_out_time'];
-                    $user['user_booking_detail']['room_booking']['resort_room_id'] =  $user['user_booking_detail']['room_detail']['id'];
-                    $user['user_booking_detail']['room_booking']['room_type']['id'] =  $user['user_booking_detail']['room_type_detail']['id'];
-                    $user['user_booking_detail']['room_booking']['room_type']['name'] =  $user['user_booking_detail']['room_type_detail']['name'];
-                    $user['user_booking_detail']['room_booking']['resort_room']['id'] =  $user['user_booking_detail']['room_detail']['id'];
-                    $user['user_booking_detail']['room_booking']['resort_room']['room_no'] =  $user['user_booking_detail']['room_detail']['room_no'];
-//                    dd($user);
+                    $user['user_booking_detail']['room_booking']['id'] =  isset($user['user_booking_detail']['id']) ? $user['user_booking_detail']['id'] : "";
+                    $user['user_booking_detail']['room_booking']['check_in'] = isset($user['user_booking_detail']['check_in']) ? $user['user_booking_detail']['check_in'] : "";
+                    $user['user_booking_detail']['room_booking']['check_in_time'] =  isset($user['user_booking_detail']['check_in_time']) ? $user['user_booking_detail']['check_in_time'] : "";
+                    $user['user_booking_detail']['room_booking']['check_out'] =  isset($user['user_booking_detail']['check_out']) ? $user['user_booking_detail']['check_out'] : "";
+                    $user['user_booking_detail']['room_booking']['check_out_time'] =  isset($user['user_booking_detail']['check_out_time']) ? $user['user_booking_detail']['check_out_time'] : "";
+                    $user['user_booking_detail']['room_booking']['resort_room_id'] =  isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
+                    $user['user_booking_detail']['room_booking']['room_type']['id'] = isset($user['user_booking_detail']['room_type_detail']['id']) ? $user['user_booking_detail']['room_type_detail']['id'] : "";
+                    $user['user_booking_detail']['room_booking']['room_type']['name'] =  isset($user['user_booking_detail']['room_type_detail']['name']) ? $user['user_booking_detail']['room_type_detail']['name'] : "";
+                    $user['user_booking_detail']['room_booking']['resort_room']['id'] =  isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
+                    $user['user_booking_detail']['room_booking']['resort_room']['room_no'] =  isset($user['user_booking_detail']['room_detail']['room_no']) ? $user['user_booking_detail']['room_detail']['room_no'] : "";
             $banners = Banner::where("is_active", 1)->get();
             $bannerArray = [];
             $i = 0;
