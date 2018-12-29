@@ -99,7 +99,7 @@ class AuthController extends Controller {
                     ->where("user_type_id", $request->user_type)
                     ->first();
 
-            if ($request->user_type == 3) {
+            if ($request->user_type == 2) {
                 if ($userExist) {
                     $userExist->otp = 9999;
                     $userExist->password = bcrypt(9999);
