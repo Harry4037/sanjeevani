@@ -166,7 +166,7 @@ class StaffController extends Controller {
                 $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
                 $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                 $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
-                $mealDataArray[$j]["room_no"] = $mealOrder->userDetail->userBookingDetail->room_detail == null ? "" : $mealOrder->userDetail->userBookingDetail->room_detail->room_no;
+                $mealDataArray[$j]["room_no"] = "";
                 $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
                 $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                 if ($mealItems) {
@@ -189,7 +189,7 @@ class StaffController extends Controller {
                 $dataArray[$k]["service_comment"] = $newService->comment;
                 $dataArray[$k]["service_icon"] = $newService->serviceDetail->icon;
                 $dataArray[$k]["user_name"] = $newService->userDetail->user_name;
-                $dataArray[$k]["room_no"] = $newService->userDetail->userBookingDetail->room_detail == null ? "" : $newService->userDetail->userBookingDetail->room_detail->room_no;
+                $dataArray[$k]["room_no"] = "";
                 $dataArray[$k]["created_at"] = $created_at->format('H:i a');
             }
 
@@ -409,7 +409,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["service_comment"] = $ongoing_job->comment;
                 $ongoingJobArray[$i]["service_icon"] = $ongoing_job->serviceDetail->icon;
                 $ongoingJobArray[$i]["user_name"] = $ongoing_job->userDetail->user_name;
-                $ongoingJobArray[$i]["room_no"] = $ongoing_job->userDetail->userBookingDetail->room_detail == null ? "" : $ongoing_job->userDetail->userBookingDetail->room_detail->room_no;
+                $ongoingJobArray[$i]["room_no"] = "";
                 $ongoingJobArray[$i]["created_at"] = $created_at->format('H:i a');
                 $ongoingJobArray[$i]["type"] = 1;
                 $i++;
@@ -441,7 +441,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["time"] = $createdAt->format("H:i a");
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->room_detail == null ? "" : $ongoingMealOrder->userDetail->userBookingDetail->room_detail->room_no;
+                $ongoingJobArray[$i]["room_no"] = "";
                 $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
@@ -495,7 +495,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["service_comment"] = $under_approval_job->comment;
                 $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail->icon;
                 $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail->user_name;
-                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->userDetail->userBookingDetail->room_detail == null ? "" : $under_approval_job->userDetail->userBookingDetail->room_detail->room_no;
+                $underApprovalJobArray[$j]["room_no"] = "";
                 $underApprovalJobArray[$j]["created_at"] = $created_at->format('H:i a');
                 $underApprovalJobArray[$j]["type"] = 1;
                 $j++;
@@ -527,7 +527,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["time"] = $createdAt->format("H:i a");
                 $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
                 $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $underApprovalJobArray[$j]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->room_detail == null ? "" : $ongoingMealOrder->userDetail->userBookingDetail->room_detail->room_no;
+                $underApprovalJobArray[$j]["room_no"] = "";
                 $underApprovalJobArray[$j]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $underApprovalJobArray[$j]["total_amount"] = $ongoingMealOrder->total_amount;
                 $underApprovalJobArray[$j]["status_id"] = $ongoingMealOrder->status;
@@ -580,7 +580,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["service_comment"] = $completed_job->comment;
                 $completedJobArray[$i]["service_icon"] = $completed_job->serviceDetail->icon;
                 $completedJobArray[$i]["user_name"] = $completed_job->userDetail->user_name;
-                $completedJobArray[$i]["room_no"] = $completed_job->userDetail->userBookingDetail->room_detail == null ? "" : $completed_job->userDetail->userBookingDetail->room_detail->room_no;
+                $completedJobArray[$i]["room_no"] = "";
                 $completedJobArray[$i]["created_at"] = $created_at->format('H:i a');
                 $i++;
             }
@@ -611,7 +611,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["time"] = $createdAt->format("H:i a");
                 $completedJobArray[$i]["total_item_count"] = count($mealItems);
                 $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $completedJobArray[$i]["room_no"] = $ongoingMealOrder->userDetail->userBookingDetail->room_detail == null ? "" : $ongoingMealOrder->userDetail->userBookingDetail->room_detail->room_no;
+                $completedJobArray[$i]["room_no"] = "";
                 $completedJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $completedJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $completedJobArray[$i]["status_id"] = $ongoingMealOrder->status;
