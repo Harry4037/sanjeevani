@@ -41,5 +41,9 @@ class UserBookingDetail extends Model {
         $userPeopleBooking = BookingpeopleAccompany::select('id', 'person_name', 'person_age', 'person_type')->where("booking_id", $this->id)->get();
         return $userPeopleBooking;
     }
+    
+    public function packageDetail(){
+        return $this->belongsTo('App\Models\HealthcateProgram', 'package_id');
+    }
 
 }

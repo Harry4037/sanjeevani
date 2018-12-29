@@ -9,6 +9,7 @@ use App\Models\HealthcateProgram;
 use App\Models\HealthcateProgramImages;
 use App\Models\HealthcateProgramDay;
 use App\Models\User;
+use App\Models\UserBookingDetail;
 
 class HealthcareProgramController extends Controller {
 
@@ -206,9 +207,15 @@ class HealthcareProgramController extends Controller {
 
             $user = User::find($request->user_id);
             if ($user) {
-                if (isset($user->userBookingDetail->package_id) && ($user->userBookingDetail->package_id > 0)) {
 
-                    $healthcare = HealthcateProgram::selectRaw(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["id" => $user->userBookingDetail->package_id])
+                $booking = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s"))
+                        ->where("check_out", ">=", date("Y-m-d H:i:s"))
+                        ->where("user_id", $request->user_id)
+                        ->first();
+
+                if ($booking) {
+
+                    $healthcare = HealthcateProgram::selectRaw(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["id" => $booking->package_id])
                                     ->with([
                                         'healthcareImages' => function($query) {
                                             $query->select('id', 'image_name as banner_image_url', 'health_program_id');
@@ -224,6 +231,8 @@ class HealthcareProgramController extends Controller {
                     } else {
                         return $this->sendErrorResponse("My Health Package not found", (object) []);
                     }
+                } else {
+                    return $this->sendErrorResponse("My Health Package not found", (object) []);
                 }
             } else {
                 return $this->sendErrorResponse("Invalid User", (object) []);
@@ -292,26 +301,40 @@ class HealthcareProgramController extends Controller {
 
             $user = User::find($request->user_id);
             if ($user) {
-                if (isset($user->userBookingDetail->package_id) && ($user->userBookingDetail->package_id > 0)) {
-                    $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["id" => $user->userBookingDetail->package_id])
-                            ->get();
 
-                    $healthDataArray = [];
-
-                    if ($healthcare) {
-                        foreach ($healthcare as $key => $health) {
-                            $healthDataArray[$key]['id'] = $health->id;
-                            $healthDataArray[$key]['name'] = $health->name;
-                            $healthDataArray[$key]['duration'] = $health->start_from . " to " . $health->end_to;
-                            $healthDataArray[$key]['status'] = "Booking Confirmed";
-                        }
-                        $data['upcoming'] = $healthDataArray;
-                        $data['complete'] = $healthDataArray;
-                        return $this->sendSuccessResponse("Health Package found", $data);
-                    } else {
-                        return $this->sendErrorResponse("Health Package not found", (object) []);
-                    }
+                $completedPackages = UserBookingDetail::with([
+                            "packageDetail" => function($query) {
+                                $query->selectRaw(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'));
+                            }
+                        ])
+                        ->where("check_out", "<", date("Y-m-d H:i:s"))
+                        ->where("user_id", $request->user_id)
+                        ->get();
+                $upcomingPackages = UserBookingDetail::with([
+                            "packageDetail" => function($query) {
+                                $query->selectRaw(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'));
+                            }
+                        ])
+                        ->where("check_in", ">", date("Y-m-d H:i:s"))
+                        ->where("user_id", $request->user_id)
+                        ->get();
+                $completedArray = [];
+                foreach ($completedPackages as $i => $completedPackage) {
+                    $completedArray[$i]["id"] = $completedPackage->packageDetail->id;
+                    $completedArray[$i]["name"] = $completedPackage->packageDetail->name;
+                    $completedArray[$i]["duration"] = $completedPackage->packageDetail->start_from . " to " . $completedPackage->packageDetail->end_to;
+                    $completedArray[$i]["status"] = "Completed";
                 }
+                $data['complete'] = $completedArray;
+                $upcomingArray = [];
+                foreach ($upcomingPackages as $i => $upcomingPackage) {
+                    $upcomingArray[$i]["id"] = $upcomingPackage->packageDetail->id;
+                    $upcomingArray[$i]["name"] = $upcomingPackage->packageDetail->name;
+                    $upcomingArray[$i]["duration"] = $upcomingPackage->packageDetail->start_from . " to " . $upcomingPackage->packageDetail->end_to;
+                    $upcomingArray[$i]["status"] = "Upcoming";
+                }
+                $data['upcoming'] = $upcomingArray;
+                return $this->sendSuccessResponse("Health Package found", $data);
             } else {
                 return $this->sendErrorResponse("Invalid User", (object) []);
             }
