@@ -290,6 +290,7 @@ class HomeController extends Controller {
                         }
                     ])
                     ->first()->toArray();
+                    $user['user_health_detail'] =  $user['user_health_detail'] != null? $user['user_health_detail'] : (object)[];
                     $user['user_booking_detail']['room_booking']['id'] =  isset($user['user_booking_detail']['id']) ? $user['user_booking_detail']['id'] : "";
                     $user['user_booking_detail']['room_booking']['check_in'] = isset($user['user_booking_detail']['check_in']) ? $user['user_booking_detail']['check_in'] : "";
                     $user['user_booking_detail']['room_booking']['check_in_time'] =  isset($user['user_booking_detail']['check_in_time']) ? $user['user_booking_detail']['check_in_time'] : "";
