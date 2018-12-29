@@ -278,29 +278,34 @@ class HomeController extends Controller {
         try {
 
             $user = User::select('id', 'user_name', 'mobile_number', 'email_id', 'voter_id', 'aadhar_id', 'address1', 'city_id', 'user_type_id')
-                    ->where(["id" => $request->user_id])
-                    ->with([
-                        'userHealthDetail' => function($query) {
-                            $query->select(DB::raw("id, user_id, medical_documents, fasting, bp, insullin_dependency, (CASE WHEN (is_diabeties = '1') THEN 'yes' ELSE 'no' END) as diabeties, (CASE WHEN (is_ppa = '1') THEN 'yes' ELSE 'no' END) as ppa, (CASE WHEN (hba_1c = '1') THEN 'yes' ELSE 'no' END) as hba_1c"));
-                        }
-                    ])
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                            $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                        }
-                    ])
-                    ->first()->toArray();
-                    $user['user_health_detail'] =  $user['user_health_detail'] != null? $user['user_health_detail'] : (object)[];
-                    $user['user_booking_detail']['room_booking']['id'] =  isset($user['user_booking_detail']['id']) ? $user['user_booking_detail']['id'] : "";
-                    $user['user_booking_detail']['room_booking']['check_in'] = isset($user['user_booking_detail']['check_in']) ? $user['user_booking_detail']['check_in'] : "";
-                    $user['user_booking_detail']['room_booking']['check_in_time'] =  isset($user['user_booking_detail']['check_in_time']) ? $user['user_booking_detail']['check_in_time'] : "";
-                    $user['user_booking_detail']['room_booking']['check_out'] =  isset($user['user_booking_detail']['check_out']) ? $user['user_booking_detail']['check_out'] : "";
-                    $user['user_booking_detail']['room_booking']['check_out_time'] =  isset($user['user_booking_detail']['check_out_time']) ? $user['user_booking_detail']['check_out_time'] : "";
-                    $user['user_booking_detail']['room_booking']['resort_room_id'] =  isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
-                    $user['user_booking_detail']['room_booking']['room_type']['id'] = isset($user['user_booking_detail']['room_type_detail']['id']) ? $user['user_booking_detail']['room_type_detail']['id'] : "";
-                    $user['user_booking_detail']['room_booking']['room_type']['name'] =  isset($user['user_booking_detail']['room_type_detail']['name']) ? $user['user_booking_detail']['room_type_detail']['name'] : "";
-                    $user['user_booking_detail']['room_booking']['resort_room']['id'] =  isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
-                    $user['user_booking_detail']['room_booking']['resort_room']['room_no'] =  isset($user['user_booking_detail']['room_detail']['room_no']) ? $user['user_booking_detail']['room_detail']['room_no'] : "";
+                            ->where(["id" => $request->user_id])
+                            ->with([
+                                'userHealthDetail' => function($query) {
+                                    $query->select(DB::raw("id, user_id, medical_documents, fasting, bp, insullin_dependency, (CASE WHEN (is_diabeties = '1') THEN 'yes' ELSE 'no' END) as diabeties, (CASE WHEN (is_ppa = '1') THEN 'yes' ELSE 'no' END) as ppa, (CASE WHEN (hba_1c = '1') THEN 'yes' ELSE 'no' END) as hba_1c"));
+                                }
+                            ])
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                                }
+                            ])
+                            ->first()->toArray();
+            if ($user['user_type_id'] == 4) {
+                $user['user_health_detail'] = null;
+                $user['user_booking_detail'] = null;
+            } else {
+                $user['user_health_detail'] = $user['user_health_detail'] != null ? $user['user_health_detail'] : (object) [];
+                $user['user_booking_detail']['room_booking']['id'] = isset($user['user_booking_detail']['id']) ? $user['user_booking_detail']['id'] : "";
+                $user['user_booking_detail']['room_booking']['check_in'] = isset($user['user_booking_detail']['check_in']) ? $user['user_booking_detail']['check_in'] : "";
+                $user['user_booking_detail']['room_booking']['check_in_time'] = isset($user['user_booking_detail']['check_in_time']) ? $user['user_booking_detail']['check_in_time'] : "";
+                $user['user_booking_detail']['room_booking']['check_out'] = isset($user['user_booking_detail']['check_out']) ? $user['user_booking_detail']['check_out'] : "";
+                $user['user_booking_detail']['room_booking']['check_out_time'] = isset($user['user_booking_detail']['check_out_time']) ? $user['user_booking_detail']['check_out_time'] : "";
+                $user['user_booking_detail']['room_booking']['resort_room_id'] = isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
+                $user['user_booking_detail']['room_booking']['room_type']['id'] = isset($user['user_booking_detail']['room_type_detail']['id']) ? $user['user_booking_detail']['room_type_detail']['id'] : "";
+                $user['user_booking_detail']['room_booking']['room_type']['name'] = isset($user['user_booking_detail']['room_type_detail']['name']) ? $user['user_booking_detail']['room_type_detail']['name'] : "";
+                $user['user_booking_detail']['room_booking']['resort_room']['id'] = isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
+                $user['user_booking_detail']['room_booking']['resort_room']['room_no'] = isset($user['user_booking_detail']['room_detail']['room_no']) ? $user['user_booking_detail']['room_detail']['room_no'] : "";
+            }
             $banners = Banner::where("is_active", 1)->get();
             $bannerArray = [];
             $i = 0;
