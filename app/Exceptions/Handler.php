@@ -47,6 +47,7 @@ class Handler extends ExceptionHandler {
      */
     public function render($request, Exception $exception) {
         if (\Request::segment(1) == "api") {
+                    dd($exception);
             if ($exception instanceof AuthenticationException) {
                 return response()->json([
                             'status' => false,

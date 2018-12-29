@@ -289,8 +289,18 @@ class HomeController extends Controller {
                             $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
                         }
                     ])
-                    ->first();
-
+                    ->first()->toArray();
+                    $user['user_booking_detail']['room_booking']['id'] =  $user['user_booking_detail']['id'];
+                    $user['user_booking_detail']['room_booking']['check_in'] = $user['user_booking_detail']['check_in'];
+                    $user['user_booking_detail']['room_booking']['check_in_time'] =  $user['user_booking_detail']['check_in_time'];
+                    $user['user_booking_detail']['room_booking']['check_out'] =  $user['user_booking_detail']['check_out'];
+                    $user['user_booking_detail']['room_booking']['check_out_time'] =  $user['user_booking_detail']['check_out_time'];
+                    $user['user_booking_detail']['room_booking']['resort_room_id'] =  $user['user_booking_detail']['room_detail']['id'];
+                    $user['user_booking_detail']['room_booking']['room_type']['id'] =  $user['user_booking_detail']['room_type_detail']['id'];
+                    $user['user_booking_detail']['room_booking']['room_type']['name'] =  $user['user_booking_detail']['room_type_detail']['name'];
+                    $user['user_booking_detail']['room_booking']['resort_room']['id'] =  $user['user_booking_detail']['room_detail']['id'];
+                    $user['user_booking_detail']['room_booking']['resort_room']['room_no'] =  $user['user_booking_detail']['room_detail']['room_no'];
+//                    dd($user);
             $banners = Banner::where("is_active", 1)->get();
             $bannerArray = [];
             $i = 0;
@@ -409,6 +419,7 @@ class HomeController extends Controller {
             ];
             return $this->jsonData($response);
         } catch (Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }

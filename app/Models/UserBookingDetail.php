@@ -16,12 +16,12 @@ class UserBookingDetail extends Model {
     ];
 
     public function getRoomTypeDetailAttribute() {
-        $roomType = RoomType::withTrashed()->where("id", $this->room_type_id)->first();
+        $roomType = RoomType::select('id','name', 'description', 'icon')->withTrashed()->where("id", $this->room_type_id)->first();
         return $roomType ? $roomType : (object)[];
     }
 
     public function getRoomDetailAttribute() {
-        $roomDetail = ResortRoom::where("id", $this->resort_room_id)->first();
+        $roomDetail = ResortRoom::select('id','resort_id', 'room_type_id', 'room_no')->where("id", $this->resort_room_id)->first();
         return $roomDetail ? $roomDetail : (object)[];
     }
 
