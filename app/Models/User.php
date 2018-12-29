@@ -71,7 +71,7 @@ class User extends Authenticatable {
     public function getMidNameAttribute($value) {
         return $value == null ? "" : $value;
     }
-    public function getLasNameAttribute($value) {
+    public function getLastNameAttribute($value) {
         return $value == null ? "" : $value;
     }
     public function getScreenNameAttribute($value) {
