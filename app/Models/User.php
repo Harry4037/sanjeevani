@@ -65,6 +65,18 @@ class User extends Authenticatable {
         }
     }
 
+    public function getFirstNameAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getMidNameAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getLasNameAttribute($value) {
+        return $value == null ? "" : $value;
+    }
+    public function getScreenNameAttribute($value) {
+        return $value == null ? "" : $value;
+    }
     public function getUserNameAttribute($value) {
         return $value == null ? "" : $value;
     }
