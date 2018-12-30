@@ -14,6 +14,7 @@ use App\Models\Amenity;
 use App\Models\AmenityRequest;
 use App\Models\AmenityTimeSlot;
 use App\Models\User;
+use App\Models\UserBookingDetail;
 
 class StaffController extends Controller {
 
@@ -112,88 +113,109 @@ class StaffController extends Controller {
      */
     public function serviceRequestListing(Request $request) {
         try {
-            if (!$request->resort_id) {
-                return $this->sendErrorResponse("Resort id missing.", (object) []);
+            //If user account deactivated by admin
+            if ($request->user()->is_active == 0) {
+                return $this->sendErrorResponse("Your account is deactived by admin. Please contact to admin", (object) []);
             }
-            $resort = Resort::where(["id" => $request->resort_id, "is_active" => 1])->first();
+            //If user not registered with any resort
+            $userResort = UserBookingDetail::where("user_id", $request->user()->id)->first();
+            if (!$userResort) {
+                return $this->sendErrorResponse("User not registered with any resort.", (object) []);
+            }
+            //If Resort not exist in our database
+            $resort = Resort::where(["id" => $userResort->resort_id])->first();
             if (!$resort) {
                 return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
+            //If registered resort deactivated by admin.
+            if ($resort->is_active == 0) {
+                return $this->sendErrorResponse("Resort deactivated by admin.", (object) []);
+            }
 
-            $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id', 'created_at')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
-                    ->with([
-                        'questionDetail' => function($query) {
-                            $query->select('id', 'name as question');
-                        }
-                    ])
-                    ->with([
-                        'serviceDetail' => function($query) {
-                            $query->select('id', 'name', 'icon', 'type_id');
-                        }
-                    ])
-                    ->with([
-                        'userDetail' => function($query) {
-                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                            ->with([
-                                'userBookingDetail' => function($query) {
-                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                                }
-                            ]);
-                        }
-                    ])->latest()
-                    ->get();
+            //If services & issues is authorized for user
+            $serviceArray = [];
+            if ($request->user()->is_service_authorise == 1) {
+                $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id', 'created_at')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
+                        ->with([
+                            'questionDetail' => function($query) {
+                                $query->select('id', 'name as question');
+                            }
+                        ])
+                        ->with([
+                            'serviceDetail' => function($query) {
+                                $query->select('id', 'name', 'icon', 'type_id');
+                            }
+                        ])
+                        ->with([
+                            'userDetail' => function($query) {
+                                $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                                ->with([
+                                    'userBookingDetail' => function($query) {
+                                        $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                    }
+                                ]);
+                            }
+                        ])->latest()
+                        ->get();
 
-            $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])
-                    ->with([
-                        'userDetail' => function($query) {
-                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                            ->with([
-                                'userBookingDetail' => function($query) {
-                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id', 'room_type_id', 'resort_room_id');
-                                }
-                            ]);
-                        }
-                    ])->latest()
-                    ->get();
+                foreach ($newServices as $k => $newService) {
+                    $created_at = Carbon::parse($newService->created_at);
+                    $serviceArray[$k]["id"] = $newService->id;
+                    $serviceArray[$k]["service_name"] = $newService->serviceDetail->name;
+                    $serviceArray[$k]["service_comment"] = $newService->comment;
+                    $serviceArray[$k]["service_icon"] = $newService->serviceDetail->icon;
+                    $serviceArray[$k]["user_name"] = $newService->userDetail->user_name;
+                    $serviceArray[$k]["room_no"] = "";
+                    $serviceArray[$k]["created_at"] = $created_at->format('H:i a');
+                }
+            }
 
+            //If Meal order is authorized for user
             $mealDataArray = [];
-            foreach ($mealOrders as $j => $mealOrder) {
-                $mealItems = MealOrderItem::where("meal_order_id", $mealOrder->id)->get();
-                $meal_created_at = Carbon::parse($mealOrder->created_at);
-                $mealDataArray[$j]["id"] = $mealOrder->id;
-                $mealDataArray[$j]["invoice_id"] = $mealOrder->invoice_id;
-                $mealDataArray[$j]["item_total_amount"] = $mealOrder->item_total_amount;
-                $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
-                $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
-                $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
-                $mealDataArray[$j]["room_no"] = "";
-                $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
-                $mealDataArray[$j]["meal_item_count"] = count($mealItems);
-                if ($mealItems) {
-                    foreach ($mealItems as $f => $mealItem) {
-                        $mealImage = MealItem::find($mealItem->meal_item_id);
-                        $mealDataArray[$j]["meal_items"][$f]["id"] = $mealItem->id;
-                        $mealDataArray[$j]["meal_items"][$f]["meal_item_name"] = $mealItem->meal_item_name;
-                        $mealDataArray[$j]["meal_items"][$f]["price"] = $mealItem->price;
-                        $mealDataArray[$j]["meal_items"][$f]["quantity"] = $mealItem->quantity;
-                        $mealDataArray[$j]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
+            if ($request->user()->is_meal_authorise == 1) {
+                $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])
+                        ->with([
+                            'userDetail' => function($query) {
+                                $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                                ->with([
+                                    'userBookingDetail' => function($query) {
+                                        $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id', 'room_type_id', 'resort_room_id');
+                                    }
+                                ]);
+                            }
+                        ])->latest()
+                        ->get();
+
+
+                foreach ($mealOrders as $j => $mealOrder) {
+                    $mealItems = MealOrderItem::where("meal_order_id", $mealOrder->id)->get();
+                    $meal_created_at = Carbon::parse($mealOrder->created_at);
+                    $mealDataArray[$j]["id"] = $mealOrder->id;
+                    $mealDataArray[$j]["invoice_id"] = $mealOrder->invoice_id;
+                    $mealDataArray[$j]["item_total_amount"] = $mealOrder->item_total_amount;
+                    $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
+                    $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
+                    $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
+                    $mealDataArray[$j]["room_no"] = "";
+                    $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
+                    $mealDataArray[$j]["meal_item_count"] = count($mealItems);
+                    if ($mealItems) {
+                        foreach ($mealItems as $f => $mealItem) {
+                            $mealImage = MealItem::find($mealItem->meal_item_id);
+                            $mealDataArray[$j]["meal_items"][$f]["id"] = $mealItem->id;
+                            $mealDataArray[$j]["meal_items"][$f]["meal_item_name"] = $mealItem->meal_item_name;
+                            $mealDataArray[$j]["meal_items"][$f]["price"] = $mealItem->price;
+                            $mealDataArray[$j]["meal_items"][$f]["quantity"] = $mealItem->quantity;
+                            $mealDataArray[$j]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
+                        }
                     }
                 }
             }
 
-            $dataArray = [];
-            foreach ($newServices as $k => $newService) {
-                $created_at = Carbon::parse($newService->created_at);
-                $dataArray[$k]["id"] = $newService->id;
-                $dataArray[$k]["service_name"] = $newService->serviceDetail->name;
-                $dataArray[$k]["service_comment"] = $newService->comment;
-                $dataArray[$k]["service_icon"] = $newService->serviceDetail->icon;
-                $dataArray[$k]["user_name"] = $newService->userDetail->user_name;
-                $dataArray[$k]["room_no"] = "";
-                $dataArray[$k]["created_at"] = $created_at->format('H:i a');
-            }
-
+            //Authorized amenity ids
+            $authoriseAmenityIds = explode("#", $request->user()->authorise_amenities_id);
             $amenities = Amenity::where(["resort_id" => $request->resort_id, "is_active" => 1])
+                    ->whereIn("id", $authoriseAmenityIds)
                     ->latest()
                     ->get();
             $amenitiesDataArray = [];
@@ -204,12 +226,12 @@ class StaffController extends Controller {
                 $amenitiesDataArray[$z]["icon"] = $amenitie->icon;
                 $amenitiesDataArray[$z]["booking_count"] = $amenitiesBookingCount;
             }
-            $data["services"] = $dataArray;
+
+            $data["services"] = $serviceArray;
             $data["meal_orders"] = $mealDataArray;
             $data["amenities"] = $amenitiesDataArray;
             return $this->sendSuccessResponse("Service request found.", $data);
         } catch (\Exception $ex) {
-            dd($ex);
             return $this->administratorResponse();
         }
     }
@@ -286,7 +308,7 @@ class StaffController extends Controller {
             $serviceRequest->accepted_by_id = $request->user_id;
             if ($serviceRequest->save()) {
                 $user = User::find($serviceRequest->user_id);
-               $this->generateNotification($user->id, "Service accepted", "Your service request accepted by our staff member. Our staff will contact you soon.", 1);
+                $this->generateNotification($user->id, "Service accepted", "Your service request accepted by our staff member. Our staff will contact you soon.", 1);
 
                 $this->androidPushNotification(3, "Service Request", "Your request is accepted by our staff member.", $user->device_token, 1, $serviceRequest->service_id);
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
@@ -445,7 +467,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
-                $ongoingJobArray[$i]["status"] = "Pending" ;
+                $ongoingJobArray[$i]["status"] = "Pending";
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
@@ -487,8 +509,8 @@ class StaffController extends Controller {
                     ->get();
 
             $underApprovalJobArray = [];
-            $j=0;
-            foreach ($under_approval_jobs as  $under_approval_job) {
+            $j = 0;
+            foreach ($under_approval_jobs as $under_approval_job) {
                 $created_at = Carbon::parse($under_approval_job->created_at);
                 $underApprovalJobArray[$j]["id"] = $under_approval_job->id;
                 $underApprovalJobArray[$j]["service_name"] = $under_approval_job->serviceDetail->name;
@@ -572,7 +594,7 @@ class StaffController extends Controller {
                     ])
                     ->get();
             $completedJobArray = [];
-            $i=0;
+            $i = 0;
             foreach ($completed_jobs as $completed_job) {
                 $created_at = Carbon::parse($completed_job->created_at);
                 $completedJobArray[$i]["id"] = $completed_job->id;
@@ -701,42 +723,42 @@ class StaffController extends Controller {
             if (!$request->type) {
                 return $this->sendErrorResponse("Type missing", (object) []);
             }
-            if($request->type == 1){
-            $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
-            ;
-            if (!$job) {
-                return $this->sendErrorResponse("Invalid job", (object) []);
-            }
+            if ($request->type == 1) {
+                $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
+                ;
+                if (!$job) {
+                    return $this->sendErrorResponse("Invalid job", (object) []);
+                }
 
-            $job->request_status_id = 3;
-            if ($job->save()) {
-                $user = User::find($job->user_id);
-                $this->generateNotification($job->user_id, "Service Request", "Your service completed by staff member. Please provide your apporval.", 1);
-                $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
-                return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
+                $job->request_status_id = 3;
+                if ($job->save()) {
+                    $user = User::find($job->user_id);
+                    $this->generateNotification($job->user_id, "Service Request", "Your service completed by staff member. Please provide your apporval.", 1);
+                    $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
+                    return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } elseif ($request->type == 4) {
+                $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
+                ;
+                if (!$job) {
+                    return $this->sendErrorResponse("Invalid job", (object) []);
+                }
+
+                $job->status = 3;
+                if ($job->save()) {
+                    $user = User::find($job->user_id);
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
+
+                    $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
+                    return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
             } else {
-                return $this->administratorResponse();
+                return $this->sendErrorResponse("Invalid type.", (object) []);
             }
-        }elseif($request->type == 4){
-            $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
-            ;
-            if (!$job) {
-                return $this->sendErrorResponse("Invalid job", (object) []);
-            }
-
-            $job->status = 3;
-            if ($job->save()) {
-                 $user = User::find($job->user_id);
-                $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
-
-                $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
-                return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
-            } else {
-                return $this->administratorResponse();
-            }
-        }else{
-            return $this->sendErrorResponse("Invalid type.", (object) []);
-        }
         } catch (Exception $ex) {
             return $this->administratorResponse();
         }
@@ -806,42 +828,42 @@ class StaffController extends Controller {
             if (!$request->type) {
                 return $this->sendErrorResponse("Type missing", (object) []);
             }
-            if($request->type== 1){
-            $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
-            ;
-            if (!$job) {
-                return $this->sendErrorResponse("Invalid job", (object) []);
-            }
+            if ($request->type == 1) {
+                $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
+                ;
+                if (!$job) {
+                    return $this->sendErrorResponse("Invalid job", (object) []);
+                }
 
-            $job->request_status_id = 5;
+                $job->request_status_id = 5;
 //            $job->reasons = $request->reasons;
 //            $job->comment = $request->comment;
-            if ($job->save()) {
-                $user = User::find($job->user_id);
-                $this->generateNotification($user->id, "Service Request", "Sorry! your request not resolved by our staff member.", 1);
-                
-                $this->androidPushNotification(3, "Service Request", "Sorry! Your request is not resolved by our staff member.", $user->device_token, 1, $job->service_id);
-                return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
-            } else {
-                return $this->administratorResponse();
-            }
-        }elseif($request->type == 4){
-             $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
-            if (!$job) {
-                return $this->sendErrorResponse("Invalid job", (object) []);
-            }
+                if ($job->save()) {
+                    $user = User::find($job->user_id);
+                    $this->generateNotification($user->id, "Service Request", "Sorry! your request not resolved by our staff member.", 1);
 
-            $job->status = 5;
-            if ($job->save()) {
-                $user = User::find($job->user_id);
-                $this->generateNotification($user->id, "Meal Order", "Sorry! your meal order request rejected by our staff member.", 1);
-                
-                $this->androidPushNotification(3, "Meal Order", "Sorry! your meal order request rejected by our staff member.", $user->device_token, 1, $job->id);
-                return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
-            } else {
-                return $this->administratorResponse();
+                    $this->androidPushNotification(3, "Service Request", "Sorry! Your request is not resolved by our staff member.", $user->device_token, 1, $job->service_id);
+                    return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } elseif ($request->type == 4) {
+                $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
+                if (!$job) {
+                    return $this->sendErrorResponse("Invalid job", (object) []);
+                }
+
+                $job->status = 5;
+                if ($job->save()) {
+                    $user = User::find($job->user_id);
+                    $this->generateNotification($user->id, "Meal Order", "Sorry! your meal order request rejected by our staff member.", 1);
+
+                    $this->androidPushNotification(3, "Meal Order", "Sorry! your meal order request rejected by our staff member.", $user->device_token, 1, $job->id);
+                    return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
             }
-        }
         } catch (Exception $ex) {
             return $this->administratorResponse();
         }
@@ -900,14 +922,14 @@ class StaffController extends Controller {
                 $user = User::find($order->user_id);
                 $msg = "Invalid status.";
                 if ($order->status == -1) {
-                     $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id rejected by our staff member", 4);
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id rejected by our staff member", 4);
                     $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id rejected by our staff member", $user->device_token, 4, $order->id);
 
                     $msg = "Order rejected succeffully.";
                 }
                 if ($order->status == 2) {
-                    
-                     $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by our staff member", 4);
+
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by our staff member", 4);
                     $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by our staff member", $user->device_token, 4, $order->id);
                     $msg = "Order accepted succeffully.";
                 }

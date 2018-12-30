@@ -40,9 +40,6 @@ Route::namespace("Api")->group(function () {
     //Raised service order & request listing
     Route::get('order-request-list', 'ServiceController@userServiceRequest');
 
-    //service order & request listing of specific resort (Staff)
-    Route::get('service-request-list', 'StaffController@serviceRequestListing');
-
     //Amenities listing of specific resort
     Route::get('amenities-list', 'AmenityController@amenitiesListing');
 
@@ -138,12 +135,19 @@ Route::namespace("Api")->group(function () {
 
         //Order accepted or rejected(staff member)
         Route::post('accept-reject-meal-order', 'StaffController@acceptRejectOrder');
+
         //Cancel HealthcarePackage
         Route::post('cancel-package', 'HealthcareProgramController@cancelHealthcareProgram');
 
+        //service order & request listing of specific resort (Staff)
+        Route::get('service-request-list', 'StaffController@serviceRequestListing');
+
         Route::post('check-in', 'UserController@checkIn');
+
         Route::get('logout', 'AuthController@logout');
+
         Route::post('update-profile', 'UserController@updateProfile');
+
         Route::post('change-password', 'UserController@changesPassword');
     });
 });

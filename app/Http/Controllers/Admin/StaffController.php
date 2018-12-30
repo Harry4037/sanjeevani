@@ -12,6 +12,7 @@ use App\Models\Resort;
 use App\Models\UserBookingDetail;
 use App\Models\StateMaster;
 use App\Models\CityMaster;
+use App\Models\Amenity;
 
 class StaffController extends Controller {
 
@@ -124,11 +125,22 @@ class StaffController extends Controller {
                         ->first();
 
                 if ($userExist) {
-                    return redirect()->route('admin.staff.index')->with('error', 'User already exists with thin mobile number');
+                    return redirect()->route('admin.staff.add')->with('error', 'User already exists with this mobile number.');
                 } else {
                     $name = explode(" ", $request->staff_name);
 
                     $user = $this->user;
+                    if ($request->is_service_authorise == "on") {
+                        $user->is_service_authorise = 1;
+                    }
+                    if ($request->is_meal_authorise == "on") {
+                        $user->is_meal_authorise = 1;
+                    }
+                    if (!empty($request->amenity_ids)) {
+                        $user->authorise_amenities_id = implode("#", $request->amenity_ids);
+                    }
+                    $user->otp = 9999;
+                    $user->password = bcrypt(9999);
                     $user->user_type_id = 2;
                     $user->user_name = $request->staff_name;
                     $user->first_name = isset($name[0]) ? $name[0] : '';
@@ -150,13 +162,24 @@ class StaffController extends Controller {
                         $userBooking->package_id = 0;
                         $userBooking->save();
                         return redirect()->route('admin.staff.index')->with('status', 'User has been added successfully');
+                    } else {
+                        return redirect()->route('admin.staff.add')->with('error', 'Something went be wrong.');
                     }
                 }
             }
 
+            $css = [
+                "vendors/iCheck/skins/flat/green.css",
+            ];
+            $js = [
+                'vendors/iCheck/icheck.min.js',
+            ];
+
             $resorts = Resort::where("is_active", 1)->get();
             $states = StateMaster::all();
             return view('admin.staff.add-user', [
+                'css' => $css,
+                'js' => $js,
                 'resorts' => $resorts,
                 'states' => $states,
             ]);
@@ -169,33 +192,44 @@ class StaffController extends Controller {
         try {
             $user = User::find($id);
             $userBooking = UserBookingDetail::where("user_id", $id)->first();
-
             if ($request->isMethod("post")) {
-                $validator = Validator::make($request->all(), [
-                            'staff_name' => 'bail|required',
-                            'staff_mobile_no' => 'bail|required|numeric',
-                            'staff_email' => 'bail|required|email',
-                            'resort_id' => 'bail|required',
-                            'staff_address' => 'bail|required',
-                            'city' => 'bail|required',
-                            'pin_code' => 'bail|required',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->route('admin.staff.index')->withErrors($validator);
+
+                $name = explode(" ", $request->staff_name);
+
+                if ($request->is_service_authorise == "on") {
+                    $user->is_service_authorise = 1;
+                }
+                if ($request->is_meal_authorise == "on") {
+                    $user->is_meal_authorise = 1;
+                }
+                if (!empty($request->amenity_ids)) {
+                    $user->authorise_amenities_id = implode("#", $request->amenity_ids);
                 }
 
-                $name = explode(" ", $request->user_name);
-
-                $user->user_name = $request->user_name;
+                $user->otp = 9999;
+                $user->password = bcrypt(9999);
+                $user->user_name = $request->staff_name;
                 $user->first_name = isset($name[0]) ? $name[0] : '';
                 $user->last_name = isset($name[1]) ? $name[1] : '';
-                $user->mobile_number = $request->mobile_number;
-                $user->email_id = $request->email_id;
+                $user->mobile_number = $request->staff_mobile_no;
+                $user->email_id = $request->staff_email;
                 $user->created_by = 1;
                 $user->updated_by = 1;
 
                 if ($user->save()) {
-                    return redirect()->route('admin.users.edit', $id)->with('status', 'User has been updated successfully');
+                    if (!$userBooking) {
+                        $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
+                    }
+                    $userBooking->source_name = ' ';
+                    $userBooking->source_id = ' ';
+                    $userBooking->user_id = $user->id;
+                    $userBooking->resort_id = $request->resort_id;
+                    $userBooking->package_id = 0;
+                    $userBooking->save();
+
+                    return redirect()->route('admin.staff.index')->with('status', 'Staff has been updated successfully.');
+                } else {
+                    return redirect()->route('admin.staff.index', $id)->with('error', 'Something went be wrong.');
                 }
             }
 
@@ -204,21 +238,58 @@ class StaffController extends Controller {
             if (isset($selectedCity->state->id)) {
                 $userCites = CityMaster::where("state_id", $selectedCity->state->id)->get();
             }
-//            dd($selectedCity->toArray());
+            $selectedResortAmenities = [];
+            if ($userBooking) {
+                $selectedResortAmenities = Amenity::where(["is_active" => 1, "resort_id" => $userBooking->resort_id])->get();
+            }
+            $authoriseAmenity = explode("#", $user->authorise_amenities_id);
             $resorts = Resort::where("is_active", 1)->get();
             $states = StateMaster::all();
+            $css = [
+                "vendors/iCheck/skins/flat/green.css",
+            ];
+            $js = [
+                'vendors/iCheck/icheck.min.js',
+            ];
             return view('admin.staff.edit-user', [
+                'css' => $css,
+                'js' => $js,
                 'states' => $states,
                 'resorts' => $resorts,
                 'user' => $user,
                 'userBooking' => $userBooking,
                 'selectedCity' => $selectedCity,
                 'userCites' => $userCites,
+                'selectedResortAmenities' => $selectedResortAmenities,
+                'authoriseAmenity' => $authoriseAmenity,
                     ]
             );
         } catch (\Exception $ex) {
-//            dd($ex);
             return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
+        }
+    }
+
+    public function getAmenities(Request $request) {
+        try {
+            if ($request->isMethod("post")) {
+                $css = [
+                    "vendors/iCheck/skins/flat/green.css",
+                ];
+                $js = [
+                    "vendors/jquery/dist/jquery.min.js",
+                    'vendors/iCheck/icheck.min.js',
+                ];
+
+                $resort_id = $request->get("resort_id");
+                $amenities = Amenity::where(["resort_id" => $resort_id, "is_active" => 1])->get();
+                return view("admin.staff.amenity-list", [
+                    "amenities" => $amenities,
+                    "css" => $css,
+                    "js" => $js,
+                ]);
+            }
+        } catch (Exception $ex) {
+            dd($ex);
         }
     }
 
