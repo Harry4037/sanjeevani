@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                 </div>
                 <h2>Meal Management</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.meal.add') }}">Add Meal</a>
+                    <a class="btn btn-success" href="{{ route('subadmin.meal.add') }}">Add Meal</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -45,7 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/meal/list",
+            ajax: _baseUrl + "/sub-admin/meal/list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -77,7 +77,7 @@
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/meal/update-status',
+                url: _baseUrl + '/sub-admin/meal/update-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
@@ -103,7 +103,7 @@
             bootbox.confirm("Are you sure want to delete this meal item?", function (result) {
                 if (result) {
                     $.ajax({
-                        url: _baseUrl + '/admin/meal/delete',
+                        url: _baseUrl + '/sub-admin/meal/delete',
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',

@@ -33,237 +33,174 @@ class HomeController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-      {
-      "status": true,
-      "status_code": 200,
-      "message": "service successfully access.",
-      "data": {
-      "user": {
-      "id": 5,
-      "user_name": "Ankit gangwar",
-      "mobile_number": "5555555555",
-      "email_id": "ankit@mail.com",
-      "voter_id": "",
-      "aadhar_id": "",
-      "address1": "",
-      "city_id": 0,
-      "user_type_id": 3,
-      "no_of_rooms": "1",
-      "user_health_detail": {
-      "id": 1,
-      "user_id": 5,
-      "medical_documents": "http://127.0.0.1:8000/storage/medical_document/xEQs2e8AiANXf0cRvUNSfdTG4Jzr47c3WoDd1oNm.jpeg",
-      "fasting": "fasting",
-      "bp": "BP",
-      "insullin_dependency": "Insuline",
-      "diabeties": "yes",
-      "ppa": "yes",
-      "hba_1c": "yes"
-      },
-      "user_booking_detail": {
-      "id": 1,
-      "room_type_id": 1,
-      "resort_room_id": 1,
-      "user_id": 5,
-      "booking_id": "QWERTY12345",
-      "source_name": "Makemy trip",
-      "resort_id": 1,
-      "package_id": 1,
-      "check_in": "23-12-2018",
-      "check_in_time": "12:00:00 AM",
-      "check_out": "31-12-2018",
-      "check_out_time": "01:00:00 AM",
-      "resort": {
-      "id": 1,
-      "name": "Grand Dragon Ladakh",
-      "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took</p>",
-      "contact_number": "9808243372",
-      "address_1": "city center of Leh"
-      },
-      "bookingpeople_accompany": [
-      {
-      "id": 1,
-      "person_name": "Ankit",
-      "person_age": "25",
-      "person_type": "Adult"
-      }
-      ],
-      "room_type_detail": {
-      "id": 1,
-      "name": "Tent",
-      "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took</p>",
-      "icon": "http://127.0.0.1:8000/storage/room_icon/uQHZEASJzM7ovwjcO9kLMJ0mcSRvZAOqDKEf74MU.png",
-      "is_active": 1,
-      "domain_id": 0,
-      "created_by": "1",
-      "updated_by": "1",
-      "created_at": "2018-12-19 18:50:41",
-      "updated_at": "2018-12-19 18:50:41",
-      "deleted_at": null
-      },
-      "room_detail": {
-      "id": 1,
-      "resort_id": 1,
-      "room_type_id": 1,
-      "room_no": "100",
-      "other_detail": null,
-      "is_active": 1,
-      "domain_id": 0,
-      "created_by": "1",
-      "updated_by": "1",
-      "created_at": "2018-12-19 18:52:55",
-      "updated_at": "2018-12-19 18:52:55"
-      }
-      }
-      },
-      "banners": [
-      {
-      "id": 1,
-      "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/YhliQQRrsZwnFVanTfxCWa0w2z9PyMQax4c4KLuX.jpeg"
-      },
-      {
-      "id": 2,
-      "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/KKL4cFe51jnyavdwSjOqu5SjMrXXqxczAHc476bj.jpeg"
-      },
-      {
-      "id": 3,
-      "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/km3wD8615JmSVxILarH4D49RBtQJ6yzpLbAHmf2L.jpeg"
-      },
-      {
-      "id": 4,
-      "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/jDHvovp4xMjhPhSVVEXRzTqg6GScme1l2gn9bnej.jpeg"
-      },
-      {
-      "id": 5,
-      "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/e0CvLts9IZj3zOELnukXtDBaX06wDxfqAr8kpVrL.jpeg"
-      },
-      {
-      "id": 6,
-      "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/QbCKc9qNOOlJ8rgOCyXTuYRSt5RkXFIWGc6LtQdC.jpeg"
-      }
-      ],
-      "nearby_attaractions": [
-      {
-      "id": 6,
-      "name": "iouoiyiuyoiuy",
-      "description": "<p>,mnm,nuoijlk</p>",
-      "distance": 56,
-      "precautions": "<p>iuiyugbvhjvhjff</p>",
-      "address": "oiuyryerwsresxdf",
-      "latitude": "28.608510",
-      "longitude": "77.347370",
-      "images": [
-      {
-      "id": 6,
-      "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/NnsTbodWaaavDkF4TTT8uCwNhzknzja4wEXBqblF.jpeg"
-      }
-      ]
-      },
-      {
-      "id": 5,
-      "name": "nbvctryfghj",
-      "description": "<p>nbv hgifyutg</p>",
-      "distance": 54,
-      "precautions": "<p>yutyugfvngcvbcvb</p>",
-      "address": "uyutyuyu",
-      "latitude": "28.608510",
-      "longitude": "77.347370",
-      "images": [
-      {
-      "id": 5,
-      "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/0OM7dJUc4hvee6XODrTEz1do3QnpetWDMlHbTlC9.jpeg"
-      }
-      ]
-      },
-      {
-      "id": 4,
-      "name": "tyutuu",
-      "description": "<p>,mnbnlj;olkm.,</p>",
-      "distance": 67,
-      "precautions": "<p>lkjhvbnm</p>",
-      "address": "oiuupo",
-      "latitude": "28.608510",
-      "longitude": "77.347370",
-      "images": [
-      {
-      "id": 4,
-      "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/InbCIqWMFZv2Fd4is9xuYu7Y0tIVt2cmUar2lIbu.jpeg"
-      }
-      ]
-      },
-      {
-      "id": 3,
-      "name": "ghfuytyutyi",
-      "description": "<p>&#39;lkjhkiuyoiuhjlkn,m</p>",
-      "distance": 54,
-      "precautions": "<p>kjlllpoilkj.,m</p>",
-      "address": "poiuyoi",
-      "latitude": "28.608510",
-      "longitude": "77.347370",
-      "images": [
-      {
-      "id": 3,
-      "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/nDdH33B6epsxxb6UnVNDQNy9dEfk0enThmOL5Ng7.jpeg"
-      }
-      ]
-      },
-      {
-      "id": 2,
-      "name": "Sonbhadra",
-      "description": "<p>dfdsfd;lkjh</p>",
-      "distance": 123,
-      "precautions": "<p>lkjhvvbn ,m.</p>",
-      "address": "city center of Leh",
-      "latitude": "28.608510",
-      "longitude": "77.347370",
-      "images": [
-      {
-      "id": 2,
-      "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/gpUMWc6KUQIOtsNDPkaqyBqqb6dyUiEi2dY4l8GK.jpeg"
-      }
-      ]
-      }
-      ],
-      "best_offers": [],
-      "health_care": [
-      {
-      "id": 1,
-      "name": "Healthcare Package",
-      "description": "<p>dfsdsadsa</p>",
-      "start_from": "26-12-2018",
-      "end_to": "26-12-2018",
-      "total_days": 3,
-      "healthcare_images": [
-      {
-      "id": 1,
-      "banner_image_url": "http://127.0.0.1:8000/storage/healthcare_images/ss8zkcOBsoRl09sn3BaMWclhigzKNWeX7GurYiFj.jpeg",
-      "health_program_id": 1
-      }
-      ],
-      "healthcare_days": [
-      {
-      "id": 1,
-      "day": "1",
-      "description": "<p>ersfsd</p>",
-      "health_program_id": 1
-      },
-      {
-      "id": 2,
-      "day": "2",
-      "description": "<p>kjhkjhkl</p>",
-      "health_program_id": 1
-      },
-      {
-      "id": 3,
-      "day": "3",
-      "description": "<p>hlkj</p>",
-      "health_program_id": 1
-      }
-      ]
-      }
-      ]
-      }
-      }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "service successfully access.",
+     *       "data": {
+     *           "user": {
+     *               "id": 2,
+     *               "user_name": "Hariom G",
+     *               "mobile_number": "9999999999",
+     *               "email_id": "hariom4037@mail.com",
+     *               "voter_id": "",
+     *               "aadhar_id": "7SKegf9AESUmVrLhzoWsiEG9xL5RFbwkQyAFPx0J.jpeg",
+     *               "address1": "",
+     *               "city_id": 26,
+     *               "user_type_id": 3,
+     *               "no_of_rooms": "1",
+     *               "user_health_detail": {
+     *                   "id": 1,
+     *                   "user_id": 2,
+     *                   "medical_documents": "http://127.0.0.1:8000/storage/medical_document/kXWzl0GYEMojSAMPiLHLOvPpuC9ToOm8hKStnwh8.png",
+     *                   "fasting": "FF",
+     *                   "bp": "BP",
+     *                   "insullin_dependency": "Ins",
+     *                   "diabeties": "yes",
+     *                   "ppa": "yes",
+     *                   "hba_1c": "yes"
+     *               },
+     *               "user_booking_detail": {
+     *                   "id": 5,
+     *                   "room_type_id": 1,
+     *                   "resort_room_id": 1,
+     *                   "user_id": 2,
+     *                   "booking_id": "AAAA",
+     *                   "source_name": "AAAA",
+     *                   "resort_id": 1,
+     *                   "package_id": 1,
+     *                   "check_in": "28-12-2018",
+     *                   "check_in_time": "12:00:00 AM",
+     *                   "check_out": "10-01-2019",
+     *                   "check_out_time": "10:00:00 AM",
+     *                   "resort": {
+     *                       "id": 1,
+     *                       "name": "Resort",
+     *                       "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *                       "contact_number": "9999999999",
+     *                       "address_1": "Sector 66"
+     *                   },
+     *                   "bookingpeople_accompany": [
+     *                       {
+     *                           "id": 4,
+     *                           "person_name": "Anhu",
+     *                           "person_age": "25",
+     *                           "person_type": "Adult"
+     *                       }
+     *                   ],
+     *                   "room_type_detail": {
+     *                       "id": 1,
+     *                       "name": "Tent",
+     *                       "description": "<p>sadasdsa</p>",
+     *                       "icon": "http://127.0.0.1:8000/storage/room_icon"
+     *                   },
+     *                   "room_detail": {
+     *                       "id": 1,
+     *                       "resort_id": 1,
+     *                       "room_type_id": 1,
+     *                       "room_no": "100"
+     *                   }
+     *               }
+     *           },
+     *           "banners": [
+     *               {
+     *                   "id": 1,
+     *                   "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/hZXHtETg3LcSSehejZEuhVjOZj4GMWEArtjYADXJ.jpeg"
+     *               },
+     *               {
+     *                   "id": 2,
+     *                   "banner_image_url": "http://127.0.0.1:8000/storage/banner_images/xf43HtQsPBdCYfl2wEMmXlUlrR1R1puqTmfDTXmV.jpeg"
+     *               }
+     *           ],
+     *           "nearby_attaractions": [
+     *               {
+     *                   "id": 1,
+     *                   "name": "Nearby place",
+     *                   "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+     *                   "distance": 10,
+     *                   "precautions": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+     *                   "address": "Sector 153",
+     *                   "latitude": "28.608510",
+     *                   "longitude": "77.347370",
+     *                   "images": [
+     *                       {
+     *                           "id": 1,
+     *                           "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/v1HPQZG75jz1rawM10ad7lrWfmqSdszNGemUfbBV.jpeg"
+     *                       },
+     *                       {
+     *                           "id": 2,
+     *                           "banner_image_url": "http://127.0.0.1:8000/storage/nearby_images/rIbJW533fPlYfkntRiIFPe018QmlVBprAsKEcoJ1.jpeg"
+     *                       }
+     *                   ]
+     *               }
+     *           ],
+     *           "best_offers": [
+     *               {
+     *                   "id": 1,
+     *                   "name": "Offer",
+     *                   "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *                   "valid_to": "Dec-31-2018",
+     *                   "price": 5000,
+     *                   "discount": "10% OFF",
+     *                   "discounted_price": 4500,
+     *                   "offer_images": [
+     *                       {
+     *                           "id": 1,
+     *                           "banner_image_url": "http://127.0.0.1:8000/storage/offer_images/9woaFJJx8VltYghdtHGR96v7CVi5ggZB9zfi8yf7.jpeg",
+     *                           "offer_id": 1
+     *                       },
+     *                       {
+     *                           "id": 2,
+     *                           "banner_image_url": "http://127.0.0.1:8000/storage/offer_images/tpUoMuqQiSHeSZkX7QpdouVBuWUyTTUOqoOf0Egk.jpeg",
+     *                           "offer_id": 1
+     *                       }
+     *                   ]
+     *               }
+     *           ],
+     *           "health_care": [
+     *               {
+     *                   "id": 1,
+     *                   "name": "Package Name",
+     *                   "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *                   "start_from": "01-12-2018",
+     *                   "end_to": "30-11-2018",
+     *                   "total_days": 3,
+     *                   "healthcare_images": [
+     *                       {
+     *                           "id": 1,
+     *                           "banner_image_url": "http://127.0.0.1:8000/storage/healthcare_images/3mkKFRMJ74O3DQ8UydMZ136D48FLeZisIUZXhvPD.jpeg",
+     *                           "health_program_id": 1
+     *                       },
+     *                       {
+     *                           "id": 2,
+     *                           "banner_image_url": "http://127.0.0.1:8000/storage/healthcare_images/0LYAujZECGPXJlPsLiMQkspV2VVad3a3yxko17fP.jpeg",
+     *                           "health_program_id": 1
+     *                       }
+     *                   ],
+     *                   "healthcare_days": [
+     *                       {
+     *                           "id": 1,
+     *                           "day": "1",
+     *                           "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *                           "health_program_id": 1
+     *                       },
+     *                       {
+     *                           "id": 2,
+     *                           "day": "2",
+     *                           "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *                           "health_program_id": 1
+     *                       },
+     *                       {
+     *                           "id": 3,
+     *                           "day": "3",
+     *                           "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
+     *                           "health_program_id": 1
+     *                       }
+     *                   ]
+     *               }
+     *           ]
+     *       }
+     *   }
      * 
      * 
      * 
@@ -289,34 +226,34 @@ class HomeController extends Controller {
                                     $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
                                 }
                             ])
-                            ->first()->toArray();
-            if ($user['user_type_id'] == 4) {
-                $user['user_health_detail'] = null;
-                $user['user_booking_detail'] = null;
-            } else {
-                if(empty($user['user_health_detail'])){
-                    $user['user_health_detail']["id"] = "";
-                    $user['user_health_detail']["user_id"] = "";
-                    $user['user_health_detail']["medical_documents"] = "";
-                    $user['user_health_detail']["fasting"] = "";
-                    $user['user_health_detail']["bp"] = "";
-                    $user['user_health_detail']["insullin_dependency"] = "";
-                    $user['user_health_detail']["diabeties"] = "";
-                    $user['user_health_detail']["ppa"] = "";
-                    $user['user_health_detail']["hba_1c"] = "";
-                }
-                
-                $user['user_booking_detail']['room_booking']['id'] = isset($user['user_booking_detail']['id']) ? $user['user_booking_detail']['id'] : "";
-                $user['user_booking_detail']['room_booking']['check_in'] = isset($user['user_booking_detail']['check_in']) ? $user['user_booking_detail']['check_in'] : "";
-                $user['user_booking_detail']['room_booking']['check_in_time'] = isset($user['user_booking_detail']['check_in_time']) ? $user['user_booking_detail']['check_in_time'] : "";
-                $user['user_booking_detail']['room_booking']['check_out'] = isset($user['user_booking_detail']['check_out']) ? $user['user_booking_detail']['check_out'] : "";
-                $user['user_booking_detail']['room_booking']['check_out_time'] = isset($user['user_booking_detail']['check_out_time']) ? $user['user_booking_detail']['check_out_time'] : "";
-                $user['user_booking_detail']['room_booking']['resort_room_id'] = isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
-                $user['user_booking_detail']['room_booking']['room_type']['id'] = isset($user['user_booking_detail']['room_type_detail']['id']) ? $user['user_booking_detail']['room_type_detail']['id'] : "";
-                $user['user_booking_detail']['room_booking']['room_type']['name'] = isset($user['user_booking_detail']['room_type_detail']['name']) ? $user['user_booking_detail']['room_type_detail']['name'] : "";
-                $user['user_booking_detail']['room_booking']['resort_room']['id'] = isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
-                $user['user_booking_detail']['room_booking']['resort_room']['room_no'] = isset($user['user_booking_detail']['room_detail']['room_no']) ? $user['user_booking_detail']['room_detail']['room_no'] : "";
-            }
+                            ->first();
+//            if ($user['user_type_id'] == 4) {
+//                $user['user_health_detail'] = null;
+//                $user['user_booking_detail'] = null;
+//            } else {
+//                if(empty($user['user_health_detail'])){
+//                    $user['user_health_detail']["id"] = "";
+//                    $user['user_health_detail']["user_id"] = "";
+//                    $user['user_health_detail']["medical_documents"] = "";
+//                    $user['user_health_detail']["fasting"] = "";
+//                    $user['user_health_detail']["bp"] = "";
+//                    $user['user_health_detail']["insullin_dependency"] = "";
+//                    $user['user_health_detail']["diabeties"] = "";
+//                    $user['user_health_detail']["ppa"] = "";
+//                    $user['user_health_detail']["hba_1c"] = "";
+//                }
+//                
+//                $user['user_booking_detail']['room_booking']['id'] = isset($user['user_booking_detail']['id']) ? $user['user_booking_detail']['id'] : "";
+//                $user['user_booking_detail']['room_booking']['check_in'] = isset($user['user_booking_detail']['check_in']) ? $user['user_booking_detail']['check_in'] : "";
+//                $user['user_booking_detail']['room_booking']['check_in_time'] = isset($user['user_booking_detail']['check_in_time']) ? $user['user_booking_detail']['check_in_time'] : "";
+//                $user['user_booking_detail']['room_booking']['check_out'] = isset($user['user_booking_detail']['check_out']) ? $user['user_booking_detail']['check_out'] : "";
+//                $user['user_booking_detail']['room_booking']['check_out_time'] = isset($user['user_booking_detail']['check_out_time']) ? $user['user_booking_detail']['check_out_time'] : "";
+//                $user['user_booking_detail']['room_booking']['resort_room_id'] = isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
+//                $user['user_booking_detail']['room_booking']['room_type']['id'] = isset($user['user_booking_detail']['room_type_detail']['id']) ? $user['user_booking_detail']['room_type_detail']['id'] : "";
+//                $user['user_booking_detail']['room_booking']['room_type']['name'] = isset($user['user_booking_detail']['room_type_detail']['name']) ? $user['user_booking_detail']['room_type_detail']['name'] : "";
+//                $user['user_booking_detail']['room_booking']['resort_room']['id'] = isset($user['user_booking_detail']['room_detail']['id']) ? $user['user_booking_detail']['room_detail']['id'] : "";
+//                $user['user_booking_detail']['room_booking']['resort_room']['room_no'] = isset($user['user_booking_detail']['room_detail']['room_no']) ? $user['user_booking_detail']['room_detail']['room_no'] : "";
+//            }
             $banners = Banner::where("is_active", 1)->get();
             $bannerArray = [];
             $i = 0;
@@ -427,7 +364,7 @@ class HomeController extends Controller {
             $response['status_code'] = 200;
             $response['message'] = "service successfully access.";
             $response['data'] = [
-                "user" => $user ? $user : (object) [],
+                "user" => $user ? $user->toArray() : (object) [],
                 "banners" => $bannerArray,
                 "nearby_attaractions" => $nearbyArray,
                 "best_offers" => $offerArray,

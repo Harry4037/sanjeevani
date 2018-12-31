@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -12,7 +12,7 @@
             </div>
             <div class="x_content">
                 <br>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.meal-category.add') }}" method="post" id="addMealcategoryForm">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.meal-category.add') }}" method="post" id="addMealcategoryForm">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Category Name</label>
@@ -24,7 +24,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route('admin.meal-category.index') }}">Cancel</a>
+                            <a class="btn btn-default" href="{{ route('subadmin.meal-category.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>

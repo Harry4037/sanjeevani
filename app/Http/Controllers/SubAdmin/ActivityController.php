@@ -23,7 +23,7 @@ class ActivityController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.activity.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.activity.index', ['js' => $js, 'css' => $css]);
     }
 
     public function activityList(Request $request) {
@@ -33,6 +33,7 @@ class ActivityController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = Activity::query();
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -51,7 +52,7 @@ class ActivityController extends Controller {
                 $checked_status = $amenity->is_active ? "checked" : '';
                 $resortsArray[$i]['resort_name'] = $resort->name;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='amenity_status' id=" . $amenity->id . " data-status=" . $amenity->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $resortsArray[$i]['action'] = '<a href="' . route('admin.activity.edit', $amenity->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                $resortsArray[$i]['action'] = '<a href="' . route('subadmin.activity.edit', $amenity->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $amenity->id . '" ><i class="fa fa-trash"></i> Delete </a>';
                 $i++;
             }
@@ -72,13 +73,13 @@ class ActivityController extends Controller {
                             'amenity_name' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.activity.index')->withErrors($validator)->withInput();
                 }
                 $amenity = new Activity();
 
                 $amenity->name = $request->amenity_name;
                 $amenity->description = $request->amenity_description;
-                $amenity->resort_id = $request->resort_id;
+                $amenity->resort_id = $request->get("subadminResort");
                 $amenity->address = $request->address;
                 $amenity->latitude = $request->latitude;
                 $amenity->longitude = $request->longitude;
@@ -105,9 +106,9 @@ class ActivityController extends Controller {
                     }
 
 
-                    return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                    return redirect()->route('subadmin.activity.index')->with('status', 'Activity has been added successfully.');
                 } else {
-                    return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('subadmin.activity.index')->with('error', 'Something went be wrong.');
                 }
             }
             $css = [
@@ -120,13 +121,13 @@ class ActivityController extends Controller {
                 'vendors/dropzone/dist/dropzone.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
-            return view('admin.activity.create', [
+            return view('subadmin.activity.create', [
                 'js' => $js,
                 'css' => $css,
                 'resorts' => $resorts,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.activity.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.activity.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -166,11 +167,11 @@ class ActivityController extends Controller {
                         'amenity_name' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.activity.index')->withErrors($validator)->withInput();
             }
             $amenity->name = $request->amenity_name;
             $amenity->description = $request->amenity_description;
-            $amenity->resort_id = $request->resort_id;
+//            $amenity->resort_id = $request->resort_id;
             $amenity->address = $request->address;
             $amenity->latitude = $request->latitude;
             $amenity->longitude = $request->longitude;
@@ -198,9 +199,9 @@ class ActivityController extends Controller {
                 }
 
 
-                return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                return redirect()->route('subadmin.activity.index')->with('status', 'Activity has been added successfully.');
             } else {
-                return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.activity.index')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
@@ -215,7 +216,7 @@ class ActivityController extends Controller {
         $resorts = Resort::where("is_active", 1)->get();
         $amenityImages = ActivityImage::where("amenity_id", $amenity->id)->get();
         $timeSlots = ActivityTimeSlot::where("amenity_id", $amenity->id)->get();
-        return view('admin.activity.edit', [
+        return view('subadmin.activity.edit', [
             'css' => $css,
             'js' => $js,
             'resorts' => $resorts,

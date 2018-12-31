@@ -21,7 +21,7 @@ class SOSController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.sos.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.sos.index', ['js' => $js, 'css' => $css]);
     }
 
     public function sosList(Request $request) {
@@ -61,18 +61,18 @@ class SOSController extends Controller {
                         'content' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.cms.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.cms.index')->withErrors($validator)->withInput();
             }
             $cms->content = $request->content;
             
             if ($cms->save()) {
                 
-                return redirect()->route('admin.cms.edit', $cms->id)->with('status', 'Paget has been update successfully.');
+                return redirect()->route('subadmin.cms.edit', $cms->id)->with('status', 'Paget has been update successfully.');
             } else {
-                return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.activity.index')->with('error', 'Something went be wrong.');
             }
         }
-        return view('admin.cms.edit', [
+        return view('subadmin.cms.edit', [
             'cms' => $cms,
         ]);
     }

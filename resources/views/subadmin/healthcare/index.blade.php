@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                 </div>
                 <h2>Healthcare Package Management</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.healthcare.add') }}">Add Healthcare Package</a>
+                    <a class="btn btn-success" href="{{ route('subadmin.healthcare.add') }}">Add Healthcare Package</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -45,7 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/healthcare/healthcare-list",
+            ajax: _baseUrl + "/sub-admin/healthcare/healthcare-list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -77,7 +77,7 @@
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/healthcare/update-status',
+                url: _baseUrl + '/sub-admin/healthcare/update-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
@@ -103,7 +103,7 @@
             bootbox.confirm("Are you sure want to delete this healthcare package?", function (result) {
                 if (result) {
                     $.ajax({
-                        url: _baseUrl + '/admin/healthcare/delete',
+                        url: _baseUrl + '/sub-admin/healthcare/delete',
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',

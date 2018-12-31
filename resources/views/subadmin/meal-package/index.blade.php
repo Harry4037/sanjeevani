@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                 </div>
                 <h2>Meal Package Management</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.meal-package.add') }}">Add Meal Package</a>
+                    <a class="btn btn-success" href="{{ route('subadmin.meal-package.add') }}">Add Meal Package</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -45,7 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/meal-package/list",
+            ajax: _baseUrl + "/sub-admin/meal-package/list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -77,7 +77,7 @@
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/meal-package/update-status',
+                url: _baseUrl + '/sub-admin/meal-package/update-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
@@ -103,7 +103,7 @@
             bootbox.confirm("Are you sure want to delete this meal package?", function (result) {
                 if (result) {
                     $.ajax({
-                        url: _baseUrl + '/admin/meal-package/delete',
+                        url: _baseUrl + '/sub-admin/meal-package/delete',
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',

@@ -21,6 +21,7 @@ class StaffController extends Controller {
     /**
      * @api {get} /api/service-request-list Service Request Listing
      * @apiHeader {String} Accept application/json.
+     * @apiHeader {String} Authorization Users unique access-token.
      * @apiName PostServicerequestlist
      * @apiGroup Staff Service
      * 
@@ -945,6 +946,7 @@ class StaffController extends Controller {
     /**
      * @api {get} /api/amenities-bookings-details Amenity bookings detail.
      * @apiHeader {String} Accept application/json.
+     * @apiHeader {String} Authorization Users unique access-token.
      * @apiName getAmenityBookingsDetail
      * @apiGroup Staff Service
      * 

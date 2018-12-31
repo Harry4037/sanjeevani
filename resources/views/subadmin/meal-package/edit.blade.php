@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -12,25 +12,9 @@
             </div>
             <div class="x_content">
                 <br>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.meal-package.edit', $data->id) }}" method="post" id="editMealpackageForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.meal-package.edit', $data->id) }}" method="post" id="editMealpackageForm" enctype="multipart/form-data">
                     @csrf
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="resort_id" name="resort_id">
-                                <option value="">Select option</option>
-                                @if($resorts)
-                                @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}"
-                                        @if($data->resort_id == $resort->id)
-                                        {{ "selected" }} 
-                                        @endif
-                                        >{{ $resort->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -89,7 +73,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route('admin.meal-package.index') }}">Cancle</a>
+                            <a class="btn btn-default" href="{{ route('subadmin.meal-package.index') }}">Cancle</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -134,7 +118,7 @@
             var record_id = $("#resort_id :selected").val();
             if (record_id) {
                 $.ajax({
-                    url: _baseUrl + '/admin/meal-package/meal-items',
+                    url: _baseUrl + '/sub-admin/meal-package/meal-items',
                     type: 'post',
                     data: {record_id: record_id},
                     dataType: 'html',

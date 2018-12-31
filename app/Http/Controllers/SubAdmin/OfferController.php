@@ -21,7 +21,7 @@ class OfferController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.offer.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.offer.index', ['js' => $js, 'css' => $css]);
     }
 
     public function offerList(Request $request) {
@@ -31,6 +31,7 @@ class OfferController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = offer::query();
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -49,7 +50,7 @@ class OfferController extends Controller {
                 $checked_status = $offer->is_active ? "checked" : '';
                 $offerArray[$key]['resort_name'] = isset($resort->name) ? $resort->name : "Generalized Offer";
                 $offerArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='amenity_status' id=" . $offer->id . " data-status=" . $offer->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $offerArray[$key]['action'] = '<a href="' . route('admin.offer.edit', $offer->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                $offerArray[$key]['action'] = '<a href="' . route('subadmin.offer.edit', $offer->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $offer->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -72,13 +73,13 @@ class OfferController extends Controller {
                             'valid_to' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.offer.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.offer.index')->withErrors($validator)->withInput();
                 }
                 $offer = new Offer();
 
                 $offer->name = $request->offer_name;
                 $offer->description = $request->offer_description;
-                $offer->resort_id = $request->resort_id;
+                $offer->resort_id = $request->get("subadminResort");
                 $offer->price = $request->price;
                 $offer->discount_percentage = $request->discount;
                 $offer->calculated_discount = (((int) $request->price) * ((int) $request->discount / 100));
@@ -92,9 +93,9 @@ class OfferController extends Controller {
                             $offerImage->save();
                         }
                     }
-                    return redirect()->route('admin.offer.index')->with('status', 'Offer has been added successfully.');
+                    return redirect()->route('subadmin.offer.index')->with('status', 'Offer has been added successfully.');
                 } else {
-                    return redirect()->route('admin.offer.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('subadmin.offer.index')->with('error', 'Something went be wrong.');
                 }
             }
             $css = [
@@ -109,13 +110,13 @@ class OfferController extends Controller {
                 'https://cdn.quilljs.com/1.0.0/quill.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
-            return view('admin.offer.create', [
+            return view('subadmin.offer.create', [
                 'js' => $js,
                 'css' => $css,
                 'resorts' => $resorts,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.offer.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.offer.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -158,12 +159,12 @@ class OfferController extends Controller {
                         'valid_to' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.offer.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.offer.index')->withErrors($validator)->withInput();
             }
 
             $amenity->name = $request->offer_name;
             $amenity->description = $request->offer_description;
-            $amenity->resort_id = $request->resort_id;
+//            $amenity->resort_id = $request->resort_id;
             $amenity->price = $request->price;
             $amenity->discount_percentage = $request->discount;
             $amenity->calculated_discount = (((int) $request->price) * ((int) $request->discount / 100));
@@ -177,9 +178,9 @@ class OfferController extends Controller {
                         $offerImage->save();
                     }
                 }
-                return redirect()->route('admin.offer.index')->with('status', 'Offer has been updated successfully.');
+                return redirect()->route('subadmin.offer.index')->with('status', 'Offer has been updated successfully.');
             } else {
-                return redirect()->route('admin.offer.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.offer.index')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
@@ -193,7 +194,7 @@ class OfferController extends Controller {
         ];
         $resorts = Resort::where("is_active", 1)->get();
         $amenityImages = offerImage::where("offer_id", $amenity->id)->get();
-        return view('admin.offer.edit', [
+        return view('subadmin.offer.edit', [
             'css' => $css,
             'js' => $js,
             'resorts' => $resorts,

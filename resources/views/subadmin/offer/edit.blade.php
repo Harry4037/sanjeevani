@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -27,38 +27,16 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Offer Images</label>
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.offer.upload-image') }}">
+                            <form id="my-dropzone" class="dropzone" action="{{ route('subadmin.offer.upload-image') }}">
                                 @csrf
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="ln_solid"></div>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.offer.edit', $amenity->id) }}" method="post" id="addOfferForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.offer.edit', $amenity->id) }}" method="post" id="addOfferForm" enctype="multipart/form-data">
                     @csrf
                     <div id="offer_images_div"></div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="resort_id" name="resort_id">
-                                <option value="">Select option</option>
-                                <option value="-1" 
-                                @if($amenity->resort_id == -1)
-                                        {{ "selected" }}
-                                        @endif
-                                >Generalized Offer</option>
-                                @if($resorts)
-                                @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}"
-                                        @if($resort->id == $amenity->resort_id)
-                                        {{ "selected" }}
-                                        @endif
-                                        >{{ $resort->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -93,7 +71,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route('admin.offer.index') }}">Cancel</a>
+                            <a class="btn btn-default" href="{{ route('subadmin.offer.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -152,7 +130,7 @@ $(document).ready(function () {
                         var record_id = this.id;
                         var record_val = $(this).attr("data-val");
                         $.ajax({
-                            url: _baseUrl + '/admin/offer/delete-images',
+                            url: _baseUrl + '/sub-admin/offer/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
 //                            dataType: 'json',
@@ -202,7 +180,7 @@ $(document).ready(function () {
         var _this = $(this);
         if (record_id) {
             $.ajax({
-                url: _baseUrl + '/admin/offer/delete-offer-images',
+                url: _baseUrl + '/sub-admin/offer/delete-offer-images',
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',

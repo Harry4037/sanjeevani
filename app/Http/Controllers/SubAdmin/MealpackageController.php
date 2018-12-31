@@ -23,7 +23,7 @@ class MealpackageController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.meal-package.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.meal-package.index', ['js' => $js, 'css' => $css]);
     }
 
     public function mealpackageList(Request $request) {
@@ -33,6 +33,7 @@ class MealpackageController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealPackage::query();
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -48,7 +49,7 @@ class MealpackageController extends Controller {
                 $checked_status = $meal->is_active ? "checked" : '';
                 $mealsArray[$key]['resort_name'] = $resort->name;
                 $mealsArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='meal_package_status' id=" . $meal->id . " data-status=" . $meal->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $mealsArray[$key]['action'] = '<a href="' . route('admin.meal-package.edit', $meal->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                $mealsArray[$key]['action'] = '<a href="' . route('subadmin.meal-package.edit', $meal->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $meal->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -68,17 +69,16 @@ class MealpackageController extends Controller {
                             'name' => 'bail|required',
                             'price' => 'bail|required',
                             'category' => 'bail|required',
-                            'resort_id' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.meal-package.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.meal-package.index')->withErrors($validator)->withInput();
                 }
                 $mealPackage = new MealPackage();
 
                 $mealPackage->name = $request->name;
                 $mealPackage->category = $request->category;
                 $mealPackage->price = $request->price;
-                $mealPackage->resort_id = $request->resort_id;
+                $mealPackage->resort_id = $request->get("subadminResort");
 
                 if ($request->hasFile("image_name")) {
                     $icon_image = $request->file("image_name");
@@ -96,9 +96,9 @@ class MealpackageController extends Controller {
                             $mealPackageItem->save();
                         }
                     }
-                    return redirect()->route('admin.meal-package.index')->with('status', 'Meal Package has been added successfully.');
+                    return redirect()->route('subadmin.meal-package.index')->with('status', 'Meal Package has been added successfully.');
                 } else {
-                    return redirect()->route('admin.meal-package.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('subadmin.meal-package.index')->with('error', 'Something went be wrong.');
                 }
             }
 
@@ -110,20 +110,20 @@ class MealpackageController extends Controller {
             ];
             $resorts = Resort::where("is_active", 1)->get();
 
-            return view('admin.meal-package.create', [
+            return view('subadmin.meal-package.create', [
                 'resorts' => $resorts,
                 'css' => $css,
                 'js' => $js,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.meal-package.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.meal-package.index')->with('error', $ex->getMessage());
         }
     }
 
     public function getResortMeal(Request $request) {
         $mealItems = MealItem::where(["is_active" => 1, "resort_id" => $request->record_id])->get();
 
-        return view('admin.meal-package.meal-item', [
+        return view('subadmin.meal-package.meal-item', [
             'mealItems' => $mealItems,
         ]);
     }
@@ -151,15 +151,15 @@ class MealpackageController extends Controller {
                         'name' => 'bail|required',
                         'price' => 'bail|required',
                         'category' => 'bail|required',
-                        'resort_id' => 'bail|required',
+                        
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.meal-package.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.meal-package.index')->withErrors($validator)->withInput();
             }
             $data->name = $request->name;
             $data->category = $request->category;
             $data->price = $request->price;
-            $data->resort_id = $request->resort_id;
+//            $data->resort_id = $request->resort_id;
             if ($request->hasFile("image_name")) {
                 $icon_image = $request->file("image_name");
                 $icon = Storage::disk('public')->put('meal_package_images', $icon_image);
@@ -178,15 +178,15 @@ class MealpackageController extends Controller {
                     }
                 }
 
-                return redirect()->route('admin.meal-package.index')->with('status', 'Package has been updated successfully.');
+                return redirect()->route('subadmin.meal-package.index')->with('status', 'Package has been updated successfully.');
             } else {
-                return redirect()->route('admin.meal-package.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.meal-package.index')->with('error', 'Something went be wrong.');
             }
         }
 
         $resorts = Resort::where("is_active", 1)->get();
         $resortMeals = MealItem::where("resort_id", $data->resort_id)->get();
-        return view('admin.meal-package.edit', [
+        return view('subadmin.meal-package.edit', [
             'resorts' => $resorts,
             'resortMeals' => $resortMeals,
             'data' => $data

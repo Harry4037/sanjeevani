@@ -19,7 +19,7 @@ class MealcategoryController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.meal-category.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.meal-category.index', ['js' => $js, 'css' => $css]);
     }
 
     public function categoryList(Request $request) {
@@ -41,7 +41,7 @@ class MealcategoryController extends Controller {
                 $mealtypeArray[$key]['name'] = $mealType->name;
                 $checked_status = $mealType->is_active ? "checked" : '';
                 $mealtypeArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='mealcategory_status' id=" . $mealType->id . " data-status=" . $mealType->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $mealtypeArray[$key]['action'] = '<a href="' . route('admin.meal-category.edit', $mealType->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                $mealtypeArray[$key]['action'] = '<a href="' . route('subadmin.meal-category.edit', $mealType->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $mealType->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -61,20 +61,20 @@ class MealcategoryController extends Controller {
                             'name' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.meal-category.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.meal-category.index')->withErrors($validator)->withInput();
                 }
                 $mealType = new MealType();
 
                 $mealType->name = $request->name;
                 if ($mealType->save()) {
-                    return redirect()->route('admin.meal-category.index')->with('status', 'Meal Category has been added successfully.');
+                    return redirect()->route('subadmin.meal-category.index')->with('status', 'Meal Category has been added successfully.');
                 } else {
-                    return redirect()->route('admin.meal-category.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('subadmin.meal-category.index')->with('error', 'Something went be wrong.');
                 }
             }
-            return view('admin.meal-category.create');
+            return view('subadmin.meal-category.create');
         } catch (\Exception $ex) {
-            return redirect()->route('admin.meal-category.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.meal-category.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -101,17 +101,17 @@ class MealcategoryController extends Controller {
                         'name' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.meal-category.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.meal-category.index')->withErrors($validator)->withInput();
             }
             $data->name = $request->name;
             if ($data->save()) {
-                return redirect()->route('admin.meal-category.index')->with('status', 'Meal category has been added successfully.');
+                return redirect()->route('subadmin.meal-category.index')->with('status', 'Meal category has been added successfully.');
             } else {
-                return redirect()->route('admin.meal-category.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.meal-category.index')->with('error', 'Something went be wrong.');
             }
         }
 
-        return view('admin.meal-category.edit', [
+        return view('subadmin.meal-category.edit', [
             'data' => $data,
         ]);
     }

@@ -23,7 +23,7 @@ class HealthcareProgramController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.healthcare.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.healthcare.index', ['js' => $js, 'css' => $css]);
     }
 
     public function healthcareList(Request $request) {
@@ -33,6 +33,7 @@ class HealthcareProgramController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = HealthcateProgram::query();
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -49,7 +50,7 @@ class HealthcareProgramController extends Controller {
                 $checked_status = $healthcarePackege->is_active ? "checked" : '';
                 $healthArray[$key]['resort_name'] = $resort->name;
                 $healthArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='health_status' id=" . $healthcarePackege->id . " data-status=" . $healthcarePackege->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $healthArray[$key]['action'] = '<a href="' . route('admin.healthcare.edit', $healthcarePackege->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                $healthArray[$key]['action'] = '<a href="' . route('subadmin.healthcare.edit', $healthcarePackege->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $healthcarePackege->id . '" ><i class="fa fa-trash"></i> Delete </a>';
             }
 
@@ -66,7 +67,6 @@ class HealthcareProgramController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'resort_id' => 'bail|required',
                             'package_name' => 'bail|required',
                             'start_from' => 'bail|required',
                             'end_to' => 'bail|required',
@@ -74,13 +74,13 @@ class HealthcareProgramController extends Controller {
                             'day_id' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.healthcare.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.healthcare.index')->withErrors($validator)->withInput();
                 }
                 $healthcare = new HealthcateProgram();
 
                 $start_from = Carbon::parse($request->start_from);
                 $end_to = Carbon::parse($request->end_to);
-                $healthcare->resort_id = $request->resort_id;
+                $healthcare->resort_id = $request->get("subadminResort");
                 $healthcare->name = $request->package_name;
                 $healthcare->description = $request->package_description;
                 $healthcare->start_from = $start_from->format('Y-m-d');
@@ -106,9 +106,9 @@ class HealthcareProgramController extends Controller {
                     }
 
 
-                    return redirect()->route('admin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
+                    return redirect()->route('subadmin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
                 } else {
-                    return redirect()->route('admin.healthcare.index')->with('error', 'Something went be wrong.');
+                    return redirect()->route('subadmin.healthcare.index')->with('error', 'Something went be wrong.');
                 }
             }
             $css = [
@@ -121,13 +121,13 @@ class HealthcareProgramController extends Controller {
                 'vendors/dropzone/dist/dropzone.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
-            return view('admin.healthcare.create', [
+            return view('subadmin.healthcare.create', [
                 'js' => $js,
                 'css' => $css,
                 'resorts' => $resorts,
             ]);
         } catch (\Exception $ex) {
-            return redirect()->route('admin.healthcare.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.healthcare.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -167,12 +167,12 @@ class HealthcareProgramController extends Controller {
                         'package_name' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.healthcare.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.healthcare.index')->withErrors($validator)->withInput();
             }
 
             $start_from = Carbon::parse($request->start_from);
             $end_to = Carbon::parse($request->end_to);
-            $healthcare->resort_id = $request->resort_id;
+//            $healthcare->resort_id = $request->resort_id;
             $healthcare->name = $request->package_name;
             $healthcare->description = $request->package_description;
             $healthcare->start_from = $start_from->format('Y-m-d');
@@ -199,9 +199,9 @@ class HealthcareProgramController extends Controller {
                 }
 
 
-                return redirect()->route('admin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
+                return redirect()->route('subadmin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
             } else {
-                return redirect()->route('admin.healthcare.index')->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.healthcare.index')->with('error', 'Something went be wrong.');
             }
         }
         $css = [
@@ -216,7 +216,7 @@ class HealthcareProgramController extends Controller {
         $resorts = Resort::where("is_active", 1)->get();
         $healthcareImages = HealthcateProgramImages::where("health_program_id", $healthcare->id)->get();
         $healthcareDays = HealthcateProgramDay::where("health_program_id", $healthcare->id)->get();
-        return view('admin.healthcare.edit', [
+        return view('subadmin.healthcare.edit', [
             'css' => $css,
             'js' => $js,
             'resorts' => $resorts,
