@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Validator;
 
 class LoginController extends Controller {
 
@@ -42,6 +43,7 @@ class LoginController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function showLoginForm() {
+
         if (Auth::check()) {
             return redirect('/admin/dashboard');
         }
@@ -111,20 +113,34 @@ class LoginController extends Controller {
     }
 
     public function profile(Request $request) {
-        if ($request->isMethod("post")) {
-            $user = User::find($request->get('record_id'));
-            $user->user_name = $request->get("user_name");
-            $user->email_id = $request->get("email_id");
-            if ($request->hasFile("profile_pic")) {
-                $profile_pic = $request->file("profile_pic");
-                $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
-                $profile_file_name = basename($profile);
-                $user->profile_pic_path = $profile_file_name;
+        try {
+            if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'profile_pic' => 'bail|max:1000|mimes:jpeg,jpg,png',
+                                ], [
+                            'profile_pic.max' => 'Image not more than 1000 kb.',
+                            'profile_pic.mimes' => 'Only jpeg,jpg,png images are allowed.',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.profile')->withErrors($validator)->withInput();
+                }
+
+                $user = User::find($request->get('record_id'));
+                $user->user_name = $request->get("user_name");
+                $user->email_id = $request->get("email_id");
+                if ($request->hasFile("profile_pic")) {
+                    $profile_pic = $request->file("profile_pic");
+                    $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
+                    $profile_file_name = basename($profile);
+                    $user->profile_pic_path = $profile_file_name;
+                }
+                $user->save();
+                return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
             }
-            $user->save();
-            return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
+            return view('admin.profile.index');
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.profile')->with('error', $ex->getMessage());
         }
-        return view('admin.profile.index');
     }
 
     public function changePassword(Request $request) {

@@ -30,7 +30,7 @@ class User extends Authenticatable {
 
     public function getProfilePicPathAttribute($name) {
         
-        return $name ? asset('storage/profile_pic/' . $name) : "";
+        return $name ? asset('storage/profile_pic/' . $name) : asset("/img/no-image.jpg");
     }
 
     public function getEmailForPasswordReset() {

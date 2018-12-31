@@ -46,7 +46,8 @@ class OrderRequestController extends Controller {
                 $dataArray[$key]['service_type'] = $serviceRequest->serviceDetail->serviceType->name;
                 $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail->name;
                 $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
-                $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room == null ? "" : $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
+//                $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room == null ? "" : $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
+                $dataArray[$key]['room_no'] = "";
                 $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
                 $dataArray[$key]['action'] = '<a href="' . route('admin.order-request.view', $serviceRequest->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }

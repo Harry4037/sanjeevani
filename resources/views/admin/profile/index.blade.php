@@ -25,7 +25,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Id</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ auth('admin')->user()->email_id }}" class="form-control" type="text" name="email_id" id="email_id" placeholder="Email Address">
-                            <small>Note: This email id is used for login into the system.</small>
+                            <small style="color:red;">Note: This email id is used for login into the system.</small>
                         </div>
                     </div>
                     <div class="form-group">
@@ -61,9 +61,6 @@
     $(document).ready(function () {
         $("#profileForm").validate({
             rules: {
-                user_name: {
-                    required: true
-                },
                 email_id: {
                     required: true
                 },
