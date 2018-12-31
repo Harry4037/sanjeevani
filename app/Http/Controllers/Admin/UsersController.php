@@ -207,6 +207,8 @@ class UsersController extends Controller {
                         $userHealthDetail->user_id = $user->id;
                         $userHealthDetail->save();
 
+                        $roomType = RoomType::find($request->resort_room_type);
+                        $room = ResortRoom::find($request->resort_room_id);
                         $userBooking = new UserBookingDetail();
                         $userBooking->source_name = $request->booking_source_name;
                         $userBooking->source_id = $request->booking_source_id;
@@ -214,7 +216,9 @@ class UsersController extends Controller {
                         $userBooking->resort_id = $request->resort_id;
                         $userBooking->package_id = $request->package_id;
                         $userBooking->room_type_id = $request->resort_room_type;
+                        $userBooking->room_type_name = $roomType ? $roomType->name : "";
                         $userBooking->resort_room_id = $request->resort_room_id;
+                        $userBooking->resort_room_no = $room ? $room->room_no : "";
                         $check_in_date = Carbon::parse($request->check_in);
                         $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
                         $check_out_date = Carbon::parse($request->check_out);

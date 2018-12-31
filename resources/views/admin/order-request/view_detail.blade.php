@@ -42,7 +42,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input readonly="true" type="text" class="form-control"  name="room_no" id="room_no" value="@if(isset($serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no)){{ $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no }}@endif">
+                            <input readonly="true" type="text" class="form-control"  name="room_no" id="room_no" value="@if(isset($serviceRequest->resort_room_no)){{ $serviceRequest->resort_room_no }}@endif">
                         </div>
                     </div>
                     <div class="form-group">

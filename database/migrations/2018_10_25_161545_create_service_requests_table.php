@@ -20,6 +20,8 @@ class CreateServiceRequestsTable extends Migration {
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('request_status_id')->default(0);
             $table->bigInteger('resort_id')->default(0);
+            $table->string('room_type_name')->nullable();
+            $table->string('resort_room_no')->nullable();
             $table->bigInteger('accepted_by_id')->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
