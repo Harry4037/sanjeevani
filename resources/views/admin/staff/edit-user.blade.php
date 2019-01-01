@@ -161,10 +161,12 @@
                     required: true
                 },
                 staff_mobile_no: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 staff_email: {
-                    required: true
+                    required: true,
+                    email: true
                 },
                 resort_id: {
                     required: true
@@ -179,7 +181,8 @@
                     required: true
                 },
                 pin_code: {
-                    required: true
+                    required: true,
+                    number: true
                 },
             }
         });

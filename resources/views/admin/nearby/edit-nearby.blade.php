@@ -179,7 +179,8 @@ $(document).ready(function () {
                 required: true
             },
             pin_code: {
-                required: true
+                required: true,
+                number: true
             },
             state: {
                 required: true

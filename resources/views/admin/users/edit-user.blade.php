@@ -352,10 +352,13 @@
             required: true
             },
             mobile_number: {
-            required: true
+            required: true,
+            max: 10,
+            number: true
             },
             email_id: {
-            required: true
+            required: true,
+            email: true
             },
             check_in: {
             required: true
