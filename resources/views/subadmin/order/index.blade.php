@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -44,7 +44,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/order/list",
+            ajax: _baseUrl + "/sub-admin/order/list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {

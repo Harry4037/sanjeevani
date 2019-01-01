@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -12,7 +12,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form class="form-horizontal form-label-left" action="{{ route('admin.notification.send') }}" method="post" id="sendNotificationForm">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.notification.send') }}" method="post" id="sendNotificationForm">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select option</label>

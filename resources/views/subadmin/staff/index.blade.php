@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                 </div>
                 <h2>Staff</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.staff.add') }}">Add Staff</a>
+                    <a class="btn btn-success" href="{{ route('subadmin.staff.add') }}">Add Staff</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -45,7 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/staff/staff-list",
+            ajax: _baseUrl + "/sub-admin/staff/staff-list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -84,7 +84,7 @@
             var status = th.attr('data-status');
             var update_status = (status == '1') ? 0 : 1;
             $.ajax({
-                url: _baseUrl + '/admin/staff/staff-status',
+                url: _baseUrl + '/sub-admin/staff/staff-status',
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',

@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -13,7 +13,7 @@
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.staff.edit', $user->id) }}" method="post" id="addStaffForm">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.staff.edit', $user->id) }}" method="post" id="addStaffForm">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
@@ -132,7 +132,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <a  class="btn btn-default" href="{{ route('admin.staff.index') }}">Cancel</a>
+                            <a  class="btn btn-default" href="{{ route('subadmin.staff.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
         $(document).on("change", "#resort_id", function () {
             var resort_id = $("#resort_id :selected").val();
             $.ajax({
-                url: _baseUrl + '/admin/staff/amenity-list',
+                url: _baseUrl + '/sub-admin/staff/amenity-list',
                 type: 'post',
                 data: {resort_id: resort_id},
                 dataType: 'html',

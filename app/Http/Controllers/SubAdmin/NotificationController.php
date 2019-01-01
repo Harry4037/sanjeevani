@@ -11,7 +11,7 @@ class NotificationController extends Controller {
 
     public function index() {
         $users = User::where("is_active", 1)->where('user_type_id','!=',1)->get();
-        return view('admin.notification.index', compact('users'));
+        return view('subadmin.notification.index', compact('users'));
     }
 
     public function sendNotification(Request $request) {

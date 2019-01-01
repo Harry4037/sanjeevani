@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -13,7 +13,7 @@
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.users.add') }}" method="post" id="addUserForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.users.add') }}" method="post" id="addUserForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">General Details</label>
@@ -342,7 +342,7 @@
                 return false;
             } else {
                 $.ajax({
-                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
+                    url: _baseUrl + '/sub-admin/resort/resort-rooms/' + resort + '/' + resort_room,
                     type: 'get',
                     dataType: 'html',
                     success: function (res) {

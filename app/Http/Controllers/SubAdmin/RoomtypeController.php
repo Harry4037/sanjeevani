@@ -99,6 +99,7 @@ class RoomtypeController extends Controller {
                 'css' => $css
             ]);
         } catch (\Exception $ex) {
+            dd($ex);
             return redirect()->route('subadmin.room.index')->with('error', $ex->getMessage());
         }
     }

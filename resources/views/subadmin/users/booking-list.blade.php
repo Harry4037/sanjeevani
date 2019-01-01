@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                 </div>
                 <h2>Bookings ({{ $user->user_name }})</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.users.booking-create', $user->id) }}">Create Booking</a>
+                    <a class="btn btn-success" href="{{ route('subadmin.users.booking-create', $user->id) }}">Create Booking</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -48,7 +48,7 @@
             // searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/admin/user-booking-list/" + {{ $user->id }},
+            ajax: _baseUrl + "/sub-admin/user-booking-list/" + {{ $user->id }},
             "columns": [
             {"data": null,
                     sortable: false,
@@ -72,7 +72,7 @@
     });
     $(document).on("change", "#user", function(){
     var record_id = $("#user :selected").val();
-    t.ajax.url(_baseUrl + "/admin/booking/booking-list/" + record_id).load();
+    t.ajax.url(_baseUrl + "/sub-admin/booking/booking-list/" + record_id).load();
     });
     });
 </script>

@@ -13,7 +13,7 @@ class OrderController extends Controller {
         $js = ['vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'];
 
-        return view('admin.order.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.order.index', ['js' => $js, 'css' => $css]);
     }
 
     public function orderList(Request $request) {
@@ -25,7 +25,7 @@ class OrderController extends Controller {
                         "userDetail" => function($query) {
                             $query->select('id', 'user_name');
                         }
-                    ])->get();
+                    ])->where("resort_id", $request->get("subadminResort"))->get();
 
             $dataArray = [];
             $stat = "";

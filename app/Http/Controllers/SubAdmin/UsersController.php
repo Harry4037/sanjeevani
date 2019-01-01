@@ -45,7 +45,7 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.users.index', ['js' => $js, 'css' => $css]);
+        return view('subadmin.users.index', ['js' => $js, 'css' => $css]);
     }
 
     /**
@@ -59,7 +59,12 @@ class UsersController extends Controller {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
-
+            $userBookingDetail = UserBookingDetail::where("resort_id", $request->get("subadminResort"))->pluck("user_id");
+            if($userBookingDetail){
+                $userIds = $userBookingDetail->toArray();
+            }else{
+                $userIds = [];
+            }
             $query = $this->user->query()->with(['payments', 'mealOrders' => function($query) {
                     $query->accepted();
                 }]);
@@ -67,6 +72,7 @@ class UsersController extends Controller {
                 $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
             $query->where("user_type_id", "=", 3);
+            $query->whereIn("id", $userIds);
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
@@ -80,13 +86,13 @@ class UsersController extends Controller {
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 if ($user->user_type_id == 3) {
-                    $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
-                            . '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('admin.users.payments', $user->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-dollar"></i> Payments </a>'
-                            . '<a href="' . route('admin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
+                    $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('subadmin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
+                            . '<a href="' . route('subadmin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('subadmin.users.payments', $user->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-dollar"></i> Payments </a>'
+                            . '<a href="' . route('subadmin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
                 } else {
-                    $usersArray[$key]['action'] = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('admin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
+                    $usersArray[$key]['action'] = '<a href="' . route('subadmin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('subadmin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
                 }
             }
             $data['data'] = $usersArray;
@@ -127,7 +133,7 @@ class UsersController extends Controller {
                 $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
                 $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id, "room_type_id" => $userBooking->room_type_id])->get();
             }
-            return view('admin.users.user-detail', [
+            return view('subadmin.users.user-detail', [
                 "user" => $user,
                 'userBooking' => $userBooking,
                 'userHealth' => $userHealth,
@@ -135,7 +141,7 @@ class UsersController extends Controller {
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
             ]);
         } catch (Exception $ex) {
-            return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.users.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -146,7 +152,7 @@ class UsersController extends Controller {
                     ->where("user_type_id", 3)
                     ->first();
             if ($userExist) {
-                return redirect()->route('admin.users.add')->with('error', 'User already exists with thin mobile number');
+                return redirect()->route('subadmin.users.add')->with('error', 'User already exists with thin mobile number');
             } else {
 
                 $validator = Validator::make($request->all(), [
@@ -171,7 +177,7 @@ class UsersController extends Controller {
 //                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.users.add')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.users.add')->withErrors($validator)->withInput();
                 }
                 try {
                     $name = explode(" ", $request->user_name);
@@ -235,10 +241,10 @@ class UsersController extends Controller {
                             }
                         }
 
-                        return redirect()->route('admin.users.index')->with('status', 'User has been added successfully');
+                        return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
                     }
                 } catch (\Exception $e) {
-                    return redirect()->route('admin.users.index')->withErrors($e->getMessage())->withInput();
+                    return redirect()->route('subadmin.users.index')->withErrors($e->getMessage())->withInput();
                 }
             }
         }
@@ -254,7 +260,7 @@ class UsersController extends Controller {
         $resorts = Resort::where("is_active", 1)->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
         $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
-        return view('admin.users.add-user', [
+        return view('subadmin.users.add-user', [
             'js' => $js,
             'css' => $css,
             'resorts' => $resorts,
@@ -298,7 +304,7 @@ class UsersController extends Controller {
 //                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.users.edit', $id)->withErrors($validator);
+                    return redirect()->route('subadmin.users.edit', $id)->withErrors($validator);
                 }
 
                 $name = explode(" ", $request->user_name);
@@ -356,7 +362,7 @@ class UsersController extends Controller {
 //                        $roomBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
 //                        $roomBooking->save();
 
-                        return redirect()->route('admin.users.edit', $id)->with('status', 'User has been updated successfully');
+                        return redirect()->route('subadmin.users.edit', $id)->with('status', 'User has been updated successfully');
                     }
                 }
             }
@@ -370,7 +376,7 @@ class UsersController extends Controller {
             ];
             $resorts = Resort::where("is_active", 1)->get();
             $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
-            return view('admin.users.edit-user', [
+            return view('subadmin.users.edit-user', [
                 'js' => $js,
                 'css' => $css,
                 'resorts' => $resorts,
@@ -384,7 +390,7 @@ class UsersController extends Controller {
                     ]
             );
         } catch (\Exception $ex) {
-            return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
+            return redirect()->route('subadmin.users.index')->with('error', $ex->getMessage());
         }
     }
 
@@ -397,7 +403,7 @@ class UsersController extends Controller {
         $paid = $user->payments->sum('amount');
         $outstanding = $total - $paid;
 
-        return view('admin.users.payments', compact('user', 'total', 'paid', 'outstanding'));
+        return view('subadmin.users.payments', compact('user', 'total', 'paid', 'outstanding'));
     }
 
     public function payOutstading(Request $request) {
@@ -435,7 +441,7 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
-        return view('admin.users.booking-list', [
+        return view('subadmin.users.booking-list', [
             'js' => $js,
             'css' => $css,
             'user' => $user
@@ -500,19 +506,19 @@ class UsersController extends Controller {
                         'package_id' => 'bail|required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.users.booking-create', $user_id)->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.users.booking-create', $user_id)->withErrors($validator)->withInput();
             }
 
             $user = User::find($user_id);
             if (!$user) {
-                return redirect()->route('admin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
+                return redirect()->route('subadmin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
             }
             $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
                     ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
                     ->where("user_id", $user_id)
                     ->first();
             if ($existingRecord) {
-                return redirect()->route('admin.users.booking-create', $user_id)->withErrors("Booking already exist with these date's.")->withInput();
+                return redirect()->route('subadmin.users.booking-create', $user_id)->withErrors("Booking already exist with these date's.")->withInput();
             }
             $UserBookingDetail = new UserBookingDetail();
             $UserBookingDetail->source_name = $request->booking_source_name;
@@ -539,9 +545,9 @@ class UsersController extends Controller {
                         }
                     }
                 }
-                return redirect()->route('admin.users.booking', $user_id)->with('status', 'booking created successfully.');
+                return redirect()->route('subadmin.users.booking', $user_id)->with('status', 'booking created successfully.');
             } else {
-                return redirect()->route('admin.users.booking-create', $user_id)->withErrors("Something went be wrong.")->withInput();
+                return redirect()->route('subadmin.users.booking-create', $user_id)->withErrors("Something went be wrong.")->withInput();
             }
         }
 
@@ -556,7 +562,7 @@ class UsersController extends Controller {
         $resorts = Resort::where(["is_active" => 1])->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
         $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
-        return view('admin.users.booking-create', [
+        return view('subadmin.users.booking-create', [
             'js' => $js,
             'css' => $css,
             "user_id" => $user_id,

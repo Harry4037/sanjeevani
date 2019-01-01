@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -56,7 +56,7 @@
 				<div class="row">
 					<div class="col-md-6 col-md-offset-3">
 						<h3 class="text-center">Pay Outstanding</h3>
-						<form action="{{route('admin.users.pay_outstanding')}}" id="paymentForm">
+						<form action="{{route('subadmin.users.pay_outstanding')}}" id="paymentForm">
 							@csrf
 							<input type="hidden" name="user_id" value="{{$user->id}}">
 							<div class="form-group">
