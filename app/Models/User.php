@@ -87,11 +87,11 @@ class User extends Authenticatable {
     }
 
     public function getVoterIdAttribute($value) {
-        return $value == null ? "" : $value;
+        return $value ? asset('storage/other_id/' . $name) : asset("/img/no-image.jpg");
     }
 
     public function getAadharIdAttribute($value) {
-        return $value == null ? "" : $value;
+        return $value ? asset('storage/aadhar_id/' . $name) : asset("/img/no-image.jpg");
     }
 
     public function getAddress1Attribute($value) {

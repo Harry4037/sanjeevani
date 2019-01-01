@@ -157,14 +157,14 @@ class UserController extends Controller {
                         return $this->sendErrorResponse("other id not valid file type.", (object) []);
                     }
                     $other_id = $request->file("other_id");
-                    $otherId = Storage::disk('local')->put('aadhar_id', $other_id);
+                    $otherId = Storage::disk('public')->put('other_id', $other_id);
                     $other_file_name = basename($otherId);
 
                     $user->voter_id = $other_file_name;
                 }
 
                 $aadhar_id = $request->file("aadhar_id");
-                $aadhar = Storage::disk('local')->put('aadhar_id', $aadhar_id);
+                $aadhar = Storage::disk('public')->put('aadhar_id', $aadhar_id);
                 $aadhar_file_name = basename($aadhar);
 
                 $user->aadhar_id = $aadhar_file_name;

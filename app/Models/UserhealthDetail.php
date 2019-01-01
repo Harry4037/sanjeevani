@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class UserhealthDetail extends Model
 {
     public function getMedicalDocumentsAttribute($name){
-        return asset('storage/medical_document/'.$name);
+        return $name ? asset('storage/medical_document/'.$name) : "";
     }
 }

@@ -42,7 +42,7 @@ class LoginController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function showLoginForm() {
-        if (Auth::check()) {
+        if (Auth::guard('subadmin')->check()) {
             return redirect('/sub-admin/dashboard');
         }
 
@@ -69,7 +69,7 @@ class LoginController extends Controller {
      * @return array
      */
     protected function credentials(Request $request) {
-        return $request->only($this->username(), 'password');
+        return $request->only($this->username(), 'password', 'user_type_id');
     }
 
     /**
@@ -96,9 +96,10 @@ class LoginController extends Controller {
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
+        $request->merge(["user_type_id" => 5]);
 
         if ($this->attemptLogin($request)) {
-
+//            dd($request->all());
             return $this->sendLoginResponse($request);
         }
 

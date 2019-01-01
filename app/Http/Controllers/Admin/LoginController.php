@@ -38,13 +38,23 @@ class LoginController extends Controller {
     }
 
     /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request) {
+        return $request->only($this->username(), 'password', 'user_type_id');
+    }
+
+    /**
      * Show the application's login form.
      *
      * @return \Illuminate\Http\Response
      */
     public function showLoginForm() {
 
-        if (Auth::check()) {
+        if (Auth::guard('admin')->check()) {
             return redirect('/admin/dashboard');
         }
         return view('admin.login');
@@ -87,12 +97,10 @@ class LoginController extends Controller {
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-
+        $request->merge(["user_type_id" => 1]);
 //        $user = User::where('email_id', $request->get('email_id'))->first();
         if ($this->attemptLogin($request)) {
-//            dd(Auth::guard('admin')->user());
-//            Auth::login($user);
-//            return redirect($this->redirectTo);
+
             return $this->sendLoginResponse($request);
         }
 
