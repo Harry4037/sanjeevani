@@ -386,9 +386,9 @@ class AuthController extends Controller {
             $userArray['resort_room_no'] = ($userBookingDetail) && ($userBookingDetail->room_detail != null) ? $userBookingDetail->room_detail->room_no : "Not available";
             $userArray['room_type'] = ($userBookingDetail) && ($userBookingDetail->room_type_detail != null) ? $userBookingDetail->room_type_detail->name : "Not available";
             $userArray['check_in_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('d-M-Y') : '';
-            $userArray['check_in_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('H:i A') : '';
+            $userArray['check_in_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('h:i A') : '';
             $userArray['check_out_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('d-M-Y') : '';
-            $userArray['check_out_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('H:i A') : '';
+            $userArray['check_out_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('h:i A') : '';
             $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->id : "";
             $userArray['no_of_guest'] = $adultNo . " Adult and " . $childNo . " Child";
             $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
