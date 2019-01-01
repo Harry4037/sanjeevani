@@ -280,7 +280,7 @@
                 mobile_number: {
                     required: true,
                     number: true,
-                    max: 10
+//                    maxlength: 10
                 },
                 email_id: {
                     required: true,

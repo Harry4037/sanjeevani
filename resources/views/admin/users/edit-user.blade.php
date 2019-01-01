@@ -353,7 +353,7 @@
             },
             mobile_number: {
             required: true,
-            max: 10,
+//            max: 10,
             number: true
             },
             email_id: {
