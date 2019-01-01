@@ -265,7 +265,7 @@ class StaffController extends Controller {
                     ]
             );
         } catch (\Exception $ex) {
-            return redirect()->route('admin.users.index')->with('error', $ex->getMessage());
+            return redirect()->route('admin.staff.index')->with('error', $ex->getMessage());
         }
     }
 

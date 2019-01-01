@@ -11,7 +11,7 @@
                 </div>
                 <h2>Staff</h2>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('admin.subadmin.add') }}">Add Staff</a>
+                    <a class="btn btn-success" href="{{ route('admin.subadmin.add') }}">Add Subadmin</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
