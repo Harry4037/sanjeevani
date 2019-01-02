@@ -116,7 +116,7 @@ class StaffController extends Controller {
         try {
             //If user account deactivated by admin
             if ($request->user()->is_active == 0) {
-                return $this->sendErrorResponse("Your account is deactived by admin. Please contact to admin", (object) []);
+                return $this->sendInactiveAccountResponse();
             }
             //If user not registered with any resort
             $userResort = UserBookingDetail::where("user_id", $request->user()->id)->first();
