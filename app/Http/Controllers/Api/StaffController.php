@@ -721,6 +721,9 @@ class StaffController extends Controller {
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
             }
+            if ($request->user()->is_active == 0) {
+                return $this->sendInactiveAccountResponse();
+            }
             if (!$request->job_id) {
                 return $this->sendErrorResponse("Job id missing", (object) []);
             }
@@ -745,7 +748,6 @@ class StaffController extends Controller {
                 }
             } elseif ($request->type == 4) {
                 $job = MealOrder::where(['id' => $request->job_id, 'status' => 2])->first();
-                ;
                 if (!$job) {
                     return $this->sendErrorResponse("Invalid job", (object) []);
                 }
@@ -763,8 +765,8 @@ class StaffController extends Controller {
             } else {
                 return $this->sendErrorResponse("Invalid type.", (object) []);
             }
-        } catch (Exception $ex) {
-            return $this->administratorResponse();
+        } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex, (object) []);
         }
     }
 
