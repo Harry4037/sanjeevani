@@ -113,7 +113,7 @@ class AuthController extends Controller {
                 }
             } else {
                 if (!$userExist) {
-                    $user = new User([
+                    $user = new Uer([
                         'mobile_number' => $request->mobile_number,
                         'user_type_id' => $request->user_type,
                         'otp' => 9999,

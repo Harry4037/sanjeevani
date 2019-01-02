@@ -68,8 +68,7 @@ class Handler extends ExceptionHandler {
             return response()->json([
                         'success' => false,
                         'status_code' => 400,
-                        'message' => "Something went be wrong. Please contact administrator.",
-                        'error' => $exception->getMessage(),
+                        'message' => $exception->getMessage(),
                         'data' => (object) [],
             ]);
         }
