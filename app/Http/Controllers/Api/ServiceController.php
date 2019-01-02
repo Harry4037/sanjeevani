@@ -483,13 +483,13 @@ class ServiceController extends Controller {
             foreach ($ongoingServices as $ongoingService) {
                 $ongoingDataArray[$i]["id"] = $ongoingService->id;
                 $ongoingDataArray[$i]["record_id"] = $ongoingService->id;
-                $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail->name;
-                $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail->icon;
+                $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail ? $ongoingService->serviceDetail->name : "";
+                $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail ? $ongoingService->serviceDetail->icon : "";
                 $ongoingDataArray[$i]["date"] = $ongoingService->date;
                 $ongoingDataArray[$i]["time"] = $ongoingService->time;
                 $ongoingDataArray[$i]["date_time"] = $ongoingService->created_timestamp;
                 $ongoingDataArray[$i]["status_id"] = $ongoingService->requestStatus->id;
-                $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus->status;
+                $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus ? $ongoingService->requestStatus->status : "";
                 $ongoingDataArray[$i]["acceptd_by"] = isset($ongoingService->acceptedBy->user_name) ? $ongoingService->acceptedBy->user_name : "";
                 $ongoingDataArray[$i]["type"] = 1;
                 $i++;
