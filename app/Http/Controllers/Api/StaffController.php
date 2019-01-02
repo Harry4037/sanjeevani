@@ -487,10 +487,10 @@ class StaffController extends Controller {
                 $i++;
             }
 
-            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
+            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                            $query->select('id', 'name', 'type_id');
+                            $query->select('id', 'name','icon', 'type_id');
                         }
                     ])->with([
                         'questionDetail' => function($query) {
@@ -517,12 +517,12 @@ class StaffController extends Controller {
             foreach ($under_approval_jobs as $under_approval_job) {
                 $created_at = Carbon::parse($under_approval_job->created_at);
                 $underApprovalJobArray[$j]["id"] = $under_approval_job->id;
-                $underApprovalJobArray[$j]["service_name"] = $under_approval_job->serviceDetail->name;
+                $underApprovalJobArray[$j]["service_name"] = $under_approval_job->serviceDetail ? $under_approval_job->serviceDetail->name : "";
                 $underApprovalJobArray[$j]["service_comment"] = $under_approval_job->comment;
-                $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail->icon;
-                $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail->user_name;
-                $underApprovalJobArray[$j]["room_no"] = "";
-                $underApprovalJobArray[$j]["created_at"] = $created_at->format('H:i a');
+                $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail ? $under_approval_job->serviceDetail->icon : "";
+                $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail ? $under_approval_job->userDetail->user_name : "";
+                $underApprovalJobArray[$j]["room_no"] = $under_approval_job->resort_room_no;
+                $underApprovalJobArray[$j]["created_at"] = $created_at->format('d-m-Y H:i a');
                 $underApprovalJobArray[$j]["type"] = 1;
                 $j++;
             }
