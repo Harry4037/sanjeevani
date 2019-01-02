@@ -29,6 +29,14 @@ class Controller extends BaseController {
         ]);
     }
 
+    public function sendInactiveAccountResponse() {
+        return response()->json([
+                    'status' => false,
+                    'status_code' => 400,
+                    'message' => "Your account has been In-active.Please contact to admin.",
+                    'data' => (object) []
+        ]);
+    }
     public function sendErrorResponse($message, $data, $statusCode = 404) {
         return response()->json([
                     'status' => false,

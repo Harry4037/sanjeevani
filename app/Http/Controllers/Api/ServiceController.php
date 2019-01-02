@@ -21,6 +21,7 @@ use App\Models\ActivityRequest;
 use Carbon\Carbon;
 use App\Models\ResortRoom;
 use App\Models\RoomType;
+use App\Models\UserBookingDetail;
 
 class ServiceController extends Controller {
 
@@ -283,6 +284,9 @@ class ServiceController extends Controller {
             if ($user->user_type_id == 4) {
                 return $this->sendErrorResponse("Please provide your check-In details.", (object) []);
             }
+            if ($user->is_active == 0) {
+                return $this->sendInactiveAccountResponse();
+            }
 
             $resort = Resort::where(["id" => $request->resort_id, "is_active" => 1])->first();
             if (!$resort) {
@@ -303,7 +307,7 @@ class ServiceController extends Controller {
                 $userDetail = User::where("id", $request->user_id)->with("userBookingDetail")->first();
                 $room = ResortRoom::find($userDetail->userBookingDetail->room_type_id);
                 $roomType = RoomType::find($userDetail->userBookingDetail->resort_room_id);
-                
+
                 $serviceRequest = new ServiceRequest();
                 $serviceRequest->resort_id = $request->resort_id;
                 $serviceRequest->user_id = $request->user_id;
@@ -314,9 +318,16 @@ class ServiceController extends Controller {
                 $serviceRequest->question_id = $request->question_id ? $request->question_id : 0;
                 $serviceRequest->request_status_id = 1;
                 if ($serviceRequest->save()) {
-                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                    $this->androidPushNotification(2, "Servie Raised", "$service->name request raised by customer", $staffDeviceTokens, 1, $service->id);
-                    $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
+                    $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+                    if ($resortUsers) {
+                        $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1])
+                                ->whereIn("id", $resortUsers->toArray())
+                                ->pluck("device_token");
+                        if ($staffDeviceTokens) {
+                            $this->androidPushNotification(2, "Servie Raised", "$service->name request raised by customer", $staffDeviceTokens->toArray(), 1, $service->id);
+                            $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
+                        }
+                    }
                     return $this->sendSuccessResponse("Request successfully created.", (object) []);
                 } else {
                     return $this->sendErrorResponse("Something went be wrong.", (object) []);
@@ -492,13 +503,13 @@ class ServiceController extends Controller {
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
                 $stat = "";
-                if($ongoingMealOrder->status == 1){
+                if ($ongoingMealOrder->status == 1) {
                     $stat = "Pending";
-                }elseif($ongoingMealOrder->status == 2){
+                } elseif ($ongoingMealOrder->status == 2) {
                     $stat = "Accepted";
-                }elseif($ongoingMealOrder->status == 3){
-                  $stat =  "Your approval needed";
-                }else{
+                } elseif ($ongoingMealOrder->status == 3) {
+                    $stat = "Your approval needed";
+                } else {
                     $stat = "Invalid status";
                 }
                 $createdAt = Carbon::parse($ongoingMealOrder->created_at);
@@ -722,37 +733,37 @@ class ServiceController extends Controller {
             if (!$request->record_id) {
                 return $this->sendErrorResponse("record id missing.", (object) []);
             }
-            if($request->type == 1){
-            
+            if ($request->type == 1) {
 
-            $serviceRequest = ServiceRequest::where(["id" => $request->record_id, "request_status_id" => 3, "is_active" => 1])->first();
-            if (!$serviceRequest) {
+
+                $serviceRequest = ServiceRequest::where(["id" => $request->record_id, "request_status_id" => 3, "is_active" => 1])->first();
+                if (!$serviceRequest) {
+                    return $this->sendErrorResponse("Invalid service & order.", (object) []);
+                }
+                $serviceRequest->request_status_id = 4;
+                if ($serviceRequest->save()) {
+                    $staff = User::find($serviceRequest->accepted_by_id);
+                    $this->androidPushNotification(2, "Service Request", "Great! your Service approved by customer.", $staff->device_token, 1, $serviceRequest->service_id);
+                    return $this->sendSuccessResponse("Service approved successfully", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } elseif ($request->type == 4) {
+                $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 3, "is_active" => 1])->first();
+                if (!$serviceRequest) {
+                    return $this->sendErrorResponse("Invalid service & order.", (object) []);
+                }
+                $serviceRequest->status = 4;
+                if ($serviceRequest->save()) {
+                    $staff = User::find($serviceRequest->accepted_by);
+                    $this->androidPushNotification(2, "Service Request", "Great! your Meal order service approved by customer.", $staff->device_token, 1, $serviceRequest->id);
+                    return $this->sendSuccessResponse("Service approved successfully", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } else {
                 return $this->sendErrorResponse("Invalid service & order.", (object) []);
             }
-            $serviceRequest->request_status_id = 4;
-            if ($serviceRequest->save()) {
-                $staff = User::find($serviceRequest->accepted_by_id);
-                $this->androidPushNotification(2, "Service Request", "Great! your Service approved by customer.", $staff->device_token, 1, $serviceRequest->service_id);
-                return $this->sendSuccessResponse("Service approved successfully", (object) []);
-            } else {
-                return $this->administratorResponse();
-            }
-        }elseif($request->type == 4){
-            $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 3, "is_active" => 1])->first();
-            if (!$serviceRequest) {
-                return $this->sendErrorResponse("Invalid service & order.", (object) []);
-            }
-            $serviceRequest->status = 4;
-            if ($serviceRequest->save()) {
-               $staff = User::find($serviceRequest->accepted_by);
-                $this->androidPushNotification(2, "Service Request", "Great! your Meal order service approved by customer.", $staff->device_token, 1, $serviceRequest->id);
-                return $this->sendSuccessResponse("Service approved successfully", (object) []);
-            } else {
-                return $this->administratorResponse();
-            }
-        }else{
-            return $this->sendErrorResponse("Invalid service & order.", (object) []);
-        }
         } catch (\Exception $ex) {
             return $this->administratorResponse();
         }

@@ -103,7 +103,7 @@ class AuthController extends Controller {
             if ($request->user_type == 2) {
                 if ($userExist) {
                     if ($userExist->is_active == 0) {
-                        return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
+                        return $this->sendInactiveAccountResponse();
                     }
 
                     $userExist->otp = 9999;
@@ -131,7 +131,7 @@ class AuthController extends Controller {
                     }
                 } else {
                     if ($userExist->is_active == 0) {
-                        return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
+                        return $this->sendInactiveAccountResponse();
                     }
                     $userExist->otp = 9999;
                     $userExist->password = bcrypt(9999);
@@ -339,7 +339,7 @@ class AuthController extends Controller {
             }
 
             if ($request->user()->is_active == 0) {
-                return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
+                return $this->sendInactiveAccountResponse();
             }
             $user = $request->user();
             $tokenResult = $user->createToken('SanjeevaniToken');
