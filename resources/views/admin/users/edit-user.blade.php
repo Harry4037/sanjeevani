@@ -140,155 +140,155 @@
                         </div>
                     </div>
 
-<!--                    <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
-                    </div>
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userBooking->source_name))
-                            <input value="{{ $userBooking->source_name }}" type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
-                            @else
-                            <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userBooking->source_id))
-                            <input value="{{ $userBooking->source_id }}" type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
-                            @else
-                            <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
-                            @endif
+                    <!--                    <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
+                                        </div>
+                                        <div class="ln_solid"></div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                @if(isset($userBooking->source_name))
+                                                <input value="{{ $userBooking->source_name }}" type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
+                                                @else
+                                                <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name">
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                @if(isset($userBooking->source_id))
+                                                <input value="{{ $userBooking->source_id }}" type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
+                                                @else
+                                                <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id">
+                                                @endif
+                    
+                                            </div>
+                                        </div>
+                    
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In</label>
+                                            <div class="col-md-3 col-sm-3 col-xs-3">
+                                                <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
+                    
+                                                <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out</label>
+                                            <div class="col-md-3 col-sm-3 col-xs-3">
+                                                <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
+                    
+                                                <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select class="form-control" name="resort_id" id="resort_id">
+                                                    <option value="">Choose option</option>
+                                                    @if($resorts)
+                                                    @foreach($resorts as $resort)
+                                                    <option value="{{ $resort->id }}" 
+                                                            @if(isset($userBooking->resort_id) && ($userBooking->resort_id == $resort->id))
+                                                            {{ "selected" }}
+                                                            @endif
+                    
+                                                            >{{ $resort->name }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select class="form-control" name="resort_room_type" id="resort_room_type">
+                                                    <option value="">Choose option</option>
+                                                    @if($roomTypes)
+                                                    @foreach($roomTypes as $roomType)
+                                                    <option value="{{ $roomType->id }}"
+                                                            @if(isset($roomBooking->room_type_id))
+                                                            @if($roomType->id == $roomBooking->room_type_id)
+                                                            {{ "selected" }}
+                                                            @endif
+                                                            @endif
+                    
+                                                            >{{ $roomType->name }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select class="form-control" name="resort_room_id" id="resort_room_id">
+                                                    @if($resortRooms)
+                                                    @foreach($resortRooms as $resortRoom)
+                                                    <option value="{{ $resortRoom->id }}"
+                                                            @if(isset($roomBooking->room_room_id))
+                                                            @if($resortRoom->id == $roomBooking->room_room_id)
+                                                            {{ "selected" }}
+                                                            @endif
+                                                            @endif
+                                                            >{{ $resortRoom->room_no }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select class="form-control" name="package_id" id="package_id">
+                                                    <option value="">Choose option</option>
+                                                    @if($healcarePackages)
+                                                    @foreach($healcarePackages as $healcarePackage)
+                                                    <option value="{{ $healcarePackage->id }}"
+                                                            @if(isset($userBooking->package_id) && $userBooking->package_id == $healcarePackage->id)
+                                                            {{ "selected" }}
+                                                            @endif
+                                                            >{{ $healcarePackage->name }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>-->
 
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In</label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
-
-                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out</label>
-                        <div class="col-md-3 col-sm-3 col-xs-3">
-                            <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
-
-                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="resort_id" id="resort_id">
-                                <option value="">Choose option</option>
-                                @if($resorts)
-                                @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}" 
-                                        @if(isset($userBooking->resort_id) && ($userBooking->resort_id == $resort->id))
-                                        {{ "selected" }}
-                                        @endif
-
-                                        >{{ $resort->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="resort_room_type" id="resort_room_type">
-                                <option value="">Choose option</option>
-                                @if($roomTypes)
-                                @foreach($roomTypes as $roomType)
-                                <option value="{{ $roomType->id }}"
-                                        @if(isset($roomBooking->room_type_id))
-                                        @if($roomType->id == $roomBooking->room_type_id)
-                                        {{ "selected" }}
-                                        @endif
-                                        @endif
-
-                                        >{{ $roomType->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="resort_room_id" id="resort_room_id">
-                                @if($resortRooms)
-                                @foreach($resortRooms as $resortRoom)
-                                <option value="{{ $resortRoom->id }}"
-                                        @if(isset($roomBooking->room_room_id))
-                                        @if($resortRoom->id == $roomBooking->room_room_id)
-                                        {{ "selected" }}
-                                        @endif
-                                        @endif
-                                        >{{ $resortRoom->room_no }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="package_id" id="package_id">
-                                <option value="">Choose option</option>
-                                @if($healcarePackages)
-                                @foreach($healcarePackages as $healcarePackage)
-                                <option value="{{ $healcarePackage->id }}"
-                                        @if(isset($userBooking->package_id) && $userBooking->package_id == $healcarePackage->id)
-                                        {{ "selected" }}
-                                        @endif
-                                        >{{ $healcarePackage->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>-->
-
-<!--                    <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-2">People Accompanying</label>
-                    </div>
-                    <div class="ln_solid"></div>
-                    <div id="member_div">
-                        @if(isset($bookingAccompany) && !empty($bookingAccompany))
-                        @foreach($bookingAccompany as $bookingA)
-                        <div class="form-group">
-                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Name</label>
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <input value="{{ $bookingA->person_name }}" type="text" class="form-control" name="person_name[]">
-                            </div>
-                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Age</label>
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <input value="{{ $bookingA->person_age }}" type="text" class="form-control" name="person_age[]">
-                            </div>
-                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Type</label>
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <select class="form-control" name="person_type[]" >
-                                    <option value="Adult" @if($bookingA->person_type == 'Adult'){{ "selected" }} @endif>Adult</option>
-                                    <option value="Children" @if($bookingA->person_type == 'Children'){{ "selected" }} @endif>Children</option>
-                                </select>
-                            </div>
-                        </div>
-                        @endforeach
-                        @endif
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
-                            <button type="button" class="btn btn-primary" id="add_more_member">Add Members</button>
-                        </div>
-                    </div>-->
+                    <!--                    <div class="form-group">
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-2">People Accompanying</label>
+                                        </div>
+                                        <div class="ln_solid"></div>
+                                        <div id="member_div">
+                                            @if(isset($bookingAccompany) && !empty($bookingAccompany))
+                                            @foreach($bookingAccompany as $bookingA)
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Name</label>
+                                                <div class="col-md-2 col-sm-2 col-xs-2">
+                                                    <input value="{{ $bookingA->person_name }}" type="text" class="form-control" name="person_name[]">
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Age</label>
+                                                <div class="col-md-2 col-sm-2 col-xs-2">
+                                                    <input value="{{ $bookingA->person_age }}" type="text" class="form-control" name="person_age[]">
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12">Person Type</label>
+                                                <div class="col-md-2 col-sm-2 col-xs-2">
+                                                    <select class="form-control" name="person_type[]" >
+                                                        <option value="Adult" @if($bookingA->person_type == 'Adult'){{ "selected" }} @endif>Adult</option>
+                                                        <option value="Children" @if($bookingA->person_type == 'Children'){{ "selected" }} @endif>Children</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                            @endif
+                                        </div>
+                    
+                                        <div class="form-group">
+                                            <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
+                                                <button type="button" class="btn btn-primary" id="add_more_member">Add Members</button>
+                                            </div>
+                                        </div>-->
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
@@ -310,123 +310,123 @@
 @section('script')
 <script>
     $(document).ready(function () {
-    $('#check_in').daterangepicker({
-    singleDatePicker: true,
-            timePicker: true,
-            singleClasses: "picker_2",
-            @if (isset($roomBooking->check_in))
-            startDate: new Date("{{ $roomBooking->check_in }}"),
-            @endif
-            locale: {
-            format: 'YYYY/M/DD hh:mm:ss A'
-            }
-    });
-    $('#check_out').daterangepicker({
-    singleDatePicker: true,
-            timePicker: true,
-            singleClasses: "picker_2",
-            @if (isset($roomBooking->check_out))
-            startDate: new Date("{{ $roomBooking->check_out }}"),
-            @endif
-            locale: {
-            format: 'YYYY/M/DD hh:mm:ss A'
-            }
-    });
-    $(document).on("click", "#add_more_member", function () {
-    var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
-            + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
-            + "<input type='text' class='form-control' name='person_age[]'></div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Type</label><div class='col-md-2 col-sm-2 col-xs-12'>"
-            + "<select class='form-control' name='person_type[]'><option value='Adult'>Adult</option><option value='Child'>Children</option></select>"
-            + "</div></div>";
-    $("#member_div").append(member_html);
-    });
-    $("#editUserForm").validate({
-    rules: {
-    booking_source_name: {
-    required: true
-    },
-            booking_source_id: {
-            required: true
-            },
-            user_name: {
-            required: true
-            },
-            mobile_number: {
-            required: true,
+//    $('#check_in').daterangepicker({
+//    singleDatePicker: true,
+//            timePicker: true,
+//            singleClasses: "picker_2",
+//            @if (isset($roomBooking->check_in))
+//            startDate: new Date("{{ $roomBooking->check_in }}"),
+//            @endif
+//            locale: {
+//            format: 'YYYY/M/DD hh:mm:ss A'
+//            }
+//    });
+//    $('#check_out').daterangepicker({
+//    singleDatePicker: true,
+//            timePicker: true,
+//            singleClasses: "picker_2",
+//            @if (isset($roomBooking->check_out))
+//            startDate: new Date("{{ $roomBooking->check_out }}"),
+//            @endif
+//            locale: {
+//            format: 'YYYY/M/DD hh:mm:ss A'
+//            }
+//    });
+//    $(document).on("click", "#add_more_member", function () {
+//    var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
+//            + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+//            + "<input type='text' class='form-control' name='person_age[]'></div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Type</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+//            + "<select class='form-control' name='person_type[]'><option value='Adult'>Adult</option><option value='Child'>Children</option></select>"
+//            + "</div></div>";
+//    $("#member_div").append(member_html);
+//    });
+        $("#editUserForm").validate({
+            rules: {
+                booking_source_name: {
+                    required: true
+                },
+                booking_source_id: {
+                    required: true
+                },
+                user_name: {
+                    required: true
+                },
+                mobile_number: {
+                    required: true,
 //            max: 10,
-            number: true
-            },
-            email_id: {
-            required: true,
-            email: true
-            },
-            check_in: {
-            required: true
-            },
-            check_out: {
-            required: true
-            },
-            resort_id: {
-            required: true
-            },
-            resort_room_type: {
-            required: true
-            },
-            resort_room_id: {
-            required: true
-            },
-            package_id: {
-            required: true
-            },
-            is_diabeties: {
-            required: true
-            },
-            is_ppa: {
-            required: true
-            },
-            hba_1c: {
-            required: true
-            },
-            fasting: {
-            required: true
-            },
-            bp: {
-            required: true
-            },
-            insullin_dependency: {
-            required: true
-            },
+                    number: true
+                },
+                email_id: {
+                    required: true,
+                    email: true
+                },
+                check_in: {
+                    required: true
+                },
+                check_out: {
+                    required: true
+                },
+                resort_id: {
+                    required: true
+                },
+                resort_room_type: {
+                    required: true
+                },
+                resort_room_id: {
+                    required: true
+                },
+                package_id: {
+                    required: true
+                },
+                is_diabeties: {
+                    required: true
+                },
+                is_ppa: {
+                    required: true
+                },
+                hba_1c: {
+                    required: true
+                },
+                fasting: {
+                    required: true
+                },
+                bp: {
+                    required: true
+                },
+                insullin_dependency: {
+                    required: true
+                },
 //                medical_documents: {
 //                    required: true
 //                },
-    }
-    });
-    $.ajaxSetup({
-    headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
-    $(document).on("change", "#resort_room_type", function () {
-    var resort = $("#resort_id :selected").val();
-    var resort_room = $("#resort_room_type :selected").val();
-    if (!resort) {
-    alert("Please select resort.")
-            return false;
-    } else if (!resort_room) {
-    alert("Please select resort room type.")
-            return false;
-    } else {
-    $.ajax({
-    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
-            type: 'get',
-            dataType: 'html',
-            success: function (res) {
-            $("#resort_room_id").html(res);
             }
-    });
-    }
+        });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $(document).on("change", "#resort_room_type", function () {
+            var resort = $("#resort_id :selected").val();
+            var resort_room = $("#resort_room_type :selected").val();
+            if (!resort) {
+                alert("Please select resort.")
+                return false;
+            } else if (!resort_room) {
+                alert("Please select resort room type.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (res) {
+                        $("#resort_room_id").html(res);
+                    }
+                });
+            }
 
-    });
+        });
     });
 </script>
 

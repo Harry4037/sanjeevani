@@ -71,7 +71,7 @@
             }
         });
 
-        $(document).on("click", ".activity_status", function () {
+        $(document).on("click", ".offer_status", function () {
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');

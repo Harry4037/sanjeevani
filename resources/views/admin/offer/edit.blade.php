@@ -43,10 +43,10 @@
                             <select class="form-control" id="resort_id" name="resort_id">
                                 <option value="">Select option</option>
                                 <option value="-1" 
-                                @if($amenity->resort_id == -1)
+                                        @if($amenity->resort_id == -1)
                                         {{ "selected" }}
                                         @endif
-                                >Generalized Offer</option>
+                                        >Generalized Offer</option>
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}"
@@ -117,10 +117,25 @@ $(document).ready(function () {
         }
     });
 
+//    $('#check_in').daterangepicker({
+//    singleDatePicker: true,
+//            timePicker: true,
+//            singleClasses: "picker_2",
+//            @if (isset($roomBooking->check_in))
+//            startDate: new Date("{{ $roomBooking->check_in }}"),
+//            @endif
+//            locale: {
+//            format: 'YYYY/M/DD hh:mm:ss A'
+//            }
+//    });
+
     $('#valid_to').daterangepicker({
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
+        @if (isset($amenity->valid_to))
+        startDate: new Date("{{ $amenity->valid_to }}"),
+        @endif
         locale: {
             format: 'YYYY/M/DD'
         }
@@ -186,10 +201,13 @@ $(document).ready(function () {
                 required: true
             },
             price: {
-                required: true
+                required: true,
+                number: true
             },
             discount: {
-                required: true
+                required: true,
+                number: true,
+                range: [0, 100]
             },
             valid_to: {
                 required: true

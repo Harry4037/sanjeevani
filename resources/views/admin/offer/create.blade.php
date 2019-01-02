@@ -167,10 +167,13 @@ $(document).ready(function () {
                 required: true
             },
             price: {
-                required: true
+                required: true,
+                number: true
             },
             discount: {
-                required: true
+                required: true,
+                number: true,
+                range: [0,100]
             },
             valid_to: {
                 required: true
