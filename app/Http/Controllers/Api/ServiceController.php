@@ -557,13 +557,13 @@ class ServiceController extends Controller {
             foreach ($completedServices as $completedService) {
                 $completedDataArray[$j]["id"] = $completedService->id;
                 $completedDataArray[$j]["record_id"] = $completedService->id;
-                $completedDataArray[$j]["name"] = $completedService->serviceDetail->name;
-                $completedDataArray[$j]["icon"] = $completedService->serviceDetail->icon;
+                $completedDataArray[$j]["name"] = $completedService->serviceDetail ? $completedService->serviceDetail->name : "";
+                $completedDataArray[$j]["icon"] = $completedService->serviceDetail ? $completedService->serviceDetail->icon : "";
                 $completedDataArray[$j]["date"] = $completedService->date;
-                $completedDataArray[$j]["time"] = $completedService->time;
+                $completedDataArray[$j]["time"] = $completedService->date ." ".$completedService->time;
                 $completedDataArray[$j]["date_time"] = $completedService->created_timestamp;
                 $completedDataArray[$j]["status_id"] = $completedService->requestStatus->id;
-                $completedDataArray[$j]["status"] = $completedService->requestStatus->status;
+                $completedDataArray[$j]["status"] = $completedService->requestStatus ? $completedService->requestStatus->status : 0;
                 $completedDataArray[$j]["acceptd_by"] = isset($completedService->acceptedBy->user_name) ? $completedService->acceptedBy->user_name : "";
                 $completedDataArray[$j]["type"] = 1;
                 $j++;
