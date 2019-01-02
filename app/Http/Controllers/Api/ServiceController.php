@@ -486,7 +486,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail ? $ongoingService->serviceDetail->name : "";
                 $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail ? $ongoingService->serviceDetail->icon : "";
                 $ongoingDataArray[$i]["date"] = $ongoingService->date;
-                $ongoingDataArray[$i]["time"] = $ongoingService->time;
+                $ongoingDataArray[$i]["time"] = $ongoingService->date. " ".$ongoingService->time;
                 $ongoingDataArray[$i]["date_time"] = $ongoingService->created_timestamp;
                 $ongoingDataArray[$i]["status_id"] = $ongoingService->requestStatus->id;
                 $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus ? $ongoingService->requestStatus->status : "";
