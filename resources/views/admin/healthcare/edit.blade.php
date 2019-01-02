@@ -158,6 +158,9 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
     singleDatePicker: true,
             timePicker: false,
             singleClasses: "picker_1",
+            @if (isset($healthcare->start_from))
+            startDate: new Date("{{ $healthcare->start_from }}"),
+            @endif
             locale: {
             format: 'YYYY/M/DD'
             }
@@ -166,6 +169,9 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
     singleDatePicker: true,
             timePicker: false,
             singleClasses: "picker_1",
+            @if (isset($healthcare->end_to))
+            startDate: new Date("{{ $healthcare->end_to }}"),
+            @endif
             locale: {
             format: 'YYYY/M/DD'
             }
