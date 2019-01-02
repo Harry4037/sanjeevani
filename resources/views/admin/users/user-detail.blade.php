@@ -7,6 +7,9 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>User Detail</h2>
+                <div class="pull-right">
+                    <a class="btn btn-info" href="{{ route('admin.users.index') }}">Back</a>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
