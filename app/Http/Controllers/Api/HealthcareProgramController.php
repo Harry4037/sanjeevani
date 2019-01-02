@@ -397,8 +397,8 @@ class HealthcareProgramController extends Controller {
             }
 
             return $this->sendSuccessResponse("Healthcare package cancelled successsfully", (object) []);
-        } catch (Exception $ex) {
-            
+        } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
