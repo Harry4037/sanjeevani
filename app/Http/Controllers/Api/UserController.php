@@ -526,41 +526,45 @@ class UserController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "Device token updated successfully.",
      *    "data": {}
-     *}
+     * }
      * 
      * 
      */
     public function updateDeviceToken(Request $request) {
-        if (!$request->user_id) {
-            return $this->sendErrorResponse("User id missing.", (object) []);
-        }
-        if (!$request->device_token) {
-            return $this->sendErrorResponse("Device token missing.", (object) []);
-        }
-        if (!$request->device_type) {
-            return $this->sendErrorResponse("Device type missing.", (object) []);
-        }
-        if ($request->user_id != $request->user()->id) {
-            return $this->sendErrorResponse("Unauthorized user.", (object) []);
-        }
-
-        $user = User::find($request->user_id);
-        if ($user) {
-            $user->device_token = $request->device_token;
-            $user->device_type = $request->device_type;
-
-            if ($user->save()) {
-                return $this->sendSuccessResponse("Device token updated successfully.", (object) []);
-            } else {
-                return $this->sendErrorResponse("Something went be wrong.", (object) []);
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
             }
-        } else {
-            return $this->sendErrorResponse("User object not found", (object) []);
+            if (!$request->device_token) {
+                return $this->sendErrorResponse("Device token missing.", (object) []);
+            }
+            if (!$request->device_type) {
+                return $this->sendErrorResponse("Device type missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+
+            $user = User::find($request->user_id);
+            if ($user) {
+                $user->device_token = $request->device_token;
+                $user->device_type = $request->device_type;
+
+                if ($user->save()) {
+                    return $this->sendSuccessResponse("Device token updated successfully.", (object) []);
+                } else {
+                    return $this->sendErrorResponse("User not found.", (object) []);
+                }
+            } else {
+                return $this->sendErrorResponse("User object not found", (object) []);
+            }
+        } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
