@@ -30,9 +30,13 @@
                     </ul>
                     <div class="ln_solid"></div>
                     <label>Adhaar Id</label>
+                    @if(file_exists($user->aadhar_id))
                     <a target="_blank" href="{{ $user->aadhar_id }}"><img src="{{ $user->aadhar_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
+                    @endif
                     <label>Other Id</label>
+                    @if(file_exists($user->voter_id))
                     <a target="_blank" href="{{ $user->voter_id }}"><img src="{{ $user->voter_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
+                    @endif
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
                     <div class="panel panel-default">
