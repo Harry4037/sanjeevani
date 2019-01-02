@@ -277,7 +277,7 @@ class ServiceController extends Controller {
                 return $this->sendErrorResponse("resort id missing.", (object) []);
             }
 
-            $user = User::where(["id" => $request->user_id, "is_active" => 1])->first();
+            $user = User::where(["id" => $request->user_id])->first();
             if (!$user) {
                 return $this->sendErrorResponse("Invalid user.", (object) []);
             }
