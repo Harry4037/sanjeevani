@@ -90,8 +90,8 @@ class User extends Authenticatable {
         return $value ? asset('storage/other_id/' . $name) : asset("/img/no-image.jpg");
     }
 
-    public function getAadharIdAttribute($value) {
-        return $value ? asset('storage/aadhar_id/' . $name) : asset("/img/no-image.jpg");
+    public function getAadharIdAttribute($name) {
+        return $name ? asset('storage/aadhar_id/' . $name) : asset("/img/no-image.jpg");
     }
 
     public function getAddress1Attribute($value) {
