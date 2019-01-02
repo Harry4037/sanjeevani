@@ -233,7 +233,7 @@ class StaffController extends Controller {
             $data["amenities"] = $amenitiesDataArray;
             return $this->sendSuccessResponse("Service request found.", $data);
         } catch (\Exception $ex) {
-            return $this->administratorResponse();
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
@@ -297,6 +297,9 @@ class StaffController extends Controller {
             if ($request->user()->user_type_id != 2) {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
+            if ($request->user()->is_active == 0) {
+                return $this->sendInactiveAccountResponse();
+            }
 
             $serviceRequest = ServiceRequest::where(["id" => $request->request_id, "is_active" => 1])->first();
             if (!$serviceRequest) {
@@ -317,7 +320,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Something went be wrong.", (object) []);
             }
         } catch (\Exception $ex) {
-            return $this->administratorResponse();
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
