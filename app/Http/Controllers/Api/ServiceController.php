@@ -334,8 +334,7 @@ class ServiceController extends Controller {
                 }
             }
         } catch (\Exception $ex) {
-            dd($ex);
-            return $this->administratorResponse();
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
