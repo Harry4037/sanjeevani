@@ -576,7 +576,7 @@ class StaffController extends Controller {
             $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                            $query->select('id', 'name', 'type_id');
+                            $query->select('id', 'name','icon', 'type_id');
                         }
                     ])->with([
                         'questionDetail' => function($query) {
