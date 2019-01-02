@@ -573,7 +573,7 @@ class StaffController extends Controller {
                 $j++;
             }
 
-            $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
+            $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'type_id');
@@ -602,12 +602,12 @@ class StaffController extends Controller {
             foreach ($completed_jobs as $completed_job) {
                 $created_at = Carbon::parse($completed_job->created_at);
                 $completedJobArray[$i]["id"] = $completed_job->id;
-                $completedJobArray[$i]["service_name"] = $completed_job->serviceDetail->name;
+                $completedJobArray[$i]["service_name"] = $completed_job->serviceDetail ? $completed_job->serviceDetail->name : "";
                 $completedJobArray[$i]["service_comment"] = $completed_job->comment;
-                $completedJobArray[$i]["service_icon"] = $completed_job->serviceDetail->icon;
-                $completedJobArray[$i]["user_name"] = $completed_job->userDetail->user_name;
-                $completedJobArray[$i]["room_no"] = "";
-                $completedJobArray[$i]["created_at"] = $created_at->format('H:i a');
+                $completedJobArray[$i]["service_icon"] = $completed_job->serviceDetail ? $completed_job->serviceDetail->icon : "";
+                $completedJobArray[$i]["user_name"] = $completed_job->userDetail ? $completed_job->userDetail->user_name : "";
+                $completedJobArray[$i]["room_no"] = $completed_job->resort_room_no;
+                $completedJobArray[$i]["created_at"] = $created_at->format('d-m-Y H:i a');
                 $i++;
             }
 
