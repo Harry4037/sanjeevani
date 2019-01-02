@@ -136,7 +136,7 @@ class StaffController extends Controller {
             //If services & issues is authorized for user
             $serviceArray = [];
             if ($request->user()->is_service_authorise == 1) {
-                $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id', 'created_at')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
+                $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id', 'created_at', 'room_type_name', 'resort_room_no')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
                         ->with([
                             'questionDetail' => function($query) {
                                 $query->select('id', 'name as question');
@@ -162,12 +162,12 @@ class StaffController extends Controller {
                 foreach ($newServices as $k => $newService) {
                     $created_at = Carbon::parse($newService->created_at);
                     $serviceArray[$k]["id"] = $newService->id;
-                    $serviceArray[$k]["service_name"] = $newService->serviceDetail->name;
+                    $serviceArray[$k]["service_name"] = $newService->serviceDetail ? $newService->serviceDetail->name : "";
                     $serviceArray[$k]["service_comment"] = $newService->comment;
-                    $serviceArray[$k]["service_icon"] = $newService->serviceDetail->icon;
-                    $serviceArray[$k]["user_name"] = $newService->userDetail->user_name;
-                    $serviceArray[$k]["room_no"] = "";
-                    $serviceArray[$k]["created_at"] = $created_at->format('H:i a');
+                    $serviceArray[$k]["service_icon"] = $newService->serviceDetail ? $newService->serviceDetail->icon : "";
+                    $serviceArray[$k]["user_name"] = $newService->userDetail ? $newService->userDetail->user_name : "";
+                    $serviceArray[$k]["room_no"] = $newService->resort_room_no;
+                    $serviceArray[$k]["created_at"] = $created_at->format('d-m-Y H:i a');
                 }
             }
 
