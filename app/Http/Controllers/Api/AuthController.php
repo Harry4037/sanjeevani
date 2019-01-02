@@ -95,12 +95,17 @@ class AuthController extends Controller {
                 return $this->sendErrorResponse("User type invalid.", (object) []);
             }
 
+
             $userExist = User::where("mobile_number", $request->mobile_number)
                     ->where("user_type_id", $request->user_type)
                     ->first();
 
             if ($request->user_type == 2) {
                 if ($userExist) {
+                    if ($userExist->is_active == 0) {
+                        return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
+                    }
+
                     $userExist->otp = 9999;
                     $userExist->password = bcrypt(9999);
                     if ($userExist->save()) {
@@ -125,6 +130,9 @@ class AuthController extends Controller {
                         return $this->administratorResponse();
                     }
                 } else {
+                    if ($userExist->is_active == 0) {
+                        return $this->sendErrorResponse("Your account has been In-active.Please contact to admin.", (object) []);
+                    }
                     $userExist->otp = 9999;
                     $userExist->password = bcrypt(9999);
                     if ($userExist->save()) {
