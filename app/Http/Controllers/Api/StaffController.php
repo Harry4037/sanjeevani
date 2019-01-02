@@ -401,7 +401,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
 
-            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
+            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'type_id');
@@ -431,12 +431,12 @@ class StaffController extends Controller {
             foreach ($ongoing_jobs as $ongoing_job) {
                 $created_at = Carbon::parse($ongoing_job->created_at);
                 $ongoingJobArray[$i]["id"] = $ongoing_job->id;
-                $ongoingJobArray[$i]["service_name"] = $ongoing_job->serviceDetail->name;
+                $ongoingJobArray[$i]["service_name"] = $ongoing_job->serviceDetail ? $ongoing_job->serviceDetail->name : "";
                 $ongoingJobArray[$i]["service_comment"] = $ongoing_job->comment;
-                $ongoingJobArray[$i]["service_icon"] = $ongoing_job->serviceDetail->icon;
-                $ongoingJobArray[$i]["user_name"] = $ongoing_job->userDetail->user_name;
-                $ongoingJobArray[$i]["room_no"] = "";
-                $ongoingJobArray[$i]["created_at"] = $created_at->format('H:i a');
+                $ongoingJobArray[$i]["service_icon"] = $ongoing_job->serviceDetail ? $ongoing_job->serviceDetail->icon : "";
+                $ongoingJobArray[$i]["user_name"] = $ongoing_job->userDetail ? $ongoing_job->userDetail->user_name : "";
+                $ongoingJobArray[$i]["room_no"] = $ongoing_job->resort_room_no;
+                $ongoingJobArray[$i]["created_at"] = $created_at->format('d-m-Y H:i a');
                 $ongoingJobArray[$i]["type"] = 1;
                 $i++;
             }
