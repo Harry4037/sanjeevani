@@ -120,11 +120,11 @@ class ServiceController extends Controller {
                 $houseKeepingArrray[$i]['name'] = $houseKeep->name;
                 $houseKeepingArrray[$i]['icon'] = $houseKeep->icon;
                 if ($serviceQuestion) {
+                    $houseKeepingArrray[$i]['questions'] = [];
                     $j = 0;
                     foreach ($serviceQuestion as $serviceQues) {
-                        $question = Question::find($serviceQues->question_id);
-                        $houseKeepingArrray[$i]['questions'][$j]['id'] = $question->id;
-                        $houseKeepingArrray[$i]['questions'][$j]['name'] = $question->name;
+//                        $houseKeepingArrray[$i]['questions'][$j]['id'] = $question->id;
+                        $houseKeepingArrray[$i]['questions'][$j]['name'] = $serviceQues->question;
                         $j++;
                     }
                 } else {
@@ -146,11 +146,12 @@ class ServiceController extends Controller {
                 $issuesArrray[$i]['name'] = $issue->name;
                 $issuesArrray[$i]['icon'] = $issue->icon;
                 if ($serviceQuestion) {
+                    $issuesArrray[$i]['questions'] = [];
                     $j = 0;
                     foreach ($serviceQuestion as $serviceQues) {
-                        $question = Question::find($serviceQues->question_id);
-                        $issuesArrray[$i]['questions'][$j]['id'] = $question->id;
-                        $issuesArrray[$i]['questions'][$j]['name'] = $question->name;
+//                        $question = Question::find($serviceQues->question_id);
+//                        $issuesArrray[$i]['questions'][$j]['id'] = $question->id;
+                        $issuesArrray[$i]['questions'][$j]['name'] = $serviceQues->question;
                         $j++;
                     }
                 } else {
@@ -305,10 +306,10 @@ class ServiceController extends Controller {
                 return $this->sendErrorResponse("Request already raised.", (object) []);
             } else {
                 $userDetail = User::where("id", $request->user_id)->with([
-                        'userBookingDetail' => function($query) {
-                            $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                        }
-                    ])->first();
+                            'userBookingDetail' => function($query) {
+                                $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                            }
+                        ])->first();
 
                 $serviceRequest = new ServiceRequest();
                 $serviceRequest->resort_id = $request->resort_id;
@@ -317,7 +318,7 @@ class ServiceController extends Controller {
                 $serviceRequest->room_type_name = $userDetail->userBookingDetail->room_type_detail ? $userDetail->userBookingDetail->room_type_detail->name : "";
                 $serviceRequest->resort_room_no = $userDetail->userBookingDetail->room_detail ? $userDetail->userBookingDetail->room_detail->room_no : "";
                 $serviceRequest->comment = $request->comment ? $request->comment : '';
-                $serviceRequest->question_id = $request->question_id ? $request->question_id : 0;
+                $serviceRequest->questions = $request->question_id ? $request->question_id : 0;
                 $serviceRequest->request_status_id = 1;
                 if ($serviceRequest->save()) {
                     $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
@@ -486,7 +487,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["name"] = $ongoingService->serviceDetail ? $ongoingService->serviceDetail->name : "";
                 $ongoingDataArray[$i]["icon"] = $ongoingService->serviceDetail ? $ongoingService->serviceDetail->icon : "";
                 $ongoingDataArray[$i]["date"] = $ongoingService->date;
-                $ongoingDataArray[$i]["time"] = $ongoingService->date. " ".$ongoingService->time;
+                $ongoingDataArray[$i]["time"] = $ongoingService->date . " " . $ongoingService->time;
                 $ongoingDataArray[$i]["date_time"] = $ongoingService->created_timestamp;
                 $ongoingDataArray[$i]["status_id"] = $ongoingService->requestStatus->id;
                 $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus ? $ongoingService->requestStatus->status : "";
@@ -560,7 +561,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["name"] = $completedService->serviceDetail ? $completedService->serviceDetail->name : "";
                 $completedDataArray[$j]["icon"] = $completedService->serviceDetail ? $completedService->serviceDetail->icon : "";
                 $completedDataArray[$j]["date"] = $completedService->date;
-                $completedDataArray[$j]["time"] = $completedService->date ." ".$completedService->time;
+                $completedDataArray[$j]["time"] = $completedService->date . " " . $completedService->time;
                 $completedDataArray[$j]["date_time"] = $completedService->created_timestamp;
                 $completedDataArray[$j]["status_id"] = $completedService->requestStatus->id;
                 $completedDataArray[$j]["status"] = $completedService->requestStatus ? $completedService->requestStatus->status : 0;

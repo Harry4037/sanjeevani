@@ -138,6 +138,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::post('/service-status', 'ServiceController@updateServiceStatus')->name('admin.service.status');
     Route::match(['get', 'post'], '/service/edit/{id}', 'ServiceController@edit')->name('admin.service.edit');
     Route::post('services/delete', 'ServiceController@deleteService')->name('admin.service.delete');
+    Route::post('services/delete-question', 'ServiceController@deleteQuestion')->name('admin.service.delete-question');
 
     /**
      * Jobs Management

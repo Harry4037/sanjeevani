@@ -67,25 +67,32 @@
                             </select>
                         </div>
                     </div>
+                    <div id="service_question">
+                        @if($serviceQuestions)
+                        @foreach($serviceQuestions as $key => $serviceQuestion)
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Question {{ $key+1 }} </label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" value="{{ $serviceQuestion->question }}" class="form-control" name="question[]"  placeholder="question">
+                            </div>
+                            <i style='cursor:pointer' class='fa fa-times delete_question' id="{{ $serviceQuestion->id }}"></i>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                    @if(count($serviceQuestions) < 4)
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Questions</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <p style="padding: 5px;">
-                                @if($questions)
-                                @foreach($questions as $question)
-                                <input class="flat" type="checkbox" name="service_question[]" value="{{ $question->id }}" @if(in_array($question->id, $qSArray)) {{ "checked" }} @endif > {{ $question->name }}
-                                       <br>
-                                @endforeach
-                                @endif
-                            <p>
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
+                            <input type="hidden" id="question_count" value="{{ count($serviceQuestions) }}">
+                            <button type="button" class="btn btn-primary" id="add_service_question">Add Members</button>
                         </div>
                     </div>
-
+                    @endif
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
                             <a class="btn btn-default" href="{{ route('admin.service.index') }}">Cancel</a>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
 
@@ -100,6 +107,57 @@
 @section('script')
 <script>
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).on("click", ".delete_question", function () {
+            var _this = $(this);
+            var record_id = this.id;
+            var question_count = $("#question_count").val();
+            $.ajax({
+                url: _baseUrl + '/admin/services/delete-question',
+                type: 'post',
+                data: {record_id: record_id},
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status)
+                    {
+                        question_count--;
+                        $("#question_count").val(question_count);
+                        _this.parent("div").remove();
+                    } else {
+                        alert("Something went be wrong");
+                    }
+                }
+            });
+        });
+        $(document).on("click", ".delete_this_div", function () {
+            var question_count = $("#question_count").val();
+            question_count--;
+            $("#question_count").val(question_count);
+            $(this).parent("div").remove();
+        });
+        $(document).on("click", "#add_service_question", function () {
+            var question_count = $("#question_count").val();
+            if (question_count < 4) {
+                question_count++;
+                var member_html = "<div class='form-group'>"
+                        + "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Question " + question_count + "</label>"
+                        + "<div class='col-md-6 col-sm-6 col-xs-6' id='service_question'>"
+                        + "<input type='text' class='form-control' name='question[]'  placeholder='question'>"
+                        + "</div>"
+                        + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
+                $("#service_question").append(member_html);
+
+                $("#question_count").val(question_count);
+            } else {
+                alert("Only four questions allowed.");
+            }
+        });
+
         $("#editServiceForm").validate({
             rules: {
                 service_name: {

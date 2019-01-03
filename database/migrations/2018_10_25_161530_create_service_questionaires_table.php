@@ -15,7 +15,7 @@ class CreateServiceQuestionairesTable extends Migration {
         Schema::create('service_questionaires', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('service_id')->default(0);
-            $table->bigInteger('question_id')->default(0);
+            $table->text('question')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);

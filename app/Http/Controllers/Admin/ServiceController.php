@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\ServiceType;
 use App\Models\Resort;
-use App\Models\Question;
 use App\Models\ServiceQuestionaire;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -99,15 +98,17 @@ class ServiceController extends Controller {
             $service->updated_by = 1;
 
             if ($service->save()) {
-                if ($request->service_question) {
-                    foreach ($request->service_question as $serviceQues) {
-                        $serviceQuestion = new ServiceQuestionaire();
-                        $serviceQuestion->service_id = $service->id;
-                        $serviceQuestion->question_id = $serviceQues;
-                        $serviceQuestion->is_active = 1;
-                        $serviceQuestion->created_by = 1;
-                        $serviceQuestion->updated_by = 1;
-                        $serviceQuestion->save();
+                if ($request->question) {
+                    foreach ($request->question as $serviceQues) {
+                        if ($serviceQues) {
+                            $serviceQuestion = new ServiceQuestionaire();
+                            $serviceQuestion->service_id = $service->id;
+                            $serviceQuestion->question = $serviceQues;
+                            $serviceQuestion->is_active = 1;
+                            $serviceQuestion->created_by = 1;
+                            $serviceQuestion->updated_by = 1;
+                            $serviceQuestion->save();
+                        }
                     }
                 }
                 return redirect()->route('admin.service.index')->with('status', 'Service has been added successfully.');
@@ -123,13 +124,11 @@ class ServiceController extends Controller {
         ];
         $serviceType = ServiceType::where("is_active", 1)->get();
         $resort = Resort::where("is_active", 1)->get();
-        $question = Question::all();
         return view('admin.services.add-service', [
             'js' => $js,
             'css' => $css,
             'serviceType' => $serviceType,
             'resort' => $resort,
-            'question' => $question
         ]);
     }
 
@@ -164,16 +163,18 @@ class ServiceController extends Controller {
             $data->resort_id = $request->resort_id;
 
             if ($data->save()) {
-                if ($request->service_question) {
+                if ($request->question) {
                     ServiceQuestionaire::where("service_id", $data->id)->delete();
-                    foreach ($request->service_question as $serviceQues) {
-                        $serviceQuestion = new ServiceQuestionaire();
-                        $serviceQuestion->service_id = $data->id;
-                        $serviceQuestion->question_id = $serviceQues;
-                        $serviceQuestion->is_active = 1;
-                        $serviceQuestion->created_by = 1;
-                        $serviceQuestion->updated_by = 1;
-                        $serviceQuestion->save();
+                    foreach ($request->question as $serviceQues) {
+                        if ($serviceQues) {
+                            $serviceQuestion = new ServiceQuestionaire();
+                            $serviceQuestion->service_id = $data->id;
+                            $serviceQuestion->question = $serviceQues;
+                            $serviceQuestion->is_active = 1;
+                            $serviceQuestion->created_by = 1;
+                            $serviceQuestion->updated_by = 1;
+                            $serviceQuestion->save();
+                        }
                     }
                 }
                 return redirect()->route('admin.service.edit', $id)->with('status', 'Service has been updated successfully.');
@@ -186,12 +187,7 @@ class ServiceController extends Controller {
         $js = ['vendors/iCheck/icheck.min.js'];
         $sTypes = ServiceType::where("is_active", 1)->get();
         $resorts = Resort::all();
-        $questions = Question::where("is_active", 1)->get();
-        $serviceQuestioner = ServiceQuestionaire::where("service_id", $id)->get();
-        $qSArray = [];
-        foreach ($serviceQuestioner as $serviceQues) {
-            $qSArray[] = $serviceQues->question_id;
-        }
+        $serviceQuestions = ServiceQuestionaire::where("service_id", $data->id)->get();
 
         return view('admin.services.edit-service', [
             'js' => $js,
@@ -199,13 +195,21 @@ class ServiceController extends Controller {
             'data' => $data,
             'sTypes' => $sTypes,
             'resorts' => $resorts,
-            'questions' => $questions,
-            'qSArray' => $qSArray,
+            'serviceQuestions' => $serviceQuestions,
         ]);
     }
 
     public function deleteService(Request $request) {
         $service = Service::find($request->id);
+        if ($service->delete()) {
+            return ['status' => true];
+        } else {
+            return ['status' => true];
+        }
+    }
+
+    public function deleteQuestion(Request $request) {
+        $service = ServiceQuestionaire::find($request->record_id);
         if ($service->delete()) {
             return ['status' => true];
         } else {
