@@ -466,6 +466,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
+                    $ongoingJobArray[$i]["meal_items"] = [];
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $ongoingJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
@@ -550,6 +551,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["acceptd_by"] = "";
                 $underApprovalJobArray[$j]["type"] = 4;
                 if ($mealItems) {
+                    $underApprovalJobArray[$j]["meal_items"] = [];
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $underApprovalJobArray[$j]["meal_items"][$f]["id"] = $mealItem->id;
@@ -632,6 +634,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["acceptd_by"] = "";
                 $completedJobArray[$i]["type"] = 4;
                 if ($mealItems) {
+                    $completedJobArray[$i]["meal_items"] = [];
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $completedJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
