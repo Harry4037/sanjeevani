@@ -396,14 +396,10 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
 
-            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
+            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name','icon', 'type_id');
-                        }
-                    ])->with([
-                        'questionDetail' => function($query) {
-                            $query->select('id', 'name');
                         }
                     ])->with([
                         'requestStatus' => function($query) {
@@ -482,14 +478,10 @@ class StaffController extends Controller {
                 $i++;
             }
 
-            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
+            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name','icon', 'type_id');
-                        }
-                    ])->with([
-                        'questionDetail' => function($query) {
-                            $query->select('id', 'name');
                         }
                     ])->with([
                         'requestStatus' => function($query) {
@@ -568,14 +560,10 @@ class StaffController extends Controller {
                 $j++;
             }
 
-            $completed_jobs = ServiceRequest::select('id', 'comment', 'question_id', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
+            $completed_jobs = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name','icon', 'type_id');
-                        }
-                    ])->with([
-                        'questionDetail' => function($query) {
-                            $query->select('id', 'name');
                         }
                     ])->with([
                         'requestStatus' => function($query) {

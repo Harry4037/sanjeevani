@@ -301,7 +301,10 @@ class ServiceController extends Controller {
                         "user_id" => $request->user_id,
                         "resort_id" => $request->resort_id,
                         "service_id" => $request->service_id,
-                    ])->where("request_status_id", 1)->orWhere("request_status_id", 2)->first();
+                    ])->where(function($q) {
+                        $q->where("request_status_id", 1)
+                        ->orWhere("request_status_id", 2);
+                    })->first();
             if ($existingServiceRequest) {
                 return $this->sendErrorResponse("Request already raised.", (object) []);
             } else {
