@@ -37,6 +37,7 @@ class Controller extends BaseController {
                     'data' => (object) []
         ]);
     }
+
     public function sendErrorResponse($message, $data, $statusCode = 404) {
         return response()->json([
                     'status' => false,
@@ -95,6 +96,27 @@ class Controller extends BaseController {
 
         $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
         return $downstreamResponse;
+    }
+
+    public function sendOtp($mobileNumber, $otp) {
+        $url = 'http://mobicomm.dove-sms.com//submitsms.jsp';
+        $fields = array(
+            'user' => 'HARISH',
+            'key' => '8db582baeaXX',
+            'mobile' => "+91" . $mobileNumber,
+            'message' => "OTP: " . $otp,
+            'senderid' => 'HMPTHY',
+            'accusage' => 1
+        );
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return $result;
     }
 
 }

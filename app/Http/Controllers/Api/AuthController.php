@@ -118,11 +118,13 @@ class AuthController extends Controller {
                 }
             } else {
                 if (!$userExist) {
+                    $OTP = rand(0000, 9999);
+                    $this->sendOtp($request->mobile_number, $OTP);
                     $user = new User([
                         'mobile_number' => $request->mobile_number,
                         'user_type_id' => $request->user_type,
-                        'otp' => 9999,
-                        'password' => bcrypt(9999)
+                        'otp' => $OTP,
+                        'password' => bcrypt($OTP)
                     ]);
                     if ($user->save()) {
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
@@ -133,8 +135,10 @@ class AuthController extends Controller {
                     if ($userExist->is_active == 0) {
                         return $this->sendInactiveAccountResponse();
                     }
-                    $userExist->otp = 9999;
-                    $userExist->password = bcrypt(9999);
+                    $OTP = rand(0000, 9999);
+                    $this->sendOtp($request->mobile_number, $OTP);
+                    $userExist->otp = $OTP;
+                    $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
