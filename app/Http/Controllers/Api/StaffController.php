@@ -466,7 +466,11 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
-                    $ongoingJobArray[$i]["meal_items"] = [];
+                    $ongoingJobArray[0]["meal_items"][0]["id"]=1;
+                    $ongoingJobArray[0]["meal_items"][0]["meal_item_name"]= "Dummy";
+                    $ongoingJobArray[0]["meal_items"][0]["price"]=123;
+                    $ongoingJobArray[0]["meal_items"][0]["quantity"]=25;
+                    $ongoingJobArray[0]["meal_items"][0]["image_url"] ="";
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $ongoingJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
