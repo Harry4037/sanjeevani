@@ -640,7 +640,6 @@ class ServiceController extends Controller {
             $data["complete_services"] = $completedDataArray;
             return $this->sendSuccessResponse("Services list", $data);
         } catch (\Exception $ex) {
-            dd($ex);
             return response()->json([
                         'status' => false,
                         'status_code' => 404,

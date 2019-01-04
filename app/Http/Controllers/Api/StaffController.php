@@ -136,12 +136,7 @@ class StaffController extends Controller {
             //If services & issues is authorized for user
             $serviceArray = [];
             if ($request->user()->is_service_authorise == 1) {
-                $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'question_id', 'created_at', 'room_type_name', 'resort_room_no')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
-                        ->with([
-                            'questionDetail' => function($query) {
-                                $query->select('id', 'name as question');
-                            }
-                        ])
+                $newServices = ServiceRequest::select('id', 'comment', 'service_id', 'user_id', 'created_at', 'room_type_name', 'resort_room_no')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
                         ->with([
                             'serviceDetail' => function($query) {
                                 $query->select('id', 'name', 'icon', 'type_id');
