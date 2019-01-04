@@ -112,6 +112,7 @@ class Controller extends BaseController {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_exec($ch);
         curl_close($ch);
 
