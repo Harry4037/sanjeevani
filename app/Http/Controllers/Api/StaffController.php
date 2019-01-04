@@ -399,7 +399,7 @@ class StaffController extends Controller {
             $ongoing_jobs = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                            $query->select('id', 'name','icon', 'type_id');
+                            $query->select('id', 'name', 'icon', 'type_id');
                         }
                     ])->with([
                         'requestStatus' => function($query) {
@@ -466,11 +466,11 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
-                    $ongoingJobArray[0]["meal_items"][0]["id"]=1;
-                    $ongoingJobArray[0]["meal_items"][0]["meal_item_name"]= "Dummy";
-                    $ongoingJobArray[0]["meal_items"][0]["price"]=123;
-                    $ongoingJobArray[0]["meal_items"][0]["quantity"]=25;
-                    $ongoingJobArray[0]["meal_items"][0]["image_url"] ="";
+                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
+                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
+                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
+                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
+                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $ongoingJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
@@ -479,8 +479,12 @@ class StaffController extends Controller {
                         $ongoingJobArray[$i]["meal_items"][$f]["quantity"] = $mealItem->quantity;
                         $ongoingJobArray[$i]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
-                }else{
-                    $ongoingJobArray[$i]["meal_items"] = [];
+                } else {
+                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
+                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
+                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
+                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
+                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
                 }
                 $i++;
             }
@@ -488,7 +492,7 @@ class StaffController extends Controller {
             $under_approval_jobs = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                            $query->select('id', 'name','icon', 'type_id');
+                            $query->select('id', 'name', 'icon', 'type_id');
                         }
                     ])->with([
                         'requestStatus' => function($query) {
@@ -564,7 +568,7 @@ class StaffController extends Controller {
                         $underApprovalJobArray[$j]["meal_items"][$f]["quantity"] = $mealItem->quantity;
                         $underApprovalJobArray[$j]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
-                }else{
+                } else {
                     $underApprovalJobArray[$j]["meal_items"] = [];
                 }
                 $j++;
@@ -573,7 +577,7 @@ class StaffController extends Controller {
             $completed_jobs = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                            $query->select('id', 'name','icon', 'type_id');
+                            $query->select('id', 'name', 'icon', 'type_id');
                         }
                     ])->with([
                         'requestStatus' => function($query) {
@@ -647,7 +651,7 @@ class StaffController extends Controller {
                         $completedJobArray[$i]["meal_items"][$f]["quantity"] = $mealItem->quantity;
                         $completedJobArray[$i]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
-                }else{
+                } else {
                     $completedJobArray[$i]["meal_items"] = [];
                 }
                 $i++;
