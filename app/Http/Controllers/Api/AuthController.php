@@ -118,7 +118,7 @@ class AuthController extends Controller {
                 }
             } else {
                 if (!$userExist) {
-                    $OTP = rand(0000, 9999);
+                    $OTP = rand(1000, 9999);
                     $this->sendOtp($request->mobile_number, $OTP);
                     $user = new User([
                         'mobile_number' => $request->mobile_number,
@@ -135,7 +135,7 @@ class AuthController extends Controller {
                     if ($userExist->is_active == 0) {
                         return $this->sendInactiveAccountResponse();
                     }
-                    $OTP = rand(0000, 9999);
+                    $OTP = rand(1000, 9999);
                     $this->sendOtp($request->mobile_number, $OTP);
                     $userExist->otp = $OTP;
                     $userExist->password = bcrypt($OTP);
