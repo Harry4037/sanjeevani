@@ -466,11 +466,12 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["acceptd_by"] = "";
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
-                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
-                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
-                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
-                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
-                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
+                    $ongoingJobArray[$i]["meal_items"] = [];
+//                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
+//                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
+//                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
+//                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
+//                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $ongoingJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
@@ -480,11 +481,12 @@ class StaffController extends Controller {
                         $ongoingJobArray[$i]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
                 } else {
-                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
-                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
-                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
-                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
-                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
+                    $ongoingJobArray[$i]["meal_items"] = [];
+//                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
+//                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
+//                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
+//                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
+//                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
                 }
                 $i++;
             }
