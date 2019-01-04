@@ -458,8 +458,8 @@ class ServiceController extends Controller {
                             ->where(function($q) {
                                 $q->where("request_status_id", 1)
                                 ->orWhere("request_status_id", 2)
-                                ->orWhere("request_status_id", 3)
-                                ->orWhere("request_status_id", 5);
+                                ->orWhere("request_status_id", 3);
+//                                ->orWhere("request_status_id", 5);
                             })
                             ->with([
                                 'serviceDetail' => function($query) {
@@ -534,7 +534,11 @@ class ServiceController extends Controller {
 
 
             $completedServices = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
-                            ->where(["user_id" => $request->user_id, "request_status_id" => 4])
+                            ->where(["user_id" => $request->user_id])
+                            ->where(function($q) {
+                                $q->where("request_status_id", 4)
+                                ->orWhere("request_status_id", 5);
+                            })
                             ->with([
                                 'serviceDetail' => function($query) {
                                     $query->select('id', 'name', 'type_id', 'icon');
@@ -582,7 +586,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
-                $completedDataArray[$j]["status"] = "Booked";
+                $completedDataArray[$j]["status"] = "Confirmed";
                 $completedDataArray[$j]["acceptd_by"] = "";
                 $completedDataArray[$j]["type"] = 2;
                 $j++;
@@ -599,13 +603,17 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
-                $completedDataArray[$j]["status"] = "Booked";
+                $completedDataArray[$j]["status"] = "Confirmed";
                 $completedDataArray[$j]["acceptd_by"] = "";
                 $completedDataArray[$j]["type"] = 3;
                 $j++;
             }
 
-            $completedMealOrders = MealOrder::where(["user_id" => $request->user_id, "status" => 1])
+            $completedMealOrders = MealOrder::where(["user_id" => $request->user_id])
+                    ->where(function($q) {
+                        $q->where("status", 4)
+                        ->orWhere("status", 5);
+                    })
                     ->get();
             foreach ($completedMealOrders as $completedMealOrder) {
                 $createdAt = Carbon::parse($completedMealOrder->created_at);
@@ -620,7 +628,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["total_item_count"] = $totalItem;
                 $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
                 $completedDataArray[$j]["status_id"] = $completedMealOrder->status;
-                $completedDataArray[$j]["status"] = "Confirmed";
+                $completedDataArray[$j]["status"] = $completedMealOrder->status == 4 ? "Completed": "Rejected";
                 $completedDataArray[$j]["acceptd_by"] = "";
                 $completedDataArray[$j]["type"] = 4;
                 $j++;
