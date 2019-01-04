@@ -106,8 +106,8 @@ class AuthController extends Controller {
                         return $this->sendInactiveAccountResponse();
                     }
 
-                    $userExist->otp = 9999;
-                    $userExist->password = bcrypt(9999);
+                    $userExist->otp = 1234;
+                    $userExist->password = bcrypt(1234);
                     if ($userExist->save()) {
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
@@ -118,13 +118,13 @@ class AuthController extends Controller {
                 }
             } else {
                 if (!$userExist) {
-                    $OTP = rand(1000, 9999);
-                    $this->sendOtp($request->mobile_number, $OTP);
+                   // $OTP = rand(1000, 9999);
+                    //$this->sendOtp($request->mobile_number, $OTP);
                     $user = new User([
                         'mobile_number' => $request->mobile_number,
                         'user_type_id' => $request->user_type,
-                        'otp' => $OTP,
-                        'password' => bcrypt($OTP)
+                        'otp' => 1234,
+                        'password' => bcrypt(1234)
                     ]);
                     if ($user->save()) {
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
@@ -135,10 +135,10 @@ class AuthController extends Controller {
                     if ($userExist->is_active == 0) {
                         return $this->sendInactiveAccountResponse();
                     }
-                    $OTP = rand(1000, 9999);
-                    $this->sendOtp($request->mobile_number, $OTP);
-                    $userExist->otp = $OTP;
-                    $userExist->password = bcrypt($OTP);
+                    //$OTP = rand(1000, 9999);
+                    //$this->sendOtp($request->mobile_number, $OTP);
+                    $userExist->otp = 1234;
+                    $userExist->password = bcrypt(1234);
                     if ($userExist->save()) {
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
