@@ -474,6 +474,8 @@ class StaffController extends Controller {
                         $ongoingJobArray[$i]["meal_items"][$f]["quantity"] = $mealItem->quantity;
                         $ongoingJobArray[$i]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
+                }else{
+                    $ongoingJobArray[$i]["meal_items"] = [];
                 }
                 $i++;
             }
@@ -556,6 +558,8 @@ class StaffController extends Controller {
                         $underApprovalJobArray[$j]["meal_items"][$f]["quantity"] = $mealItem->quantity;
                         $underApprovalJobArray[$j]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
+                }else{
+                    $underApprovalJobArray[$j]["meal_items"] = [];
                 }
                 $j++;
             }
@@ -636,6 +640,8 @@ class StaffController extends Controller {
                         $completedJobArray[$i]["meal_items"][$f]["quantity"] = $mealItem->quantity;
                         $completedJobArray[$i]["meal_items"][$f]["image_url"] = isset($mealImage->image_name) ? $mealImage->image_name : "";
                     }
+                }else{
+                    $completedJobArray[$i]["meal_items"] = [];
                 }
                 $i++;
             }
