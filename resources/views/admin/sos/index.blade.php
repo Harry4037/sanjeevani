@@ -23,7 +23,7 @@
                             <th>Room No.</th>
                             <th>Latitude</th>
                             <th>Longitude</th>
-                            <!-- <th>Action</th> -->
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -57,7 +57,7 @@
                 {"data": "room_no"},
                 {"data": "latitude"},
                 {"data": "longitude"},
-                // {"data": "action", sortable: false, },
+                {"data": "action", sortable: false, },
             ]
         });
 
