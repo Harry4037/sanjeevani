@@ -521,7 +521,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["name"] = $ongoingMealOrder->invoice_id;
                 $ongoingDataArray[$i]["icon"] = "";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
-                $ongoingDataArray[$i]["time"] = $createdAt->format("H:i a");
+                $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $ongoingDataArray[$i]["total_item_count"] = $totalItem;
                 $ongoingDataArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
