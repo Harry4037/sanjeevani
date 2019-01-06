@@ -6,12 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\AdminNotification;
+use Carbon\Carbon;
 
 class NotificationController extends Controller {
 
     public function index() {
+        $css = [
+            'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
+        ];
+        $js = [
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+        ];
+
         $users = User::where("is_active", 1)->where('user_type_id','!=',1)->get();
-        return view('admin.notification.index', compact('users'));
+        return view('admin.notification.index', [
+            'users' => $users,
+            'css' => $css,
+            'js' => $js,
+        ]);
     }
 
     public function sendNotification(Request $request) {
@@ -35,11 +49,39 @@ class NotificationController extends Controller {
         ->pluck("device_token")->toArray();
 
         if (count($tokens)) {
-            $this->androidPushNotification(3, $request->title, $request->message, $tokens,123,0);
+            //$this->androidPushNotification(3, $request->title, $request->message, $tokens,123,0);
         }
-
+        $adminNotification = new AdminNotification();
+        $adminNotification->title = $request->title;
+        $adminNotification->message  = $request->message;
+        $adminNotification->save();
         return $this->sendSuccessResponse("Notification send successfully", (object) [],200);
     }
 
+    public function listNotification(Request $request){
+        try {
+            $offset = $request->get('start') ? $request->get('start') : 0;
+            $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
+
+            $query = AdminNotification::query();
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $notifications = $query->take($limit)->offset($offset)->latest()->get();
+            
+            $notificationsArray = [];
+            foreach ($notifications as $k => $notification) {
+                $created_at = Carbon::parse($notification->created_at);
+                $notificationsArray[$k]['title'] = $notification->title;
+                $notificationsArray[$k]['message'] = $notification->message;
+                $notificationsArray[$k]['created_at'] = $created_at->format('d-m-Y H:i a');
+            }
+
+            $data['data'] = $notificationsArray;
+            return $data;
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
 
 }

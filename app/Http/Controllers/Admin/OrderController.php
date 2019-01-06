@@ -22,18 +22,20 @@ class OrderController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $mealOrders = MealOrder::with([
+            $query = MealOrder::query();
+            if ($searchKeyword) {
+                $query->where("invoice_id", "LIKE", "%$searchKeyword%")
+                ->orWhere("total_amount", "LIKE", "%$searchKeyword%");
+            }
+
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $mealOrders = $query->with([
                         "userDetail" => function($query) {
                             $query->select('id', 'user_name');
                         }
-                    ])->get();
-            $data['recordsTotal'] = count($mealOrders);
-            $data['recordsFiltered'] = count($mealOrders);
-            $mealOrders = MealOrder::with([
-                        "userDetail" => function($query) {
-                            $query->select('id', 'user_name');
-                        }
-                    ])->take($limit)->offset($offset)->latest()->get();
+                    ])->take($limit)->offset($offset)->get();
+
             $dataArray = [];
             $stat = "";
             foreach ($mealOrders as $key => $mealOrder) {

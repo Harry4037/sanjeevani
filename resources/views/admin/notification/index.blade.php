@@ -55,17 +55,64 @@
                             <button type="submit" class="btn btn-success">Send</button>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Notification List</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table id="list" class="table table-striped table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Title</th>
+                                <th>Message</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
 <script>
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+            var t = $('#list').DataTable({
+            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            searching: true,
+            processing: true,
+            serverSide: true,
+            ajax: _baseUrl + "/admin/notification/notifications-list",
+            "columns": [
+                {"data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {"data": "title"},
+                {"data": "message"},
+                {"data": "created_at"},
+            ]
+        });
+
         $(document).on("change", "#user_type", function () {
             var record_id = $("#user_type :selected").val();
             if (record_id == 2) {
@@ -130,7 +177,7 @@
                     data: $(form).serialize(),
                     success: function (response) {
                         btn.text('Send').removeAttr('disabled');
-
+                        t.draw();
                         if (response.status_code == 200) {
                             $(".msg").html(response.message);
                             $(".msg").removeClass("alert-danger");
@@ -143,6 +190,7 @@
                             $(".msg").addClass("alert-danger");
                             $(".msg").css("display", "block");
                         }
+
                         setTimeout(function () {
                             $(".msg").fadeOut();
                         }, 2000);
