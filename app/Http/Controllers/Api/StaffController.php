@@ -193,7 +193,7 @@ class StaffController extends Controller {
                     $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                     $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
                     $mealDataArray[$j]["room_no"] = "";
-                    $mealDataArray[$j]["created_at"] = $meal_created_at->format('h:i a');
+                    $mealDataArray[$j]["created_at"] = $meal_created_at->format('d-m-Y h:i a');
                     $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                     if ($mealItems) {
                         foreach ($mealItems as $f => $mealItem) {
