@@ -162,7 +162,7 @@ class StaffController extends Controller {
                     $serviceArray[$k]["service_icon"] = $newService->serviceDetail ? $newService->serviceDetail->icon : "";
                     $serviceArray[$k]["user_name"] = $newService->userDetail ? $newService->userDetail->user_name : "";
                     $serviceArray[$k]["room_no"] = $newService->resort_room_no;
-                    $serviceArray[$k]["created_at"] = $created_at->format('d-m-Y H:i a');
+                    $serviceArray[$k]["created_at"] = $created_at->format('d-m-Y h:i a');
                 }
             }
 
