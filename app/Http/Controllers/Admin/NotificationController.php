@@ -49,7 +49,7 @@ class NotificationController extends Controller {
         ->pluck("device_token")->toArray();
 
         if (count($tokens)) {
-            //$this->androidPushNotification(3, $request->title, $request->message, $tokens,123,0);
+            $this->androidPushNotification(3, $request->title, $request->message, $tokens,123,0);
         }
         $adminNotification = new AdminNotification();
         $adminNotification->title = $request->title;
