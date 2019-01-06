@@ -22,18 +22,21 @@ class OrderRequestController extends Controller {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
 
-            $serviceRequests = ServiceRequest::select('id', 'comment', 'service_id', 'question_id', 'request_status_id', 'user_id', 'resort_room_no')
+            $query = ServiceRequest::query();
+            if ($searchKeyword) {
+                $query->where("resort_room_no", "LIKE", "%$searchKeyword%");
+            }
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $serviceRequests = $query->select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'resort_room_no')
                             ->take($limit)->offset($offset)
                             ->with([
                                 'serviceDetail' => function($query) {
                                     $query->select('id', 'name', 'type_id');
                                 }
                             ])->with([
-                        'questionDetail' => function($query) {
-                            $query->select('id', 'name');
-                        }
-                    ])->with([
                         'requestStatus' => function($query) {
                             $query->select('id')->userRequestStatus();
                         }
@@ -46,13 +49,11 @@ class OrderRequestController extends Controller {
                 $dataArray[$key]['service_type'] = $serviceRequest->serviceDetail->serviceType->name;
                 $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail->name;
                 $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
-//                $dataArray[$key]['room_no'] = $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room == null ? "" : $serviceRequest->userDetail->userBookingDetail->room_booking->resort_room->room_no;
                 $dataArray[$key]['room_no'] = $serviceRequest->resort_room_no;
                 $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
                 $dataArray[$key]['action'] = '<a href="' . route('admin.order-request.view', $serviceRequest->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
-            $data['recordsTotal'] = count($serviceRequests);
-            $data['recordsFiltered'] = count($serviceRequests);
+            
             $data['data'] = $dataArray;
             return $data;
         } catch (\Exception $e) {
