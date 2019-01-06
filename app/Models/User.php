@@ -54,8 +54,8 @@ class User extends Authenticatable {
     }
 
     public function getUserTypeIdAttribute($value) {
-        $booking = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s"))
-                ->where("check_out", ">=", date("Y-m-d H:i:s"))
+        $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
+                    // ->where("check_in", "<=", date("Y-m-d H:i:s"))
                 ->where("user_id", $this->id)
                 ->first();
 
