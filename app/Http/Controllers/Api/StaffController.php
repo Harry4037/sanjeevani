@@ -193,7 +193,7 @@ class StaffController extends Controller {
                     $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                     $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
                     $mealDataArray[$j]["room_no"] = "";
-                    $mealDataArray[$j]["created_at"] = $meal_created_at->format('H:i a');
+                    $mealDataArray[$j]["created_at"] = $meal_created_at->format('h:i a');
                     $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                     if ($mealItems) {
                         foreach ($mealItems as $f => $mealItem) {
@@ -427,7 +427,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["service_icon"] = $ongoing_job->serviceDetail ? $ongoing_job->serviceDetail->icon : "";
                 $ongoingJobArray[$i]["user_name"] = $ongoing_job->userDetail ? $ongoing_job->userDetail->user_name : "";
                 $ongoingJobArray[$i]["room_no"] = $ongoing_job->resort_room_no;
-                $ongoingJobArray[$i]["created_at"] = $created_at->format('d-m-Y H:i a');
+                $ongoingJobArray[$i]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $ongoingJobArray[$i]["type"] = 1;
                 $i++;
             }
@@ -455,7 +455,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["name"] = $ongoingMealOrder->invoice_id;
                 $ongoingJobArray[$i]["icon"] = "";
                 $ongoingJobArray[$i]["date"] = $createdAt->format("d-m-Y");
-                $ongoingJobArray[$i]["time"] = $createdAt->format("H:i a");
+                $ongoingJobArray[$i]["time"] = $createdAt->format("h:i a");
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $ongoingJobArray[$i]["room_no"] = "";
@@ -522,7 +522,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["service_icon"] = $under_approval_job->serviceDetail ? $under_approval_job->serviceDetail->icon : "";
                 $underApprovalJobArray[$j]["user_name"] = $under_approval_job->userDetail ? $under_approval_job->userDetail->user_name : "";
                 $underApprovalJobArray[$j]["room_no"] = $under_approval_job->resort_room_no;
-                $underApprovalJobArray[$j]["created_at"] = $created_at->format('d-m-Y H:i a');
+                $underApprovalJobArray[$j]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $underApprovalJobArray[$j]["type"] = 1;
                 $j++;
             }
@@ -550,7 +550,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["name"] = $ongoingMealOrder->invoice_id;
                 $underApprovalJobArray[$j]["icon"] = "";
                 $underApprovalJobArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $underApprovalJobArray[$j]["time"] = $createdAt->format("H:i a");
+                $underApprovalJobArray[$j]["time"] = $createdAt->format("h:i a");
                 $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
                 $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $underApprovalJobArray[$j]["room_no"] = "";
@@ -606,7 +606,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["service_icon"] = $completed_job->serviceDetail ? $completed_job->serviceDetail->icon : "";
                 $completedJobArray[$i]["user_name"] = $completed_job->userDetail ? $completed_job->userDetail->user_name : "";
                 $completedJobArray[$i]["room_no"] = $completed_job->resort_room_no;
-                $completedJobArray[$i]["created_at"] = $created_at->format('d-m-Y H:i a');
+                $completedJobArray[$i]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $i++;
             }
 
@@ -633,7 +633,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["name"] = $ongoingMealOrder->invoice_id;
                 $completedJobArray[$i]["icon"] = "";
                 $completedJobArray[$i]["date"] = $createdAt->format("d-m-Y");
-                $completedJobArray[$i]["time"] = $createdAt->format("H:i a");
+                $completedJobArray[$i]["time"] = $createdAt->format("h:i a");
                 $completedJobArray[$i]["total_item_count"] = count($mealItems);
                 $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $completedJobArray[$i]["room_no"] = "";
