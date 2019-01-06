@@ -12,6 +12,7 @@ use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Facades\FCM;
+use App\Models\UserBookingDetail;
 
 class Controller extends BaseController {
 
@@ -19,6 +20,14 @@ class Controller extends BaseController {
         DispatchesJobs,
         ValidatesRequests,
         Common;
+
+    public function bookBeforeCheckInDate($userId){
+         $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
+                    ->where("check_in", "<=", date("Y-m-d H:i:s"))
+                ->where("user_id", $userId)
+                ->first();
+          return $booking ? true : false;      
+    }    
 
     public function sendSuccessResponse($message, $data) {
         return response()->json([

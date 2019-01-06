@@ -266,8 +266,12 @@ class ServiceController extends Controller {
      */
     public function raiseServiceRequest(Request $request) {
         try {
+
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if(!$this->bookBeforeCheckInDate(request->user_id)){
+              return $this->sendErrorResponse("You can not raised request befor checkIn date or after checkout date.", (object) []);   
             }
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
