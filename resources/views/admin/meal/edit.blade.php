@@ -65,6 +65,11 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="meal_type" name="meal_type">
                                 <option value="">Select option</option>
+                                <option value="D"
+                                        @if($data->category == "D")
+                                        {{ "selected" }}
+                                        @endif
+                                        >Drinks</option>
                                 <option value="V"
                                         @if($data->category == "V")
                                         {{ "selected" }}
