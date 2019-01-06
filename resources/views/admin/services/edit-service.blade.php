@@ -71,9 +71,9 @@
                         @if($serviceQuestions)
                         @foreach($serviceQuestions as $key => $serviceQuestion)
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Question {{ $key+1 }} </label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Reason {{ $key+1 }} </label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
-                                <input type="text" value="{{ $serviceQuestion->question }}" class="form-control" name="question[]"  placeholder="question">
+                                <input type="text" value="{{ $serviceQuestion->question }}" class="form-control" name="question[]"  placeholder="Reason">
                             </div>
                             <i style='cursor:pointer' class='fa fa-times delete_question' id="{{ $serviceQuestion->id }}"></i>
                         </div>
@@ -84,7 +84,7 @@
                     <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8">
                             <input type="hidden" id="question_count" value="{{ count($serviceQuestions) }}">
-                            <button type="button" class="btn btn-primary" id="add_service_question">Add Members</button>
+                            <button type="button" class="btn btn-primary" id="add_service_question">Add Reason</button>
                         </div>
                     </div>
                     @endif
@@ -145,9 +145,9 @@
             if (question_count < 4) {
                 question_count++;
                 var member_html = "<div class='form-group'>"
-                        + "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Question " + question_count + "</label>"
+                        + "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Reason " + question_count + "</label>"
                         + "<div class='col-md-6 col-sm-6 col-xs-6' id='service_question'>"
-                        + "<input type='text' class='form-control' name='question[]'  placeholder='question'>"
+                        + "<input type='text' class='form-control' name='question[]'  placeholder='Reason'>"
                         + "</div>"
                         + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
                 $("#service_question").append(member_html);
