@@ -237,18 +237,18 @@ class CmsController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing", (object) []);
             }
-            // if ($request->user()->id != $request->user_id) {
-            //     return $this->sendErrorResponse("invalid user", (object) []);
-            // }
+             if ($request->user()->id != $request->user_id) {
+                 return $this->sendErrorResponse("invalid user", (object) []);
+             }
             if (!$request->latitude) {
                 return $this->sendErrorResponse("Latitude missing", (object) []);
             }
             if (!$request->longitude) {
                 return $this->sendErrorResponse("Longitude missing", (object) []);
             }
-            // if($request->user()->user_type_id == 4){
-            //         return $this->sendInactiveAccountResponse();
-            // }
+             if($request->user()->user_type_id == 4){
+                     return $this->sendInactiveAccountResponse();
+             }
             $user = User::with("userBookingDetail")->find($request->user_id);
             $SOS = new SOS();
             $SOS->user_id = $request->user_id;
