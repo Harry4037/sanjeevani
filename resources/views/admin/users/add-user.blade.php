@@ -279,7 +279,8 @@
                 mobile_number: {
                     required: true,
                     number: true,
-//                    maxlength: 10
+                    maxlength: 10,
+                    minlength: 10,
                 },
                 email_id: {
                     required: true,
