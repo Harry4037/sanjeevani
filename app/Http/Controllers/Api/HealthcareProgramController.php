@@ -99,7 +99,20 @@ class HealthcareProgramController extends Controller {
             if (!$request->resort_id) {
                 return $this->sendErrorResponse("Resort id missing", (object) []);
             }
-            $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1, "resort_id" => $request->resort_id])
+            if($request->resort_id == -1){
+                $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
+                            ->with([
+                                'healthcareImages' => function($query) {
+                                    $query->select('id', 'image_name as banner_image_url', 'health_program_id');
+                                }
+                            ])
+                            ->with([
+                                'healthcareDays' => function($query) {
+                                    $query->select('id', 'day', 'description', 'health_program_id');
+                                }
+                            ])latest()->get();
+            }else{
+                $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1, "resort_id" => $request->resort_id])
                             ->with([
                                 'healthcareImages' => function($query) {
                                     $query->select('id', 'image_name as banner_image_url', 'health_program_id');
@@ -110,6 +123,7 @@ class HealthcareProgramController extends Controller {
                                     $query->select('id', 'day', 'description', 'health_program_id');
                                 }
                             ])->get();
+            }
 
             if (count($healthcare) > 0) {
                 foreach ($healthcare as $key => $health) {
