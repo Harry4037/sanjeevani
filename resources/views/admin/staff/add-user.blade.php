@@ -135,6 +135,8 @@
                 staff_mobile_no: {
                     required: true,
                     number: true,
+                    maxlength: 10,
+                    minlength: 10,
                 },
                 staff_email: {
                     required: true,
