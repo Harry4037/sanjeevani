@@ -64,14 +64,22 @@ class OfferController extends Controller {
      */
     public function offerListing(Request $request) {
         try {
-            if (!$request->resort_id) {
-                return $this->sendErrorResponse("Resort id missing", (object) []);
-            }
-            $offers = offer::where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
+            if($request->resort_id == -1){
+                $offers = offer::where(["is_active" => 1])->with([
                         'offerImages' => function($query) {
                             $query->select('id', 'image_name as banner_image_url', 'offer_id');
                         }
-                    ])->get();
+                    ])->latest()->get();
+            }else{
+                if (!$request->resort_id) {
+                    return $this->sendErrorResponse("Resort id missing", (object) []);
+                }
+                $offers = offer::where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
+                            'offerImages' => function($query) {
+                                $query->select('id', 'image_name as banner_image_url', 'offer_id');
+                            }
+                        ])->get();
+            }
             $dataArray = [];
             if (count($offers) > 0) {
                 foreach ($offers as $key => $offer) {
