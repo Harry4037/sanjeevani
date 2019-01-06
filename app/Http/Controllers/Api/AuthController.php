@@ -381,7 +381,7 @@ class AuthController extends Controller {
             $userArray['last_name'] = $user->last_name;
             $userArray['email_id'] = $user->email_id;
             $userArray['user_type_id'] = $user->user_type_id;
-            $userArray['is_checked_in'] = $user->aadhar_id ? true : false;
+            $userArray['is_checked_in'] = false;
             $userArray['address'] = $user->address1;
             $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
             $userArray['city'] = isset($cityState->city) ? $cityState->city : "";
