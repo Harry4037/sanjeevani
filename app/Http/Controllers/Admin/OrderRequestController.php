@@ -79,16 +79,12 @@ class OrderRequestController extends Controller {
             return redirect()->route('admin.order-request.view', $id)->with("status", "Status updated successfully.");
         }
 
-        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'question_id', 'request_status_id', 'user_id', 'resort_room_no')
+        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'resort_room_no')
                             ->with([
                                 'serviceDetail' => function($query) {
                                     $query->select('id', 'name', 'type_id');
                                 }
                             ])->with([
-                        'questionDetail' => function($query) {
-                            $query->select('id', 'name');
-                        }
-                    ])->with([
                         'requestStatus' => function($query) {
                             $query->select('id')->userRequestStatus();
                         }
