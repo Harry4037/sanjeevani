@@ -31,19 +31,27 @@ class SOSController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = SOS::query();
-            // if ($searchKeyword) {
-            //     $query->where("content", "LIKE", "%$searchKeyword%");
-            // }
+            if ($searchKeyword) {
+                $query->where("latitude", "LIKE", "%$searchKeyword%")
+                    ->orWhere("longitude", "LIKE", "%$searchKeyword%")
+                    ->orWhere("resort_name", "LIKE", "%$searchKeyword%")
+                    ->orWhere("room_type", "LIKE", "%$searchKeyword%")
+                    ->orWhere("room_no", "LIKE", "%$searchKeyword%")
+                ;
+            }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $sos = $query->take($limit)->offset($offset)->latest()->get();
             $sosArray = [];
             foreach ($sos as $key => $so) {
-                $user = User::find($so->id);
-                $sosArray[$key]['user_name'] = $user->user_name;
-                $sosArray[$key]['longitude'] = $so->longitude;
+                $user = User::find($so->user_id);
+                $sosArray[$key]['user_name'] = $user ? $user->user_name : "";
+                $sosArray[$key]['resort_name'] = $so->resort_name;
+                $sosArray[$key]['room_type'] = $so->room_type;
+                $sosArray[$key]['room_no'] = $so->room_no;
                 $sosArray[$key]['latitude'] = $so->latitude;
-                $sosArray[$key]['action'] = '';
+                $sosArray[$key]['longitude'] = $so->longitude;
+                // $sosArray[$key]['action'] = '';
                 // '<a href="' . route('admin.sos.view', $so->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
 

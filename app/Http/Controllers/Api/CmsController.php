@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Cms;
 use App\Models\SOS;
+use App\Models\User;
+use App\Models\UserBookingDetail;
 
 class CmsController extends Controller {
 
@@ -235,23 +237,30 @@ class CmsController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing", (object) []);
             }
-            if ($request->user()->id != $request->user_id) {
-                return $this->sendErrorResponse("invalid user", (object) []);
-            }
+            // if ($request->user()->id != $request->user_id) {
+            //     return $this->sendErrorResponse("invalid user", (object) []);
+            // }
             if (!$request->latitude) {
                 return $this->sendErrorResponse("Latitude missing", (object) []);
             }
             if (!$request->longitude) {
                 return $this->sendErrorResponse("Longitude missing", (object) []);
             }
-
+            // if($request->user()->user_type_id == 4){
+            //         return $this->sendInactiveAccountResponse();
+            // }
+            $user = User::with("userBookingDetail")->find($request->user_id);
             $SOS = new SOS();
             $SOS->user_id = $request->user_id;
             $SOS->latitude = $request->latitude;
             $SOS->longitude = $request->longitude;
+            $SOS->resort_name = isset($user->userBookingDetail->resort->name) ? $user->userBookingDetail->resort->name : "";
+            $SOS->room_no = isset($user->userBookingDetail->resort_room_no) ? $user->userBookingDetail->resort_room_no : "";
+            $SOS->room_type = isset($user->userBookingDetail->room_type_name) ? $user->userBookingDetail->room_type_name : "";
             $SOS->save();
             return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object) []);
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }

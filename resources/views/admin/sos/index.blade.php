@@ -18,9 +18,12 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
+                            <th>Resort</th>
+                            <th>Room Type</th>
+                            <th>Room No.</th>
                             <th>Latitude</th>
                             <th>Longitude</th>
-                            <th>Action</th>
+                            <!-- <th>Action</th> -->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -49,9 +52,12 @@
                     }
                 },
                 {"data": "user_name"},
+                {"data": "resort_name"},
+                {"data": "room_type"},
+                {"data": "room_no"},
                 {"data": "latitude"},
                 {"data": "longitude"},
-                {"data": "action", sortable: false, },
+                // {"data": "action", sortable: false, },
             ]
         });
 

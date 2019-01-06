@@ -27,6 +27,8 @@ Route::namespace("Api")->group(function () {
         fclose($myfile);
     }
 
+Route::post('sos', 'CmsController@sos');
+
     //City State list
     Route::get('state-city-list', 'UserController@stateCityList');
     //Sent OTP
@@ -128,7 +130,7 @@ Route::namespace("Api")->group(function () {
         //My Cart
         Route::post('create-order', 'OrderController@submitOrder');
 
-        Route::post('sos', 'CmsController@sos');
+        //Route::post('sos', 'CmsController@sos');
 
         //Update device token
         Route::post('update-device-token', 'UserController@updateDeviceToken');

@@ -18,6 +18,9 @@ class CreateSOSTable extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->bigInteger('user_id')->default(0);
+            $table->string('resort_name')->nullable();
+            $table->string('room_type')->nullable();
+            $table->string('room_no')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);
