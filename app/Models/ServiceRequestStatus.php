@@ -13,7 +13,7 @@ class ServiceRequestStatus extends Model
                 . "WHEN (id = '2') THEN 'Accepted' "
                 . "WHEN (id = '3') THEN 'Your Approval Needed' "
                 . "WHEN (id = '4') THEN 'Completed' "
-                . "ELSE 'Not Resolve' END) as status"));
+                . "ELSE 'Not Resolved' END) as status"));
     }
     public function scopeStaffRequestStatus($query){
         $query->addSelect(DB::raw("(CASE "
