@@ -184,6 +184,9 @@ class ActivityController extends Controller {
         if (!$request->user_id) {
             return $this->sendErrorResponse("user id missing.", (object) []);
         }
+         if(!$this->bookBeforeCheckInDate($request->user_id)){
+              return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);   
+            }
         if (!$request->resort_id) {
             return $this->sendErrorResponse("resort id missing.", (object) []);
         }

@@ -86,6 +86,9 @@ class OrderController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
+             if(!$this->bookBeforeCheckInDate($request->user_id)){
+              return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);   
+            }
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
             }
