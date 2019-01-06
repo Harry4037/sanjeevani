@@ -336,7 +336,7 @@ class AmenityController extends Controller {
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid amenity.", (object) []);
         }
-        $amenityTimeSlots = AmenityTimeSlot::select(DB::raw('id, DATE_FORMAT(from, "%r") as from, DATE_FORMAT(to, "%r") as to, allow_no_of_member')->where([
+        $amenityTimeSlots = AmenityTimeSlot::select(DB::raw('id, DATE_FORMAT(from, "%r") as from, DATE_FORMAT(to, "%r") as to, allow_no_of_member'))->where([
                     "amenity_id" => $request->amenity_id
                 ])->get();
         if ($amenityTimeSlots) {
