@@ -9,7 +9,6 @@ use App\Models\Amenity;
 use App\Models\AmenityTimeSlot;
 use App\Models\AmenityRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class AmenityController extends Controller {
 
@@ -336,7 +335,7 @@ class AmenityController extends Controller {
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid amenity.", (object) []);
         }
-        $amenityTimeSlots = AmenityTimeSlot::select(DB::raw('id, DATE_FORMAT(from, "%r") as from, DATE_FORMAT(to, "%r") as to, allow_no_of_member'))->where([
+        $amenityTimeSlots = AmenityTimeSlot::select('id', 'from', 'to', 'allow_no_of_member')->where([
                     "amenity_id" => $request->amenity_id
                 ])->get();
         if ($amenityTimeSlots) {
