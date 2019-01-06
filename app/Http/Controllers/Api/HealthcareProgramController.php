@@ -108,7 +108,7 @@ class HealthcareProgramController extends Controller {
                                 'healthcareDays' => function($query) {
                                     $query->select('id', 'day', 'description', 'health_program_id');
                                 }
-                            ])latest()->get();
+                            ])->latest()->get();
             }else{
 
                 if (!$request->resort_id) {
