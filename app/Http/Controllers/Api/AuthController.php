@@ -352,7 +352,7 @@ class AuthController extends Controller {
             $token->save();
 
             $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
-                    ->where("check_in", "<=", date("Y-m-d H:i:s"))
+                    ->where("check_out", ">=", date("Y-m-d H:i:s"))
                     ->first();
             $adultNo = 0;
             $childNo = 0;
