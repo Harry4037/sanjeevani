@@ -255,8 +255,8 @@ class CmsController extends Controller {
             $SOS->latitude = $request->latitude;
             $SOS->longitude = $request->longitude;
             $SOS->resort_name = isset($user->userBookingDetail->resort->name) ? $user->userBookingDetail->resort->name : "";
-            $SOS->room_no = isset($user->userBookingDetail->resort_room_no) ? $user->userBookingDetail->resort_room_no : "";
-            $SOS->room_type = isset($user->userBookingDetail->room_type_name) ? $user->userBookingDetail->room_type_name : "";
+             $SOS->room_no = isset($user->userBookingDetail->room_detail->room_no) ? $user->userBookingDetail->room_detail->room_no : "";
+            $SOS->room_type = isset($user->userBookingDetail->room_type_detail->name) ? $user->userBookingDetail->room_type_detail->name : "";
             $SOS->save();
             return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object) []);
         } catch (\Exception $ex) {
