@@ -111,7 +111,7 @@ class ServiceController extends Controller {
      */
     public function serviceListing(Request $request) {
 
-        $houseKeeping = Service::where(["resort_id" => $this->resort_id, "type_id" => 1, "is_active" => 1])->get();
+        $houseKeeping = Service::where(["resort_id" => $request->resort_id, "type_id" => 1, "is_active" => 1])->get();
         $houseKeepingArrray = [];
         if ($houseKeeping) {
             $i = 0;
@@ -137,7 +137,7 @@ class ServiceController extends Controller {
             $houseKeepingArrray = [];
         }
 
-        $issues = Service::where(["resort_id" => $this->resort_id, "type_id" => 2, "is_active" => 1])->get();
+        $issues = Service::where(["resort_id" => $request->resort_id, "type_id" => 2, "is_active" => 1])->get();
         $issuesArrray = [];
         if ($issues) {
             $i = 0;
