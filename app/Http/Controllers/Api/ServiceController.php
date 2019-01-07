@@ -549,10 +549,30 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
                 $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
-                $ongoingDataArray[$i]["status_id"] = 1;
+                $ongoingDataArray[$i]["status_id"] = 2;
                 $ongoingDataArray[$i]["status"] = "Upcoming";
                 $ongoingDataArray[$i]["acceptd_by"] = "";
                 $ongoingDataArray[$i]["type"] = 2;
+                $i++;
+            }
+
+            $ongoingActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
+            ->where("booking_date", ">" , date("Y-m-d H:i:s"))
+            ->get();
+            foreach ($ongoingActivities as $completedActivity) {
+                $createdAt = Carbon::parse($completedActivity->created_at);
+                $activity = Activity::find($completedActivity->amenity_id);
+                $ongoingDataArray[$i]["id"] = $completedActivity->id;
+                $ongoingDataArray[$i]["record_id"] = $completedActivity->amenity_id;
+                $ongoingDataArray[$i]["name"] = $activity->name;
+                $ongoingDataArray[$i]["icon"] = "";
+                $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
+                $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
+                $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
+                $ongoingDataArray[$i]["status_id"] = 2;
+                $ongoingDataArray[$i]["status"] = "Upcoming";
+                $ongoingDataArray[$i]["acceptd_by"] = "";
+                $ongoingDataArray[$i]["type"] = 3;
                 $i++;
             }
 
@@ -594,26 +614,28 @@ class ServiceController extends Controller {
                 $j++;
             }
 
-            // $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-            // ->where("booking_date" ,"<=", date("Y-m-d H:i:s"))
-            // ->get();
-            // foreach ($completedAmenities as $completedAmenity) {
-            //     $createdAt = Carbon::parse($completedAmenity->created_at);
-            //     $amenity = Amenity::find($completedAmenity->amenity_id);
-            //     $completedDataArray[$j]["id"] = $completedAmenity->id;
-            //     $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
-            //     $completedDataArray[$j]["name"] = $amenity->name;
-            //     $completedDataArray[$j]["icon"] = "";
-            //     $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-            //     $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
-            //     $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
-            //     $completedDataArray[$j]["status_id"] = 1;
-            //     $completedDataArray[$j]["status"] = "Confirmed";
-            //     $completedDataArray[$j]["acceptd_by"] = "";
-            //     $completedDataArray[$j]["type"] = 2;
-            //     $j++;
-            // }
-            $completedActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])->get();
+            $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
+            ->where("booking_date" ,"<=", date("Y-m-d H:i:s"))
+            ->get();
+            foreach ($completedAmenities as $completedAmenity) {
+                $createdAt = Carbon::parse($completedAmenity->created_at);
+                $amenity = Amenity::find($completedAmenity->amenity_id);
+                $completedDataArray[$j]["id"] = $completedAmenity->id;
+                $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
+                $completedDataArray[$j]["name"] = $amenity->name;
+                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
+                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
+                $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
+                $completedDataArray[$j]["status_id"] = 1;
+                $completedDataArray[$j]["status"] = "Confirmed";
+                $completedDataArray[$j]["acceptd_by"] = "";
+                $completedDataArray[$j]["type"] = 2;
+                $j++;
+            }
+            $completedActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
+            ->where("booking_date", "<=" , date("Y-m-d H:i:s"))
+            ->get();
             foreach ($completedActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
                 $activity = Activity::find($completedActivity->amenity_id);
@@ -622,7 +644,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["name"] = $activity->name;
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
                 $completedDataArray[$j]["status"] = "Confirmed";
@@ -645,7 +667,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["name"] = $completedMealOrder->invoice_id;
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["total_item_count"] = $totalItem;
                 $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
