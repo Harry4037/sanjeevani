@@ -567,7 +567,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["name"] = $activity->name;
                 $ongoingDataArray[$i]["icon"] = "";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
-                $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
+                $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $ongoingDataArray[$i]["status_id"] = 2;
                 $ongoingDataArray[$i]["status"] = "Upcoming";
@@ -625,7 +625,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["name"] = $amenity->name;
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
+                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
                 $completedDataArray[$j]["status"] = "Confirmed";
@@ -644,7 +644,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["name"] = $activity->name;
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
+                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["status_id"] = 1;
                 $completedDataArray[$j]["status"] = "Confirmed";
@@ -667,7 +667,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["name"] = $completedMealOrder->invoice_id;
                 $completedDataArray[$j]["icon"] = "";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("H:i a");
+                $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedDataArray[$j]["total_item_count"] = $totalItem;
                 $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
