@@ -95,7 +95,7 @@ class Controller extends BaseController {
                 ->setSound('default');
 
         $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['title' => $title, 'message' => $message, 'type' => $notificationType, "record_id" => $recordId]);
+        $dataBuilder->addData(['title' => $title, 'message' => $message, 'type' => $notificationType, "record_id" => $recordId, "notification_count" => 0]);
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();

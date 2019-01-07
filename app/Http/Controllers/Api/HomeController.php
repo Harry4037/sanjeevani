@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\HealthcateProgram;
 use App\Models\NearbyPlaceImage;
 use App\Models\HealthcateProgramDay;
+use App\Models\Notification;
 
 class HomeController extends Controller {
 
@@ -225,6 +226,9 @@ class HomeController extends Controller {
                 $user['no_of_rooms'] = "1";
             }
 
+            $notification = Notification::where("user_id", $request->user_id)->count();
+            $user['notification_count'] = $notification;
+            
             $banners = Banner::where("is_active", 1)->get();
             $bannerArray = [];
             $i = 0;

@@ -66,6 +66,12 @@ class NotificationController extends Controller {
             return $this->sendErrorResponse("User id missing.", (object) []);
         }
         $notifications = Notification::select(DB::raw('id, title, message, type, DATE_FORMAT(created_at, "%d-%b-%Y")  as date, DATE_FORMAT(created_at, "%r")  as time'))->where("user_id", $request->user_id)->latest()->get();
+        if($notifications){
+            foreach($notifications as $notification){
+                $notification->is_view = 1;
+                $notification->save();
+            }
+        }
 
         return $this->sendSuccessResponse("Notifications", $notifications);
     }

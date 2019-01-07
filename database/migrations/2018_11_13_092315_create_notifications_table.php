@@ -19,6 +19,7 @@ class CreateNotificationsTable extends Migration {
             $table->text('message');
             $table->Integer('type');
             $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_view')->default(0);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);
             $table->string('updated_by')->default(1);
