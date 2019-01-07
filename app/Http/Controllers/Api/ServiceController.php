@@ -536,6 +536,26 @@ class ServiceController extends Controller {
                 $i++;
             }
 
+            $ongoingAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
+            ->where("booking_date" ,">", date("Y-m-d H:i:s"))
+            ->get();
+            foreach ($ongoingAmenities as $completedAmenity) {
+                $createdAt = Carbon::parse($completedAmenity->created_at);
+                $amenity = Amenity::find($completedAmenity->amenity_id);
+                $ongoingDataArray[$i]["id"] = $completedAmenity->id;
+                $ongoingDataArray[$i]["record_id"] = $completedAmenity->amenity_id;
+                $ongoingDataArray[$i]["name"] = $amenity->name;
+                $ongoingDataArray[$i]["icon"] = "";
+                $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
+                $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
+                $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
+                $ongoingDataArray[$i]["status_id"] = 1;
+                $ongoingDataArray[$i]["status"] = "Upcoming";
+                $ongoingDataArray[$i]["acceptd_by"] = "";
+                $ongoingDataArray[$i]["type"] = 2;
+                $i++;
+            }
+
 
             $completedServices = ServiceRequest::select(DB::raw('id, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
                             ->where(["user_id" => $request->user_id])
@@ -574,7 +594,9 @@ class ServiceController extends Controller {
                 $j++;
             }
 
-            $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])->get();
+            $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
+            ->where("booking_date" ,"<=", date("Y-m-d H:i:s"))
+            ->get();
             foreach ($completedAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
                 $amenity = Amenity::find($completedAmenity->amenity_id);
