@@ -594,25 +594,25 @@ class ServiceController extends Controller {
                 $j++;
             }
 
-            $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-            ->where("booking_date" ,"<=", date("Y-m-d H:i:s"))
-            ->get();
-            foreach ($completedAmenities as $completedAmenity) {
-                $createdAt = Carbon::parse($completedAmenity->created_at);
-                $amenity = Amenity::find($completedAmenity->amenity_id);
-                $completedDataArray[$j]["id"] = $completedAmenity->id;
-                $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
-                $completedDataArray[$j]["name"] = $amenity->name;
-                $completedDataArray[$j]["icon"] = "";
-                $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
-                $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
-                $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
-                $completedDataArray[$j]["status_id"] = 1;
-                $completedDataArray[$j]["status"] = "Confirmed";
-                $completedDataArray[$j]["acceptd_by"] = "";
-                $completedDataArray[$j]["type"] = 2;
-                $j++;
-            }
+            // $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
+            // ->where("booking_date" ,"<=", date("Y-m-d H:i:s"))
+            // ->get();
+            // foreach ($completedAmenities as $completedAmenity) {
+            //     $createdAt = Carbon::parse($completedAmenity->created_at);
+            //     $amenity = Amenity::find($completedAmenity->amenity_id);
+            //     $completedDataArray[$j]["id"] = $completedAmenity->id;
+            //     $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
+            //     $completedDataArray[$j]["name"] = $amenity->name;
+            //     $completedDataArray[$j]["icon"] = "";
+            //     $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
+            //     $completedDataArray[$j]["time"] = $createdAt->format("H:i a");
+            //     $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
+            //     $completedDataArray[$j]["status_id"] = 1;
+            //     $completedDataArray[$j]["status"] = "Confirmed";
+            //     $completedDataArray[$j]["acceptd_by"] = "";
+            //     $completedDataArray[$j]["type"] = 2;
+            //     $j++;
+            // }
             $completedActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])->get();
             foreach ($completedActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
