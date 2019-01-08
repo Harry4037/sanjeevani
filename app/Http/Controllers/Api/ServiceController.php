@@ -460,7 +460,7 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $ongoingServices = ServiceRequest::select(DB::raw('id, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
+            $ongoingServices = ServiceRequest::select(DB::raw('id, staff_reasons, staff_comment, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
 //            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
                             ->where(["user_id" => $request->user_id])
                             ->where(function($q) {
@@ -497,6 +497,8 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["status"] = $ongoingService->requestStatus ? $ongoingService->requestStatus->status : "";
                 $ongoingDataArray[$i]["acceptd_by"] = isset($ongoingService->acceptedBy->user_name) ? $ongoingService->acceptedBy->user_name : "";
                 $ongoingDataArray[$i]["type"] = 1;
+                $ongoingDataArray[$i]["staff_reasons"] = $ongoingService->staff_reasons;
+                $ongoingDataArray[$i]["staff_comment"] = $ongoingService->staff_comment;
                 $i++;
             }
 
@@ -577,7 +579,7 @@ class ServiceController extends Controller {
             }
 
 
-            $completedServices = ServiceRequest::select(DB::raw('id, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
+            $completedServices = ServiceRequest::select(DB::raw('id,staff_reasons, staff_comment, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
                             ->where(["user_id" => $request->user_id])
                             ->where(function($q) {
                                 $q->where("request_status_id", 4)
@@ -611,6 +613,8 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["status"] = $completedService->requestStatus ? $completedService->requestStatus->status : 0;
                 $completedDataArray[$j]["acceptd_by"] = isset($completedService->acceptedBy->user_name) ? $completedService->acceptedBy->user_name : "";
                 $completedDataArray[$j]["type"] = 1;
+                $completedDataArray[$j]["staff_reasons"] = $completedService->staff_reasons;
+                $completedDataArray[$j]["staff_comment"] = $completedService->staff_comment;
                 $j++;
             }
 
