@@ -507,7 +507,7 @@ class StaffController extends Controller {
                 $i++;
             }
 
-            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
+            $under_approval_jobs = ServiceRequest::select('id', 'comment','questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
@@ -540,8 +540,14 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["room_no"] = $under_approval_job->resort_room_no;
                 $underApprovalJobArray[$j]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $underApprovalJobArray[$j]["type"] = 1;
-                $underApprovalJobArray[$j]["staff_reasons"] = $under_approval_job->staff_reasons ? $under_approval_job->staff_reasons : "";
-                $underApprovalJobArray[$j]["staff_comment"] = $under_approval_job->staff_comment ? $under_approval_job->staff_comment : "";
+                if ($under_approval_job->questions) {
+                    $reasons = explode(",", $under_approval_job->questions);
+                    foreach ($reasons as $l => $reason) {
+                        $underApprovalJobArray[$j]["reasons"][$l]['reason'] = $reason;
+                    }
+                } else {
+                    $underApprovalJobArray[$j]["reasons"] = [];
+                }
                 $j++;
             }
 
