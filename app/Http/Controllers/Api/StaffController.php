@@ -404,7 +404,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
 
-            $ongoing_jobs = ServiceRequest::select('id', 'comment','staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
+            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
@@ -437,8 +437,14 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["room_no"] = $ongoing_job->resort_room_no;
                 $ongoingJobArray[$i]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $ongoingJobArray[$i]["type"] = 1;
-                $ongoingJobArray[$i]["staff_comment"] = $ongoing_job->staff_comment ? $ongoing_job->staff_comment : "";
-                $ongoingJobArray[$i]["staff_reasons"] = $ongoing_job->staff_reasons ? $ongoing_job->staff_reasons : "";
+                if ($ongoing_job->questions) {
+                    $reasons = explode(",", $ongoing_job->questions);
+                    foreach ($reasons as $l => $reason) {
+                        $ongoingJobArray[$i]["reasons"][$l]['reason'] = $reason;
+                    }
+                } else {
+                    $serviceArray[$i]["reasons"] = [];
+                }
                 $i++;
             }
 
@@ -588,7 +594,7 @@ class StaffController extends Controller {
                 $j++;
             }
 
-            $completed_jobs = ServiceRequest::select('id', 'comment', 'staff_reasons', 'staff_comment' , 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
+            $completed_jobs = ServiceRequest::select('id', 'comment', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
