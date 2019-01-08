@@ -852,8 +852,8 @@ class StaffController extends Controller {
                 }
 
                 $job->request_status_id = 5;
-//            $job->reasons = $request->reasons;
-//            $job->comment = $request->comment;
+                $job->staff_reasons = $request->reasons;
+                $job->staff_comment = $request->comment;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
                     $this->generateNotification($user->id, "Service Request", "Sorry! your request not resolved by our staff member.", 1);

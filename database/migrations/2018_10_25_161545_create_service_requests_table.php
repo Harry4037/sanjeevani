@@ -23,6 +23,8 @@ class CreateServiceRequestsTable extends Migration {
             $table->string('room_type_name')->nullable();
             $table->string('resort_room_no')->nullable();
             $table->bigInteger('accepted_by_id')->default(0);
+            $table->text('staff_reasons')->nullable();
+            $table->text('staff_comment')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);
