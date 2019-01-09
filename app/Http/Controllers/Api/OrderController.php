@@ -86,8 +86,8 @@ class OrderController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
-             if(!$this->bookBeforeCheckInDate($request->user_id)){
-              return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);   
+            if (!$this->bookBeforeCheckInDate($request->user_id)) {
+                return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);
             }
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
@@ -99,6 +99,7 @@ class OrderController extends Controller {
             if (!$resort) {
                 return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
+            $user = User::with("userBookingDetail")->find($request->user_id);
             $carts = Cart::where(["user_id" => $request->user_id])->get();
             $cartDataArray = [];
             if ($carts) {
@@ -147,7 +148,13 @@ class OrderController extends Controller {
                 $data['total_amount'] = $mealOrder->total_amount;
                 Cart::where(["user_id" => $request->user_id])->delete();
                 $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# "."by ".$request->user()->user_name, $staffDeviceTokens, 4, $mealOrder->id);
+                $msg = "";
+                if ($user->userBookingDetail->room_detail != null) {
+                    $msg = "Meal order raised from Room# " . $user->userBookingDetail->room_detail->room_no . " by " . $request->user()->user_name;
+                } else {
+                    $msg = "Meal order raised by " . $request->user()->user_name;
+                }
+                $this->androidPushNotification(2, "Meal Order", $msg, $staffDeviceTokens, 4, $mealOrder->id);
                 $this->generateNotification($request->user_id, "Meal Order", "You meal ordered with invoice Id $mealOrder->invoice_id ", 4);
                 return $this->sendSuccessResponse("We will serve your food soon.", $data);
             } else {
@@ -300,7 +307,7 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
             $user = User::find($request->user_id);
-         $user->load(['payments','mealOrders'    =>  function($query){
+            $user->load(['payments', 'mealOrders' => function($query) {
                     $query->accepted();
                 }]);
 
