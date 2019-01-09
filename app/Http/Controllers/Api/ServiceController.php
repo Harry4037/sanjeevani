@@ -813,7 +813,7 @@ class ServiceController extends Controller {
                 $serviceRequest->status = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by);
-                    $this->androidPushNotification(2, "Service Request", "Great! your Meal order service approved by customer.", $staff->device_token, 1, $serviceRequest->id);
+                    $this->androidPushNotification(2, "Service Request", "Great! your Meal order service approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->id);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
