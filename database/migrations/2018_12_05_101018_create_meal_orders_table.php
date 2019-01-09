@@ -16,6 +16,9 @@ class CreateMealOrdersTable extends Migration
         Schema::create('meal_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('invoice_id')->nullable();
+            $table->string('resort_room_type')->nullable();
+            $table->string('resort_room_no')->nullable();
+            $table->string('invoice_id')->nullable();
             $table->bigInteger('resort_id')->default(0);
             $table->bigInteger('user_id')->default(0);
             $table->float('item_total_amount')->default(0);

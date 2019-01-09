@@ -128,6 +128,8 @@ class OrderController extends Controller {
                 $mealOrder->invoice_id = time();
                 $mealOrder->resort_id = $request->resort_id;
                 $mealOrder->user_id = $request->user_id;
+                $mealOrder->resort_room_type = $user->userBookingDetail->room_type_detail ? $user->userBookingDetail->room_type_detail->name : "";
+                $mealOrder->resort_room_no = $user->userBookingDetail->room_detail ? $user->userBookingDetail->room_detail->room_no : "";
                 $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
                 $mealOrder->gst_amount = $gst;
@@ -148,13 +150,7 @@ class OrderController extends Controller {
                 $data['total_amount'] = $mealOrder->total_amount;
                 Cart::where(["user_id" => $request->user_id])->delete();
                 $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                $msg = "";
-                if ($user->userBookingDetail->room_detail != null) {
-                    $msg = "Meal order raised from Room# " . $user->userBookingDetail->room_detail->room_no . " by " . $request->user()->user_name;
-                } else {
-                    $msg = "Meal order raised by " . $request->user()->user_name;
-                }
-                $this->androidPushNotification(2, "Meal Order", $msg, $staffDeviceTokens, 4, $mealOrder->id);
+                $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens, 4, $mealOrder->id);
                 $this->generateNotification($request->user_id, "Meal Order", "You meal ordered with invoice Id $mealOrder->invoice_id ", 4);
                 return $this->sendSuccessResponse("We will serve your food soon.", $data);
             } else {
