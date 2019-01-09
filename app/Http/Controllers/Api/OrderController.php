@@ -149,7 +149,7 @@ class OrderController extends Controller {
                 $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
                 $this->androidPushNotification(2, "Servie Raised", "Meal order raised by customer", $staffDeviceTokens, 4, $mealOrder->id);
                 $this->generateNotification($request->user_id, "Meal Order", "You meal ordered with invoice Id $mealOrder->invoice_id ", 4);
-                return $this->sendSuccessResponse("Order created succeffully.", $data);
+                return $this->sendSuccessResponse("We will serve your food soon.", $data);
             } else {
                 Cart::where(["user_id" => $request->user_id])->delete();
                 return $this->sendErrorResponse("Cart is empty", (object) []);

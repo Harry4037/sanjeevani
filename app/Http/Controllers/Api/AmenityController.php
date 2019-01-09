@@ -258,7 +258,7 @@ class AmenityController extends Controller {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
                     $this->androidPushNotification(2, "Booked Amenity", "$amenity->name booked by customer", $staffDeviceTokens, 1, $request->amenity_id);
                     
-                    return $this->sendSuccessResponse("Anemity booking created", (object) []);
+                    return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
                 } else {
                     return $this->administratorResponse();
                 }

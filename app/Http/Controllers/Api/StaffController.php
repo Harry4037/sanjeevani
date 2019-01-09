@@ -15,6 +15,7 @@ use App\Models\AmenityRequest;
 use App\Models\AmenityTimeSlot;
 use App\Models\User;
 use App\Models\UserBookingDetail;
+use App\Models\Service;
 
 class StaffController extends Controller {
 
@@ -314,10 +315,10 @@ class StaffController extends Controller {
             $serviceRequest->request_status_id = 2;
             $serviceRequest->accepted_by_id = $request->user_id;
             if ($serviceRequest->save()) {
+                $service = Service::withTrashed()->find($serviceRequest->service_id);
                 $user = User::find($serviceRequest->user_id);
                 $this->generateNotification($user->id, "Service accepted", "Your service request accepted by our staff member. Our staff will contact you soon.", 1);
-
-                $this->androidPushNotification(3, "Service Request", "Your request is accepted by our staff member.", $user->device_token, 1, $serviceRequest->service_id);
+                $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request is accepted by ".$request->user()->user_name, $user->device_token, 1, $serviceRequest->service_id);
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
             } else {
                 return $this->sendErrorResponse("Something went be wrong.", (object) []);
@@ -767,16 +768,17 @@ class StaffController extends Controller {
             }
             if ($request->type == 1) {
                 $job = ServiceRequest::where(['id' => $request->job_id, 'request_status_id' => 2])->first();
-                ;
                 if (!$job) {
                     return $this->sendErrorResponse("Invalid job", (object) []);
                 }
 
                 $job->request_status_id = 3;
                 if ($job->save()) {
+                    $service = Service::withTrashed()->find($job->service_id);
                     $user = User::find($job->user_id);
+                    $staff = User::find($job->accepted_by_id);
                     $this->generateNotification($job->user_id, "Service Request", "Your service completed by staff member. Please provide your apporval.", 1);
-                    $this->androidPushNotification(3, "Service Request", "Your request mark as commpleted by our staff member. Please provide your approval", $user->device_token, 1, $job->service_id);
+                    $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request marked as commplete by ".$staff->user_name, $user->device_token, 1, $job->service_id);
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -882,8 +884,7 @@ class StaffController extends Controller {
                 if ($job->save()) {
                     $user = User::find($job->user_id);
                     $this->generateNotification($user->id, "Service Request", "Sorry! your request not resolved by our staff member.", 1);
-
-                    $this->androidPushNotification(3, "Service Request", "Sorry! Your request is not resolved by our staff member.", $user->device_token, 1, $job->service_id);
+                    $this->androidPushNotification(3, "Service Request", "Unfortunately! Your request is not resolved by ".$request->user()->user_name, $user->device_token, 1, $job->service_id);
                     return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
                 } else {
                     return $this->administratorResponse();

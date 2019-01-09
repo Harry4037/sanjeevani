@@ -335,11 +335,11 @@ class ServiceController extends Controller {
                                 ->whereIn("id", $resortUsers->toArray())
                                 ->pluck("device_token");
                         if ($staffDeviceTokens) {
-                            $this->androidPushNotification(2, "Servie Raised", "$service->name request raised by customer", $staffDeviceTokens->toArray(), 1, $service->id);
+                            $this->androidPushNotification(2, "Servie Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id);
                             $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                         }
                     }
-                    return $this->sendSuccessResponse("Request successfully created.", (object) []);
+                    return $this->sendSuccessResponse("Our staff member will contact you soon.", (object) []);
                 } else {
                     return $this->sendErrorResponse("Something went be wrong.", (object) []);
                 }
@@ -800,7 +800,7 @@ class ServiceController extends Controller {
                 $serviceRequest->request_status_id = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by_id);
-                    $this->androidPushNotification(2, "Service Request", "Great! your Service approved by customer.", $staff->device_token, 1, $serviceRequest->service_id);
+                    $this->androidPushNotification(2, "Service Request", "Great! your service request approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->service_id);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
