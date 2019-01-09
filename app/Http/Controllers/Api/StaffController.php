@@ -776,9 +776,8 @@ class StaffController extends Controller {
                 if ($job->save()) {
                     $service = Service::withTrashed()->find($job->service_id);
                     $user = User::find($job->user_id);
-                    $staff = User::find($job->accepted_by_id);
-                    $this->generateNotification($job->user_id, "Service Request", "Your service completed by staff member. Please provide your apporval.", 1);
-                    $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request marked as commplete by ".$staff->user_name, $user->device_token, 1, $job->service_id);
+                    $this->generateNotification($job->user_id, "Service Request", "Your service completed by ".$request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request marked as commplete by ".$request->user()->user_name, $user->device_token, 1, $job->service_id);
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -788,13 +787,12 @@ class StaffController extends Controller {
                 if (!$job) {
                     return $this->sendErrorResponse("Invalid job", (object) []);
                 }
-
                 $job->status = 3;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", 4);
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by ".$request->user()->user_name, 4);
 
-                    $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by staff. Please provide your approval.", $user->device_token, 4, $job->id);
+                    $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by ".$request->user()->user_name, $user->device_token, 4, $job->id);
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -883,7 +881,7 @@ class StaffController extends Controller {
                 $job->staff_comment = $request->comment;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Service Request", "Sorry! your request not resolved by our staff member.", 1);
+                    $this->generateNotification($user->id, "Service Request", "Unfortunately! Your request is not resolved by ".$request->user()->user_name, 1);
                     $this->androidPushNotification(3, "Service Request", "Unfortunately! Your request is not resolved by ".$request->user()->user_name, $user->device_token, 1, $job->service_id);
                     return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
                 } else {
@@ -898,9 +896,8 @@ class StaffController extends Controller {
                 $job->status = 5;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Meal Order", "Sorry! your meal order request rejected by our staff member.", 1);
-
-                    $this->androidPushNotification(3, "Meal Order", "Sorry! your meal order request rejected by our staff member.", $user->device_token, 1, $job->id);
+                    $this->generateNotification($user->id, "Meal Order", "Unfortunately! Your meal order request rejected by ".$request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Meal Order", "Unfortunately! Your meal order request rejected by ".$request->user()->user_name, $user->device_token, 1, $job->id);
                     return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -964,15 +961,14 @@ class StaffController extends Controller {
                 $user = User::find($order->user_id);
                 $msg = "Invalid status.";
                 if ($order->status == -1) {
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id rejected by our staff member", 4);
-                    $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id rejected by our staff member", $user->device_token, 4, $order->id);
+                    $this->generateNotification($user->id, "Meal Order", "Unfortunately!You meal order with invoice Id $order->invoice_id rejected by ".$request->user()->user_name, 4);
+                    $this->androidPushNotification(3, "Meal Order", "Unfortunately!Your meal order with invoice id $order->invoice_id rejected by ".$request->user()->user_name, $user->device_token, 4, $order->id);
 
                     $msg = "Order rejected succeffully.";
                 }
-                if ($order->status == 2) {
-
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by our staff member", 4);
-                    $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by our staff member", $user->device_token, 4, $order->id);
+                if ($order->status == 1) {
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by ".$request->user()->user_name, 4);
+                    $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by ".$request->user()->user_name, $user->device_token, 4, $order->id);
                     $msg = "Order accepted succeffully.";
                 }
                 return $this->sendSuccessResponse($msg, (object) []);
