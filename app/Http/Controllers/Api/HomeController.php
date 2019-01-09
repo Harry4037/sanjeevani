@@ -226,7 +226,7 @@ class HomeController extends Controller {
                 $user['no_of_rooms'] = "1";
             }
 
-            $notification = Notification::where("user_id", $request->user_id)->count();
+            $notification = Notification::where(["user_id"=> $request->user_id, "is_view"=>0])->count();
             $user['notification_count'] = $notification;
             
             $banners = Banner::where("is_active", 1)->get();
