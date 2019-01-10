@@ -510,6 +510,7 @@ class ServiceController extends Controller {
                     })
                     ->get();
             foreach ($ongoingMealOrders as $ongoingMealOrder) {
+                $acceptedBy = User::find($ongoingMealOrder->accepted_by);
                 $stat = "";
                 if ($ongoingMealOrder->status == 1) {
                     $stat = "Pending";
@@ -533,7 +534,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingDataArray[$i]["status_id"] = $ongoingMealOrder->status;
                 $ongoingDataArray[$i]["status"] = $stat;
-                $ongoingDataArray[$i]["acceptd_by"] = "";
+                $ongoingDataArray[$i]["acceptd_by"] = $acceptedBy ? $acceptedBy->user_name : "";
                 $ongoingDataArray[$i]["type"] = 4;
                 $i++;
             }
@@ -664,6 +665,7 @@ class ServiceController extends Controller {
                     })
                     ->get();
             foreach ($completedMealOrders as $completedMealOrder) {
+                $acceptedBy = User::find($completedMealOrder->accepted_by);
                 $createdAt = Carbon::parse($completedMealOrder->created_at);
                 $totalItem = MealOrderItem::where("meal_order_id", $completedMealOrder->id)->count();
                 $completedDataArray[$j]["id"] = $completedMealOrder->id;
@@ -677,7 +679,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
                 $completedDataArray[$j]["status_id"] = $completedMealOrder->status;
                 $completedDataArray[$j]["status"] = $completedMealOrder->status == 4 ? "Completed": "Rejected";
-                $completedDataArray[$j]["acceptd_by"] = "";
+                $completedDataArray[$j]["acceptd_by"] = $acceptedBy ? $acceptedBy->user_name : "";
                 $completedDataArray[$j]["staff_comment"] = $completedMealOrder->staff_comment;
                 $completedDataArray[$j]["staff_reasons"] = $completedMealOrder->staff_reasons;
                 $completedDataArray[$j]["type"] = 4;
