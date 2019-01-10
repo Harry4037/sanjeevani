@@ -13,7 +13,6 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Facades\FCM;
 use App\Models\UserBookingDetail;
-use App\Models\Notification;
 
 class Controller extends BaseController {
 
