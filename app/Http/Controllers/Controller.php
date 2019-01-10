@@ -13,6 +13,7 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Facades\FCM;
 use App\Models\UserBookingDetail;
+use App\Models\Notification;
 
 class Controller extends BaseController {
 
@@ -20,6 +21,10 @@ class Controller extends BaseController {
         DispatchesJobs,
         ValidatesRequests,
         Common;
+    
+    public function notificationCount($userId){
+        return Notification::where(["user_id" => $userId, "is_view" => 0])->count();
+    }
 
     public function bookBeforeCheckInDate($userId){
          $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
