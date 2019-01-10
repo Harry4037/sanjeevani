@@ -13,6 +13,7 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Facades\FCM;
 use App\Models\UserBookingDetail;
+use App\Models\Notification;
 
 class Controller extends BaseController {
 
@@ -21,13 +22,17 @@ class Controller extends BaseController {
         ValidatesRequests,
         Common;
 
-    public function bookBeforeCheckInDate($userId){
-         $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
-                    ->where("check_in", "<=", date("Y-m-d H:i:s"))
+    public function userNotificationCount($userId) {
+        return Notification::where(["user_id" => $userId, "is_view" => 0])->count();
+    }
+
+    public function bookBeforeCheckInDate($userId) {
+        $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
+                ->where("check_in", "<=", date("Y-m-d H:i:s"))
                 ->where("user_id", $userId)
                 ->first();
-          return $booking ? true : false;      
-    }    
+        return $booking ? true : false;
+    }
 
     public function sendSuccessResponse($message, $data) {
         return response()->json([
@@ -71,13 +76,14 @@ class Controller extends BaseController {
         $notification->title = $title;
         $notification->message = $message;
         $notification->type = $type;
+        $notification->is_view = 0;
         if ($notification->save())
             return TRUE;
         else
             return FALSE;
     }
 
-    public function androidPushNotification($userType, $title, $message, $token, $notificationType, $recordId) {
+    public function androidPushNotification($userType, $title, $message, $token, $notificationType, $recordId, $notificationCount=0) {
         if ($userType == '3') {
             //Fro customer
             config(['fcm.http.server_key' => 'AAAAZDeprME:APA91bHyGVMy54RTPTZKyj-gsF5L31IsHP0efkEm4RorsITp-yH2Syh-ftIuuaIu2zm7zZpJZp_CBmY4B33yahx1uZWG570_z6bJ9OxnuX2_Zzh9NFwVbtYKANXRh7SpsQZPq328Y-Jj']);
@@ -95,7 +101,7 @@ class Controller extends BaseController {
                 ->setSound('default');
 
         $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['title' => $title, 'message' => $message, 'type' => $notificationType, "record_id" => $recordId, "notification_count" => 0]);
+        $dataBuilder->addData(['title' => $title, 'message' => $message, 'type' => $notificationType, "record_id" => $recordId, "notification_count" => $notificationCount]);
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();

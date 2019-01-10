@@ -335,7 +335,7 @@ class ServiceController extends Controller {
                                 ->whereIn("id", $resortUsers->toArray())
                                 ->pluck("device_token");
                         if ($staffDeviceTokens) {
-                            $this->androidPushNotification(2, "Servie Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id);
+                            $this->androidPushNotification(2, "Servie Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 0);
                             $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                         }
                     }
