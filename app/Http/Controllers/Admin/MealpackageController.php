@@ -169,8 +169,8 @@ class MealpackageController extends Controller {
 
             if ($data->save()) {
                 if ($request->meal_item) {
+                    MealPackageItem::where("meal_package_id", $data->id)->delete();
                     foreach ($request->meal_item as $item) {
-                        MealPackageItem::where("meal_package_id", $data->id)->delete();
                         $mealPackageItem = new MealPackageItem();
                         $mealPackageItem->meal_package_id = $data->id;
                         $mealPackageItem->meal_item_id = $item;
@@ -186,9 +186,11 @@ class MealpackageController extends Controller {
 
         $resorts = Resort::where("is_active", 1)->get();
         $resortMeals = MealItem::where("resort_id", $data->resort_id)->get();
+        $mealPackageItems = MealPackageItem::where("meal_package_id", $data->id)->pluck("meal_item_id");
         return view('admin.meal-package.edit', [
             'resorts' => $resorts,
             'resortMeals' => $resortMeals,
+            'mealPackageItems' => $mealPackageItems ? $mealPackageItems->toArray() : [],
             'data' => $data
         ]);
     }
