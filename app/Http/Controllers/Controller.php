@@ -23,7 +23,8 @@ class Controller extends BaseController {
         Common;
     
     public function notificationCount($userId){
-        return Notification::where(["user_id" => $userId, "is_view" => 0])->count();
+        $nCount = Notification::where(["user_id" => $userId, "is_view" => 0])->count();
+        return $nCount;
     }
 
     public function bookBeforeCheckInDate($userId){
