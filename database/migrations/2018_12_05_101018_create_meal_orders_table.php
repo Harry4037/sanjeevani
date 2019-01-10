@@ -25,6 +25,8 @@ class CreateMealOrdersTable extends Migration
             $table->float('gst_amount')->default(0);
             $table->float('total_amount')->default(0);
             $table->bigInteger('accepted_by')->default(0);
+            $table->string('staff_reasons')->nullable();
+            $table->string('staff_comment')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);

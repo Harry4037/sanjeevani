@@ -317,8 +317,8 @@ class StaffController extends Controller {
             if ($serviceRequest->save()) {
                 $service = Service::withTrashed()->find($serviceRequest->service_id);
                 $user = User::find($serviceRequest->user_id);
-                $this->generateNotification($user->id, "Service accepted", "Your ".$service->name." request is accepted by ".$request->user()->user_name, 1);
-                $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request is accepted by ".$request->user()->user_name, $user->device_token, 1, $serviceRequest->service_id, $this->notificationCount($user->id));
+                $this->generateNotification($user->id, "Service accepted", "Your " . $service->name . " request is accepted by " . $request->user()->user_name, 1);
+                $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is accepted by " . $request->user()->user_name, $user->device_token, 1, $serviceRequest->service_id, $this->notificationCount($user->id));
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
             } else {
                 return $this->sendErrorResponse("Something went be wrong.", (object) []);
@@ -776,8 +776,8 @@ class StaffController extends Controller {
                 if ($job->save()) {
                     $service = Service::withTrashed()->find($job->service_id);
                     $user = User::find($job->user_id);
-                    $this->generateNotification($job->user_id, "Service Request", "Your ".$service->name." request marked as commplete by ".$request->user()->user_name, 1);
-                    $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request marked as commplete by ".$request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
+                    $this->generateNotification($job->user_id, "Service Request", "Your " . $service->name . " request marked as commplete by " . $request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request marked as commplete by " . $request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -790,9 +790,9 @@ class StaffController extends Controller {
                 $job->status = 3;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by ".$request->user()->user_name, 4);
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by " . $request->user()->user_name, 4);
 
-                    $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by ".$request->user()->user_name, $user->device_token, 4, $job->id, $this->notificationCount($user->id));
+                    $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by " . $request->user()->user_name, $user->device_token, 4, $job->id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -881,8 +881,8 @@ class StaffController extends Controller {
                 $job->staff_comment = $request->comment;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Service Request", "Unfortunately! Your request is not resolved by ".$request->user()->user_name, 1);
-                    $this->androidPushNotification(3, "Service Request", "Unfortunately! Your request is not resolved by ".$request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
+                    $this->generateNotification($user->id, "Service Request", "Unfortunately! Your request is not resolved by " . $request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Service Request", "Unfortunately! Your request is not resolved by " . $request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -896,8 +896,8 @@ class StaffController extends Controller {
                 $job->status = 5;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Meal Order", "Unfortunately! Your meal order request rejected by ".$request->user()->user_name, 1);
-                    $this->androidPushNotification(3, "Meal Order", "Unfortunately! Your meal order request rejected by ".$request->user()->user_name, $user->device_token, 1, $job->id, $this->notificationCount($user->id));
+                    $this->generateNotification($user->id, "Meal Order", "Unfortunately! Your meal order request rejected by " . $request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Meal Order", "Unfortunately! Your meal order request rejected by " . $request->user()->user_name, $user->device_token, 1, $job->id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -956,19 +956,21 @@ class StaffController extends Controller {
             }
 
             $order->status = $request->status;
+            $order->staff_reasons = $request->reasons;
+            $order->staff_comment = $request->comment;
             $order->accepted_by = $request->user_id;
             if ($order->save()) {
                 $user = User::find($order->user_id);
                 $msg = "Invalid status.";
                 if ($order->status == -1) {
-                    $this->generateNotification($user->id, "Meal Order", "Unfortunately!You meal order with invoice Id $order->invoice_id rejected by ".$request->user()->user_name, 4);
-                    $this->androidPushNotification(3, "Meal Order", "Unfortunately!Your meal order with invoice id $order->invoice_id rejected by ".$request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
+                    $this->generateNotification($user->id, "Meal Order", "Unfortunately!You meal order with invoice Id $order->invoice_id rejected by " . $request->user()->user_name, 4);
+                    $this->androidPushNotification(3, "Meal Order", "Unfortunately!Your meal order with invoice id $order->invoice_id rejected by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
 
                     $msg = "Order rejected succeffully.";
                 }
                 if ($order->status == 1) {
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by ".$request->user()->user_name, 4);
-                    $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by ".$request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
+                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by " . $request->user()->user_name, 4);
+                    $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
                     $msg = "Order accepted succeffully.";
                 }
                 return $this->sendSuccessResponse($msg, (object) []);
