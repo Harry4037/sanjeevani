@@ -678,6 +678,8 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["status_id"] = $completedMealOrder->status;
                 $completedDataArray[$j]["status"] = $completedMealOrder->status == 4 ? "Completed": "Rejected";
                 $completedDataArray[$j]["acceptd_by"] = "";
+                $completedDataArray[$j]["staff_comment"] = $completedMealOrder->staff_comment;
+                $completedDataArray[$j]["staff_reasons"] = $completedMealOrder->staff_reasons;
                 $completedDataArray[$j]["type"] = 4;
                 $j++;
             }
