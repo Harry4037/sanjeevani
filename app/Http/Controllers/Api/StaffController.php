@@ -318,7 +318,7 @@ class StaffController extends Controller {
                 $service = Service::withTrashed()->find($serviceRequest->service_id);
                 $user = User::find($serviceRequest->user_id);
                 $this->generateNotification($user->id, "Service accepted", "Your service request accepted by our staff member. Our staff will contact you soon.", 1);
-                $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request is accepted by ".$request->user()->user_name, $user->device_token, 1, $serviceRequest->service_id, $this->userNotificationCount($user->id));
+                $this->androidPushNotification(3, "Service Request", "Your ".$service->name." request is accepted by ".$request->user()->user_name, $user->device_token, 1, $serviceRequest->service_id);
                 return $this->sendSuccessResponse("Request accepted.", (object) []);
             } else {
                 return $this->sendErrorResponse("Something went be wrong.", (object) []);
