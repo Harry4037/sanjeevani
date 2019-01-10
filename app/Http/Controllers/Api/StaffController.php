@@ -962,7 +962,7 @@ class StaffController extends Controller {
             if ($order->save()) {
                 $user = User::find($order->user_id);
                 $msg = "Invalid status.";
-                if ($order->status == -1) {
+                if ($order->status == 5) {
                     $this->generateNotification($user->id, "Meal Order", "Unfortunately!You meal order with invoice Id $order->invoice_id rejected by " . $request->user()->user_name, 4);
                     $this->androidPushNotification(3, "Meal Order", "Unfortunately!Your meal order with invoice id $order->invoice_id rejected by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
 
