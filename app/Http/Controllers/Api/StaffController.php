@@ -955,7 +955,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid order", (object) []);
             }
 
-            $order->status = $request->status;
+            $order->status = $request->status == -1 ? 5 : $request->status;
             $order->staff_reasons = $request->reasons;
             $order->staff_comment = $request->comment;
             $order->accepted_by = $request->user_id;
