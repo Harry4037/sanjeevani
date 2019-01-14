@@ -116,15 +116,19 @@ $(document).ready(function () {
         locale: {
             format: 'YYYY/M/DD'
         }
+    }, function (start, end, label) {
+        console.log(start);
+        $('#end_to').daterangepicker({
+            minDate: start,
+            singleDatePicker: true,
+            timePicker: false,
+            singleClasses: "picker_1",
+            locale: {
+                format: 'YYYY/M/DD'
+            }
+        });
     });
-    $('#end_to').daterangepicker({
-        singleDatePicker: true,
-        timePicker: false,
-        singleClasses: "picker_1",
-        locale: {
-            format: 'YYYY/M/DD'
-        }
-    });
+
 
 
     $(document).on("change", "#day_id", function () {

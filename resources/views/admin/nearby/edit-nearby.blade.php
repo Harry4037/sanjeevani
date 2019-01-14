@@ -180,7 +180,9 @@ $(document).ready(function () {
             },
             pin_code: {
                 required: true,
-                number: true
+                number: true,
+                maxlength: 6,
+                minlength: 6,
             },
             state: {
                 required: true

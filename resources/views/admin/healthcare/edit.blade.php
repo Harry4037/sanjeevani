@@ -171,6 +171,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             singleClasses: "picker_1",
             @if (isset($healthcare->end_to))
             startDate: new Date("{{ $healthcare->end_to }}"),
+            minDate: new Date("{{ $healthcare->end_to }}"),
             @endif
             locale: {
             format: 'YYYY/M/DD'
