@@ -21,7 +21,7 @@ class UserBookingDetail extends Model {
     }
 
     public function getRoomDetailAttribute() {
-        $roomDetail = ResortRoom::select('id','resort_id', 'room_type_id', 'room_no')->where("id", $this->resort_room_id)->first();
+        $roomDetail = ResortRoom::withTrashed()->select('id','resort_id', 'room_type_id', 'room_no')->where("id", $this->resort_room_id)->first();
         return $roomDetail ? $roomDetail : (object)[];
     }
 
