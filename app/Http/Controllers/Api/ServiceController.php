@@ -468,7 +468,7 @@ class ServiceController extends Controller {
                             'data' => (object) []
                 ]);
             }
-            $ongoingServices = ServiceRequest::select(DB::raw('id, staff_reasons, staff_comment, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%b-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
+            $ongoingServices = ServiceRequest::select(DB::raw('id, staff_reasons, staff_comment, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%b-%Y") as date, DATE_FORMAT(created_at, "%h:%i%p") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
 //            $serviceRequest['order_request']['ongoing_order'] = ServiceRequest::select(DB::raw('id, comment, service_id, question_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%m-%Y") as date, DATE_FORMAT(created_at, "%r") as time'))
                             ->where(["user_id" => $request->user_id])
                             ->where(function($q) {
@@ -588,7 +588,7 @@ class ServiceController extends Controller {
             }
 
 
-            $completedServices = ServiceRequest::select(DB::raw('id,staff_reasons, staff_comment, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%b-%Y") as date, DATE_FORMAT(created_at, "%r") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
+            $completedServices = ServiceRequest::select(DB::raw('id,staff_reasons, staff_comment, comment, service_id, request_status_id, accepted_by_id, DATE_FORMAT(created_at, "%d-%b-%Y") as date, DATE_FORMAT(created_at, "%h:%i%p") as time, DATE_FORMAT(created_at, "%d-%m-%Y %H:%i:%s") as created_timestamp'))
                             ->where(["user_id" => $request->user_id])
                             ->where(function($q) {
                                 $q->where("request_status_id", 4)
