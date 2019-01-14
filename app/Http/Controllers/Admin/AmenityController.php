@@ -98,14 +98,16 @@ class AmenityController extends Controller {
                     }
                     if ($request->from_time && $request->to_time) {
                         foreach ($request->from_time as $key => $fromTime) {
-                            $from_time = Carbon::parse($fromTime);
-                            $to_time = Carbon::parse($request->to_time[$key]);
-                            $amenityTimeSlot = new AmenityTimeSlot();
-                            $amenityTimeSlot->amenity_id = $amenity->id;
-                            $amenityTimeSlot->from = $from_time->format("H:s:i");
-                            $amenityTimeSlot->to = $to_time->format("H:s:i");
-                            $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                            $amenityTimeSlot->save();
+                            if ($fromTime && $request->to_time[$key] && $request->total_people[$key]) {
+                                $from_time = Carbon::parse($fromTime);
+                                $to_time = Carbon::parse($request->to_time[$key]);
+                                $amenityTimeSlot = new AmenityTimeSlot();
+                                $amenityTimeSlot->amenity_id = $amenity->id;
+                                $amenityTimeSlot->from = $from_time->format("H:s:i");
+                                $amenityTimeSlot->to = $to_time->format("H:s:i");
+                                $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
+                                $amenityTimeSlot->save();
+                            }
                         }
                     }
 
@@ -181,12 +183,12 @@ class AmenityController extends Controller {
             $amenity->resort_id = $request->resort_id;
             $amenity->address = $request->address;
             if ($request->file("amenity_icon")) {
-                    $amenity_icon = Storage::disk('public')->put('amenity_icon', $request->file("amenity_icon"));
-                    if ($amenity_icon) {
-                        $amenity_icon_name = basename($amenity_icon);
-                        $amenity->icon = $amenity_icon_name;
-                    }
+                $amenity_icon = Storage::disk('public')->put('amenity_icon', $request->file("amenity_icon"));
+                if ($amenity_icon) {
+                    $amenity_icon_name = basename($amenity_icon);
+                    $amenity->icon = $amenity_icon_name;
                 }
+            }
             if ($amenity->save()) {
                 if ($request->amenity_images) {
                     foreach ($request->amenity_images as $tempImage) {
