@@ -191,13 +191,29 @@ class MealpackageController extends Controller {
         }
 
         $resorts = Resort::where("is_active", 1)->get();
-        $resortMeals = MealItem::where("resort_id", $data->resort_id)->get();
+//        $resortMeals = MealItem::where("resort_id", $data->resort_id)->get();
+        $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($data) {
+                    $query->where('resort_id', $data->resort_id);
+                })->with([
+                    'menuItems' => function ($query) use($data) {
+                        $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $data->resort_id);
+                    }
+                ])->get();
         $mealPackageItems = MealPackageItem::where("meal_package_id", $data->id)->pluck("meal_item_id");
+        $css = [
+            "vendors/iCheck/skins/flat/green.css",
+        ];
+        $js = [
+            'vendors/iCheck/icheck.min.js',
+        ];
         return view('admin.meal-package.edit', [
             'resorts' => $resorts,
-            'resortMeals' => $resortMeals,
+            'mealCategories' => $mealCategories,
+//            'resortMeals' => $resortMeals,
             'mealPackageItems' => $mealPackageItems ? $mealPackageItems->toArray() : [],
-            'data' => $data
+            'data' => $data,
+            'css' => $css,
+            'js' => $js
         ]);
     }
 

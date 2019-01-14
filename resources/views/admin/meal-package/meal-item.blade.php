@@ -1,4 +1,4 @@
-
+<link href="{{ asset("vendors/iCheck/skins/flat/green.css") }}" rel="stylesheet">
 @if($mealCategories)
 @foreach($mealCategories as $k => $mealCategory)
 <div class="panel-group">
@@ -8,7 +8,13 @@
                 <a data-toggle="collapse" href="#{{ 'collapse'.$k }}">{{ $mealCategory->name }}</a>
             </h4>
         </div>
-        <div id="{{ 'collapse'.$k }}" class="<?php if($k==0){ echo 'panel-collapse collapse in'; }else{ echo 'panel-collapse collapse'; } ?>">
+        <div id="{{ 'collapse'.$k }}" class="<?php
+        if ($k == 0) {
+            echo 'panel-collapse collapse in';
+        } else {
+            echo 'panel-collapse collapse';
+        }
+        ?>">
             <div class="panel-body">
                 <p style="padding: 5px;">
                     @foreach($mealCategory->menuItems as $key => $item)
@@ -29,6 +35,17 @@
 </div>
 @endforeach
 @endif
-
-
+<script src="{{ asset("vendors/iCheck/icheck.min.js") }}"></script>
+<script>
+$(document).ready(function () {
+    if ($("input.flat")[0]) {
+        $(document).ready(function () {
+            $('input.flat').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            });
+        });
+    }
+});
+</script>    
 
