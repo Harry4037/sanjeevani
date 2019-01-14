@@ -121,10 +121,16 @@ class MealpackageController extends Controller {
     }
 
     public function getResortMeal(Request $request) {
-        $mealItems = MealItem::where(["is_active" => 1, "resort_id" => $request->record_id])->get();
+        $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+                    $query->where('resort_id', $request->record_id);
+                })->with([
+                    'menuItems' => function ($query) use($request) {
+                        $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->record_id);
+                    }
+                ])->get();
 
         return view('admin.meal-package.meal-item', [
-            'mealItems' => $mealItems,
+            'mealCategories' => $mealCategories,
         ]);
     }
 

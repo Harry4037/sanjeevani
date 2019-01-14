@@ -34,7 +34,7 @@ class OrderController extends Controller {
                         "userDetail" => function($query) {
                             $query->select('id', 'user_name');
                         }
-                    ])->take($limit)->offset($offset)->get();
+                    ])->take($limit)->offset($offset)->latest()->get();
 
             $dataArray = [];
             $stat = "";

@@ -73,11 +73,11 @@
                                     @if($resortMeals)
                                     @foreach($resortMeals as $key => $item)
                                     <input class="flat" type="checkbox" name="meal_item[]" value="{{ $item->id }}"  
-                                           
+
                                            @if(in_array($item->id, $mealPackageItems))
                                            {{ "checked" }}
                                            @endif
-                                           
+
 
                                            > {{ $item->name }}
                                            @endforeach
