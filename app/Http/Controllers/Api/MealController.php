@@ -248,7 +248,7 @@ class MealController extends Controller {
                         $query->where('resort_id', $request->resort_id);
                     })->with([
                         'menuItems' => function ($query) use($request) {
-                            $query->select('id', 'name', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+                            $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
                         }
                     ])->get();
             $mealCatData = [];
@@ -261,6 +261,7 @@ class MealController extends Controller {
                             $userCart = Cart::where(["user_id" => $request->user_id, "meal_item_id" => $mitems->id])->first();
                             $mealCatData[$m]['menu_items'][$j]['id'] = $mitems->id;
                             $mealCatData[$m]['menu_items'][$j]['name'] = $mitems->name;
+                            $mealCatData[$m]['menu_items'][$j]['category'] = $mitems->category;
                             $mealCatData[$m]['menu_items'][$j]['banner_image_url'] = $mitems->banner_image_url;
                             $mealCatData[$m]['menu_items'][$j]['price'] = $mitems->price;
                             $mealCatData[$m]['menu_items'][$j]['quantity_count'] = isset($userCart->quantity) && $userCart->quantity ? $userCart->quantity : 0;

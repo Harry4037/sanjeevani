@@ -251,6 +251,7 @@ class CartController extends Controller {
                     $cartDataArray['cart_items'][$key]['type'] = $itemType;
                     $cartDataArray['cart_items'][$key]['item_id'] = $mealItem->id;
                     $cartDataArray['cart_items'][$key]['image_url'] = $mealItem->image_name;
+                    $cartDataArray['cart_items'][$key]['category'] = $mealItem->category;
                     $cartDataArray['cart_items'][$key]['item_name'] = $mealItem->name;
                     $cartDataArray['cart_items'][$key]['item_price'] = $mealItem->price;
                     $cartDataArray['cart_items'][$key]['quantity'] = $cart->quantity;
