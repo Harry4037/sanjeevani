@@ -110,8 +110,12 @@ class ServiceController extends Controller {
      * 
      */
     public function serviceListing(Request $request) {
-
+        
+        if($request->resort_id == -1){
+            $houseKeeping = Service::where(["resort_id" => 1, "type_id" => 1, "is_active" => 1])->get();
+        }else{
         $houseKeeping = Service::where(["resort_id" => $request->resort_id, "type_id" => 1, "is_active" => 1])->get();
+        }
         $houseKeepingArrray = [];
         if ($houseKeeping) {
             $i = 0;
@@ -136,8 +140,12 @@ class ServiceController extends Controller {
         } else {
             $houseKeepingArrray = [];
         }
-
-        $issues = Service::where(["resort_id" => $request->resort_id, "type_id" => 2, "is_active" => 1])->get();
+        
+        if($request->resort_id == -1){
+            $issues = Service::where(["resort_id" => 1, "type_id" => 2, "is_active" => 1])->get();
+        }else{
+            $issues = Service::where(["resort_id" => $request->resort_id, "type_id" => 2, "is_active" => 1])->get();
+        }
         $issuesArrray = [];
         if ($issues) {
             $i = 0;
@@ -335,7 +343,7 @@ class ServiceController extends Controller {
                                 ->whereIn("id", $resortUsers->toArray())
                                 ->pluck("device_token");
                         if ($staffDeviceTokens) {
-                            $this->androidPushNotification(2, "Servie Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id);
+                            $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id);
                             $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                         }
                     }
@@ -526,7 +534,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["id"] = $ongoingMealOrder->id;
                 $ongoingDataArray[$i]["record_id"] = $ongoingMealOrder->id;
                 $ongoingDataArray[$i]["name"] = $ongoingMealOrder->invoice_id;
-                $ongoingDataArray[$i]["icon"] = "";
+                $ongoingDataArray[$i]["icon"] = "http://sanjeevani.dbaquincy.com/storage/meal_package_images/b988bbpsmFkbs4UJOGkLyiPwk3W0GNHx2VPmwbbh.jpeg";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-m-Y");
                 $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -544,7 +552,7 @@ class ServiceController extends Controller {
             ->get();
             foreach ($ongoingAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
-                $amenity = Amenity::find($completedAmenity->amenity_id);
+                $amenity = Amenity::withTrashed()->find($completedAmenity->amenity_id);
                 $ongoingDataArray[$i]["id"] = $completedAmenity->id;
                 $ongoingDataArray[$i]["record_id"] = $completedAmenity->amenity_id;
                 $ongoingDataArray[$i]["name"] = $amenity->name;
@@ -553,7 +561,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $ongoingDataArray[$i]["status_id"] = 2;
-                $ongoingDataArray[$i]["status"] = "Upcoming";
+                $ongoingDataArray[$i]["status"] = "Confirmed";
                 $ongoingDataArray[$i]["acceptd_by"] = "";
                 $ongoingDataArray[$i]["type"] = 2;
                 $i++;
@@ -564,7 +572,7 @@ class ServiceController extends Controller {
             ->get();
             foreach ($ongoingActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
-                $activity = Activity::find($completedActivity->amenity_id);
+                $activity = Activity::withTrashed()->find($completedActivity->amenity_id);
                 $ongoingDataArray[$i]["id"] = $completedActivity->id;
                 $ongoingDataArray[$i]["record_id"] = $completedActivity->amenity_id;
                 $ongoingDataArray[$i]["name"] = $activity->name;
@@ -573,7 +581,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $ongoingDataArray[$i]["status_id"] = 2;
-                $ongoingDataArray[$i]["status"] = "Upcoming";
+                $ongoingDataArray[$i]["status"] = "Confirmed";
                 $ongoingDataArray[$i]["acceptd_by"] = "";
                 $ongoingDataArray[$i]["type"] = 3;
                 $i++;
@@ -624,7 +632,7 @@ class ServiceController extends Controller {
             ->get();
             foreach ($completedAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
-                $amenity = Amenity::find($completedAmenity->amenity_id);
+                $amenity = Amenity::withTrashed()->find($completedAmenity->amenity_id);
                 $completedDataArray[$j]["id"] = $completedAmenity->id;
                 $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
                 $completedDataArray[$j]["name"] = $amenity->name;
@@ -671,7 +679,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["id"] = $completedMealOrder->id;
                 $completedDataArray[$j]["record_id"] = $completedMealOrder->id;
                 $completedDataArray[$j]["name"] = $completedMealOrder->invoice_id;
-                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["icon"] = "http://sanjeevani.dbaquincy.com/storage/meal_package_images/b988bbpsmFkbs4UJOGkLyiPwk3W0GNHx2VPmwbbh.jpeg";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-m-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("d-m-Y")." ".$createdAt->format("h:i a");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -704,7 +712,7 @@ class ServiceController extends Controller {
                         'status' => false,
                         'status_code' => 404,
                         'message' => $ex->getMessage(),
-                        'data' => []
+                        'data' => (object)[]
             ]);
         }
     }
@@ -817,7 +825,7 @@ class ServiceController extends Controller {
                 $serviceRequest->status = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by);
-                    $this->androidPushNotification(2, "Service Request", "Great! your Meal order service approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->id);
+                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->id);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();

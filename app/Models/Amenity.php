@@ -14,5 +14,9 @@ class Amenity extends Model {
     public function amenityImages() {
         return $this->hasMany('App\Models\AmenityImage', 'amenity_id');
     }
+    
+    public function getIconAttribute($name) {
+        return $name ? asset('storage/amenity_icon/' . $name) : null;
+    }
 
 }

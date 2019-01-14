@@ -80,6 +80,13 @@ class AmenityController extends Controller {
                 $amenity->description = $request->amenity_description;
                 $amenity->resort_id = $request->resort_id;
                 $amenity->address = $request->address;
+                if ($request->file("amenity_icon")) {
+                    $amenity_icon = Storage::disk('public')->put('amenity_icon', $request->file("amenity_icon"));
+                    if ($amenity_icon) {
+                        $amenity_icon_name = basename($amenity_icon);
+                        $amenity->icon = $amenity_icon_name;
+                    }
+                }
                 if ($amenity->save()) {
                     if ($request->amenity_images) {
                         foreach ($request->amenity_images as $tempImage) {
@@ -173,6 +180,13 @@ class AmenityController extends Controller {
             $amenity->description = $request->amenity_description;
             $amenity->resort_id = $request->resort_id;
             $amenity->address = $request->address;
+            if ($request->file("amenity_icon")) {
+                    $amenity_icon = Storage::disk('public')->put('amenity_icon', $request->file("amenity_icon"));
+                    if ($amenity_icon) {
+                        $amenity_icon_name = basename($amenity_icon);
+                        $amenity->icon = $amenity_icon_name;
+                    }
+                }
             if ($amenity->save()) {
                 if ($request->amenity_images) {
                     foreach ($request->amenity_images as $tempImage) {

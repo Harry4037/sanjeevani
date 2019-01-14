@@ -214,7 +214,11 @@ class MealController extends Controller {
 
 
             //For meal packages
-            $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
+            if($request->resort_id == -1){
+                $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => 1])->get();
+            }else{
+                $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
+            }
             $packageData = [];
             if ($mealPackages) {
                 foreach ($mealPackages as $key => $mealPackage) {

@@ -201,7 +201,7 @@ class StaffController extends Controller {
                     $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
                     $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                     $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
-                    $mealDataArray[$j]["room_no"] = "";
+                    $mealDataArray[$j]["room_no"] = $mealOrder->resort_room_no;
                     $mealDataArray[$j]["created_at"] = $meal_created_at->format('d-m-Y h:i a');
                     $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                     if ($mealItems) {
@@ -228,7 +228,7 @@ class StaffController extends Controller {
                 $amenitiesBookingCount = AmenityRequest::where(["amenity_id" => $amenitie->id, "booking_date" => date("Y-m-d")])->count();
                 $amenitiesDataArray[$z]["id"] = $amenitie->id;
                 $amenitiesDataArray[$z]["name"] = $amenitie->name;
-                $amenitiesDataArray[$z]["icon"] = $amenitie->icon;
+                $amenitiesDataArray[$z]["icon"] = "http://sanjeevani.dbaquincy.com/storage/amenity_images/QKYvWDznmpjcuowP9UsHMPKm6ruJ8h9pgCtN94Ub.jpeg";
                 $amenitiesDataArray[$z]["booking_count"] = $amenitiesBookingCount;
             }
 
@@ -475,7 +475,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["time"] = $createdAt->format("h:i a");
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $ongoingJobArray[$i]["room_no"] = "";
+                $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
                 $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
@@ -508,7 +508,7 @@ class StaffController extends Controller {
                 $i++;
             }
 
-            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 3, "is_active" => 1])
+            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
@@ -527,6 +527,12 @@ class StaffController extends Controller {
                             ]);
                         }
                     ])
+                    ->where(["accepted_by_id" => $request->user()->id, "is_active" => 1])
+                     ->where(function($q) {
+                        $q->where("request_status_id", 3)
+                        ->orWhere("request_status_id", 5)
+                        ;
+                    })
                     ->get();
 
             $underApprovalJobArray = [];
@@ -564,7 +570,9 @@ class StaffController extends Controller {
                         }
                     ])
                     ->where(function($q) {
-                        $q->where("status", 3);
+                        $q->where("status", 3)
+                        ->orWhere("status", 5)
+                        ;
                     })->latest()
                     ->get();
             foreach ($underMealOrders as $ongoingMealOrder) {
@@ -578,7 +586,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["time"] = $createdAt->format("h:i a");
                 $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
                 $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $underApprovalJobArray[$j]["room_no"] = "";
+                $underApprovalJobArray[$j]["room_no"] = $ongoingMealOrder->resort_room_no;
                 $underApprovalJobArray[$j]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $underApprovalJobArray[$j]["total_amount"] = $ongoingMealOrder->total_amount;
                 $underApprovalJobArray[$j]["status_id"] = $ongoingMealOrder->status;
@@ -670,7 +678,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["time"] = $createdAt->format("h:i a");
                 $completedJobArray[$i]["total_item_count"] = count($mealItems);
                 $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
-                $completedJobArray[$i]["room_no"] = "";
+                $completedJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
                 $completedJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
                 $completedJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $completedJobArray[$i]["status_id"] = $ongoingMealOrder->status;
@@ -776,8 +784,8 @@ class StaffController extends Controller {
                 if ($job->save()) {
                     $service = Service::withTrashed()->find($job->service_id);
                     $user = User::find($job->user_id);
-                    $this->generateNotification($job->user_id, "Service Request", "Your " . $service->name . " request marked as commplete by " . $request->user()->user_name, 1);
-                    $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request marked as commplete by " . $request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
+                    $this->generateNotification($job->user_id, "Service Request Completed", "Your " . $service->name . " request marked as completed by " . $request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Service Request Completed", "Your " . $service->name . " request marked as completed by " . $request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -790,9 +798,9 @@ class StaffController extends Controller {
                 $job->status = 3;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by " . $request->user()->user_name, 4);
+                    $this->generateNotification($user->id, "Meal Order Delivered", "Your meal order with invoice# $job->invoice_id is delivered.", 4);
 
-                    $this->androidPushNotification(3, "Meal Order", "You meal order with invoice Id $job->invoice_id completed by " . $request->user()->user_name, $user->device_token, 4, $job->id, $this->notificationCount($user->id));
+                    $this->androidPushNotification(3, "Meal Order Completed", "Your meal order with invoice# $job->invoice_id completed by " . $request->user()->user_name, $user->device_token, 4, $job->id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed. Now your job in under approval.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -881,8 +889,8 @@ class StaffController extends Controller {
                 $job->staff_comment = $request->comment;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
-                    $this->generateNotification($user->id, "Service Request", "Unfortunately! Your request is not resolved by " . $request->user()->user_name, 1);
-                    $this->androidPushNotification(3, "Service Request", "Unfortunately! Your request is not resolved by " . $request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
+                    $this->generateNotification($user->id, "Service Request Rejected", "Unfortunately! Your request is not resolved by " . $request->user()->user_name, 1);
+                    $this->androidPushNotification(3, "Service Request Rejected", "Unfortunately! Your request is not resolved by " . $request->user()->user_name, $user->device_token, 1, $job->service_id, $this->notificationCount($user->id));
                     return $this->sendSuccessResponse("Your job status has been changed.", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -963,15 +971,15 @@ class StaffController extends Controller {
                 $user = User::find($order->user_id);
                 $msg = "Invalid status.";
                 if ($order->status == 5) {
-                    $this->generateNotification($user->id, "Meal Order", "Unfortunately!You meal order with invoice Id $order->invoice_id rejected by " . $request->user()->user_name, 4);
-                    $this->androidPushNotification(3, "Meal Order", "Unfortunately!Your meal order with invoice id $order->invoice_id rejected by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
+                    $this->generateNotification($user->id, "Meal Order Rejected", "Unfortunately! Your meal order with invoice# $order->invoice_id rejected by " . $request->user()->user_name, 4);
+                    $this->androidPushNotification(3, "Meal Order Rejected", "Unfortunately! Your meal order with invoice# $order->invoice_id rejected by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
 
-                    $msg = "Order rejected succeffully.";
+                    $msg = "Order rejected successfully.";
                 }
-                if ($order->status == 1) {
-                    $this->generateNotification($user->id, "Meal Order", "You meal order with invoice Id $order->invoice_id accepted by " . $request->user()->user_name, 4);
-                    $this->androidPushNotification(3, "Meal Order", "Your meal order with invoice id $order->invoice_id accepted by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
-                    $msg = "Order accepted succeffully.";
+                if ($order->status == 2) {
+                    $this->generateNotification($user->id, "Meal Order Accepted", "Your meal order with invoice# $order->invoice_id accepted by " . $request->user()->user_name, 4);
+                    $this->androidPushNotification(3, "Meal Order Accepted", "Your meal order with invoice# $order->invoice_id accepted by " . $request->user()->user_name, $user->device_token, 4, $order->id, $this->notificationCount($user->id));
+                    $msg = "Order accepted successfully.";
                 }
                 return $this->sendSuccessResponse($msg, (object) []);
             } else {

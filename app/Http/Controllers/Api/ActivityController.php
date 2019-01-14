@@ -64,11 +64,20 @@ class ActivityController extends Controller {
         if (!$request->resort_id) {
             return $this->sendErrorResponse("Resort id missing", (object) []);
         }
-        $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
+        
+        if($request->resort_id == -1){
+            $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => 1])->with([
                     'activityImages' => function($query) {
                         $query->select('id', 'image_name as banner_image_url', 'amenity_id');
                     }
                 ])->get();
+        }else{
+            $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
+                    'activityImages' => function($query) {
+                        $query->select('id', 'image_name as banner_image_url', 'amenity_id');
+                    }
+                ])->get();
+        }
 
         if (count($amenities) > 0) {
             foreach ($amenities as $key => $amenity) {
