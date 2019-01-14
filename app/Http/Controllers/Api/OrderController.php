@@ -149,8 +149,16 @@ class OrderController extends Controller {
                 $data['invoice_id'] = $mealOrder->invoice_id;
                 $data['total_amount'] = $mealOrder->total_amount;
                 Cart::where(["user_id" => $request->user_id])->delete();
-                $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens, 4, $mealOrder->id);
+
+                $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+                if ($resortUsers) {
+                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_meal_authorise" => 1])
+                            ->whereIn("id", $resortUsers->toArray())
+                            ->pluck("device_token");
+                    if ($staffDeviceTokens) {
+                        $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id);
+                    }
+                }
                 $this->generateNotification($request->user_id, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id ", 4);
                 return $this->sendSuccessResponse("We will serve your food soon.", $data);
             } else {
