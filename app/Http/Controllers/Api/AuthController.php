@@ -395,8 +395,8 @@ class AuthController extends Controller {
 
             $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
             $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
-            $userArray['resort_room_no'] = ($userBookingDetail) && ($userBookingDetail->room_detail != null) ? $userBookingDetail->room_detail->room_no : "Not available";
-            $userArray['room_type'] = ($userBookingDetail) && ($userBookingDetail->room_type_detail != null) ? $userBookingDetail->room_type_detail->name : "Not available";
+            $userArray['resort_room_no'] = $userBookingDetail ? $userBookingDetail->resort_room_no : "Not available";
+            $userArray['room_type'] = $userBookingDetail ? $userBookingDetail->room_type_name : "Not available";
             $userArray['check_in_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('d-M-Y') : '';
             $userArray['check_in_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('h:i A') : '';
             $userArray['check_out_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('d-M-Y') : '';
