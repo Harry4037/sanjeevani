@@ -442,6 +442,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["room_no"] = $ongoing_job->resort_room_no;
                 $ongoingJobArray[$i]["date"] = $created_at->format('d-M-Y');
                 $ongoingJobArray[$i]["time"] = $created_at->format('h:i A');
+                $ongoingJobArray[$i]["date_time"] = $created_at->format('d-m-Y H:i:s');
                 $ongoingJobArray[$i]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $ongoingJobArray[$i]["type"] = 1;
                 if ($ongoing_job->questions) {
@@ -479,6 +480,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["icon"] = "";
                 $ongoingJobArray[$i]["date"] = $createdAt->format("d-M-Y");
                 $ongoingJobArray[$i]["time"] = $createdAt->format("h:i A");
+                $ongoingJobArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
@@ -553,6 +555,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["room_no"] = $under_approval_job->resort_room_no;
                 $underApprovalJobArray[$j]["date"] = $created_at->format('d-M-Y');
                 $underApprovalJobArray[$j]["time"] = $created_at->format('h:i A');
+                $underApprovalJobArray[$j]["date_time"] = $created_at->format('d-m-Y H:i:s');
                 $underApprovalJobArray[$j]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $underApprovalJobArray[$j]["type"] = 1;
                 if ($under_approval_job->questions) {
@@ -592,6 +595,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["icon"] = "";
                 $underApprovalJobArray[$j]["date"] = $createdAt->format("d-M-Y");
                 $underApprovalJobArray[$j]["time"] = $createdAt->format("h:i A");
+                $underApprovalJobArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
                 $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $underApprovalJobArray[$j]["room_no"] = $ongoingMealOrder->resort_room_no;
@@ -649,6 +653,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["room_no"] = $completed_job->resort_room_no;
                 $completedJobArray[$i]["date"] = $created_at->format('d-M-Y');
                 $completedJobArray[$i]["time"] = $created_at->format('h:i A');
+                $completedJobArray[$i]["date_time"] = $created_at->format('d-m-Y H:i:s');
                 $completedJobArray[$i]["created_at"] = $created_at->format('d-m-Y h:i a');
                 $completedJobArray[$i]["type"] = 1;
                 if ($completed_job->questions) {
@@ -686,6 +691,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["icon"] = "";
                 $completedJobArray[$i]["date"] = $createdAt->format("d-M-Y");
                 $completedJobArray[$i]["time"] = $createdAt->format("h:i A");
+                $completedJobArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
                 $completedJobArray[$i]["total_item_count"] = count($mealItems);
                 $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $completedJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
@@ -710,6 +716,21 @@ class StaffController extends Controller {
                 }
                 $i++;
             }
+            usort($ongoingJobArray, function ($a, $b) {
+                $t1 = strtotime($a['date_time']);
+                $t2 = strtotime($b['date_time']);
+                return $t2 - $t1;
+            });
+            usort($underApprovalJobArray, function ($a, $b) {
+                $t1 = strtotime($a['date_time']);
+                $t2 = strtotime($b['date_time']);
+                return $t2 - $t1;
+            });
+            usort($completedJobArray, function ($a, $b) {
+                $t1 = strtotime($a['date_time']);
+                $t2 = strtotime($b['date_time']);
+                return $t2 - $t1;
+            });
             $data["ongoing_jobs"] = $ongoingJobArray;
             $data["under_approval_jobs"] = $underApprovalJobArray;
             $data["completed_jobs"] = $completedJobArray;
