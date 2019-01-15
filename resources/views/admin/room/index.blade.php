@@ -86,6 +86,9 @@
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
 
                     if (res.status)
@@ -97,6 +100,7 @@
                         setTimeout(function () {
                             $(".msg").fadeOut();
                         }, 1000);
+                        $(".overlay").hide();
                     }
                 }
             });
