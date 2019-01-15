@@ -163,6 +163,8 @@ class StaffController extends Controller {
                     $serviceArray[$k]["service_icon"] = $newService->serviceDetail ? $newService->serviceDetail->icon : "";
                     $serviceArray[$k]["user_name"] = $newService->userDetail ? $newService->userDetail->user_name : "";
                     $serviceArray[$k]["room_no"] = $newService->resort_room_no;
+                    $serviceArray[$k]["date"] = $created_at->format('d-M-Y');
+                    $serviceArray[$k]["time"] = $created_at->format('h:i A');
                     $serviceArray[$k]["created_at"] = $created_at->format('d-m-Y h:i a');
                     if ($newService->questions) {
                         $reasons = explode(",", $newService->questions);
@@ -202,6 +204,8 @@ class StaffController extends Controller {
                     $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                     $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
                     $mealDataArray[$j]["room_no"] = $mealOrder->resort_room_no;
+                    $mealDataArray[$j]["date"] = $meal_created_at->format('d-M-Y');
+                    $mealDataArray[$j]["time"] = $meal_created_at->format('h:i A');
                     $mealDataArray[$j]["created_at"] = $meal_created_at->format('d-m-Y h:i a');
                     $mealDataArray[$j]["meal_item_count"] = count($mealItems);
                     if ($mealItems) {
