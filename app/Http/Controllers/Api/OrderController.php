@@ -12,6 +12,7 @@ use App\Models\MealOrder;
 use App\Models\MealOrderItem;
 use App\Models\Resort;
 use App\Models\User;
+use App\Models\UserBookingDetail;
 
 class OrderController extends Controller {
 
