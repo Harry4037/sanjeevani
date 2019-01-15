@@ -42,6 +42,10 @@
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: {
                 url: _baseUrl + "/admin/room-type/rooms-list",
                 error: function (xhr, error, thrown) {
@@ -67,13 +71,11 @@
                 },
             ]
         });
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
         $(document).on("click", ".room_status", function () {
             var record_id = this.id;
             var th = $(this);
@@ -98,9 +100,7 @@
                     }
                 }
             });
-
         });
-
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
             bootbox.confirm("Are you sure want to delete this room type?", function (result) {
