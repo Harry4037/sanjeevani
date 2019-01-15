@@ -45,6 +45,10 @@
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: {
                 url: _baseUrl + "/admin/resort/resorts-list",
                 error: function (xhr, error, thrown) {
@@ -89,6 +93,9 @@
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
 
                     if (res.status)
@@ -99,13 +106,14 @@
                         $(".msg").css("display", "block");
                         setTimeout(function () {
                             $(".msg").fadeOut();
-                        }, 1000);
+                        }, 2000);
+                        $(".overlay").hide();
                     }
                 }
             });
 
         });
-        
+
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
             bootbox.confirm("Are you sure want to delete this resort?", function (result) {
@@ -115,10 +123,14 @@
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',
+                        beforeSend: function () {
+                            $(".overlay").show();
+                        },
                         success: function (res) {
                             console.log(res);
                             if (res.status)
                             {
+                                $(".overlay").hide();
                                 t.draw();
                             } else {
                                 alert("something went be wrong.")

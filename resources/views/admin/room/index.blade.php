@@ -114,9 +114,13 @@
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',
+                        beforeSend: function () {
+                            $(".overlay").show();
+                        },
                         success: function (res) {
                             if (res.status)
                             {
+                                $(".overlay").hide();
                                 t.draw();
                             } else {
                                 alert("something went be wrong.")

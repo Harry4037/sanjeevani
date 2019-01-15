@@ -46,27 +46,31 @@
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/users-list",
             "columns": [
-            {"data": null,
-            render: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
-            }
-        },
-        {"data": "mobileno", sortable: true},
-        {"data": "name", sortable: true},
-        {"data": "email", sortable: true},
-        {"data": "user_type", sortable: true},
-        {"data": "outstanding", sortable: false},
-        {"data": null,
-        sortable: false,
-        render: function (data, type, row, meta) {
-            return row['status'];
-        }
-    },
-    {"data": "action", sortable: false},
-    ]
-});
+                {"data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {"data": "mobileno", sortable: true},
+                {"data": "name", sortable: true},
+                {"data": "email", sortable: true},
+                {"data": "user_type", sortable: true},
+                {"data": "outstanding", sortable: false},
+                {"data": null,
+                    sortable: false,
+                    render: function (data, type, row, meta) {
+                        return row['status'];
+                    }
+                },
+                {"data": "action", sortable: false},
+            ]
+        });
 
         $.ajaxSetup({
             headers: {
@@ -85,6 +89,9 @@
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
 
                     if (res.status)
@@ -95,7 +102,8 @@
                         $(".msg").css("display", "block");
                         setTimeout(function () {
                             $(".msg").fadeOut();
-                        }, 1000);
+                        }, 2000);
+                        $(".overlay").hide();
                     }
                 }
             });

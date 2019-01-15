@@ -355,8 +355,12 @@
                     url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
                     type: 'get',
                     dataType: 'html',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
                     success: function (res) {
                         $("#resort_room_id").html(res);
+                        $(".overlay").hide();
                     }
                 });
             }

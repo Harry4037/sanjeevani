@@ -46,6 +46,10 @@
 //            ordering: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/nearby/nearby-list/",
             "columns": [
                 {"data": null,
@@ -80,6 +84,9 @@
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
 
                     if (res.status)
@@ -91,6 +98,7 @@
                         setTimeout(function () {
                             $(".msg").fadeOut();
                         }, 2000);
+                        $(".overlay").hide();
                     }
                 }
             });
@@ -105,12 +113,15 @@
                         type: 'post',
                         data: {id: record_id},
                         dataType: 'json',
+                        beforeSend: function () {
+                            $(".overlay").show();
+                        },
                         success: function (res) {
 
                             if (res.status)
                             {
+                                $(".overlay").hide();
                                 t.draw();
-                                console.log(res);
                             } else {
                                 alert("something went be wrong.")
                             }

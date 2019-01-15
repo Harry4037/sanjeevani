@@ -110,7 +110,11 @@
                     url: _baseUrl + '/admin/city-list/' + state_id,
                     type: 'get',
                     dataType: 'html',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
                     success: function (res) {
+                        $(".overlay").hide();
                         $("#city").html(res);
                     }
                 });

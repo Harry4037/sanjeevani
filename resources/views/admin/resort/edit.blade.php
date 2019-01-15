@@ -246,9 +246,13 @@ $(document).ready(function () {
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
+                        $(".overlay").hide();
                         _this.parent("div").remove();
                     } else {
                         alert("Something went be wrong");
