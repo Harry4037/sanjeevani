@@ -37,7 +37,7 @@ class CmsController extends Controller {
     public function termContidion(Request $request) {
         try {
             $cms = Cms::find(1);
-            $data = $cms->content;
+            $data["content"] = $cms->content;
             return $this->sendSuccessResponse("term & condition found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
@@ -69,7 +69,8 @@ class CmsController extends Controller {
     public function aboutUs(Request $request) {
         try {
             $cms = Cms::find(2);
-            $data = $cms->content;
+            $data["content"] = $cms->content;
+            $data["last_updated"] = $cms->updated_at;
             return $this->sendSuccessResponse("about us found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
@@ -101,7 +102,9 @@ class CmsController extends Controller {
     public function contactUsDetail(Request $request) {
         try {
             $cms = Cms::find(3);
-            $data = $cms->content;
+            $data["content"] = $cms->content;
+            $data["phone_no_1"] = "1800 7300 7400";
+            $data["phone_no_2"] = "9896543210";
             return $this->sendSuccessResponse("contact us found.", $data);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
