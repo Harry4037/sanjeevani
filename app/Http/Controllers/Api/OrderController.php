@@ -157,7 +157,7 @@ class OrderController extends Controller {
                             ->whereIn("id", $resortUsers->toArray())
                             ->pluck("device_token");
                     if ($staffDeviceTokens) {
-                        $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id);
+                        $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id, 1);
                     }
                 }
                 $this->generateNotification($request->user_id, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id ", 4);

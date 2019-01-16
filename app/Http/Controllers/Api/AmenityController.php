@@ -264,7 +264,7 @@ class AmenityController extends Controller {
                 $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                    $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by ".$request->user()->user_name. " for ".$book_date->format('d M'), $staffDeviceTokens, 1, $request->amenity_id);
+                    $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by ".$request->user()->user_name. " for ".$book_date->format('d M'), $staffDeviceTokens, 1, $request->amenity_id, 1);
                     $this->generateNotification($request->user()->id, "Amenity Booked", "Your $amenity->name booking is confirmed". " for ".$book_date->format('d M'), 3);
                     
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
