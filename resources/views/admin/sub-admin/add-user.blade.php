@@ -95,16 +95,21 @@
             }
         });
 
-        $("#addStaffForm").validate({
+        $("#addSubadminForm").validate({
             rules: {
-                staff_name: {
+                name: {
                     required: true
                 },
-                staff_mobile_no: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
                     required: true
                 },
-                staff_email: {
-                    required: true
+                confirm_password: {
+                    required: true,
+                    equalTo: "#password"
                 },
                 resort_id: {
                     required: true

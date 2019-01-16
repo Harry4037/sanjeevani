@@ -134,6 +134,7 @@ $(document).ready(function () {
         timePicker: false,
         singleClasses: "picker_1",
         @if (isset($amenity->valid_to))
+//        minDate: new Date(),    
         startDate: new Date("{{ $amenity->valid_to }}"),
         @endif
         locale: {

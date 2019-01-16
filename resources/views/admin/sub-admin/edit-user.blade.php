@@ -87,30 +87,16 @@
             }
         });
 
-        $("#addStaffForm").validate({
+        $("#editSubadminForm").validate({
             rules: {
-                staff_name: {
+                name: {
                     required: true
                 },
-                staff_mobile_no: {
-                    required: true
-                },
-                staff_email: {
-                    required: true
+                email: {
+                    required: true,
+                    email: true
                 },
                 resort_id: {
-                    required: true
-                },
-                staff_address: {
-                    required: true
-                },
-                state: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                pin_code: {
                     required: true
                 },
             }

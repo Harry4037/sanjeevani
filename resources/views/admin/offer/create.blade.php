@@ -102,6 +102,7 @@ $(document).ready(function () {
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
+        minDate: new Date(),
         locale: {
             format: 'YYYY/M/DD'
         }
