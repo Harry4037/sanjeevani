@@ -192,7 +192,9 @@ $(document).ready(function () {
             },
             edit_contact_no: {
                 required: true,
-                number: true
+                number: true,
+                minlength: 10,
+                maxlength: 10,
             },
             edit_resort_description: {
                 required: true
@@ -201,7 +203,10 @@ $(document).ready(function () {
                 required: true
             },
             edit_pin_code: {
-                required: true
+                required: true,
+                number: true,
+                minlength: 6,
+                maxlength: 6,
             },
             state: {
                 required: true

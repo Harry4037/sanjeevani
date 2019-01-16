@@ -241,6 +241,7 @@
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
+            minDate: new Date(),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }

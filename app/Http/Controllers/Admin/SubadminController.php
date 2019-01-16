@@ -82,7 +82,7 @@ class SubadminController extends Controller {
     public function addUser(Request $request) {
         try {
             if ($request->isMethod("post")) {
-                $existingUser = User::where("email_id", $request->email)->first();
+                $existingUser = User::where(["email_id"=> $request->email, "user_type_id" => 5])->first();
                 if ($existingUser) {
                     return redirect()->route('admin.subadmin.add')->with('error', 'User already exist with this email Id.');
                 }
@@ -152,7 +152,7 @@ class SubadminController extends Controller {
             if ($request->isMethod("post")) {
 
                 $name = explode(" ", $request->name);
-                $user->password = bcrypt($request->password);
+//                $user->password = bcrypt($request->password);
                 $user->user_type_id = 5;
                 $user->user_name = $request->name;
                 $user->first_name = isset($name[0]) ? $name[0] : '';

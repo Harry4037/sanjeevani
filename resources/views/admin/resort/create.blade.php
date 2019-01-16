@@ -244,14 +244,19 @@ $(document).ready(function () {
             },
             contact_no: {
                 required: true,
-                number: true
+                number: true,
+                minlength: 10,
+                maxlength: 10,
+
             },
             address: {
                 required: true
             },
             pin_code: {
                 required: true,
-                number: true
+                number: true,
+                minlength: 6,
+                maxlength: 6,
             },
             state: {
                 required: true

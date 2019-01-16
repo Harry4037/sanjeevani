@@ -20,7 +20,7 @@ class NotificationController extends Controller {
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
         ];
 
-        $users = User::where("is_active", 1)->where('user_type_id','!=',1)->get();
+        $users = User::where("is_active", 1)->where('user_type_id', '!=', 1)->get();
         return view('admin.notification.index', [
             'users' => $users,
             'css' => $css,
@@ -29,46 +29,60 @@ class NotificationController extends Controller {
     }
 
     public function sendNotification(Request $request) {
-        $validator = Validator::make($request->all(),[
-            'title'   =>  'required',
-            'message'   =>  'required',
-            'notify_user'   =>  'required_if:user_type,2',
-            'user_type'   =>  'required',
+        $validator = Validator::make($request->all(), [
+                    'title' => 'required',
+                    'message' => 'required',
+                    'notify_user' => 'required_if:user_type,2',
+                    'user_type' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendErrorResponse($validator->errors()->all()[0], (object) [],200);
+            return $this->sendErrorResponse($validator->errors()->all()[0], (object) [], 200);
         }
 
         $tokens = User::where("is_active", 1)
-        ->where('user_type_id','!=',1)
-        ->where("device_token",'!=',null)
-        ->when($request->user_type == 2,function($query) use($request){
-            return $query->whereIn('id',$request->notify_user);
-        })
-        ->pluck("device_token")->toArray();
-
+                        ->where('user_type_id', '!=', 1)
+                        ->where("device_token", '!=', null)
+                        ->when($request->user_type == 2, function($query) use($request) {
+                            return $query->whereIn('id', $request->notify_user);
+                        })
+                        ->pluck("id")->toArray();
         if (count($tokens)) {
-            $this->androidPushNotification(3, $request->title, $request->message, $tokens,123,0);
+            $this->androidPushNotification(3, $request->title, $request->message, $tokens, 123, 0);
+        }
+
+        $userIds = User::where("is_active", 1)
+                        ->where('user_type_id', '!=', 1)
+                        ->where("device_token", '!=', null)
+                        ->when($request->user_type == 2, function($query) use($request) {
+                            return $query->whereIn('id', $request->notify_user);
+                        })
+                        ->pluck("id")->toArray();
+        foreach ($userIds as $userId) {
+            $this->generateNotification($userId, "$request->title", $request->message, 5);
         }
         $adminNotification = new AdminNotification();
         $adminNotification->title = $request->title;
-        $adminNotification->message  = $request->message;
+        $adminNotification->message = $request->message;
         $adminNotification->save();
-        return $this->sendSuccessResponse("Notification send successfully", (object) [],200);
+        return $this->sendSuccessResponse("Notification send successfully", (object) [], 200);
     }
 
-    public function listNotification(Request $request){
+    public function listNotification(Request $request) {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
             $query = AdminNotification::query();
+            if ($searchKeyword) {
+                $query->where("title", "LIKE", "%$searchKeyword%")
+                        ->orWhere("message", "LIKE", "%$searchKeyword%");
+            }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $notifications = $query->take($limit)->offset($offset)->latest()->get();
-            
+
             $notificationsArray = [];
             foreach ($notifications as $k => $notification) {
                 $created_at = Carbon::parse($notification->created_at);

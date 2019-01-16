@@ -158,6 +158,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
     singleDatePicker: true,
             timePicker: false,
             singleClasses: "picker_1",
+            minDate: new Date(),
             @if (isset($healthcare->start_from))
             startDate: new Date("{{ $healthcare->start_from }}"),
             @endif

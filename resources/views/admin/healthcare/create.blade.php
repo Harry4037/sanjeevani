@@ -113,11 +113,11 @@ $(document).ready(function () {
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
+        minDate: new Date(),
         locale: {
             format: 'YYYY/M/DD'
         }
     }, function (start, end, label) {
-        console.log(start);
         $('#end_to').daterangepicker({
             minDate: start,
             singleDatePicker: true,
@@ -128,7 +128,15 @@ $(document).ready(function () {
             }
         });
     });
-
+    $('#end_to').daterangepicker({
+        singleDatePicker: true,
+        timePicker: false,
+        singleClasses: "picker_1",
+        minDate: moment().startOf('hour').add(24, 'hour'),
+        locale: {
+            format: 'YYYY/M/DD'
+        }
+    });
 
 
     $(document).on("change", "#day_id", function () {
