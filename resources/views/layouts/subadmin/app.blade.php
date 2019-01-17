@@ -98,11 +98,17 @@
         @yield('script')
 
         <script>
+            //setup CSRF token for ajax forms
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
+            // Getting the list cities based on selected state
             $(document).on('change', "#state", function () {
                 var state_id = $("#state :selected").val();
                 state_id = state_id ? state_id : 0;
-//        if (state_id) {
                 $.ajax({
                     url: _baseUrl + '/sub-admin/city-list/' + state_id,
                     type: 'get',
@@ -111,9 +117,17 @@
                         $("#city").html(res);
                     }
                 });
-//        }
             })
 
+            function showErrorMessage(msg) {
+                $(".msg").addClass("alert-danger");
+                $(".msg").html(msg);
+                $(".msg").fadeIn();
+                setTimeout(function () {
+                    $(".msg").fadeOut();
+                }, 2000);
+            }
+            // Hide the alert message after 5 second
             setTimeout(function () {
                 $(".alert").fadeOut();
             }, 5000);

@@ -4,9 +4,9 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         @include('errors.errors-and-messages')
+        <div style="display: none;" class="alert msg" role="alert"></div>
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert"></div>
                 <h2>Room Type Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('subadmin.room.add') }}">Add Room Type</a>
@@ -37,11 +37,16 @@
 <script>
     $(document).ready(function () {
 
+        //Initialized datatable
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 20, 30], [10, 20, 30]],
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: {
                 url: _baseUrl + "/sub-admin/room-type/rooms-list",
                 error: function (xhr, error, thrown) {
@@ -68,38 +73,38 @@
             ]
         });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
+        // Active or deactive room type
         $(document).on("click", ".room_status", function () {
-            var record_id = this.id;
-            var th = $(this);
-            var status = th.attr('data-status');
-            var update_status = (status == '1') ? 0 : 1;
-            $.ajax({
-                url: _baseUrl + '/sub-admin/room-type/update-status',
-                type: 'post',
-                data: {status: update_status, record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
+            try {
+                var record_id = this.id;
+                var th = $(this);
+                var status = th.attr('data-status');
+                var update_status = (status == '1') ? 0 : 1;
+                $.ajax({
+                    url: _baseUrl + '/sub-admin/room-type/update-status',
+                    type: 'post',
+                    data: {status: update_status, record_id: record_id},
+                    dataType: 'json',
+                    success: function (res) {
 
-                    if (res.status)
-                    {
-                        th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 1000);
+                        if (res.status)
+                        {
+                            th.attr('data-status', res.data.status);
+                            $(".msg").addClass("alert-success");
+                            $(".msg").html(res.data.message);
+                            $(".msg").css("display", "block");
+                            setTimeout(function () {
+                                $(".msg").fadeOut();
+                            }, 1000);
+                        }
                     }
-                }
-            });
+                });
+            } catch (err) {
+                showErrorMessage(err.message);
+            }
 
-        });
+        }
+        );
 
         $(document).on("click", ".delete", function () {
             var record_id = this.id;

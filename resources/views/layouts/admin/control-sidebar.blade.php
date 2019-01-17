@@ -28,7 +28,7 @@
 @endif>
 <a><i class="fa fa-users"></i> User Management <span class="fa fa-chevron-down"></span></a>
 <ul class="nav child_menu"  
-@if(in_array(Route::currentRouteName(), ['admin.users.booking-create', 'admin.users.booking', 'admin.staff.edit', 'admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
+@if(in_array(Route::currentRouteName(), ['admin.subadmin.edit', 'admin.subadmin.add', 'admin.subadmin.index', 'admin.users.booking-create', 'admin.users.booking', 'admin.staff.edit', 'admin.staff.add','admin.staff.index','admin.users.add','admin.users.edit','admin.users.detail']))
 {{ "style=display:block;" }}
 @endif
 >
@@ -41,7 +41,7 @@
 {{ "class=current-page" }}
 @endif
 ><a href="{{ route('admin.staff.index') }}">Staff</a></li>
-<li @if(in_array(Route::currentRouteName(), ['admin.subadmin.index']))
+<li @if(in_array(Route::currentRouteName(), ['admin.subadmin.edit', 'admin.subadmin.add', 'admin.subadmin.index']))
 {{ "class=current-page" }}
 @endif
 ><a href="{{ route('admin.subadmin.index') }}">Sub Admin</a></li>

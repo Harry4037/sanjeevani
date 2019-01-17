@@ -1,5 +1,5 @@
 <?php
-
+// RoomType Management Controller
 namespace App\Http\Controllers\SubAdmin;
 
 use App\Http\Controllers\Controller;
@@ -12,6 +12,7 @@ use Validator;
 
 class RoomtypeController extends Controller {
 
+    // Show the list of romtypes
     public function index(Request $request) {
 
         $css = [

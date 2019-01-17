@@ -62,11 +62,12 @@
                             <p style="padding: 5px;">
                                 @if($menus)
                                 @foreach($menus as $menu)
-                                <input class="flat" type="checkbox" name="menu_ids[]" value="{{ $menu->id }}">{{ $menu->display_name }}
-                                <br>
-                                @endforeach
-                                @endif
-                            <p>
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-bottom: 4px;">
+                                <input class="flat" type="checkbox" name="menu_ids[]" value="{{ $menu->id }}"><label>{{ $menu->display_name }}</label>
+                            </div>
+                            @endforeach
+                            @endif
+                            </p>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -116,6 +117,15 @@
                 },
             }
         });
+
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
     });
 </script>
 

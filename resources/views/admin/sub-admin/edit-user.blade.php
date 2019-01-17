@@ -50,21 +50,23 @@
                             <p style="padding: 5px;">
                                 @if($menus)
                                 @foreach($menus as $menu)
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-bottom: 4px;">
                                 <input class="flat" type="checkbox" name="menu_ids[]" value="{{ $menu->id }}"
                                        @if(in_array($menu->id, $userAuthorityMapping))
                                        {{ "checked" }}
                                        @endif
-                                       >{{ $menu->display_name }}
-                                <br>
-                                @endforeach
-                                @endif
+                                       ><label>{{ $menu->display_name }}</label>
+                            </div>
+
+                            @endforeach
+                            @endif
                             <p>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
-                            <a  class="btn btn-default" href="{{ route('admin.staff.index') }}">Cancel</a>
+                            <a  class="btn btn-default" href="{{ route('admin.subadmin.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -114,6 +116,15 @@
                 }
             });
         });
+
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
     });
 </script>
 
