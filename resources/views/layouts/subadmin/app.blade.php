@@ -35,6 +35,9 @@
     </head>
 
     <body class="nav-md">
+        <div class="overlay">
+            <div id="loading-img"></div>
+        </div>
         <div class="container body">
             <div class="main_container">
                 @include('layouts.subadmin.header')

@@ -66,7 +66,7 @@ class ServiceController extends Controller {
             $data['data'] = $servicesArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -115,19 +115,9 @@ class ServiceController extends Controller {
                 return redirect()->route('subadmin.service.add')->with('error', 'Something went be wrong.');
             }
         }
-        $css = [
-            "vendors/iCheck/skins/flat/green.css",
-        ];
-        $js = [
-            'vendors/iCheck/icheck.min.js',
-        ];
         $serviceType = ServiceType::where("is_active", 1)->get();
-        $question = Question::all();
         return view('subadmin.services.add-service', [
-            'js' => $js,
-            'css' => $css,
-            'serviceType' => $serviceType,
-            'question' => $question
+            'serviceType' => $serviceType
         ]);
     }
 
@@ -138,12 +128,15 @@ class ServiceController extends Controller {
                 $service->is_active = $request->status;
                 if ($service->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
             return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -179,32 +172,22 @@ class ServiceController extends Controller {
             }
         }
 
-        $css = ["vendors/iCheck/skins/flat/green.css"];
-        $js = ['vendors/iCheck/icheck.min.js'];
         $sTypes = ServiceType::where("is_active", 1)->get();
-        $questions = Question::where("is_active", 1)->get();
-        $serviceQuestioner = ServiceQuestionaire::where("service_id", $id)->get();
-        $qSArray = [];
-        foreach ($serviceQuestioner as $serviceQues) {
-            $qSArray[] = $serviceQues->question_id;
-        }
+        $serviceQuestions = ServiceQuestionaire::where("service_id", $data->id)->get();
 
         return view('subadmin.services.edit-service', [
-            'js' => $js,
-            'css' => $css,
             'data' => $data,
             'sTypes' => $sTypes,
-            'questions' => $questions,
-            'qSArray' => $qSArray,
+            'serviceQuestions' => $serviceQuestions,
         ]);
     }
 
     public function deleteService(Request $request) {
         $service = Service::find($request->id);
         if ($service->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Service deleted successfully."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

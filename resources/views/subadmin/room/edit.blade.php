@@ -1,7 +1,6 @@
 @extends('layouts.subadmin.app')
 
 @section('content')
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         @include('errors.errors-and-messages')
@@ -19,7 +18,7 @@
                         @foreach($roomImages as $roomImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
                             <img src="{{ $roomImage->image_name }}" class="img-rounded img-pre">
-                            <button style="margin-left: 40px;" class="btn btn-info btn-xs delete_room_image" id="{{ $roomImage->id }}" >Remove</button>
+                            <button style="margin-left: 40px;" class="btn btn-danger btn-xs delete_room_image" id="{{ $roomImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
@@ -84,12 +83,6 @@
 <script>
 $(document).ready(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
 //For ckeditor
     CKEDITOR.replace('description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
@@ -106,24 +99,32 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.delete_room_image', function () {
-        var record_id = this.id;
-        var _this = $(this);
-        if (record_id) {
-            $.ajax({
-                url: _baseUrl + '/sub-admin/room-type/delete-room-images',
-                type: 'post',
-                data: {record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status)
-                    {
-                        _this.parent("div").remove();
-                    } else {
-                        alert("Something went be wrong");
+        try {
+            var record_id = this.id;
+            var _this = $(this);
+            if (record_id) {
+                $.ajax({
+                    url: _baseUrl + '/sub-admin/room-type/delete-room-images',
+                    type: 'post',
+                    data: {record_id: record_id},
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        if (res.status) {
+                            _this.parent("div").remove();
+                            showSuccessMessage(res.message);
+                        } else {
+                            showErrorMessage(res.message)
+                        }
+                        $(".overlay").hide();
                     }
-                }
-            });
-
+                });
+            }
+        } catch (err) {
+            showErrorMessage(err.message);
+            $(".overlay").hide();
         }
     });
 
@@ -131,7 +132,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                     var hidden_image_html = "<input id='room_image_input_" + response.id + "' type='hidden' name='room_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -147,7 +148,6 @@ $(document).ready(function () {
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
                             success: function (res) {
-                                console.log(res);
                                 $("#room_image_input_" + record_id).remove();
                                 _this.removeFile(file);
                             }
@@ -160,7 +160,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message)
                 this.removeFile(file);
             });
         },

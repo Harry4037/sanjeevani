@@ -43,7 +43,7 @@ class NearbyController extends Controller {
                 $nearbyArray[$key]['name'] = $nearby->name;
                 $checked_status = $nearby->is_active ? "checked" : '';
                 $nearbyArray[$key]['distance'] = $nearby->distance_from_resort;
-                $nearbyArray[$key]['resort_name'] = $resort->name;
+//                $nearbyArray[$key]['resort_name'] = $resort->name;
                 $nearbyArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='nearby_status' id=" . $nearby->id . " data-status=" . $nearby->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $nearbyArray[$key]['action'] = '<a href="' . route('subadmin.nearby.edit', $nearby->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $nearby->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -51,7 +51,7 @@ class NearbyController extends Controller {
             $data['data'] = $nearbyArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -143,12 +143,14 @@ class NearbyController extends Controller {
                 $nearby->is_active = $request->status;
                 if ($nearby->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -212,18 +214,18 @@ class NearbyController extends Controller {
             $nearbyImage = NearbyPlaceImage::select('name as nearby_img')->find($request->record_id);
             @unlink('storage/nearby_images/' . $nearbyImage->nearby_img);
             NearbyPlaceImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ["status" => true, "message"=> "Image deleted successfully."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ["status" => false, "message"=> $ex->getMessage()];
         }
     }
 
     public function deleteNearby(Request $request) {
         $resortNearby = ResortNearbyPlace::find($request->id);
         if ($resortNearby->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Nearby place deleted successfully."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

@@ -116,17 +116,9 @@ class ServiceController extends Controller {
                 return redirect()->route('admin.service.add')->with('error', 'Something went be wrong.');
             }
         }
-        $css = [
-            "vendors/iCheck/skins/flat/green.css",
-        ];
-        $js = [
-            'vendors/iCheck/icheck.min.js',
-        ];
         $serviceType = ServiceType::where("is_active", 1)->get();
         $resort = Resort::where("is_active", 1)->get();
         return view('admin.services.add-service', [
-            'js' => $js,
-            'css' => $css,
             'serviceType' => $serviceType,
             'resort' => $resort,
         ]);

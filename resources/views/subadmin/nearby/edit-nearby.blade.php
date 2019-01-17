@@ -19,7 +19,7 @@
                         @foreach($nearbyImages as $nearbyImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
                             <img src="{{ $nearbyImage->name }}" class="img-pre">
-                            <button style="margin-left: 40px;" class="btn btn-info btn-xs delete_nearby_image" id="{{ $nearbyImage->id }}" >Remove</button>
+                            <button style="margin-left: 40px;" class="btn btn-danger btn-xs delete_nearby_image" id="{{ $nearbyImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
@@ -156,17 +156,20 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-            place_description: {
-                required: true
-            },
-            place_precaution: {
-                required: true
-            },
+//            place_description: {
+//                required: true
+//            },
+//            place_precaution: {
+//                required: true
+//            },
             address: {
                 required: true
             },
             pin_code: {
-                required: true
+                required: true,
+                number: true,
+                minlength: 6,
+                maxlegth: 6
             },
             state: {
                 required: true
@@ -183,12 +186,6 @@ $(document).ready(function () {
             longitude: {
                 required: true
             },
-        }
-    });
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
@@ -231,24 +228,35 @@ $(document).ready(function () {
     };
 
     $(document).on('click', '.delete_nearby_image', function () {
-        var record_id = this.id;
-        var _this = $(this);
-        if (record_id) {
-            $.ajax({
-                url: _baseUrl + '/sub-admin/nearby/delete-nearby-images',
-                type: 'post',
-                data: {record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status)
-                    {
-                        _this.parent("div").remove();
-                    } else {
-                        alert("Something went be wrong");
-                    }
-                }
-            });
+        try {
+            var record_id = this.id;
+            var _this = $(this);
+            if (record_id) {
+                $.ajax({
+                    url: _baseUrl + '/sub-admin/nearby/delete-nearby-images',
+                    type: 'post',
+                    data: {record_id: record_id},
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        if (res.status)
+                        {
+                            _this.parent("div").remove();
 
+
+                        } else {
+                            showErrorMessage(res.message)
+                        }
+                        $(".overlay").hide();
+                    }
+                });
+
+            }
+        } catch (err) {
+            showErrorMessage(err.message);
+            $(".overlay").hide();
         }
     });
 });

@@ -41,12 +41,12 @@ class BannerController extends Controller {
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $banners = $query->take($limit)->offset($offset)->latest()->get();
-            
+
             $bannersArray = [];
             foreach ($banners as $k => $banner) {
                 $resort = Resort::find($banner->resort_id);
                 $bannersArray[$k]['banner'] = '<img height="100" width="200" src=' . $banner->name . '>';
-                $bannersArray[$k]['resort_name'] = $resort->name;
+//                $bannersArray[$k]['resort_name'] = $resort->name;
                 $checked_status = $banner->is_active ? "checked" : '';
                 $bannersArray[$k]['status'] = "<label class='switch'><input  type='checkbox' class='banner_status' id=" . $banner->id . " data-status=" . $banner->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $bannersArray[$k]['action'] = '<a href="' . route('subadmin.banner.edit', $banner->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -56,7 +56,7 @@ class BannerController extends Controller {
             $data['data'] = $bannersArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -84,10 +84,9 @@ class BannerController extends Controller {
                 'vendors/datatables.net/js/jquery.dataTables.min.js',
                 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
             ];
-            
+
             return view('subadmin.banners.add-banner', [
                 'js' => $js,
-                
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('subadmin.banner.index')->with('error', $ex->getMessage());
@@ -101,12 +100,15 @@ class BannerController extends Controller {
                 $banner->is_active = $request->status;
                 if ($banner->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
             return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -145,9 +147,9 @@ class BannerController extends Controller {
     public function deleteBanner(Request $request) {
         $banner = Banner::find($request->id);
         if ($banner->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Banner deleted successfully."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

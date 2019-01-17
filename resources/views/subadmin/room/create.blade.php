@@ -1,7 +1,6 @@
 @extends('layouts.subadmin.app')
 
 @section('content')
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         @include('errors.errors-and-messages')
@@ -57,19 +56,12 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('script')
 <script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
 //For ckeditor
     CKEDITOR.replace('description', {
@@ -81,7 +73,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                     var hidden_image_html = "<input id='room_image_input_" + response.id + "' type='hidden' name='room_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -94,9 +86,7 @@ $(document).ready(function () {
                             url: _baseUrl + '/sub-admin/room-type/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
                             success: function (res) {
-                                console.log(res);
                                 $("#room_image_input_" + record_id).remove();
                                 _this.removeFile(file);
                             }
@@ -107,7 +97,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
         },

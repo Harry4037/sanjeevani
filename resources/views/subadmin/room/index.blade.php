@@ -4,7 +4,6 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         @include('errors.errors-and-messages')
-        <div style="display: none;" class="alert msg" role="alert"></div>
         <div class="x_panel">
             <div class="x_title">
                 <h2>Room Type Management</h2>
@@ -50,7 +49,7 @@
             ajax: {
                 url: _baseUrl + "/sub-admin/room-type/rooms-list",
                 error: function (xhr, error, thrown) {
-                    alert(error);
+                    showErrorMessage(error);
                 },
             },
             "columns": [
@@ -85,6 +84,9 @@
                     type: 'post',
                     data: {status: update_status, record_id: record_id},
                     dataType: 'json',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
                     success: function (res) {
                         if (res.status)
                         {
@@ -93,10 +95,12 @@
                         } else {
                             showErrorMessage(res.message);
                         }
+                        $(".overlay").hide();
                     }
                 });
             } catch (err) {
                 showErrorMessage(err.message);
+                $(".overlay").hide();
             }
 
         }
@@ -113,6 +117,9 @@
                             type: 'post',
                             data: {id: record_id},
                             dataType: 'json',
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
                                 if (res.status)
                                 {
@@ -121,11 +128,13 @@
                                 } else {
                                     showErrorMessage(res.message);
                                 }
+                                $(".overlay").hide();
                             }
                         });
                     }
                 } catch (err) {
                     showErrorMessage(err.message);
+                    $(".overlay").hide();
                 }
             });
 

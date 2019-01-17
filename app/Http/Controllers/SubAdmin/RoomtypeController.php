@@ -101,7 +101,6 @@ class RoomtypeController extends Controller {
                 'css' => $css
             ]);
         } catch (\Exception $ex) {
-            dd($ex);
             return redirect()->route('subadmin.room.index')->with('error', $ex->getMessage());
         }
     }
@@ -200,9 +199,9 @@ class RoomtypeController extends Controller {
             $roomImage = RoomtypeImage::select('image_name as resort_img')->find($request->record_id);
             @unlink('storage/room_images/' . $roomImage->resort_img);
             RoomtypeImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ["status" => true, "message" => "Image deleted successfully."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 

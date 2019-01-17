@@ -120,11 +120,6 @@
 <script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
 //For ckeditor
     CKEDITOR.replace('place_description', {
@@ -165,7 +160,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
 
@@ -197,7 +192,10 @@ $(document).ready(function () {
                 required: true
             },
             pin_code: {
-                required: true
+                required: true,
+                number: true,
+                minlength: 6,
+                maxlegth: 6
             },
             state: {
                 required: true

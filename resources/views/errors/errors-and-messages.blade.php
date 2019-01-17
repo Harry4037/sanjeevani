@@ -36,3 +36,4 @@
 </div>
 
 @endif
+<div style="display: none;" class="alert msg" role="alert"></div>
