@@ -86,16 +86,12 @@
                     data: {status: update_status, record_id: record_id},
                     dataType: 'json',
                     success: function (res) {
-
                         if (res.status)
                         {
                             th.attr('data-status', res.data.status);
-                            $(".msg").addClass("alert-success");
-                            $(".msg").html(res.data.message);
-                            $(".msg").css("display", "block");
-                            setTimeout(function () {
-                                $(".msg").fadeOut();
-                            }, 1000);
+                            showSuccessMessage(res.data.message);
+                        } else {
+                            showErrorMessage(res.message);
                         }
                     }
                 });
@@ -106,26 +102,33 @@
         }
         );
 
+        // Delete the room type
         $(document).on("click", ".delete", function () {
             var record_id = this.id;
             bootbox.confirm("Are you sure want to delete this room type?", function (result) {
-                if (result) {
-                    $.ajax({
-                        url: _baseUrl + '/sub-admin/room-type/delete',
-                        type: 'post',
-                        data: {id: record_id},
-                        dataType: 'json',
-                        success: function (res) {
-                            if (res.status)
-                            {
-                                t.draw();
-                            } else {
-                                alert("something went be wrong.")
+                try {
+                    if (result) {
+                        $.ajax({
+                            url: _baseUrl + '/sub-admin/room-type/delete',
+                            type: 'post',
+                            data: {id: record_id},
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.status)
+                                {
+                                    t.draw();
+                                    showSuccessMessage(res.message);
+                                } else {
+                                    showErrorMessage(res.message);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                } catch (err) {
+                    showErrorMessage(err.message);
                 }
             });
+
         });
     });
 </script>

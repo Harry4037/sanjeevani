@@ -1,5 +1,7 @@
 <?php
+
 // RoomType Management Controller
+
 namespace App\Http\Controllers\SubAdmin;
 
 use App\Http\Controllers\Controller;
@@ -8,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\RoomType;
 use App\Models\RoomtypeImage;
 use Validator;
-
 
 class RoomtypeController extends Controller {
 
@@ -112,12 +113,14 @@ class RoomtypeController extends Controller {
                 $room->is_active = $request->status;
                 if ($room->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return ['status' => false];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            return ['status' => false];
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -180,11 +183,15 @@ class RoomtypeController extends Controller {
     }
 
     public function deleteRoom(Request $request) {
-        $room = RoomType::find($request->id);
-        if ($room->delete()) {
-            return ['status' => true];
-        } else {
-            return ['status' => true];
+        try {
+            $room = RoomType::find($request->id);
+            if ($room->delete()) {
+                return ['status' => true, "message" => "Room type deleted successfully."];
+            } else {
+                return ['status' => false, "message" => "Something went be wrong."];
+            }
+        } catch (\Exception $ex) {
+            return ['status' => false, "message" => $ex->getMessage()];
         }
     }
 

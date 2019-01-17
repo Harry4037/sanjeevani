@@ -127,6 +127,14 @@
                     $(".msg").fadeOut();
                 }, 2000);
             }
+            function showSuccessMessage(msg) {
+                $(".msg").addClass("alert-success");
+                $(".msg").html(msg);
+                $(".msg").fadeIn();
+                setTimeout(function () {
+                    $(".msg").fadeOut();
+                }, 2000);
+            }
             // Hide the alert message after 5 second
             setTimeout(function () {
                 $(".alert").fadeOut();
