@@ -343,7 +343,7 @@ class ServiceController extends Controller {
                                 ->whereIn("id", $resortUsers->toArray())
                                 ->pluck("device_token");
                         if ($staffDeviceTokens) {
-                            $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 1);
+                            $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 0, 1);
                             $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                         }
                     }
@@ -812,7 +812,7 @@ class ServiceController extends Controller {
                 $serviceRequest->request_status_id = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by_id);
-                    $this->androidPushNotification(2, "Service Request", "Great! your service request approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->service_id, 2);
+                    $this->androidPushNotification(2, "Service Request", "Great! your service request approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->service_id, 0, 2);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -825,7 +825,7 @@ class ServiceController extends Controller {
                 $serviceRequest->status = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by);
-                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 2);
+                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
