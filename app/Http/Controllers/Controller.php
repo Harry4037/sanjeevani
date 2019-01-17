@@ -13,6 +13,7 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Facades\FCM;
 use App\Models\UserBookingDetail;
+use App\Models\OauthAccessToken;
 
 class Controller extends BaseController {
 
@@ -137,6 +138,17 @@ class Controller extends BaseController {
         curl_exec($ch);
         curl_close($ch);
 
+        return true;
+    }
+    
+    public function invalidateAllUsertokens($userId){
+        $userTokens = OauthAccessToken::where(["user_id"=>$userId, "revoked" => 0])->get();
+        if($userTokens){
+            foreach($userTokens as $userToken){
+                $userToken->revoked = 1;
+                $userToken->save();
+            }
+        }
         return true;
     }
 

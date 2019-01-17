@@ -118,7 +118,7 @@ class AuthController extends Controller {
                 }
             } else {
                 if (!$userExist) {
-                   // $OTP = rand(1000, 9999);
+                    // $OTP = rand(1000, 9999);
                     //$this->sendOtp($request->mobile_number, $OTP);
                     $user = new User([
                         'mobile_number' => $request->mobile_number,
@@ -346,6 +346,8 @@ class AuthController extends Controller {
                 return $this->sendInactiveAccountResponse();
             }
             $user = $request->user();
+
+            $this->invalidateAllUsertokens($user->id);
             $tokenResult = $user->createToken('SanjeevaniToken');
             $token = $tokenResult->token;
 //        $token->expires_at = Carbon::now()->addWeeks(1);
@@ -549,7 +551,8 @@ class AuthController extends Controller {
         }
     }
 
-    public function logout() {
+    public function logout(Request $request) {
+        $request->user()->token()->revoke();
         return $this->sendSuccessResponse("logout successfully", (object) []);
     }
 
