@@ -7,7 +7,6 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
                 </div>
                 <h2>Offers Management</h2>
                 <div class="pull-right">
@@ -71,7 +70,7 @@
             }
         });
 
-        $(document).on("click", ".activity_status", function () {
+        $(document).on("click", ".offer_status", function () {
             var record_id = this.id;
             var th = $(this);
             var status = th.attr('data-status');
