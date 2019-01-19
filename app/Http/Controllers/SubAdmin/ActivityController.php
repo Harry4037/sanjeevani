@@ -94,14 +94,16 @@ class ActivityController extends Controller {
                     }
                     if ($request->from_time && $request->to_time) {
                         foreach ($request->from_time as $key => $fromTime) {
-                            $from_time = Carbon::parse($fromTime);
-                            $to_time = Carbon::parse($request->to_time[$key]);
-                            $amenityTimeSlot = new ActivityTimeSlot();
-                            $amenityTimeSlot->amenity_id = $amenity->id;
-                            $amenityTimeSlot->from = $from_time->format("H:s:i");
-                            $amenityTimeSlot->to = $to_time->format("H:s:i");
-                            $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                            $amenityTimeSlot->save();
+                            if ($fromTime && $request->to_time[$key] && $request->total_people[$key]) {
+                                $from_time = Carbon::parse($fromTime);
+                                $to_time = Carbon::parse($request->to_time[$key]);
+                                $amenityTimeSlot = new ActivityTimeSlot();
+                                $amenityTimeSlot->amenity_id = $amenity->id;
+                                $amenityTimeSlot->from = $from_time->format("H:s:i");
+                                $amenityTimeSlot->to = $to_time->format("H:s:i");
+                                $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
+                                $amenityTimeSlot->save();
+                            }
                         }
                     }
 
@@ -187,14 +189,16 @@ class ActivityController extends Controller {
                 if ($request->from_time && $request->to_time) {
                     ActivityTimeSlot::where("amenity_id", $amenity->id)->delete();
                     foreach ($request->from_time as $key => $fromTime) {
-                        $from_time = Carbon::parse($fromTime);
-                        $to_time = Carbon::parse($request->to_time[$key]);
-                        $amenityTimeSlot = new ActivityTimeSlot();
-                        $amenityTimeSlot->amenity_id = $amenity->id;
-                        $amenityTimeSlot->from = $from_time->format("H:s:i");
-                        $amenityTimeSlot->to = $to_time->format("H:s:i");
-                        $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
-                        $amenityTimeSlot->save();
+                        if ($fromTime && $request->to_time[$key] && $request->total_people[$key]) {
+                            $from_time = Carbon::parse($fromTime);
+                            $to_time = Carbon::parse($request->to_time[$key]);
+                            $amenityTimeSlot = new ActivityTimeSlot();
+                            $amenityTimeSlot->amenity_id = $amenity->id;
+                            $amenityTimeSlot->from = $from_time->format("H:s:i");
+                            $amenityTimeSlot->to = $to_time->format("H:s:i");
+                            $amenityTimeSlot->allow_no_of_member = $request->total_people[$key];
+                            $amenityTimeSlot->save();
+                        }
                     }
                 }
 
