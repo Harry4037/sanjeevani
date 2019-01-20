@@ -22,7 +22,7 @@
                             <th>Sr.No.</th>
                             <th>Name</th>
                             <th>EmailAddress</th>
-                            <!--<th>Resort Name</th>-->
+                            <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -53,7 +53,7 @@
                 },
                 {"data": "name", sortable: true},
                 {"data": "email", sortable: true},
-//                {"data": "resort_name"},
+                {"data": "resort_name"},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

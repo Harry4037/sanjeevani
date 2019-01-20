@@ -164,7 +164,7 @@ class StaffController extends Controller {
                         $userBooking->source_name = ' ';
                         $userBooking->source_id = ' ';
                         $userBooking->user_id = $user->id;
-                        $userBooking->resort_id = $request->resort_id;
+                        $userBooking->resort_id = $request->get("subadminResort");
                         $userBooking->package_id = 0;
                         $userBooking->save();
                         return redirect()->route('subadmin.staff.index')->with('status', 'User has been added successfully');
@@ -181,12 +181,12 @@ class StaffController extends Controller {
                 'vendors/iCheck/icheck.min.js',
             ];
 
-            $resorts = Resort::where("is_active", 1)->get();
+            $amenities = Amenity::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
             $states = StateMaster::all();
             return view('subadmin.staff.add-user', [
                 'css' => $css,
                 'js' => $js,
-                'resorts' => $resorts,
+                'amenities' => $amenities,
                 'states' => $states,
             ]);
         } catch (\Exception $ex) {
@@ -229,7 +229,7 @@ class StaffController extends Controller {
                     $userBooking->source_name = ' ';
                     $userBooking->source_id = ' ';
                     $userBooking->user_id = $user->id;
-                    $userBooking->resort_id = $request->resort_id;
+                    $userBooking->resort_id = $request->get("subadminResort");
                     $userBooking->package_id = 0;
                     $userBooking->save();
 

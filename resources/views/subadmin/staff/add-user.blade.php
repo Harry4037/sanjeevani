@@ -33,23 +33,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="resort_id" id="resort_id">
-                                <option value="">Choose option</option>
-                                @if($resorts)
-                                @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}"
-                                        @if(old('staff_email') == $resort->id)
-                                        {{ "slected" }}
-                                        @endif
-                                        >{{ $resort->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Address.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ old('staff_address') }}" type="text" class="form-control" placeholder="Address" name="staff_address" id="staff_address">
@@ -97,7 +80,14 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenities Allowed For</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6" id="amenity_list_div">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            @if($amenities)
+                            <p style="padding: 5px;">
+                                @foreach($amenities as $amenity)
+                                <input class="flat" type="checkbox" name="amenity_ids[]" value="{{ $amenity->id }}">{{ $amenity->name }}
+                                @endforeach
+                            <p>
+                                @endif
                         </div>
                     </div>
 
@@ -121,11 +111,6 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $("#addStaffForm").validate({
             rules: {
@@ -136,9 +121,6 @@
                     required: true
                 },
                 staff_email: {
-                    required: true
-                },
-                resort_id: {
                     required: true
                 },
                 staff_address: {
@@ -156,18 +138,6 @@
             }
         });
 
-        $(document).on("change", "#resort_id", function () {
-            var resort_id = $("#resort_id :selected").val();
-            $.ajax({
-                url: _baseUrl + '/sub-admin/staff/amenity-list',
-                type: 'post',
-                data: {resort_id: resort_id},
-                dataType: 'html',
-                success: function (res) {
-                    $("#amenity_list_div").html(res);
-                }
-            });
-        });
     });
 </script>
 
