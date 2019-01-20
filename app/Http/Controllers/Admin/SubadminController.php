@@ -15,6 +15,7 @@ use App\Models\CityMaster;
 use App\Models\Amenity;
 use App\Models\MenuStructure;
 use App\Models\AuthorityMenuMapping;
+use Illuminate\Support\Facades\Hash;
 
 class SubadminController extends Controller {
 
@@ -69,7 +70,8 @@ class SubadminController extends Controller {
                 $usersArray[$key]['resort_name'] = isset($staffResort->resort->name) ? $staffResort->resort->name : 'N/A';
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
-                $usersArray[$key]['view-deatil'] = '<a class="btn btn-info btn-xs" href="' . route('admin.subadmin.edit', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Edit</a>';
+                $usersArray[$key]['view-deatil'] = '<a class="btn btn-info btn-xs" href="' . route('admin.subadmin.edit', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Edit</a>'
+                        .'<a class="btn btn-primary btn-xs" href="' . route('admin.subadmin.change-password', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Change Password</a>';
             }
 
             $data['data'] = $usersArray;
@@ -82,7 +84,7 @@ class SubadminController extends Controller {
     public function addUser(Request $request) {
         try {
             if ($request->isMethod("post")) {
-                $existingUser = User::where(["email_id"=> $request->email, "user_type_id" => 5])->first();
+                $existingUser = User::where(["email_id" => $request->email, "user_type_id" => 5])->first();
                 if ($existingUser) {
                     return redirect()->route('admin.subadmin.add')->with('error', 'User already exist with this email Id.');
                 }
@@ -229,6 +231,22 @@ class SubadminController extends Controller {
         } catch (\Exception $e) {
             dd($e);
         }
+    }
+
+    public function changePassword(Request $request, $id) {
+        $user = User::find($id);
+        if ($request->isMethod("post")) {
+            if (Hash::check($request->get("old_password"), $user->password)) {
+                $user->password = bcrypt($request->get("new_password"));
+                $user->save();
+                return redirect()->route('admin.subadmin.change-password', $user->id)->with('status', 'Password has been updated successfully.');
+            } else {
+                return redirect()->route('admin.subadmin.change-password', $user->id)->with('error', 'Old password incorrect.');
+            }
+        }
+        return view('admin.sub-admin.change-password', [
+            "user" => $user,
+        ]);
     }
 
 }

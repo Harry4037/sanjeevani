@@ -118,6 +118,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/staff-detail/{id}', 'SubadminController@viewUser')->name('admin.subadmin.detail');
         Route::match(['get', 'post'], '/edit/{id}', 'SubadminController@editUser')->name('admin.subadmin.edit');
         Route::post('/amenity-list', 'SubadminController@getAmenities')->name('admin.subadmin.amenity-list');
+        Route::match(['get','post'],'/change-password/{id}', 'SubadminController@changePassword')->name('admin.subadmin.change-password');
     });
     /**
      * Banner Management
