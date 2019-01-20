@@ -1,11 +1,14 @@
 @extends('layouts.subadmin.app')
 
 @section('content')
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
+                <div style="display: none;" class="alert msg" role="alert">
+                </div>
                 <h2>Order</h2>
                 <div class="pull-right">
 
@@ -35,21 +38,13 @@
 @section('script')
 <script>
     $(document).ready(function () {
+
         var t = $('#list').DataTable({
-            lengthMenu: [[15, 25, 50], [15, 25, 50]],
+            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
-            language: {
-                'loadingRecords': '&nbsp;',
-                'processing': '<i class="fa fa-refresh fa-spin"></i>'
-            },
-            ajax: {
-                url: _baseUrl + "/sub-admin/order/list",
-                error: function (xhr, error, thrown) {
-                    showErrorMessage(error);
-                },
-            },
+            ajax: _baseUrl + "/sub-admin/order/list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -62,6 +57,12 @@
                 {"data": "status"},
             ]
         });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
     });
 </script>
 @endsection

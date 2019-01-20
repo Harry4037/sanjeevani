@@ -37,7 +37,7 @@ class UsersController extends Controller {
      * @return pages
      */
     public function index() {
-        
+
         $css = [
             'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
         ];
@@ -60,9 +60,9 @@ class UsersController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
             $userBookingDetail = UserBookingDetail::where("resort_id", $request->get("subadminResort"))->pluck("user_id");
-            if($userBookingDetail){
+            if ($userBookingDetail) {
                 $userIds = $userBookingDetail->toArray();
-            }else{
+            } else {
                 $userIds = [];
             }
             $query = $this->user->query()->with(['payments', 'mealOrders' => function($query) {
@@ -98,7 +98,7 @@ class UsersController extends Controller {
             $data['data'] = $usersArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -115,12 +115,14 @@ class UsersController extends Controller {
                 $user->is_active = $request->status;
                 if ($user->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 

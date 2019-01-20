@@ -10,7 +10,6 @@ use Validator;
 use App\Models\SOS;
 use App\Models\User;
 
-
 class SOSController extends Controller {
 
     public function index() {
@@ -31,50 +30,31 @@ class SOSController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = SOS::query();
-            // if ($searchKeyword) {
-            //     $query->where("content", "LIKE", "%$searchKeyword%");
-            // }
+            if ($searchKeyword) {
+                $query->where("latitude", "LIKE", "%$searchKeyword%")
+                        ->orWhere("longitude", "LIKE", "%$searchKeyword%")
+                        ->orWhere("resort_name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("room_type", "LIKE", "%$searchKeyword%")
+                        ->orWhere("room_no", "LIKE", "%$searchKeyword%");
+            }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $sos = $query->take($limit)->offset($offset)->latest()->get();
             $sosArray = [];
             foreach ($sos as $key => $so) {
-                $user = User::find($so->id);
-                $sosArray[$key]['user_name'] = $user->user_name;
+                $mapUrl = "<a target='_blank' class='btn btn-warning btn-xs' href='http://maps.google.com/maps?q=" . $so->latitude . "," . $so->longitude . "'><i class='fa fa-map'></i> View</a>";
+                $user = User::find($so->user_id);
+                $sosArray[$key]['user_name'] = $user ? $user->user_name : "";
                 $sosArray[$key]['longitude'] = $so->longitude;
                 $sosArray[$key]['latitude'] = $so->latitude;
-                $sosArray[$key]['action'] = '';
-                // '<a href="' . route('admin.sos.view', $so->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
+                $sosArray[$key]['action'] = $mapUrl;
             }
 
             $data['data'] = $sosArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
-    }
-
-    public function editCms(Request $request) {
-        $cms = Cms::find($request->id);
-        if ($request->isMethod("post")) {
-            $validator = Validator::make($request->all(), [
-                        'content' => 'bail|required',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->route('subadmin.cms.index')->withErrors($validator)->withInput();
-            }
-            $cms->content = $request->content;
-            
-            if ($cms->save()) {
-                
-                return redirect()->route('subadmin.cms.edit', $cms->id)->with('status', 'Paget has been update successfully.');
-            } else {
-                return redirect()->route('subadmin.activity.index')->with('error', 'Something went be wrong.');
-            }
-        }
-        return view('subadmin.cms.edit', [
-            'cms' => $cms,
-        ]);
     }
 
 }

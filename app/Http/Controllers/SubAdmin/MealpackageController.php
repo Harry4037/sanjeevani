@@ -108,24 +108,21 @@ class MealpackageController extends Controller {
             $js = [
                 'vendors/iCheck/icheck.min.js',
             ];
-            $resorts = Resort::where("is_active", 1)->get();
-
+            $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+                        $query->where('resort_id', $request->get("subadminResort"));
+                    })->with([
+                        'menuItems' => function ($query) use($request) {
+                            $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->get("subadminResort"));
+                        }
+                    ])->get();
             return view('subadmin.meal-package.create', [
-                'resorts' => $resorts,
+                'mealCategories' => $mealCategories,
                 'css' => $css,
                 'js' => $js,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('subadmin.meal-package.index')->with('error', $ex->getMessage());
         }
-    }
-
-    public function getResortMeal(Request $request) {
-        $mealItems = MealItem::where(["is_active" => 1, "resort_id" => $request->record_id])->get();
-
-        return view('subadmin.meal-package.meal-item', [
-            'mealItems' => $mealItems,
-        ]);
     }
 
     public function updateStatus(Request $request) {
@@ -135,70 +132,89 @@ class MealpackageController extends Controller {
                 $meal->is_active = $request->status;
                 if ($meal->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
     public function editMealpackage(Request $request) {
-        $data = MealPackage::find($request->id);
-        if ($request->isMethod("post")) {
-            $validator = Validator::make($request->all(), [
-                        'name' => 'bail|required',
-                        'price' => 'bail|required',
-                        'category' => 'bail|required',
-                        
-            ]);
-            if ($validator->fails()) {
-                return redirect()->route('subadmin.meal-package.index')->withErrors($validator)->withInput();
-            }
-            $data->name = $request->name;
-            $data->category = $request->category;
-            $data->price = $request->price;
-//            $data->resort_id = $request->resort_id;
-            if ($request->hasFile("image_name")) {
-                $icon_image = $request->file("image_name");
-                $icon = Storage::disk('public')->put('meal_package_images', $icon_image);
-                $icon_file_name = basename($icon);
-                $data->image_name = $icon_file_name;
-            }
-
-            if ($data->save()) {
-                if ($request->meal_item) {
-                    foreach ($request->meal_item as $item) {
-                        MealPackageItem::where("meal_package_id", $data->id)->delete();
-                        $mealPackageItem = new MealPackageItem();
-                        $mealPackageItem->meal_package_id = $data->id;
-                        $mealPackageItem->meal_item_id = $item;
-                        $mealPackageItem->save();
-                    }
+        try {
+            $data = MealPackage::find($request->id);
+            if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'name' => 'bail|required',
+                            'price' => 'bail|required',
+                            'category' => 'bail|required',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('subadmin.meal-package.index')->withErrors($validator)->withInput();
+                }
+                $data->name = $request->name;
+                $data->category = $request->category;
+                $data->price = $request->price;
+                if ($request->hasFile("image_name")) {
+                    $icon_image = $request->file("image_name");
+                    $icon = Storage::disk('public')->put('meal_package_images', $icon_image);
+                    $icon_file_name = basename($icon);
+                    $data->image_name = $icon_file_name;
                 }
 
-                return redirect()->route('subadmin.meal-package.index')->with('status', 'Package has been updated successfully.');
-            } else {
-                return redirect()->route('subadmin.meal-package.index')->with('error', 'Something went be wrong.');
-            }
-        }
+                if ($data->save()) {
+                    if ($request->meal_item) {
+                        foreach ($request->meal_item as $item) {
+                            MealPackageItem::where("meal_package_id", $data->id)->delete();
+                            $mealPackageItem = new MealPackageItem();
+                            $mealPackageItem->meal_package_id = $data->id;
+                            $mealPackageItem->meal_item_id = $item;
+                            $mealPackageItem->save();
+                        }
+                    }
 
-        $resorts = Resort::where("is_active", 1)->get();
-        $resortMeals = MealItem::where("resort_id", $data->resort_id)->get();
-        return view('subadmin.meal-package.edit', [
-            'resorts' => $resorts,
-            'resortMeals' => $resortMeals,
-            'data' => $data
-        ]);
+                    return redirect()->route('subadmin.meal-package.index')->with('status', 'Package has been updated successfully.');
+                } else {
+                    return redirect()->route('subadmin.meal-package.index')->with('error', 'Something went be wrong.');
+                }
+            }
+
+            $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+                        $query->where('resort_id', $request->get("subadminResort"));
+                    })->with([
+                        'menuItems' => function ($query) use($request) {
+                            $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->get("subadminResort"));
+                        }
+                    ])->get();
+
+            $packageItems = MealPackageItem::where("meal_package_id", $data->id)->pluck("meal_item_id")->toArray();
+            $css = [
+                "vendors/iCheck/skins/flat/green.css",
+            ];
+            $js = [
+                'vendors/iCheck/icheck.min.js',
+            ];
+            return view('subadmin.meal-package.edit', [
+                'mealCategories' => $mealCategories,
+                'packageItems' => $packageItems,
+                'data' => $data,
+                'css' => $css,
+                'js' => $js,
+            ]);
+        } catch (\Exception $ex) {
+            return redirect()->route('subadmin.meal-package.edit')->with('error', $ex->getMessage());
+        }
     }
 
     public function deleteMealpackage(Request $request) {
         $meal = MealPackage::find($request->id);
         if ($meal->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Pacakage deleted successfully."];
         } else {
-            return ['status' => true];
+            return ['status' => true, "message" => "Something went be wrong."];
         }
     }
 

@@ -220,8 +220,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
-                            <!--                            <button type="button" class="btn btn-primary">Cancel</button>-->
-                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a class="btn btn-default" href="{{ route('subadmin.users.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -246,7 +245,6 @@
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
         }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
         });
 
         $('#check_out').daterangepicker({
@@ -324,36 +322,38 @@
                 },
             }});
 
+        $(document).on("change", "#resort_room_type, #resort_id", function () {
+            try {
+                var resort = $("#resort_id :selected").val();
+                var resort_room = $("#resort_room_type :selected").val();
+                if (!resort) {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $(document).on("change", "#resort_room_type", function () {
-            var resort = $("#resort_id :selected").val();
-            var resort_room = $("#resort_room_type :selected").val();
-            if (!resort) {
-                alert("Please select resort.")
-                return false;
-            } else if (!resort_room) {
-                alert("Please select resort room type.")
-                return false;
-            } else {
-                $.ajax({
-                    url: _baseUrl + '/sub-admin/resort/resort-rooms/' + resort + '/' + resort_room,
-                    type: 'get',
-                    dataType: 'html',
-                    success: function (res) {
-                        $("#resort_room_id").html(res);
-                    }
-                });
+                    alert("Please select resort.")
+                    return false;
+                } else if (!resort_room) {
+                    alert("Please select resort room type.")
+                    return false;
+                } else {
+                    $.ajax({
+                        url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
+                        type: 'get',
+                        dataType: 'html',
+                        beforeSend: function () {
+                            $(".overlay").show();
+                        },
+                        success: function (res) {
+                            $("#resort_room_id").html(res);
+                            $(".overlay").hide();
+                        }
+                    });
+                }
+            } catch (err) {
+                alert(err.message);
+                $(".overlay").hide();
             }
         });
         $(document).on("change", "#resort_room_id", function () {
             var record_val = $("#resort_room_id :selected").text();
-            ;
             $("#resort_room_id_hidden").val(record_val);
         });
     });

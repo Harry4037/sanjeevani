@@ -7,8 +7,6 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
-                </div>
                 <h2>Meal Package Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('subadmin.meal-package.add') }}">Add Meal Package</a>
@@ -45,7 +43,16 @@
             searching: true,
             processing: true,
             serverSide: true,
-            ajax: _baseUrl + "/sub-admin/meal-package/list",
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
+            ajax: {
+                url: _baseUrl + "/sub-admin/meal-package/list",
+                error: function (xhr, error, thrown) {
+                    showErrorMessage(error);
+                },
+            },
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
@@ -65,36 +72,36 @@
             ]
         });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $(document).on("click", ".meal_package_status", function () {
-            var record_id = this.id;
-            var th = $(this);
-            var status = th.attr('data-status');
-            var update_status = (status == '1') ? 0 : 1;
-            $.ajax({
-                url: _baseUrl + '/sub-admin/meal-package/update-status',
-                type: 'post',
-                data: {status: update_status, record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-
-                    if (res.status)
-                    {
-                        th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 1000);
+            try {
+                var record_id = this.id;
+                var th = $(this);
+                var status = th.attr('data-status');
+                var update_status = (status == '1') ? 0 : 1;
+                $.ajax({
+                    url: _baseUrl + '/sub-admin/meal-package/update-status',
+                    type: 'post',
+                    data: {status: update_status, record_id: record_id},
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        if (res.status)
+                        {
+                            th.attr('data-status', res.data.status);
+                            showSuccessMessage(res.data.message);
+                        } else {
+                            showErrorMessage(res.message);
+                        }
+                        $(".overlay").hide();
                     }
-                }
-            });
+                });
+            } catch (err) {
+                showErrorMessage(err.message);
+                $(".overlay").hide();
+            }
 
         });
 
@@ -102,21 +109,29 @@
             var record_id = this.id;
             bootbox.confirm("Are you sure want to delete this meal package?", function (result) {
                 if (result) {
-                    $.ajax({
-                        url: _baseUrl + '/sub-admin/meal-package/delete',
-                        type: 'post',
-                        data: {id: record_id},
-                        dataType: 'json',
-                        success: function (res) {
-                            console.log(res);
-                            if (res.status)
-                            {
-                                t.draw();
-                            } else {
-                                alert("something went be wrong.")
+                    try {
+                        $.ajax({
+                            url: _baseUrl + '/sub-admin/meal-package/delete',
+                            type: 'post',
+                            data: {id: record_id},
+                            dataType: 'json',
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
+                            success: function (res) {
+                                if (res.status)
+                                {
+                                    t.draw();
+                                    showSuccessMessage(res.message);
+                                } else {
+                                    showErrorMessage(res.message)
+                                }
+                                $(".overlay").hide();
                             }
-                        }
-                    });
+                        });
+                    } catch (err) {
+                        showErrorMessage(err.message);
+                    }
                 }
             });
         });

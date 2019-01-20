@@ -7,30 +7,30 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
+                <h2>Services Management</h2>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="{{ route('subadmin.service.add') }}">Add Service</a>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <h2>Services Management</h2>
-            <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('subadmin.service.add') }}">Add Service</a>
+
+            <div class="x_content">
+                <table id="list" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Sr.No.</th>
+                            <th>Service Icon</th>
+                            <th>Service Name</th>
+                            <th>Service Type</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            <table id="list" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Sr.No.</th>
-                        <th>Service Icon</th>
-                        <th>Service Name</th>
-                        <th>Service Type</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
         </div>
     </div>
-</div>
 </div>
 
 @endsection

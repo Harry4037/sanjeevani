@@ -20,25 +20,35 @@ class OrderController extends Controller {
         try {
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
 
-            $mealOrders = MealOrder::with([
+            $query = MealOrder::query();
+            $query->where("resort_id", $request->get("subadminResort"));
+            if ($searchKeyword) {
+                $query->where("invoice_id", "LIKE", "%$searchKeyword%")
+                        ->orWhere("total_amount", "LIKE", "%$searchKeyword%");
+            }
+
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $mealOrders = $query->with([
                         "userDetail" => function($query) {
                             $query->select('id', 'user_name');
                         }
-                    ])->where("resort_id", $request->get("subadminResort"))->get();
+                    ])->take($limit)->offset($offset)->latest()->get();
 
             $dataArray = [];
             $stat = "";
             foreach ($mealOrders as $key => $mealOrder) {
-                if($mealOrder->status == 1){
+                if ($mealOrder->status == 1) {
                     $stat = "New";
-                }elseif($mealOrder->status == 2){
+                } elseif ($mealOrder->status == 2) {
                     $stat = "Accepted by staff";
-                }elseif($mealOrder->status == 3){
+                } elseif ($mealOrder->status == 3) {
                     $stat = "Under Approval";
-                }elseif($mealOrder->status == 4){
+                } elseif ($mealOrder->status == 4) {
                     $stat = "Completed";
-                }else{
+                } else {
                     $stat = "Rejected";
                 }
                 $dataArray[$key]['user_name'] = isset($mealOrder->userDetail->user_name) ? $mealOrder->userDetail->user_name : "";
@@ -46,12 +56,11 @@ class OrderController extends Controller {
                 $dataArray[$key]['total_amount'] = $mealOrder->total_amount;
                 $dataArray[$key]['status'] = $stat;
             }
-            $data['recordsTotal'] = count($mealOrders);
-            $data['recordsFiltered'] = count($mealOrders);
+
             $data['data'] = $dataArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 

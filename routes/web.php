@@ -502,7 +502,6 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::post('/update-status', 'MealpackageController@updateStatus')->name('subadmin.meal-package.status-update');
         Route::match(['get', 'post'], '/edit/{id}', 'MealpackageController@editMealpackage')->name('subadmin.meal-package.edit');
         Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('subadmin.meal-package.delete');
-        Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('subadmin.meal-package.resort-item');
     });
 
     /**

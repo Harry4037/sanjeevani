@@ -89,114 +89,110 @@
 <script>
 $(document).ready(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     $('#valid_to').daterangepicker({
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
+        @if (isset($amenity - > valid_to))
+        startDate: new Date("{{ $amenity->valid_to }}"),
+        @endif
         locale: {
-            format: 'YYYY/M/DD'
+        format: 'YYYY/M/DD'
         }
-    });
+});
 
 
 //For ckeditor
-    CKEDITOR.replace('offer_description', {
-        removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
-        removePlugins: 'image, link',
-    });
-    CKEDITOR.instances.offer_description.on('change', function () {
-        if (CKEDITOR.instances.offer_description.getData().length > 0) {
-            $('label[for="offer_description"]').hide();
-        }
-    });
+CKEDITOR.replace('offer_description', {
+    removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
+    removePlugins: 'image, link',
+});
+CKEDITOR.instances.offer_description.on('change', function () {
+    if (CKEDITOR.instances.offer_description.getData().length > 0) {
+        $('label[for="offer_description"]').hide();
+    }
+});
 
-    Dropzone.options.myDropzone = {
-        init: function () {
-            this.on("success", function (file, response) {
-                if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
-                    var hidden_image_html = "<input id='offer_image_input_" + response.id + "' type='hidden' name='offer_images[]' value='" + response.file_name + "'>";
-                    var _this = this;
-                    removeButton.addEventListener("click", function (e) {
-                        // Make sure the button click doesn't submit the form:
-                        e.preventDefault();
-                        e.stopPropagation();
-                        var record_id = this.id;
-                        var record_val = $(this).attr("data-val");
-                        $.ajax({
-                            url: _baseUrl + '/sub-admin/offer/delete-images',
-                            type: 'post',
-                            data: {record_val: record_val, record_id: record_id},
+Dropzone.options.myDropzone = {
+    init: function () {
+        this.on("success", function (file, response) {
+            if (response.status) {
+                var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                var hidden_image_html = "<input id='offer_image_input_" + response.id + "' type='hidden' name='offer_images[]' value='" + response.file_name + "'>";
+                var _this = this;
+                removeButton.addEventListener("click", function (e) {
+                    // Make sure the button click doesn't submit the form:
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var record_id = this.id;
+                    var record_val = $(this).attr("data-val");
+                    $.ajax({
+                        url: _baseUrl + '/sub-admin/offer/delete-images',
+                        type: 'post',
+                        data: {record_val: record_val, record_id: record_id},
 //                            dataType: 'json',
-                            success: function (res) {
-                                $("#offer_image_input_" + record_id).remove();
-                                _this.removeFile(file);
-                            }
-                        });
+                        success: function (res) {
+                            $("#offer_image_input_" + record_id).remove();
+                            _this.removeFile(file);
+                        }
                     });
-                    file.previewElement.appendChild(removeButton);
-                    $("#offer_images_div").append(hidden_image_html);
-                }
-            });
-            this.on("error", function (file, message) {
-                alert(message);
-                this.removeFile(file);
-            });
+                });
+                file.previewElement.appendChild(removeButton);
+                $("#offer_images_div").append(hidden_image_html);
+            }
+        });
+        this.on("error", function (file, message) {
+            showErrorMessage(message);
+            this.removeFile(file);
+        });
+    },
+    maxFilesize: 2,
+    acceptedMimeTypes: 'image/*',
+    dictDefaultMessage: "Drop or Select multiple images for offer."
+};
+
+$("#addOfferForm").validate({
+    ignore: [],
+    rules: {
+        resort_id: {
+            required: true
         },
-        maxFilesize: 2,
-        acceptedMimeTypes: 'image/*',
-        dictDefaultMessage: "Drop or Select multiple images for offer."
-    };
+        offer_name: {
+            required: true
+        },
+        price: {
+            required: true
+        },
+        discount: {
+            required: true
+        },
+        valid_to: {
+            required: true
+        },
+    }
+});
 
-    $("#addOfferForm").validate({
-        ignore: [],
-        rules: {
-            resort_id: {
-                required: true
-            },
-            offer_name: {
-                required: true
-            },
-            price: {
-                required: true
-            },
-            discount: {
-                required: true
-            },
-            valid_to: {
-                required: true
-            },
-        }
-    });
-
-    $(document).on('click', '.delete_offer_image', function () {
-        var record_id = this.id;
+$(document).on('click', '.delete_offer_image', function () {
+var record_id = this.id;
         var _this = $(this);
         if (record_id) {
-            $.ajax({
-                url: _baseUrl + '/sub-admin/offer/delete-offer-images',
-                type: 'post',
-                data: {record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-                    if (res.status)
-                    {
-                        _this.parent("div").remove();
-                    } else {
-                        alert("Something went be wrong");
-                    }
-                }
-            });
-
+$.ajax({
+url: _baseUrl + '/sub-admin/offer/delete-offer-images',
+        type: 'post',
+        data: {record_id: record_id},
+        dataType: 'json',
+        success: function (res) {
+        if (res.status)
+        {
+        _this.parent("div").remove();
+        } else {
+        alert("Something went be wrong");
         }
-    });
-
+        }
 });
+        }
+});
+}
+);
 </script>
 @endsection

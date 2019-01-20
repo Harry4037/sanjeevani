@@ -42,13 +42,13 @@ class OfferController extends Controller {
 //            dd($amenities->toArray());
             $offerArray = [];
             foreach ($offers as $key => $offer) {
-                $resort = Resort::find($offer->resort_id);
+//                $resort = Resort::find($offer->resort_id);
                 $image = offerImage::where("offer_id", $offer->id)->first();
                 $offerImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $offerArray[$key]['image'] = '<img src=' . $offerImage . ' height=70 width=100 class="img-rounded">';
                 $offerArray[$key]['name'] = $offer->name;
                 $checked_status = $offer->is_active ? "checked" : '';
-                $offerArray[$key]['resort_name'] = isset($resort->name) ? $resort->name : "Generalized Offer";
+//                $offerArray[$key]['resort_name'] = isset($resort->name) ? $resort->name : "Generalized Offer";
                 $offerArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='offer_status' id=" . $offer->id . " data-status=" . $offer->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $offerArray[$key]['action'] = '<a href="' . route('subadmin.offer.edit', $offer->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $offer->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -57,7 +57,7 @@ class OfferController extends Controller {
             $data['data'] = $offerArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -101,13 +101,11 @@ class OfferController extends Controller {
             $css = [
                 'vendors/bootstrap-daterangepicker/daterangepicker.css',
                 "vendors/dropzone/dist/dropzone.css",
-                "https://cdn.quilljs.com/1.0.0/quill.snow.css",
             ];
             $js = [
                 'vendors/moment/min/moment.min.js',
                 'vendors/bootstrap-daterangepicker/daterangepicker.js',
                 'vendors/dropzone/dist/dropzone.js',
-                'https://cdn.quilljs.com/1.0.0/quill.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
             return view('subadmin.offer.create', [
@@ -140,12 +138,15 @@ class OfferController extends Controller {
                 $offer->is_active = $request->status;
                 if ($offer->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                }else{
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            }else{
+                return ['status' => false, "message" => "Method not allowed."];
             }
             return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -208,18 +209,18 @@ class OfferController extends Controller {
             $amenityImage = offerImage::select('image_name as amenity_img')->find($request->record_id);
             @unlink('storage/offer_images/' . $amenityImage->amenity_img);
             offerImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ["status" => true, "message" => "Offer Image deleted successfully."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ["status" => false, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteOffer(Request $request) {
         $amenity = offer::find($request->id);
         if ($amenity->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Offer deleted successfully"];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Somethig went be wrong."];
         }
     }
 

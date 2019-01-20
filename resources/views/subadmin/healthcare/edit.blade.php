@@ -132,15 +132,15 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
 <script>
     $(document).ready(function () {
 
-    $.ajaxSetup({
-    headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
+
     $('#start_from').daterangepicker({
     singleDatePicker: true,
             timePicker: false,
             singleClasses: "picker_1",
+            minDate: new Date(),
+            @if (isset($healthcare - > start_from))
+            startDate: new Date("{{ $healthcare->start_from }}"),
+            @endif
             locale: {
             format: 'YYYY/M/DD'
             }
@@ -149,6 +149,10 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
     singleDatePicker: true,
             timePicker: false,
             singleClasses: "picker_1",
+            @if (isset($healthcare - > end_to))
+            startDate: new Date("{{ $healthcare->end_to }}"),
+            minDate: new Date("{{ $healthcare->end_to }}"),
+            @endif
             locale: {
             format: 'YYYY/M/DD'
             }
@@ -243,6 +247,9 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             type: 'post',
             data: {record_id: record_id},
             dataType: 'json',
+            beforeSend: function () {
+            $(".overlay").show();
+            },
             success: function (res) {
             if (res.status)
             {
@@ -250,6 +257,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             } else {
             alert("Something went be wrong");
             }
+            $(".overlay").hide();
             }
     });
     }

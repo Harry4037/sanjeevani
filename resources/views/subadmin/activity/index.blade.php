@@ -7,8 +7,6 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
-                </div>
                 <h2>Activites Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('subadmin.activity.add') }}">Add Activity</a>
@@ -65,11 +63,6 @@
             ]
         });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $(document).on("click", ".activity_status", function () {
             var record_id = this.id;

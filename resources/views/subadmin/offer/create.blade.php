@@ -78,16 +78,11 @@
 <script>
 $(document).ready(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     $('#valid_to').daterangepicker({
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
+        minDate: new Date(),
         locale: {
             format: 'YYYY/M/DD'
         }
@@ -134,7 +129,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
         },

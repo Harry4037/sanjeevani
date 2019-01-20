@@ -42,13 +42,11 @@ class HealthcareProgramController extends Controller {
             $healthcarePackeges = $query->take($limit)->offset($offset)->latest()->get();
             $healthArray = [];
             foreach ($healthcarePackeges as $key => $healthcarePackege) {
-                $resort = Resort::find($healthcarePackege->resort_id);
                 $image = HealthcateProgramImages::where("health_program_id", $healthcarePackege->id)->first();
                 $healthImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $healthArray[$key]['image'] = '<img src=' . $healthImage . ' height=70 width=100 class="img-rounded">';
                 $healthArray[$key]['name'] = $healthcarePackege->name;
                 $checked_status = $healthcarePackege->is_active ? "checked" : '';
-                $healthArray[$key]['resort_name'] = $resort->name;
                 $healthArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='health_status' id=" . $healthcarePackege->id . " data-status=" . $healthcarePackege->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $healthArray[$key]['action'] = '<a href="' . route('subadmin.healthcare.edit', $healthcarePackege->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $healthcarePackege->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -57,7 +55,7 @@ class HealthcareProgramController extends Controller {
             $data['data'] = $healthArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 
@@ -151,12 +149,15 @@ class HealthcareProgramController extends Controller {
                 $amenity->is_active = $request->status;
                 if ($amenity->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
             return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -240,9 +241,9 @@ class HealthcareProgramController extends Controller {
     public function deleteHealthcare(Request $request) {
         $amenity = HealthcateProgram::find($request->id);
         if ($amenity->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Healthcare Program deleted succeffully."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

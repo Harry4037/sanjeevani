@@ -52,22 +52,39 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Items</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div id="resort_meal_items">
-                                <p style="padding: 5px;">
-                                    @if($resortMeals)
-                                    @foreach($resortMeals as $key => $item)
-                                    <input class="flat" type="checkbox" name="meal_item[]" value="{{ $item->id }}"  
-                                           @if(isset(old('meal_item')[$key]))
-                                           @if(old('meal_item')[$key] == $item->id)
-                                           {{ "checked" }}
-                                           @endif
-                                           @endif
+                            @if($mealCategories)
+                            @foreach($mealCategories as $k => $mealCategory)
+                            <div class="panel-group">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" href="#{{ 'collapse'.$k }}">{{ $mealCategory->name }}</a>
+                                        </h4>
+                                    </div>
+                                    <div id="{{ 'collapse'.$k }}" class="<?php
+                                    if ($k == 0) {
+                                        echo 'panel-collapse collapse in';
+                                    } else {
+                                        echo 'panel-collapse collapse';
+                                    }
+                                    ?>">
+                                        <div class="panel-body">
+                                            @foreach($mealCategory->menuItems as $key => $item)
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input class="flat" type="checkbox" name="meal_item[]" value="{{ $item->id }}"  
+                                                       @if(in_array($item->id, $packageItems))
+                                                       {{ "checked" }}
+                                                       @endif
 
-                                           > {{ $item->name }}
-                                           @endforeach
-                                           @endif
-                                <p>
+                                                       > {{ $item->name }}
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            @endforeach
+                            @endif
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -90,11 +107,14 @@
 <script>
     $(document).ready(function () {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
 
         $("#editMealpackageForm").validate({
             ignore: [],
@@ -114,20 +134,6 @@
             }
         });
 
-        $(document).on("change", "#resort_id", function () {
-            var record_id = $("#resort_id :selected").val();
-            if (record_id) {
-                $.ajax({
-                    url: _baseUrl + '/sub-admin/meal-package/meal-items',
-                    type: 'post',
-                    data: {record_id: record_id},
-                    dataType: 'html',
-                    success: function (res) {
-                        $("#resort_meal_items").html(res);
-                    }
-                });
-            }
-        });
     });
 </script>
 @endsection
