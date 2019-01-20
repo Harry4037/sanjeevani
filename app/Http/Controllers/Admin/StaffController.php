@@ -198,16 +198,22 @@ class StaffController extends Controller {
 
                 if ($request->is_service_authorise == "on") {
                     $user->is_service_authorise = 1;
+                } else {
+                    $user->is_service_authorise = 0;
                 }
                 if ($request->is_meal_authorise == "on") {
                     $user->is_meal_authorise = 1;
+                } else {
+                    $user->is_meal_authorise = 0;
                 }
                 if (!empty($request->amenity_ids)) {
                     $user->authorise_amenities_id = implode("#", $request->amenity_ids);
+                } else {
+                    $user->authorise_amenities_id = "";
                 }
 
                 $user->otp = 9999;
-                $user->password = bcrypt(9999);
+//                $user->password = bcrypt(9999);
                 $user->user_name = $request->staff_name;
                 $user->first_name = isset($name[0]) ? $name[0] : '';
                 $user->last_name = isset($name[1]) ? $name[1] : '';
