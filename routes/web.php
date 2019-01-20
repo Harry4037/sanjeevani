@@ -143,12 +143,28 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::post('services/delete-question', 'ServiceController@deleteQuestion')->name('admin.service.delete-question');
 
     /**
-     * Jobs Management
+     * ServiceRequest Management
      */
     Route::prefix('order-request')->group(function() {
         Route::get('/', 'OrderRequestController@index')->name('admin.order-request.index');
         Route::get('/order-request-list', 'OrderRequestController@orderRequestList')->name('admin.order-request.list');
         Route::match(['get', 'post'], '/view-detail/{id}', 'OrderRequestController@viewDetail')->name('admin.order-request.view');
+    });
+
+    /**
+     * AmenityRequest Management
+     */
+    Route::prefix('amenity-request')->group(function() {
+        Route::get('/', 'AmenityRequestController@index')->name('admin.amenity-request.index');
+        Route::get('/amenity-request-list', 'AmenityRequestController@amenityRequestList')->name('admin.amenity-request.list');
+    });
+
+    /**
+     * ActivityRequest Management
+     */
+    Route::prefix('activity-request')->group(function() {
+        Route::get('/', 'ActivityRequestController@index')->name('admin.activity-request.index');
+        Route::get('/activity-request-list', 'ActivityRequestController@activityRequestList')->name('admin.activity-request.list');
     });
 
     /**
@@ -398,6 +414,22 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::match(['get', 'post'], '/view-detail/{id}', 'OrderRequestController@viewDetail')->name('subadmin.order-request.view');
     });
 
+    /**
+     * AmenityRequest Management
+     */
+    Route::prefix('amenity-request')->group(function() {
+        Route::get('/', 'AmenityRequestController@index')->name('subadmin.amenity-request.index');
+        Route::get('/amenity-request-list', 'AmenityRequestController@amenityRequestList')->name('subadmin.amenity-request.list');
+    });
+
+    /**
+     * ActivityRequest Management
+     */
+    Route::prefix('activity-request')->group(function() {
+        Route::get('/', 'ActivityRequestController@index')->name('subadmin.activity-request.index');
+        Route::get('/activity-request-list', 'ActivityRequestController@activityRequestList')->name('subadmin.activity-request.list');
+    });
+    
     /**
      * Amenity Management
      */

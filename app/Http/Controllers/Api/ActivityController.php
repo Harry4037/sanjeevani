@@ -233,6 +233,8 @@ class ActivityController extends Controller {
             } else {
                 $bookingRequest = new ActivityRequest();
                 $bookingRequest->amenity_id = $request->activity_id;
+                $bookingRequest->activity_name = $amenity->name;
+                $bookingRequest->resort_id = $request->resort_id;
                 $bookingRequest->user_id = $request->user_id;
                 $bookingRequest->booking_date = $book_date->format('Y-m-d');
                 $bookingRequest->from = $request->from_time;

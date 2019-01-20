@@ -15,6 +15,8 @@ class CreateActivityRequestsTable extends Migration {
         Schema::create('activity_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('amenity_id')->default(0);
+            $table->bigInteger('resort_id')->default(0);
+            $table->string('activity_name')->nullable();
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('accepted_by')->default(0);
             $table->Date('booking_date')->nullable();

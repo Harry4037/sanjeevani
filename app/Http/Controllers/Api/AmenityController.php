@@ -258,6 +258,8 @@ class AmenityController extends Controller {
             } else {
                 $bookingRequest = new AmenityRequest();
                 $bookingRequest->amenity_id = $request->amenity_id;
+                $bookingRequest->resort_id = $request->resort_id;
+                $bookingRequest->amenity_name = $amenity->name;
                 $bookingRequest->user_id = $request->user_id;
                 $bookingRequest->booking_date = $book_date->format('Y-m-d');
                 $bookingRequest->from = $request->from_time;

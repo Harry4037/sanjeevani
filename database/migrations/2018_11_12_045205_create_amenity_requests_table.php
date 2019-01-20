@@ -15,6 +15,8 @@ class CreateAmenityRequestsTable extends Migration {
         Schema::create('amenity_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('amenity_id')->default(0);
+            $table->bigInteger('resort_id')->default(0);
+            $table->string('amenity_name')->nullable();
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('accepted_by')->default(0);
             $table->Date('booking_date')->nullable();

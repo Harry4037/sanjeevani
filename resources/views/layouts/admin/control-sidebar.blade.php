@@ -61,7 +61,13 @@
 <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i>Services Management</a>
 </li>
 <li>
-  <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i>Request Management</a>
+  <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i>ServiceRequest Management</a>
+</li>
+<li>
+  <a href="{{ route('admin.amenity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
+</li>
+<li>
+  <a href="{{ route('admin.activity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
 </li>
 <li  @if(in_array(Route::currentRouteName(), ['admin.amenity.add', 'admin.amenity.edit']))
 {{ "class=current-page" }}
