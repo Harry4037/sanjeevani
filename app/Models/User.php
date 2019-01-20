@@ -87,7 +87,7 @@ class User extends Authenticatable {
     }
 
     public function getVoterIdAttribute($value) {
-        return $value ? asset('storage/other_id/' . $name) : asset("/img/no-image.jpg");
+        return $value ? asset('storage/other_id/' . $value) : asset("/img/no-image.jpg");
     }
 
     public function getAadharIdAttribute($name) {

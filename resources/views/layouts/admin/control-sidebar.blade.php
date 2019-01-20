@@ -66,9 +66,9 @@
 <li>
   <a href="{{ route('admin.amenity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
 </li>
-<li>
+<!--<li>
   <a href="{{ route('admin.activity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
-</li>
+</li>-->
 <li  @if(in_array(Route::currentRouteName(), ['admin.amenity.add', 'admin.amenity.edit']))
 {{ "class=current-page" }}
 @endif
