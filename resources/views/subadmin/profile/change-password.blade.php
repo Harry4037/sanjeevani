@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -12,9 +12,9 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form class="form-horizontal form-label-left" action="{{ route('admin.change-password') }}" method="post" id="profileForm" >
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.change-password') }}" method="post" id="profileForm" >
                     @csrf
-                    <input type="hidden" name="record_id" id="record_id" value="{{ auth('admin')->user()->id }}" >
+                    <input type="hidden" name="record_id" id="record_id" value="{{ auth('subadmin')->user()->id }}" >
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">old Password</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -38,7 +38,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route("admin.dashboard") }}">Cancel</a>
+                            <a class="btn btn-default" href="{{ route("subadmin.dashboard") }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
