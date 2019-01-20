@@ -45,8 +45,11 @@ class SOSController extends Controller {
                 $mapUrl = "<a target='_blank' class='btn btn-warning btn-xs' href='http://maps.google.com/maps?q=" . $so->latitude . "," . $so->longitude . "'><i class='fa fa-map'></i> View</a>";
                 $user = User::find($so->user_id);
                 $sosArray[$key]['user_name'] = $user ? $user->user_name : "";
-                $sosArray[$key]['longitude'] = $so->longitude;
+//                $sosArray[$key]['resort_name'] = $so->resort_name;
+                $sosArray[$key]['room_type'] = $so->room_type;
+                $sosArray[$key]['room_no'] = $so->room_no;
                 $sosArray[$key]['latitude'] = $so->latitude;
+                $sosArray[$key]['longitude'] = $so->longitude;
                 $sosArray[$key]['action'] = $mapUrl;
             }
 
