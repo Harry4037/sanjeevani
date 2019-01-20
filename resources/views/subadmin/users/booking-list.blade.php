@@ -27,6 +27,7 @@
                             <th>Check Out</th>
                             <th>Package Name</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -67,6 +68,9 @@
                     render: function (data, type, row, meta) {
                     return row['status'];
                     }
+            },
+            {"data": "action",
+                    sortable: false,
             },
             ]
     });

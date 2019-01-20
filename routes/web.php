@@ -95,6 +95,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::get('user-booking/{id}', 'UsersController@booking')->name('admin.users.booking');
     Route::get('user-booking-list/{id}', 'UsersController@bookingList')->name('admin.users.booking-list');
     Route::match(['get', 'post'], 'user-booking-create/{id}', 'UsersController@bookingCreate')->name('admin.users.booking-create');
+    Route::match(['get', 'post'], 'user-booking-edit/{id}', 'UsersController@bookingEdit')->name('admin.users.booking-edit');
     /**
      * Staff Management
      */
@@ -118,7 +119,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/staff-detail/{id}', 'SubadminController@viewUser')->name('admin.subadmin.detail');
         Route::match(['get', 'post'], '/edit/{id}', 'SubadminController@editUser')->name('admin.subadmin.edit');
         Route::post('/amenity-list', 'SubadminController@getAmenities')->name('admin.subadmin.amenity-list');
-        Route::match(['get','post'],'/change-password/{id}', 'SubadminController@changePassword')->name('admin.subadmin.change-password');
+        Route::match(['get', 'post'], '/change-password/{id}', 'SubadminController@changePassword')->name('admin.subadmin.change-password');
     });
     /**
      * Banner Management
@@ -301,6 +302,10 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::match(['get', 'post'], '/profile', 'LoginController@profile')->name('subadmin.profile');
     Route::match(['get', 'post'], '/change-password', 'LoginController@changePassword')->name('subadmin.change-password');
     Route::get('/city-list/{id}', 'CommonController@getCityList')->name('subadmin.city.list');
+
+    Route::prefix('resort')->group(function() {
+        Route::get('/resort-rooms/{resort}/{type}', 'ResortController@getResortRooms')->name('subadmin.resort.rooms');
+    });
     /**
      * Dashboard & Profile routes
      */
@@ -350,6 +355,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::get('user-booking/{id}', 'UsersController@booking')->name('subadmin.users.booking');
     Route::get('user-booking-list/{id}', 'UsersController@bookingList')->name('subadmin.users.booking-list');
     Route::match(['get', 'post'], 'user-booking-create/{id}', 'UsersController@bookingCreate')->name('subadmin.users.booking-create');
+    Route::match(['get', 'post'], 'user-booking-edit/{id}', 'UsersController@bookingEdit')->name('subadmin.users.booking-edit');
     /**
      * Staff Management
      */

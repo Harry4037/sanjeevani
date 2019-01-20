@@ -219,7 +219,7 @@ class UsersController extends Controller {
                         $userBooking->source_name = $request->booking_source_name;
                         $userBooking->source_id = $request->booking_source_id;
                         $userBooking->user_id = $user->id;
-                        $userBooking->resort_id = $request->resort_id;
+                        $userBooking->resort_id = $request->get("subadminResort");
                         $userBooking->package_id = $request->package_id;
                         $userBooking->room_type_id = $request->resort_room_type;
                         $userBooking->resort_room_id = $request->resort_room_id;
@@ -259,13 +259,13 @@ class UsersController extends Controller {
             'vendors/bootstrap-daterangepicker/daterangepicker.js',
             'vendors/datatables.net/js/jquery.dataTables.min.js',
         ];
-        $resorts = Resort::where("is_active", 1)->get();
+//        $resorts = Resort::where("is_active", 1)->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
         $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
         return view('subadmin.users.add-user', [
             'js' => $js,
             'css' => $css,
-            'resorts' => $resorts,
+            'resort' => $request->get("subadminResort"),
             'roomTypes' => $roomTypes,
             'healcarePackages' => $healcarePackages,
         ]);
@@ -485,6 +485,7 @@ class UsersController extends Controller {
                 $bookinDetailArray[$i]["check_in"] = isset($userBookingDetail->check_in) ? $userBookingDetail->check_in : "";
                 $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? $userBookingDetail->check_out : "";
                 $bookinDetailArray[$i]["status"] = $stat;
+                $bookinDetailArray[$i]["action"] = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
             }
             $data["data"] = $bookinDetailArray;
 
@@ -571,6 +572,81 @@ class UsersController extends Controller {
             'resorts' => $resorts,
             'roomTypes' => $roomTypes,
             'healcarePackages' => $healcarePackages,
+        ]);
+    }
+
+    public function bookingEdit(Request $request, $id) {
+        $data = UserBookingDetail::find($id);
+        if ($request->isMethod("post")) {
+            $validator = Validator::make($request->all(), [
+                        'booking_source_name' => 'bail|required',
+                        'booking_source_id' => 'bail|required',
+                        'check_in' => 'bail|required',
+                        'check_out' => 'bail|required',
+                        'resort_id' => 'bail|required',
+                        'resort_room_type' => 'bail|required',
+                        'resort_room_id' => 'bail|required',
+                        'package_id' => 'bail|required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('subadmin.users.booking-edit', $data->id)->withErrors($validator)->withInput();
+            }
+
+            $data->source_name = $request->booking_source_name;
+            $data->source_id = $request->booking_source_id;
+            $data->resort_id = $request->resort_id;
+            $data->package_id = $request->package_id;
+            $data->room_type_id = $request->resort_room_type;
+            $data->resort_room_id = $request->resort_room_id;
+            $check_in_date = Carbon::parse($request->check_in);
+            $data->check_in = $check_in_date->format('Y-m-d H:i:s');
+            $check_out_date = Carbon::parse($request->check_out);
+            $data->check_out = $check_out_date->format('Y-m-d H:i:s');
+            if ($data->save()) {
+                if (!empty($request->person_name) && !empty($request->person_age)) {
+                    foreach ($request->person_name as $key => $person_name) {
+                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                            if ($request->record_id[$key]) {
+                                $familyMember = BookingpeopleAccompany::find($request->record_id[$key]);
+                            } else {
+                                $familyMember = new BookingpeopleAccompany();
+                            }
+                            $familyMember->person_name = $person_name ? $person_name : ' ';
+                            $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                            $familyMember->booking_id = $data->id;
+                            $familyMember->save();
+                        }
+                    }
+                }
+                return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', 'booking created successfully.');
+            } else {
+                return redirect()->route('subadmin.users.booking-edit', $data->id)->withErrors("Something went be wrong.")->withInput();
+            }
+        }
+
+        $css = [
+            'vendors/bootstrap-daterangepicker/daterangepicker.css',
+        ];
+        $js = [
+            'vendors/moment/min/moment.min.js',
+            'vendors/bootstrap-daterangepicker/daterangepicker.js',
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+        ];
+        $resorts = Resort::where(["is_active" => 1])->get();
+        $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
+        $resortRoom = ResortRoom::find($data->resort_room_id);
+        $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
+        $BookingPeoples = BookingpeopleAccompany::where("booking_id", $data->id)->get();
+        return view('subadmin.users.booking-edit', [
+            'js' => $js,
+            'css' => $css,
+            'resorts' => $resorts,
+            'roomTypes' => $roomTypes,
+            'healcarePackages' => $healcarePackages,
+            'resortRoom' => $resortRoom,
+            'data' => $data,
+            'BookingPeoples' => $BookingPeoples,
         ]);
     }
 

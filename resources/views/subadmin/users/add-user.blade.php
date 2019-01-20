@@ -129,19 +129,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="resort_id" id="resort_id">
-                                <option value="">Choose option</option>
-                                @if($resorts)
-                                @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}" @if(old('resort_id') == $resort->id){{ "selected" }}@endif>{{ $resort->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_type" id="resort_room_type">
@@ -287,9 +274,9 @@
                 check_out: {
                     required: true
                 },
-                resort_id: {
-                    required: true
-                },
+//                resort_id: {
+//                    required: true
+//                },
                 resort_room_type: {
                     required: true
                 },
@@ -322,20 +309,16 @@
                 },
             }});
 
-        $(document).on("change", "#resort_room_type, #resort_id", function () {
+        $(document).on("change", "#resort_room_type", function () {
             try {
-                var resort = $("#resort_id :selected").val();
+                var resort = {{ $resort }};
                 var resort_room = $("#resort_room_type :selected").val();
-                if (!resort) {
-
-                    alert("Please select resort.")
-                    return false;
-                } else if (!resort_room) {
+                if (!resort_room) {
                     alert("Please select resort room type.")
                     return false;
                 } else {
                     $.ajax({
-                        url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
+                        url: _baseUrl + '/sub-admin/resort/resort-rooms/' + resort + '/' + resort_room,
                         type: 'get',
                         dataType: 'html',
                         beforeSend: function () {
