@@ -129,6 +129,7 @@
 <script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
+    var index = "<?php echo count($timeSlots); ?>";
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -187,18 +188,22 @@ $(document).ready(function () {
         var html = "<div class='form-group'>\n\
                 <label class='control-label col-md-2 col-sm-2 col-xs-12'>From</label>\n\
                 <div class='col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control from_timepicker' name='from_time[]' >"
+                + "<input readonly type='text' class='form-control from_timepicker' name='from_time["+index+"]' >"
                 + "</div>\n\
             <label class='control-label col-md-1 col-sm-1 col-xs-12'>To</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control to_timepicker' name='to_time[]'>"
+                + "<input readonly type='text' class='form-control to_timepicker' name='to_time["+index+"]'>"
                 + "</div>"
                 + "<label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-10'>"
-                + "<input type='number' class='form-control' name='total_people[]'>"
+                + "<input type='number' class='form-control' name='total_people["+index+"]'>"
                 + "</div>"
                 + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#time_slot_div").append(html);
+        $("input[name='total_people["+index+"]']").rules("add", {required: true,number:true});
+        $("input[name='from_time["+index+"]']").rules("add", {required: true});
+        $("input[name='to_time["+index+"]']").rules("add", {required: true});
+        index++;
     });
 
     Dropzone.options.myDropzone = {
