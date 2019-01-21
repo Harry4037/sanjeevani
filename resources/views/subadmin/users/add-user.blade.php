@@ -228,6 +228,8 @@
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
+            minDate: new Date(),
+            startDate: new Date(),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
@@ -239,6 +241,7 @@
             timePicker: true,
             singleClasses: "picker_2",
             startDate: moment().startOf('hour').add(24, 'hour'),
+            minDate: moment().startOf('hour').add(24, 'hour'),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }});
