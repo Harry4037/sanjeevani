@@ -195,7 +195,7 @@ $(document).ready(function () {
                 required: true,
                 number: true,
                 minlength: 6,
-                maxlegth: 6
+                maxlength: 6
             },
             state: {
                 required: true
