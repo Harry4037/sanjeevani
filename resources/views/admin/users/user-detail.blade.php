@@ -33,11 +33,11 @@
                     </ul>
                     <div class="ln_solid"></div>
                     <label>Adhaar Id</label>
-                    @if(file_exists($user->aadhar_id))
+                    @if($user->aadhar_id)
                     <a target="_blank" href="{{ $user->aadhar_id }}"><img src="{{ $user->aadhar_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
                     @endif
                     <label>Other Id</label>
-                    @if(file_exists($user->voter_id))
+                    @if($user->voter_id)
                     <a target="_blank" href="{{ $user->voter_id }}"><img src="{{ $user->voter_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
                     @endif
                 </div>
@@ -78,7 +78,7 @@
                             <div class="row" style="margin-top: 20px;">
                                 <label class="col-md-2 col-sm-2 col-xs-6">Medical Document</label>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    @if(isset($userHealth->medical_documents) && file_exists($userHealth->medical_documents)) 
+                                    @if($userHealth->medical_documents) 
                                     <a target="_blank" href="{{ $userHealth->medical_documents }}" ><img src="{{ $userHealth->medical_documents }}" class="img-rounded img-responsive" style="height: 200px; width: 800px;"></a>
                                     @endif
                                 </div>
