@@ -171,7 +171,7 @@ class UsersController extends Controller {
                             'medical_documents' => 'bail|required',
                             'booking_source_name' => 'bail|required',
                             'booking_source_id' => 'bail|required',
-                            'resort_id' => 'bail|required',
+//                            'resort_id' => 'bail|required',
                             'package_id' => 'bail|required',
                             'resort_room_id' => 'bail|required',
                             'check_in' => 'bail|required',
