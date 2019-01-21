@@ -53,13 +53,13 @@
                 },
             },
             "columns": [
-                {"data": null,
+                {"data": null, sortable: false,
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
                 {"data": "image", sortable: false},
-                {"data": "name"},
+                {"data": "name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
