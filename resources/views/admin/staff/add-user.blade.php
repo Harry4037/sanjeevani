@@ -156,7 +156,9 @@
                 },
                 pin_code: {
                     required: true,
-                    number: true
+                    number: true,
+                    maxlength: 6,
+                    minlength: 6,
                 },
             }
         });

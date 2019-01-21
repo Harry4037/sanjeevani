@@ -167,8 +167,8 @@ class MealpackageController extends Controller {
 
                 if ($data->save()) {
                     if ($request->meal_item) {
+                        MealPackageItem::where("meal_package_id", $data->id)->delete();
                         foreach ($request->meal_item as $item) {
-                            MealPackageItem::where("meal_package_id", $data->id)->delete();
                             $mealPackageItem = new MealPackageItem();
                             $mealPackageItem->meal_package_id = $data->id;
                             $mealPackageItem->meal_item_id = $item;

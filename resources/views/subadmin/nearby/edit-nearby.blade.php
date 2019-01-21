@@ -156,12 +156,6 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-//            place_description: {
-//                required: true
-//            },
-//            place_precaution: {
-//                required: true
-//            },
             address: {
                 required: true
             },
@@ -169,7 +163,7 @@ $(document).ready(function () {
                 required: true,
                 number: true,
                 minlength: 6,
-                maxlegth: 6
+                maxlength: 6
             },
             state: {
                 required: true

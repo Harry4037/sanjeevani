@@ -65,7 +65,7 @@ class SubadminController extends Controller {
             foreach ($users as $key => $user) {
                 $staffResort = UserBookingDetail::where("user_id", $user->id)->first();
 
-                $usersArray[$key]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$key]['name'] = $user->user_name;
                 $usersArray[$key]['email'] = $user->email_id;
                 $usersArray[$key]['resort_name'] = isset($staffResort->resort->name) ? $staffResort->resort->name : 'N/A';
                 $checked_status = $user->is_active ? "checked" : '';

@@ -34,7 +34,7 @@ class OrderRequestController extends Controller {
                             ->take($limit)->offset($offset)
                             ->with([
                                 'serviceDetail' => function($query) {
-                                    $query->select('id', 'name', 'type_id');
+                                    $query->withTrashed()->select('id', 'name', 'type_id');
                                 }
                             ])->with([
                         'requestStatus' => function($query) {
@@ -46,7 +46,7 @@ class OrderRequestController extends Controller {
             
             $dataArray = [];
             foreach ($serviceRequests as $key => $serviceRequest) {
-                $dataArray[$key]['service_type'] = $serviceRequest->serviceDetail->serviceType->name;
+                $dataArray[$key]['service_type'] = isset($serviceRequest->serviceDetail->serviceType) ? $serviceRequest->serviceDetail->serviceType->name : "";
                 $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail->name;
                 $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
                 $dataArray[$key]['room_no'] = $serviceRequest->resort_room_no;

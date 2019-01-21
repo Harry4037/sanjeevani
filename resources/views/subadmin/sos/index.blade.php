@@ -18,7 +18,7 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
-                            <th>Resort</th>
+                            <!--<th>Resort</th>-->
                             <th>Room Type</th>
                             <th>Room No.</th>
                             <th>Latitude</th>

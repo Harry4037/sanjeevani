@@ -90,7 +90,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route('subadmin.meal-package.index') }}">Cancle</a>
+                            <a class="btn btn-default" href="{{ route('subadmin.meal-package.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>

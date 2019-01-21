@@ -263,10 +263,14 @@
                     required: true
                 },
                 mobile_number: {
-                    required: true
+                    required: true,
+                    number: true,
+                    minlength: 10,
+                    maxlength: 10,
                 },
                 email_id: {
-                    required: true
+                    required: true,
+                    email: true
                 },
                 check_in: {
                     required: true

@@ -99,11 +99,11 @@ class ServiceController extends Controller {
             $service->updated_by = 1;
 
             if ($service->save()) {
-                if ($request->service_question) {
-                    foreach ($request->service_question as $serviceQues) {
+                if ($request->question) {
+                    foreach ($request->question as $serviceQues) {
                         $serviceQuestion = new ServiceQuestionaire();
                         $serviceQuestion->service_id = $service->id;
-                        $serviceQuestion->question_id = $serviceQues;
+                        $serviceQuestion->question = $serviceQues;
                         $serviceQuestion->is_active = 1;
                         $serviceQuestion->created_by = 1;
                         $serviceQuestion->updated_by = 1;
@@ -154,12 +154,12 @@ class ServiceController extends Controller {
             $data->type_id = $request->service_type;
 
             if ($data->save()) {
-                if ($request->service_question) {
+                if ($request->question) {
                     ServiceQuestionaire::where("service_id", $data->id)->delete();
-                    foreach ($request->service_question as $serviceQues) {
+                    foreach ($request->question as $serviceQues) {
                         $serviceQuestion = new ServiceQuestionaire();
                         $serviceQuestion->service_id = $data->id;
-                        $serviceQuestion->question_id = $serviceQues;
+                        $serviceQuestion->question = $serviceQues;
                         $serviceQuestion->is_active = 1;
                         $serviceQuestion->created_by = 1;
                         $serviceQuestion->updated_by = 1;

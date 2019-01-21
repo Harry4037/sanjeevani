@@ -26,8 +26,7 @@ class AmenityRequestController extends Controller {
 
             $query = AmenityRequest::query();
             if ($searchKeyword) {
-                $query->where("user_name", "LIKE", "%$searchKeyword%")
-                        ->orWhere("amenity_name", "LIKE", "%$searchKeyword%")
+                $query->orWhere("amenity_name", "LIKE", "%$searchKeyword%")
                         ;
             }
             $data['recordsTotal'] = $query->count();

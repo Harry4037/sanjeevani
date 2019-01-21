@@ -35,7 +35,7 @@ class OrderRequestController extends Controller {
                             ->take($limit)->offset($offset)
                             ->with([
                                 'serviceDetail' => function($query) {
-                                    $query->select('id', 'name', 'type_id');
+                                    $query->withTrashed()->select('id', 'name', 'type_id');
                                 }
                             ])->with([
                         'requestStatus' => function($query) {

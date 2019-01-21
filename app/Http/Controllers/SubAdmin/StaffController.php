@@ -219,6 +219,7 @@ class StaffController extends Controller {
                 $user->last_name = isset($name[1]) ? $name[1] : '';
                 $user->mobile_number = $request->staff_mobile_no;
                 $user->email_id = $request->staff_email;
+                $user->pincode = $request->pin_code;
                 $user->created_by = 1;
                 $user->updated_by = 1;
 

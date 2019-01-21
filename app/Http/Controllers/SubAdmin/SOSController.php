@@ -31,9 +31,9 @@ class SOSController extends Controller {
 
             $query = SOS::query();
             if ($searchKeyword) {
-                $query->where("latitude", "LIKE", "%$searchKeyword%")
+                $query->where("latitue", "LIKE", "%$searchKeyword%")
                         ->orWhere("longitude", "LIKE", "%$searchKeyword%")
-                        ->orWhere("resort_name", "LIKE", "%$searchKeyword%")
+//                        ->orWhere("resort_name", "LIKE", "%$searchKeyword%")
                         ->orWhere("room_type", "LIKE", "%$searchKeyword%")
                         ->orWhere("room_no", "LIKE", "%$searchKeyword%");
             }
