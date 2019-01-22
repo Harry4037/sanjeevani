@@ -7,8 +7,8 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
-                </div>
+<!--                <div style="display: none;" class="alert msg" role="alert">
+                </div>-->
                 <h2>Staff</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.staff.add') }}">Add Staff</a>

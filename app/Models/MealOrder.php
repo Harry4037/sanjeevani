@@ -13,6 +13,10 @@ class MealOrder extends Model {
 	public function userDetail() {
 		return $this->belongsTo('App\Models\User', 'user_id');
 	}
+        
+	public function resortDetail() {
+		return $this->belongsTo('App\Models\Resort', 'resort_id');
+	}
 
 	public function scopeAccepted($query)
 	{

@@ -21,9 +21,11 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
+                            <th>Room No.</th>
                             <th>Invoice Id</th>
                             <th>Total Amount</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -52,9 +54,11 @@
                     }
                 },
                 {"data": "user_name"},
+                {"data": "room_no"},
                 {"data": "invoice_id"},
                 {"data": "total_amount"},
                 {"data": "status"},
+                {"data": "action"},
             ]
         });
         $.ajaxSetup({

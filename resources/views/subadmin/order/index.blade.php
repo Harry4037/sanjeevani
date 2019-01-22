@@ -21,6 +21,7 @@
                             <th>Invoice Id</th>
                             <th>Total Amount</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -60,6 +61,7 @@
                 {"data": "invoice_id"},
                 {"data": "total_amount"},
                 {"data": "status"},
+                {"data": "action"},
             ]
         });
     });

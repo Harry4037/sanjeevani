@@ -287,11 +287,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::prefix('order')->group(function() {
         Route::get('/', 'OrderController@index')->name('admin.order.index');
         Route::get('/list', 'OrderController@OrderList')->name('admin.order.list');
-//        Route::match(['get', 'post'], '/create', 'MealpackageController@create')->name('admin.meal-package.add');
-//        Route::post('/update-status', 'MealpackageController@updateStatus')->name('admin.meal-package.status-update');
-//        Route::match(['get', 'post'], '/edit/{id}', 'MealpackageController@editMealpackage')->name('admin.meal-package.edit');
-//        Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('admin.meal-package.delete');
-//        Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('admin.meal-package.resort-item');
+        Route::match(['get', 'post'], '/view-detail/{id}', 'OrderController@viewDetail')->name('admin.order.view');
     });
     /**
      * Notification Management
@@ -429,7 +425,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::get('/', 'ActivityRequestController@index')->name('subadmin.activity-request.index');
         Route::get('/activity-request-list', 'ActivityRequestController@activityRequestList')->name('subadmin.activity-request.list');
     });
-    
+
     /**
      * Amenity Management
      */
@@ -549,11 +545,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::prefix('order')->group(function() {
         Route::get('/', 'OrderController@index')->name('subadmin.order.index');
         Route::get('/list', 'OrderController@OrderList')->name('subadmin.order.list');
-//        Route::match(['get', 'post'], '/create', 'MealpackageController@create')->name('admin.meal-package.add');
-//        Route::post('/update-status', 'MealpackageController@updateStatus')->name('admin.meal-package.status-update');
-//        Route::match(['get', 'post'], '/edit/{id}', 'MealpackageController@editMealpackage')->name('admin.meal-package.edit');
-//        Route::post('/delete', 'MealpackageController@deleteMealpackage')->name('admin.meal-package.delete');
-//        Route::post('/meal-items', 'MealpackageController@getResortMeal')->name('admin.meal-package.resort-item');
+        Route::match(['get', 'post'], '/view-detail/{id}', 'OrderController@viewDetail')->name('subadmin.order.view');
     });
     /**
      * Notification Management

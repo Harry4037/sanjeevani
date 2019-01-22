@@ -9,6 +9,7 @@ use App\Models\Amenity;
 use App\Models\AmenityTimeSlot;
 use App\Models\AmenityRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AmenityController extends Controller {
 
@@ -69,7 +70,7 @@ class AmenityController extends Controller {
      *            ]
      *        }
      *    ]
-     *}
+     * }
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
@@ -90,18 +91,18 @@ class AmenityController extends Controller {
             $response['data'] = (object) [];
             return $this->jsonData($response);
         }
-        if($request->resort_id == -1){
+        if ($request->resort_id == -1) {
             $amenities = Amenity::select('id', 'name', 'description', 'address')->where(["is_active" => 1, "resort_id" => 1])->with([
-                    'amenityImages' => function($query) {
-                        $query->select('id', 'image_name as banner_image_url', 'amenity_id');
-                    }
-                ])->get();
-        }else{
+                        'amenityImages' => function($query) {
+                            $query->select('id', 'image_name as banner_image_url', 'amenity_id');
+                        }
+                    ])->get();
+        } else {
             $amenities = Amenity::select('id', 'name', 'description', 'address')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
-                    'amenityImages' => function($query) {
-                        $query->select('id', 'image_name as banner_image_url', 'amenity_id');
-                    }
-                ])->get();
+                        'amenityImages' => function($query) {
+                            $query->select('id', 'image_name as banner_image_url', 'amenity_id');
+                        }
+                    ])->get();
         }
 
         if (count($amenities) > 0) {
@@ -218,9 +219,9 @@ class AmenityController extends Controller {
         if (!$request->user_id) {
             return $this->sendErrorResponse("user id missing.", (object) []);
         }
-         if(!$this->bookBeforeCheckInDate($request->user_id)){
-              return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);   
-            }
+        if (!$this->bookBeforeCheckInDate($request->user_id)) {
+            return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);
+        }
         if (!$request->resort_id) {
             return $this->sendErrorResponse("resort id missing.", (object) []);
         }
@@ -256,8 +257,18 @@ class AmenityController extends Controller {
             if ($booking > 0) {
                 return $this->sendErrorResponse("Booking already created with these details", (object) []);
             } else {
+                $user = User::select('id', 'user_name', 'mobile_number', 'email_id', 'voter_id', 'aadhar_id', 'address1', 'city_id', 'user_type_id')
+                        ->where(["id" => $request->user_id])
+                        ->with([
+                            'userBookingDetail' => function($query) {
+                                $query->selectRaw(DB::raw('id, resort_room_no, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                            }
+                        ])
+                        ->first();
+                
                 $bookingRequest = new AmenityRequest();
                 $bookingRequest->amenity_id = $request->amenity_id;
+                $bookingRequest->room_no = isset($user->userBookingDetail->resort_room_no) ? $user->userBookingDetail->resort_room_no : "";
                 $bookingRequest->resort_id = $request->resort_id;
                 $bookingRequest->amenity_name = $amenity->name;
                 $bookingRequest->user_id = $request->user_id;
@@ -266,9 +277,9 @@ class AmenityController extends Controller {
                 $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                    $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by ".$request->user()->user_name. " for ".$book_date->format('d M'), $staffDeviceTokens, 1, $request->amenity_id, 1);
-                    $this->generateNotification($request->user()->id, "Amenity Booked", "Your $amenity->name booking is confirmed". " for ".$book_date->format('d M'), 3);
-                    
+                    $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by " . $request->user()->user_name . " for " . $book_date->format('d M'), $staffDeviceTokens, 1, $request->amenity_id, 1);
+                    $this->generateNotification($request->user()->id, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), 3);
+
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
                 } else {
                     return $this->administratorResponse();

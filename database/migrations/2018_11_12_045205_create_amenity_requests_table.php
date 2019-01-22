@@ -18,6 +18,7 @@ class CreateAmenityRequestsTable extends Migration {
             $table->bigInteger('resort_id')->default(0);
             $table->string('amenity_name')->nullable();
             $table->bigInteger('user_id')->default(0);
+            $table->string('room_no')->nullable();
             $table->bigInteger('accepted_by')->default(0);
             $table->Date('booking_date')->nullable();
             $table->time('from')->nullable();

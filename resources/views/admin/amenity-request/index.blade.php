@@ -21,6 +21,7 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
+                            <th>Room No.</th>
                             <th>Amenity Name</th>
                             <th>Booking Date</th>
                             <th>From (Time)</th>
@@ -53,6 +54,7 @@
                     }
                 },
                 {"data": "user_name"},
+                {"data": "room_no"},
                 {"data": "amenity_name"},
                 {"data": "booking_date"},
                 {"data": "from"},

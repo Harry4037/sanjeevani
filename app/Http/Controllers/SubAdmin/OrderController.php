@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SubAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MealOrder;
+use Validator;
 
 class OrderController extends Controller {
 
@@ -55,6 +56,7 @@ class OrderController extends Controller {
                 $dataArray[$key]['invoice_id'] = $mealOrder->invoice_id;
                 $dataArray[$key]['total_amount'] = $mealOrder->total_amount;
                 $dataArray[$key]['status'] = $stat;
+                $dataArray[$key]['action'] = '<a href="' . route('subadmin.order.view', $mealOrder->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
 
             $data['data'] = $dataArray;
@@ -62,6 +64,40 @@ class OrderController extends Controller {
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function viewDetail(Request $request, $id) {
+        if ($request->isMethod("post")) {
+            $sRequest = MealOrder::find($id);
+            if (!$sRequest) {
+                return redirect()->route('subadmin.order.view', $id)->with('error', 'Record Not found.');
+            }
+            $validator = Validator::make($request->all(), [
+                        'seleted_status' => 'bail|required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('subadmin.order.view', $id)->withErrors($validator)->withInput();
+            }
+            $sRequest->status = $request->seleted_status;
+            $sRequest->save();
+            return redirect()->route('subadmin.order.view', $id)->with("status", "Status updated successfully.");
+        }
+
+        $mealRequest = MealOrder::with([
+                            'userDetail' => function($query) {
+                                $query->select('id', 'user_name');
+                            }
+                        ])->with(['resortDetail' => function($query) {
+                                $query->withTrashed();
+                            }])
+                        ->with('orderItems')->where("id", $id)->first();
+        if (!$mealRequest) {
+            return redirect()->route('subadmin.order.index')->with('error', 'Record Not found.');
+        }
+
+        return view("subadmin.order.view_detail", [
+            "mealRequest" => $mealRequest
+        ]);
     }
 
 }

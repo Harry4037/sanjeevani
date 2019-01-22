@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MealOrder;
+use Validator;
 
 class OrderController extends Controller {
 
@@ -25,7 +26,7 @@ class OrderController extends Controller {
             $query = MealOrder::query();
             if ($searchKeyword) {
                 $query->where("invoice_id", "LIKE", "%$searchKeyword%")
-                ->orWhere("total_amount", "LIKE", "%$searchKeyword%");
+                        ->orWhere("total_amount", "LIKE", "%$searchKeyword%");
             }
 
             $data['recordsTotal'] = $query->count();
@@ -51,9 +52,11 @@ class OrderController extends Controller {
                     $stat = "Rejected";
                 }
                 $dataArray[$key]['user_name'] = isset($mealOrder->userDetail->user_name) ? $mealOrder->userDetail->user_name : "";
+                $dataArray[$key]['room_no'] = $mealOrder->resort_room_no;
                 $dataArray[$key]['invoice_id'] = $mealOrder->invoice_id;
                 $dataArray[$key]['total_amount'] = $mealOrder->total_amount;
                 $dataArray[$key]['status'] = $stat;
+                $dataArray[$key]['action'] = '<a href="' . route('admin.order.view', $mealOrder->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
 
             $data['data'] = $dataArray;
@@ -61,6 +64,40 @@ class OrderController extends Controller {
         } catch (\Exception $e) {
             dd($e);
         }
+    }
+
+    public function viewDetail(Request $request, $id) {
+        if ($request->isMethod("post")) {
+            $sRequest = MealOrder::find($id);
+            if (!$sRequest) {
+                return redirect()->route('admin.order.view', $id)->with('error', 'Record Not found.');
+            }
+            $validator = Validator::make($request->all(), [
+                        'seleted_status' => 'bail|required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('admin.order.view', $id)->withErrors($validator)->withInput();
+            }
+            $sRequest->status = $request->seleted_status;
+            $sRequest->save();
+            return redirect()->route('admin.order.view', $id)->with("status", "Status updated successfully.");
+        }
+
+        $mealRequest = MealOrder::with([
+                    'userDetail' => function($query) {
+                        $query->select('id', 'user_name');
+                    }
+                ])->with(['resortDetail' => function($query){
+                    $query->withTrashed();
+                }])
+                ->with('orderItems')->where("id", $id)->first();
+        if (!$mealRequest) {
+            return redirect()->route('admin.order.index')->with('error', 'Record Not found.');
+        }
+
+        return view("admin.order.view_detail", [
+            "mealRequest" => $mealRequest
+        ]);
     }
 
 }
