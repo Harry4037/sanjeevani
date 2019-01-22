@@ -243,6 +243,7 @@ class ResortController extends Controller {
 
     public function getResortRooms(Request $request, $resort = 0, $type = 0) {
         $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $type, "is_active" => 1])->get();
+        
         return view('admin.resort.rooms', ['resortRooms' => $resortRooms]);
     }
 

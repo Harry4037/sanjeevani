@@ -129,8 +129,8 @@ class OrderController extends Controller {
                 $mealOrder->invoice_id = time();
                 $mealOrder->resort_id = $request->resort_id;
                 $mealOrder->user_id = $request->user_id;
-                $mealOrder->resort_room_type = $user->userBookingDetail->room_type_detail ? $user->userBookingDetail->room_type_detail->name : "";
-                $mealOrder->resort_room_no = $user->userBookingDetail->room_detail ? $user->userBookingDetail->room_detail->room_no : "";
+                $mealOrder->resort_room_type = $user->userBookingDetail ? $user->userBookingDetail->room_type_name : "";
+                $mealOrder->resort_room_no = $user->userBookingDetail ? $user->userBookingDetail->resort_room_no : "";
                 $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
                 $mealOrder->gst_amount = $gst;
@@ -167,7 +167,6 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("Cart is empty", (object) []);
             }
         } catch (\Exception $ex) {
-            dd($ex);
             return $this->administratorResponse();
         }
     }

@@ -93,7 +93,7 @@ $(document).ready(function () {
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
-        @if (isset($amenity - > valid_to))
+        @if (isset($amenity->valid_to))
         startDate: new Date("{{ $amenity->valid_to }}"),
         @endif
         locale: {
