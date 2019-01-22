@@ -21,19 +21,19 @@ class Controller extends BaseController {
         DispatchesJobs,
         ValidatesRequests,
         Common;
-    
-    public function notificationCount($userId){
+
+    public function notificationCount($userId) {
         $nCount = Notification::where(["user_id" => $userId, "is_view" => 0])->count();
         return $nCount;
     }
 
-    public function bookBeforeCheckInDate($userId){
-         $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
-                    ->where("check_in", "<=", date("Y-m-d H:i:s"))
+    public function bookBeforeCheckInDate($userId) {
+        $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
+                ->where("check_in", "<=", date("Y-m-d H:i:s"))
                 ->where("user_id", $userId)
                 ->first();
-          return $booking ? true : false;      
-    }    
+        return $booking ? true : false;
+    }
 
     public function sendSuccessResponse($message, $data) {
         return response()->json([
@@ -83,7 +83,7 @@ class Controller extends BaseController {
             return FALSE;
     }
 
-    public function androidPushNotification($userType, $title, $message, $token, $notificationType, $recordId, $userNotificationCount=0, $statusType = 0) {
+    public function androidPushNotification($userType, $title, $message, $token, $notificationType, $recordId, $userNotificationCount = 0, $statusType = 0) {
         if ($userType == '3') {
             //Fro customer
             config(['fcm.http.server_key' => 'AAAAZDeprME:APA91bHyGVMy54RTPTZKyj-gsF5L31IsHP0efkEm4RorsITp-yH2Syh-ftIuuaIu2zm7zZpJZp_CBmY4B33yahx1uZWG570_z6bJ9OxnuX2_Zzh9NFwVbtYKANXRh7SpsQZPq328Y-Jj']);
@@ -102,13 +102,13 @@ class Controller extends BaseController {
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
-            'title' => $title, 
-            'message' => $message, 
-            'type' => $notificationType, 
-            "record_id" => $recordId, 
+            'title' => $title,
+            'message' => $message,
+            'type' => $notificationType,
+            "record_id" => $recordId,
             "notification_count" => $userNotificationCount,
             "status_type" => $statusType,
-                ]);
+        ]);
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
@@ -123,11 +123,11 @@ class Controller extends BaseController {
     public function sendOtp($mobileNumber, $otp) {
         $url = 'http://mobicomm.dove-sms.com//submitsms.jsp';
         $fields = array(
-            'user' => 'HARISH',
-            'key' => '8db582baeaXX',
+            'user' => 'Rizilian',
+            'key' => '83529b3d8eXX',
             'mobile' => "+91" . $mobileNumber,
             'message' => "OTP: " . $otp,
-            'senderid' => 'HMPTHY',
+            'senderid' => 'RIZOTP',
             'accusage' => 1
         );
         $ch = curl_init();
@@ -140,11 +140,11 @@ class Controller extends BaseController {
 
         return true;
     }
-    
-    public function invalidateAllUsertokens($userId){
-        $userTokens = OauthAccessToken::where(["user_id"=>$userId, "revoked" => 0])->get();
-        if($userTokens){
-            foreach($userTokens as $userToken){
+
+    public function invalidateAllUsertokens($userId) {
+        $userTokens = OauthAccessToken::where(["user_id" => $userId, "revoked" => 0])->get();
+        if ($userTokens) {
+            foreach ($userTokens as $userToken) {
                 $userToken->revoked = 1;
                 $userToken->save();
             }
