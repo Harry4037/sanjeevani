@@ -346,7 +346,8 @@ class AuthController extends Controller {
                 return $this->sendInactiveAccountResponse();
             }
             $user = $request->user();
-
+            
+            $this->cleanDeviceToken($request->device_id);
             $this->invalidateAllUsertokens($user->id);
             $tokenResult = $user->createToken('SanjeevaniToken');
             $token = $tokenResult->token;

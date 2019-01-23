@@ -14,6 +14,7 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Facades\FCM;
 use App\Models\UserBookingDetail;
 use App\Models\OauthAccessToken;
+use App\Models\User;
 
 class Controller extends BaseController {
 
@@ -122,7 +123,7 @@ class Controller extends BaseController {
 
     public function sendOtp($mobileNumber, $otp) {
         $url = 'http://mobicomm.dove-sms.com//submitsms.jsp';
-        $OTPMessage = "Dear Customer, your One Time Verification (OTP) code is ".$otp.".";
+        $OTPMessage = "Dear Customer, your One Time Verification (OTP) code is " . $otp . ".";
         $fields = array(
             'user' => 'Rizilian',
             'key' => '83529b3d8eXX',
@@ -150,6 +151,11 @@ class Controller extends BaseController {
                 $userToken->save();
             }
         }
+        return true;
+    }
+
+    public function cleanDeviceToken($deviceId) {
+        User::where('device_id', $deviceId)->update(['device_token' => ""]);
         return true;
     }
 
