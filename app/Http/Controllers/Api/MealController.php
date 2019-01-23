@@ -214,9 +214,9 @@ class MealController extends Controller {
 
 
             //For meal packages
-            if($request->resort_id == -1){
+            if ($request->resort_id == -1) {
                 $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => 1])->get();
-            }else{
+            } else {
                 $mealPackages = MealPackage::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
             }
             $packageData = [];
@@ -244,13 +244,23 @@ class MealController extends Controller {
                 }
             }
 
-            $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
-                        $query->where('resort_id', $request->resort_id);
-                    })->with([
-                        'menuItems' => function ($query) use($request) {
-                            $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
-                        }
-                    ])->get();
+            if ($request->resort_id == -1) {
+                $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+                            $query->where('resort_id', 1);
+                        })->with([
+                            'menuItems' => function ($query) use($request) {
+                        $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', 1);
+                    }
+                        ])->get();
+            } else {
+                $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+                            $query->where('resort_id', $request->resort_id);
+                        })->with([
+                            'menuItems' => function ($query) use($request) {
+                        $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+                    }
+                        ])->get();
+            }
             $mealCatData = [];
             if ($mealCategories) {
                 foreach ($mealCategories as $m => $mealCategory) {
