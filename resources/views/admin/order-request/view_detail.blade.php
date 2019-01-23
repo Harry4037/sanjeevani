@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input readonly="true" type="text" class="form-control"  name="customer_name" id="customer_name" value="@if(isset($serviceRequest->userDetail->user_name)){{ $serviceRequest->userDetail->user_name }}@endif">
                         </div>
