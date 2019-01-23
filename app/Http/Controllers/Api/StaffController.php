@@ -409,7 +409,7 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Invalid login.", (object) []);
             }
 
-            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
+            $ongoing_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no', 'created_at')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
@@ -492,11 +492,6 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["type"] = 4;
                 if ($mealItems) {
                     $ongoingJobArray[$i]["meal_items"] = [];
-//                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
-//                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
-//                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
-//                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
-//                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
                     foreach ($mealItems as $f => $mealItem) {
                         $mealImage = MealItem::find($mealItem->meal_item_id);
                         $ongoingJobArray[$i]["meal_items"][$f]["id"] = $mealItem->id;
@@ -507,16 +502,11 @@ class StaffController extends Controller {
                     }
                 } else {
                     $ongoingJobArray[$i]["meal_items"] = [];
-//                    $ongoingJobArray[$i]["meal_items"][0]["id"] = 1;
-//                    $ongoingJobArray[$i]["meal_items"][0]["meal_item_name"] = "Dummy";
-//                    $ongoingJobArray[$i]["meal_items"][0]["price"] = 123;
-//                    $ongoingJobArray[$i]["meal_items"][0]["quantity"] = 25;
-//                    $ongoingJobArray[$i]["meal_items"][0]["image_url"] = "";
                 }
                 $i++;
             }
 
-            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')
+            $under_approval_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no', 'created_at')
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
@@ -621,7 +611,7 @@ class StaffController extends Controller {
                 $j++;
             }
 
-            $completed_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
+            $completed_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no', 'created_at')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
                             $query->select('id', 'name', 'icon', 'type_id');
