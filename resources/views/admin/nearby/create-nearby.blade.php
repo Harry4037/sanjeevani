@@ -225,10 +225,12 @@ $(document).ready(function () {
                 required: true
             },
             latitude: {
-                required: true
+                required: true,
+                number: true
             },
             longitude: {
-                required: true
+                required: true,
+                number: true
             },
         }
     });
