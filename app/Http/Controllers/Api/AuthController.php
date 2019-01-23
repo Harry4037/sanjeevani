@@ -347,7 +347,7 @@ class AuthController extends Controller {
             }
             $user = $request->user();
             
-            $this->cleanDeviceToken($request->device_id);
+            $this->cleanDeviceToken($request->device_id, $request->user_type);
             $this->invalidateAllUsertokens($user->id);
             $tokenResult = $user->createToken('SanjeevaniToken');
             $token = $tokenResult->token;

@@ -154,8 +154,8 @@ class Controller extends BaseController {
         return true;
     }
 
-    public function cleanDeviceToken($deviceId) {
-        User::where('device_id', $deviceId)->update(['device_token' => ""]);
+    public function cleanDeviceToken($deviceId, $userType) {
+        User::where(['device_id' => $deviceId, "user_type_id" => $userType])->update(['device_token' => ""]);
         return true;
     }
 
