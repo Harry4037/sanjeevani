@@ -184,6 +184,9 @@ $(document).ready(function () {
             $('label[for="edit_resort_description"]').hide();
         }
     });
+   jQuery.validator.addMethod("float_number", function(value, element) {
+  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+}, "Please provide valid float value");
 
     $("#editResortForm").validate({
         rules: {
@@ -213,11 +216,13 @@ $(document).ready(function () {
             },
             latitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true,
             },
             longitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true,
             },
             city: {
                 required: true

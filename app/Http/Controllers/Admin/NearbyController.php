@@ -66,11 +66,8 @@ class NearbyController extends Controller {
                             'address' => 'bail|required',
                             'city' => 'bail|required',
                             'pin_code' => 'bail|required',
-                            'latitude' => 'bail|required|regex:/^\d*(\.\d{2})?$/',
-                            'longitude' => 'bail|required|regex:/^\d*(\.\d{2})?$/',
-                ],[
-                   'latitude.regex' => 'Please provide valid latitude',
-                    'longitude.regex' => 'Please provide valid longitude'
+                            'latitude' => 'bail|required',
+                            'longitude' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.nearby.add')->withErrors($validator)->withInput();

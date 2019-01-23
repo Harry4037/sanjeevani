@@ -243,6 +243,10 @@ $(document).ready(function () {
         dictDefaultMessage: "Drop or Select multiple images for activites."
     };
 
+   jQuery.validator.addMethod("float_number", function(value, element) {
+  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+}, "Please provide valid float value");
+
     $("#addActivityForm").validate({
         ignore: [],
         rules: {
@@ -263,11 +267,13 @@ $(document).ready(function () {
             },
             latitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true
             },
             longitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true
             },
         }
     });

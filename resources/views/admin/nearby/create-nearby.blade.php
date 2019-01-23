@@ -188,6 +188,10 @@ $(document).ready(function () {
         dictDefaultMessage: "Drop or Select multiple images for nearny images."
     };
 
+jQuery.validator.addMethod("float_number", function(value, element) {
+  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+}, "Please provide valid float value");
+
     $("#addNearbyForm").validate({
         rules: {
             resort_id: {
@@ -226,11 +230,13 @@ $(document).ready(function () {
             },
             latitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true
             },
             longitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true
             },
         }
     });

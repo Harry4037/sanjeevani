@@ -105,9 +105,11 @@ class AuthController extends Controller {
                     if ($userExist->is_active == 0) {
                         return $this->sendInactiveAccountResponse();
                     }
-
-                    $userExist->otp = 1234;
-                    $userExist->password = bcrypt(1234);
+                     $OTP = rand(1000, 9999);
+                    $this->sendOtp($request->mobile_number, $OTP);
+                    
+                    $userExist->otp = $OTP;
+                    $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {

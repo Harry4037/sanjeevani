@@ -160,6 +160,11 @@ $(document).ready(function () {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
         removePlugins: 'image, link',
     });
+    
+    jQuery.validator.addMethod("float_number", function(value, element) {
+  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+}, "Please provide valid float value");
+
     $("#editNearbyForm").validate({
         rules: {
             place_name: {
@@ -195,11 +200,13 @@ $(document).ready(function () {
             },
             latitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true
             },
             longitude: {
                 required: true,
-                number: true
+                number: true,
+                float_number: true
             },
         }
     });
