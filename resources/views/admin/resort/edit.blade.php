@@ -211,6 +211,14 @@ $(document).ready(function () {
             state: {
                 required: true
             },
+            latitude: {
+                required: true,
+                number: true
+            },
+            longitude: {
+                required: true,
+                number: true
+            },
             city: {
                 required: true
             }
