@@ -321,7 +321,7 @@ class OrderController extends Controller {
                             $query->select('id', 'meal_item_name', 'quantity', 'price', 'meal_order_id');
                         }
                     ])
-                    ->get();
+                    ->latest()->get();
             $data['total_amount'] = $user->mealOrders->sum('total_amount');
             $data['paid_amount'] = $user->payments->sum('amount');
             $data['outstanding_amount'] = $data['total_amount'] - $data['paid_amount'];

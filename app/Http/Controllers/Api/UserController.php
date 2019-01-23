@@ -554,6 +554,7 @@ class UserController extends Controller {
             if ($user) {
                 $user->device_token = $request->device_token;
                 $user->device_type = $request->device_type;
+                $user->device_id = $request->device_id;
 
                 if ($user->save()) {
                     return $this->sendSuccessResponse("Device token updated successfully.", (object) []);
