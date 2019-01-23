@@ -316,7 +316,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::get('/city-list/{id}', 'CommonController@getCityList')->name('subadmin.city.list');
 
     Route::prefix('resort')->group(function() {
-        Route::get('/resort-rooms/{resort}/{type}', 'ResortController@getResortRooms')->name('subadmin.resort.rooms');
+        Route::post('/resort-rooms', 'ResortController@getResortRooms')->name('subadmin.resort.rooms');
     });
     /**
      * Dashboard & Profile routes

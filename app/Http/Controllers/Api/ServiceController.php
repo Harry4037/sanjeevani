@@ -534,7 +534,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["id"] = $ongoingMealOrder->id;
                 $ongoingDataArray[$i]["record_id"] = $ongoingMealOrder->id;
                 $ongoingDataArray[$i]["name"] = $ongoingMealOrder->invoice_id;
-                $ongoingDataArray[$i]["icon"] = "http://sanjeevani.dbaquincy.com/storage/meal_package_images/b988bbpsmFkbs4UJOGkLyiPwk3W0GNHx2VPmwbbh.jpeg";
+                $ongoingDataArray[$i]["icon"] = "http://devsanjeevani.dbaquincy.com/img/my_meal.png";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-M-Y");
                 $ongoingDataArray[$i]["time"] = $createdAt->format("h:i A");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -556,7 +556,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["id"] = $completedAmenity->id;
                 $ongoingDataArray[$i]["record_id"] = $completedAmenity->amenity_id;
                 $ongoingDataArray[$i]["name"] = $amenity->name;
-                $ongoingDataArray[$i]["icon"] = "";
+                $ongoingDataArray[$i]["icon"] = "http://devsanjeevani.dbaquincy.com/img/my_activities.png";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-M-Y");
                 $ongoingDataArray[$i]["time"] = $createdAt->format("h:i A");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -576,7 +576,7 @@ class ServiceController extends Controller {
                 $ongoingDataArray[$i]["id"] = $completedActivity->id;
                 $ongoingDataArray[$i]["record_id"] = $completedActivity->amenity_id;
                 $ongoingDataArray[$i]["name"] = $activity->name;
-                $ongoingDataArray[$i]["icon"] = "";
+                $ongoingDataArray[$i]["icon"] = "http://devsanjeevani.dbaquincy.com/img/my_amenities.png";
                 $ongoingDataArray[$i]["date"] = $createdAt->format("d-M-Y");
                 $ongoingDataArray[$i]["time"] = $createdAt->format("h:i A");
                 $ongoingDataArray[$i]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -636,7 +636,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["id"] = $completedAmenity->id;
                 $completedDataArray[$j]["record_id"] = $completedAmenity->amenity_id;
                 $completedDataArray[$j]["name"] = $amenity->name;
-                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["icon"] = "http://devsanjeevani.dbaquincy.com/img/my_amenities.png";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-M-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("h:i A");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -655,7 +655,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["id"] = $completedActivity->id;
                 $completedDataArray[$j]["record_id"] = $completedActivity->amenity_id;
                 $completedDataArray[$j]["name"] = $activity->name;
-                $completedDataArray[$j]["icon"] = "";
+                $completedDataArray[$j]["icon"] = "http://devsanjeevani.dbaquincy.com/img/my_activities.png";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-M-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("h:i A");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");
@@ -679,7 +679,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["id"] = $completedMealOrder->id;
                 $completedDataArray[$j]["record_id"] = $completedMealOrder->id;
                 $completedDataArray[$j]["name"] = $completedMealOrder->invoice_id;
-                $completedDataArray[$j]["icon"] = "http://sanjeevani.dbaquincy.com/storage/meal_package_images/b988bbpsmFkbs4UJOGkLyiPwk3W0GNHx2VPmwbbh.jpeg";
+                $completedDataArray[$j]["icon"] = "http://devsanjeevani.dbaquincy.com/img/my_meal.png";
                 $completedDataArray[$j]["date"] = $createdAt->format("d-M-Y");
                 $completedDataArray[$j]["time"] = $createdAt->format("h:i A");
                 $completedDataArray[$j]["date_time"] = $createdAt->format("d-m-Y H:i:s");

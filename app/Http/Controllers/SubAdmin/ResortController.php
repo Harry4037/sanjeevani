@@ -13,6 +13,7 @@ use App\Models\ResortRating;
 use App\Models\StateMaster;
 use App\Models\CityMaster;
 use Validator;
+use App\Models\UserBookingDetail;
 
 class ResortController extends Controller {
 
@@ -24,9 +25,24 @@ class ResortController extends Controller {
         $this->resortRating = $resortRating;
     }
 
-    public function getResortRooms(Request $request, $resort = 0, $type = 0) {
-        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $type, "is_active" => 1])->get();
+    public function getResortRooms(Request $request) {
+        try{
+        $check_in = date("Y-m-d H:s:i", strtotime($request->check_in));
+        $check_out = date("Y-m-d H:s:i", strtotime($request->check_out));
+        $resort = $request->resort;
+
+        $roomIds = UserBookingDetail::where("resort_id", $resort)
+                ->where("check_in", ">=", $check_in)
+                ->where("check_in", "<=", $check_out)
+                ->pluck("resort_room_id");
+
+        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->type, "is_active" => 1])
+                ->whereNotIn("id", $roomIds)
+                ->get();
         return view('admin.resort.rooms', ['resortRooms' => $resortRooms]);
+        }  catch (\Exception $ex){
+            dd($ex);
+        }
     }
 
 }
