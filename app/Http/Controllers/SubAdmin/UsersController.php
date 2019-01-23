@@ -78,7 +78,7 @@ class UsersController extends Controller {
             $users = $query->take($limit)->offset($offset)->latest()->get();
             $usersArray = [];
             foreach ($users as $key => $user) {
-                $usersArray[$key]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$key]['name'] = $user->user_name;
                 $usersArray[$key]['email'] = $user->email_id;
                 $usersArray[$key]['mobileno'] = $user->mobile_number;
                 $usersArray[$key]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
