@@ -7,8 +7,8 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-<!--                <div style="display: none;" class="alert msg" role="alert">
-                </div>-->
+                <!--                <div style="display: none;" class="alert msg" role="alert">
+                                </div>-->
                 <h2>Staff</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.staff.add') }}">Add Staff</a>
@@ -45,6 +45,10 @@
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/staff/staff-list",
             "columns": [
                 {"data": null,
@@ -52,10 +56,10 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "name", sortable: true},
-                {"data": "email", sortable: true},
-                {"data": "mobileno", sortable: true},
-                {"data": "resort_name"},
+                {"data": "name", sortable: false},
+                {"data": "email", sortable: false},
+                {"data": "mobileno", sortable: false},
+                {"data": "resort_name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

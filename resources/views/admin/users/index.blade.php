@@ -57,10 +57,10 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "mobileno", sortable: true},
-                {"data": "name", sortable: true},
-                {"data": "email", sortable: true},
-                {"data": "user_type", sortable: true},
+                {"data": "mobileno", sortable: false},
+                {"data": "name", sortable: false},
+                {"data": "email", sortable: false},
+                {"data": "user_type", sortable: false},
                 {"data": "outstanding", sortable: false},
                 {"data": null,
                     sortable: false,

@@ -29,20 +29,23 @@ class NearbyController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = ResortNearbyPlace::query();
+            $query->withTrashed()->with("resortDetail");
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%")
+                $query->whereHas("resortDetail", function($query) use($searchKeyword) {
+                            $query->where("name", "LIKE", "%$searchKeyword%");
+                        })->orWhere("name", "LIKE", "%$searchKeyword%")
                         ->orWhere("distance_from_resort", "LIKE", "%$searchKeyword%");
             }
+
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $nearbys = $query->take($limit)->offset($offset)->latest()->get();
             $nearbyArray = [];
             foreach ($nearbys as $key => $nearby) {
-                $resort = Resort::find($nearby->resort_id);
                 $nearbyArray[$key]['name'] = $nearby->name;
                 $checked_status = $nearby->is_active ? "checked" : '';
                 $nearbyArray[$key]['distance'] = $nearby->distance_from_resort;
-                $nearbyArray[$key]['resort_name'] = $resort->name;
+                $nearbyArray[$key]['resort_name'] = isset($nearby->resortDetail->name) ? $nearby->resortDetail->name : "";
                 $nearbyArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='nearby_status' id=" . $nearby->id . " data-status=" . $nearby->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $nearbyArray[$key]['action'] = '<a href="' . route('admin.nearby.edit', $nearby->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $nearby->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -50,7 +53,7 @@ class NearbyController extends Controller {
             $data['data'] = $nearbyArray;
             return $data;
         } catch (\Exception $e) {
-            dd($e);
+            return $e->getMessage();
         }
     }
 

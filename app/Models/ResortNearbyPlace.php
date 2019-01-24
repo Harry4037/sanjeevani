@@ -11,4 +11,8 @@ class ResortNearbyPlace extends Model {
 
     protected $dates = ['deleted_at'];
 
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
+
 }

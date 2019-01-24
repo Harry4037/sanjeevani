@@ -60,9 +60,9 @@
                     }
                 },
                 {"data": "image", sortable: false},
-                {"data": "name"},
-                {"data": "contact_no"},
-                {"data": "address"},
+                {"data": "name", sortable: false},
+                {"data": "contact_no", sortable: false},
+                {"data": "address", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

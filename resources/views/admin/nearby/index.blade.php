@@ -7,8 +7,6 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-<!--                <div style="display: none;" class="alert msg" role="alert">
-                </div>-->
                 <h2>Nearby Place Management</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.nearby.add') }}">Add Nearby</a>
@@ -57,9 +55,9 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "name"},
-                {"data": "distance"},
-                {"data": "resort_name"},
+                {"data": "name",sortable: false},
+                {"data": "distance",sortable: false},
+                {"data": "resort_name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
