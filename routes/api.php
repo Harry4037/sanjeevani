@@ -93,9 +93,11 @@ Route::namespace("Api")->group(function () {
 
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
 
-    Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
+
 
     Route::middleware('auth:api')->group(function () {
+            Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
+            
         //Raise service request (by user)
         Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
 

@@ -520,6 +520,9 @@ class UsersController extends Controller {
             if ($existingRecord) {
                 return redirect()->route('admin.users.booking-create', $user_id)->withErrors("Booking already exist with these date's.")->withInput();
             }
+            
+            $roomType = RoomType::find($request->resort_room_type);
+            $roomRoom = ResortRoom::find($request->resort_room_id);
             $UserBookingDetail = new UserBookingDetail();
             $UserBookingDetail->source_name = $request->booking_source_name;
             $UserBookingDetail->source_id = $request->booking_source_id;
@@ -528,6 +531,8 @@ class UsersController extends Controller {
             $UserBookingDetail->package_id = $request->package_id;
             $UserBookingDetail->room_type_id = $request->resort_room_type;
             $UserBookingDetail->resort_room_id = $request->resort_room_id;
+            $UserBookingDetail->resort_room_no = $roomRoom->room_no;
+            $UserBookingDetail->room_type_name = $roomType->name;
             $check_in_date = Carbon::parse($request->check_in);
             $UserBookingDetail->check_in = $check_in_date->format('Y-m-d H:i:s');
             $check_out_date = Carbon::parse($request->check_out);
@@ -588,13 +593,17 @@ class UsersController extends Controller {
             if ($validator->fails()) {
                 return redirect()->route('admin.users.booking-edit', $data->id)->withErrors($validator)->withInput();
             }
-
+            $roomType = RoomType::find($request->resort_room_type);
+            $roomRoom = ResortRoom::find($request->resort_room_id);
+            
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
             $data->resort_id = $request->resort_id;
             $data->package_id = $request->package_id;
             $data->room_type_id = $request->resort_room_type;
             $data->resort_room_id = $request->resort_room_id;
+            $data->resort_room_no = $roomRoom->room_no;
+            $data->room_type_name = $roomType->name;
             $check_in_date = Carbon::parse($request->check_in);
             $data->check_in = $check_in_date->format('Y-m-d H:i:s');
             $check_out_date = Carbon::parse($request->check_out);

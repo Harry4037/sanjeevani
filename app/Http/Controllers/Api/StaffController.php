@@ -137,7 +137,7 @@ class StaffController extends Controller {
             //If services & issues is authorized for user
             $serviceArray = [];
             if ($request->user()->is_service_authorise == 1) {
-                $newServices = ServiceRequest::select('id', 'comment', 'questions', 'service_id', 'user_id', 'created_at', 'room_type_name', 'resort_room_no')->where(["resort_id" => $request->resort_id, "request_status_id" => 1])
+                $newServices = ServiceRequest::select('id', 'comment', 'questions', 'service_id', 'user_id', 'created_at', 'room_type_name', 'resort_room_no')->where(["resort_id" => $userResort->resort_id, "request_status_id" => 1])
                         ->with([
                             'serviceDetail' => function($query) {
                         $query->select('id', 'name', 'icon', 'type_id');
@@ -180,7 +180,7 @@ class StaffController extends Controller {
             //If Meal order is authorized for user
             $mealDataArray = [];
             if ($request->user()->is_meal_authorise == 1) {
-                $mealOrders = MealOrder::where(["resort_id" => $request->resort_id, "status" => 1])
+                $mealOrders = MealOrder::where(["resort_id" => $userResort->resort_id, "status" => 1])
                         ->with([
                             'userDetail' => function($query) {
                         $query->select('id', 'user_name', 'email_id', 'mobile_number')
@@ -223,7 +223,7 @@ class StaffController extends Controller {
 
             //Authorized amenity ids
             $authoriseAmenityIds = explode("#", $request->user()->authorise_amenities_id);
-            $amenities = Amenity::where(["resort_id" => $request->resort_id, "is_active" => 1])
+            $amenities = Amenity::where(["resort_id" => $userResort->resort_id, "is_active" => 1])
                     ->whereIn("id", $authoriseAmenityIds)
                     ->latest()
                     ->get();
@@ -930,6 +930,8 @@ class StaffController extends Controller {
                 }
 
                 $job->status = 5;
+                $job->staff_reasons = $request->reasons;
+                $job->staff_comment = $request->comment;
                 if ($job->save()) {
                     $user = User::find($job->user_id);
                     $this->generateNotification($user->id, "Meal Order", "Unfortunately! Your meal order request rejected by " . $request->user()->user_name, 1);
@@ -1064,6 +1066,15 @@ class StaffController extends Controller {
      */
     public function amenitiesBooking(Request $request) {
         try {
+            //If user account deactivated by admin
+            if ($request->user()->is_active == 0) {
+                return $this->sendInactiveAccountResponse();
+            }
+            //If user not registered with any resort
+            $userResort = UserBookingDetail::where("user_id", $request->user()->id)->first();
+            if (!$userResort) {
+                return $this->sendErrorResponse("User not registered with any resort.", (object) []);
+            }
             if (!$request->amenity_id) {
                 return $this->sendErrorResponse("amenity id missing.", (object) []);
             }
@@ -1071,17 +1082,22 @@ class StaffController extends Controller {
             if (!$amenity) {
                 return $this->sendErrorResponse("Invalid amenity.", (object) []);
             }
+
             $amenitySlots = AmenityTimeSlot::where(["amenity_id" => $request->amenity_id, "is_active" => 1])->get();
+            //dd($amenitySlots->toArray());
             $amenitySlotData = [];
             foreach ($amenitySlots as $i => $amenitySlot) {
+              
                 $amenitiesRequests = AmenityRequest::where(["amenity_id" => $request->amenity_id, "from" => $amenitySlot->from, "to" => $amenitySlot->to, "booking_date" => $request->booking_date])
                         ->with("userDetail")
                         ->get();
+               
+                        
                 $from = Carbon::parse($amenitySlot->from);
                 $to = Carbon::parse($amenitySlot->to);
                 $amenitySlotData[$i]['slot'] = $from->format("H:i") . "-" . $to->format("H:i");
                 if ($amenitiesRequests) {
-                    $amenitySlotData[$i]['bookings'] = [];
+                    
                     foreach ($amenitiesRequests as $j => $amenitiesRequest) {
                         $created_at = Carbon::parse($amenitiesRequest->created_at);
                         $amenitySlotData[$i]['bookings'][$j]["id"] = $amenitiesRequest->id;
