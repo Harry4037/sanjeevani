@@ -36,8 +36,8 @@ class ResortController extends Controller {
                 ->where("check_in", "<=", $check_out)
                 ->pluck("resort_room_id");
 
-        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->type, "is_active" => 1])
-//                ->whereNotIn("id", $roomIds)
+        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->resort_room, "is_active" => 1])
+               ->whereNotIn("id", $roomIds)
                 ->get();
         return view('admin.resort.rooms', ['resortRooms' => $resortRooms]);
         }  catch (\Exception $ex){
