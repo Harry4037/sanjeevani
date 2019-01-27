@@ -32,8 +32,8 @@ class ResortController extends Controller {
             $resort = $request->resort;
 
             $roomIds = UserBookingDetail::where("resort_id", $resort)
-                    ->where("check_in", ">=", $check_in)
-                    ->where("check_out", "<=", $check_out)
+                    ->where("check_in", "<=", $check_in)
+                    ->where("check_out", ">=", $check_out)
                     ->pluck("resort_room_id");
 
             $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->resort_room, "is_active" => 1])
