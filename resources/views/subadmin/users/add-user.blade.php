@@ -340,7 +340,6 @@
                             $(".overlay").show();
                         },
                         success: function (res) {
-                            console.log(res);
                             $("#resort_room_id").html(res);
                             $(".overlay").hide();
                         }

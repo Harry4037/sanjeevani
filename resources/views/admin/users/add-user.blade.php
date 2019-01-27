@@ -345,6 +345,8 @@
         $(document).on("change", "#resort_room_type", function () {
             var resort = $("#resort_id :selected").val();
             var resort_room = $("#resort_room_type :selected").val();
+            var check_in = $("#check_in").val();
+            var check_out = $("#check_out").val();
             if (!resort) {
                 alert("Please select resort.")
                 return false;
@@ -353,8 +355,14 @@
                 return false;
             } else {
                 $.ajax({
-                    url: _baseUrl + '/admin/resort/resort-rooms/' + resort + '/' + resort_room,
-                    type: 'get',
+                    url: _baseUrl + '/admin/resort/resort-rooms',
+                    type: 'post',
+                    data: {
+                        "resort": resort,
+                        "resort_room": resort_room,
+                        "check_in": check_in,
+                        "check_out": check_out,
+                    },
                     dataType: 'html',
                     beforeSend: function () {
                         $(".overlay").show();

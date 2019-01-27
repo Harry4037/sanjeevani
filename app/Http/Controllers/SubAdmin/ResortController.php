@@ -26,21 +26,21 @@ class ResortController extends Controller {
     }
 
     public function getResortRooms(Request $request) {
-        try{
-        $check_in = date("Y-m-d H:s:i", strtotime($request->check_in));
-        $check_out = date("Y-m-d H:s:i", strtotime($request->check_out));
-        $resort = $request->resort;
+        try {
+            $check_in = date("Y-m-d H:s:i", strtotime($request->check_in));
+            $check_out = date("Y-m-d H:s:i", strtotime($request->check_out));
+            $resort = $request->resort;
 
-        $roomIds = UserBookingDetail::where("resort_id", $resort)
-                ->where("check_in", ">=", $check_in)
-                ->where("check_in", "<=", $check_out)
-                ->pluck("resort_room_id");
+            $roomIds = UserBookingDetail::where("resort_id", $resort)
+                    ->where("check_in", ">=", $check_in)
+                    ->where("check_out", "<=", $check_out)
+                    ->pluck("resort_room_id");
 
-        $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->resort_room, "is_active" => 1])
-               ->whereNotIn("id", $roomIds)
-                ->get();
-        return view('admin.resort.rooms', ['resortRooms' => $resortRooms]);
-        }  catch (\Exception $ex){
+            $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->resort_room, "is_active" => 1])
+                    ->whereNotIn("id", $roomIds)
+                    ->get();
+            return view('admin.resort.rooms', ['resortRooms' => $resortRooms]);
+        } catch (\Exception $ex) {
             dd($ex);
         }
     }
