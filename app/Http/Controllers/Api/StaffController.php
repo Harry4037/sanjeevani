@@ -486,7 +486,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
-                $ongoingJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
+                $ongoingJobArray[$i]["gst_amount"] = number_format(($ongoingMealOrder->total_amount * ($ongoingMealOrder->gst_amount/100)) , 0);
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
                 $ongoingJobArray[$i]["status"] = "Pending";
@@ -591,7 +591,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
                 $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $underApprovalJobArray[$j]["room_no"] = $ongoingMealOrder->resort_room_no;
-                $underApprovalJobArray[$j]["gst_amount"] = $ongoingMealOrder->gst_amount;
+                $underApprovalJobArray[$j]["gst_amount"] = number_format(($ongoingMealOrder->total_amount * ($ongoingMealOrder->gst_amount/100)) , 0);
                 $underApprovalJobArray[$j]["total_amount"] = $ongoingMealOrder->total_amount;
                 $underApprovalJobArray[$j]["status_id"] = $ongoingMealOrder->status;
                 $underApprovalJobArray[$j]["status"] = "Under Apporval";
@@ -687,7 +687,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["total_item_count"] = count($mealItems);
                 $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $completedJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
-                $completedJobArray[$i]["gst_amount"] = $ongoingMealOrder->gst_amount;
+                $completedJobArray[$i]["gst_amount"] = number_format(($ongoingMealOrder->total_amount * ($ongoingMealOrder->gst_amount/100)) , 0);
                 $completedJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $completedJobArray[$i]["status_id"] = $ongoingMealOrder->status;
                 $completedJobArray[$i]["status"] = "Under Apporval";
