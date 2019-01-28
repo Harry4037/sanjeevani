@@ -155,6 +155,7 @@ class OrderController extends Controller {
                 if ($resortUsers) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_meal_authorise" => 1])
                             ->whereIn("id", $resortUsers->toArray())
+                            ->where("device_token", "!=", "");
                             ->pluck("device_token");
                     if ($staffDeviceTokens) {
                         $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id, 1);
