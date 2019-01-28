@@ -295,5 +295,14 @@ class ResortController extends Controller {
             return ['status' => true];
         }
     }
+    
+    public function getResortHealthcare(Request $request, $id) {
+        try {
+            $healthcares = \App\Models\HealthcateProgram::where(["resort_id" => $id, "is_active" => 1])->get();
+            return view('admin.resort.healthcare', ['healthcares' => $healthcares]);
+        } catch (\Exception $ex) {
+            dd($ex);
+        }
+    }
 
 }

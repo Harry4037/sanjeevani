@@ -83,12 +83,6 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="package_id" id="package_id">
                                 <option value="">Choose option</option>
-                                @if($healcarePackages)
-                                @foreach($healcarePackages as $healcarePackage)
-                                <option value="{{ $healcarePackage->id }}">{{ $healcarePackage->name }}</option>
-                                @endforeach
-                                @endif
-
                             </select>
                         </div>
                     </div>
@@ -230,6 +224,26 @@
             }
         });
 
+        $(document).on("change", "#resort_id", function () {
+            var resort = $("#resort_id :selected").val();
+            if (!resort) {
+                alert("Please select resort.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/resort/resort-healthcare/' + resort,
+                    type: 'get',
+                    dataType: 'html',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        $("#package_id").html(res);
+                        $(".overlay").hide();
+                    }
+                });
+            }
+        });
 
     });
 </script>

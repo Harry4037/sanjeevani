@@ -49,7 +49,7 @@
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}"
-                                        @if($data->resort_id = $resort->id)
+                                        @if($data->package_id == $resort->id)
                                         {{ "selected" }}
                                         @endif
                                         >{{ $resort->name }}</option>
@@ -266,6 +266,26 @@
             }
         });
 
+        $(document).on("change", "#resort_id", function () {
+            var resort = $("#resort_id :selected").val();
+            if (!resort) {
+                alert("Please select resort.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/resort/resort-healthcare/' + resort,
+                    type: 'get',
+                    dataType: 'html',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        $("#package_id").html(res);
+                        $(".overlay").hide();
+                    }
+                });
+            }
+        });
 
     });
 </script>

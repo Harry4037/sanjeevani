@@ -62,6 +62,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/delete-resort-images', 'ResortController@deleteResortImage')->name('admin.resort.delete-resort-image');
         Route::match(['get', 'post'], '/edit/{id}', 'ResortController@editResort')->name('admin.resort.edit');
         Route::post('/resort-rooms', 'ResortController@getResortRooms')->name('admin.resort.rooms');
+        Route::get('/resort-healthcare/{id}', 'ResortController@getResortHealthcare')->name('admin.resort.healthcare-list');
         Route::post('/delete-room', 'ResortController@deleteRoom')->name('admin.resort.delete-room');
         Route::post('/delete', 'ResortController@deleteResort')->name('admin.resort.delete');
     });
@@ -402,7 +403,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::post('services/delete', 'ServiceController@deleteService')->name('subadmin.service.delete');
 
     /**
-     * Jobs Management
+     * ServiceRequest Management
      */
     Route::prefix('order-request')->group(function() {
         Route::get('/', 'OrderRequestController@index')->name('subadmin.order-request.index');
