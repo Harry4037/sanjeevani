@@ -167,6 +167,7 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("Cart is empty", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
