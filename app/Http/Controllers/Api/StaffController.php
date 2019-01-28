@@ -200,7 +200,7 @@ class StaffController extends Controller {
                     $mealDataArray[$j]["id"] = $mealOrder->id;
                     $mealDataArray[$j]["invoice_id"] = $mealOrder->invoice_id;
                     $mealDataArray[$j]["item_total_amount"] = $mealOrder->item_total_amount;
-                    $mealDataArray[$j]["gst_amount"] = $mealOrder->gst_amount;
+                    $mealDataArray[$j]["gst_amount"] = $mealOrder->total_amount * ($mealOrder->gst_amount/100);
                     $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                     $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
                     $mealDataArray[$j]["room_no"] = $mealOrder->resort_room_no;
