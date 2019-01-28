@@ -238,7 +238,7 @@ class CartController extends Controller {
             $cartDataArray = [];
             if ($carts) {
                 $total = 0;
-                $gst = 0;
+                $gst = 5;
                 foreach ($carts as $key => $cart) {
                     if ($cart->meal_item_id > 0) {
                         $mealItem = MealItem::find($cart->meal_item_id);
@@ -259,8 +259,8 @@ class CartController extends Controller {
                 }
                 $cartDataArray['total_no_item'] = count($cartDataArray['cart_items']);
                 $cartDataArray['item_amount'] = $total;
-                $cartDataArray['gst'] = $gst;
-                $cartDataArray['total_amount'] = $total - $gst;
+                $cartDataArray['gst'] = $gst."%";
+                $cartDataArray['total_amount'] = $total - ($total * ($gst/100));
 
                 return $this->sendSuccessResponse("my cart list", $cartDataArray);
             } else {

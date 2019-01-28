@@ -105,7 +105,7 @@ class OrderController extends Controller {
             $cartDataArray = [];
             if ($carts) {
                 $total = 0;
-                $gst = 0;
+                $gst = 5;
                 foreach ($carts as $key => $cart) {
                     if ($cart->meal_item_id > 0) {
                         $mealItem = MealItem::find($cart->meal_item_id);
@@ -133,7 +133,7 @@ class OrderController extends Controller {
                 $mealOrder->resort_room_no = $user->userBookingDetail ? $user->userBookingDetail->resort_room_no : "";
                 $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
-                $mealOrder->gst_amount = 5;
+                $mealOrder->gst_amount = $gst."%";
                 $mealOrder->total_amount = $total + ($total * ($gst/100));
                 if ($mealOrder->save()) {
                     foreach ($cartDataArray as $cartData) {
