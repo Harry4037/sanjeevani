@@ -101,9 +101,10 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
             $user = User::with("userBookingDetail")->find($request->user_id);
-            $carts = Cart::where(["user_id" => $request->user_id])->get();
+            $cartCount = Cart::where(["user_id" => $request->user_id])->count();
             $cartDataArray = [];
-            if ($carts) {
+            if ($cartCount > 0) {
+                $carts = Cart::where(["user_id" => $request->user_id])->get();
                 $total = 0;
                 $gst = 5;
                 foreach ($carts as $key => $cart) {
@@ -157,7 +158,8 @@ class OrderController extends Controller {
                             ->whereIn("id", $resortUsers->toArray())
                             ->where("device_token", "!=", "")
                             ->pluck("device_token");
-                    if ($staffDeviceTokens) {
+                          
+                    if (count($staffDeviceTokens) > 0) {
                         $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id, 1);
                     }
                 }
