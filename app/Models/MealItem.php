@@ -14,9 +14,13 @@ class MealItem extends Model {
     public function getImageNameAttribute($name) {
         return asset('storage/meal_images/' . $name);
     }
-    
+
     public function getBannerImageUrlAttribute($name) {
         return asset('storage/meal_images/' . $name);
+    }
+
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
     }
 
 }

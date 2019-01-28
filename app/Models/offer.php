@@ -19,4 +19,8 @@ class offer extends Model {
         return $this->hasMany('App\Models\offerImage', 'offer_id');
     }
 
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
+
 }

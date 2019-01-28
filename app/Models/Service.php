@@ -23,4 +23,8 @@ class Service extends Model {
         return asset('storage/Service_icon/' . $name);
     }
 
+    public function serviceTypeDetail() {
+        return $this->belongsTo('App\Models\ServiceType', 'type_id');
+    }
+
 }

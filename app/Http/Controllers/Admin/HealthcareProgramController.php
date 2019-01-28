@@ -33,21 +33,23 @@ class HealthcareProgramController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = HealthcateProgram::query();
+            $query->with("resortDetail");
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("resortDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $healthcarePackeges = $query->take($limit)->offset($offset)->latest()->get();
             $healthArray = [];
             foreach ($healthcarePackeges as $key => $healthcarePackege) {
-                $resort = Resort::find($healthcarePackege->resort_id);
                 $image = HealthcateProgramImages::where("health_program_id", $healthcarePackege->id)->first();
                 $healthImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $healthArray[$key]['image'] = '<img src=' . $healthImage . ' height=70 width=100 class="img-rounded">';
                 $healthArray[$key]['name'] = $healthcarePackege->name;
                 $checked_status = $healthcarePackege->is_active ? "checked" : '';
-                $healthArray[$key]['resort_name'] = $resort->name;
+                $healthArray[$key]['resort_name'] = isset($healthcarePackege->resortDetail->name) ? $healthcarePackege->resortDetail->name : "";
                 $healthArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='health_status' id=" . $healthcarePackege->id . " data-status=" . $healthcarePackege->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $healthArray[$key]['action'] = '<a href="' . route('admin.healthcare.edit', $healthcarePackege->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $healthcarePackege->id . '" ><i class="fa fa-trash"></i> Delete </a>';

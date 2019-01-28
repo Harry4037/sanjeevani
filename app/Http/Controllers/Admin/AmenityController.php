@@ -33,8 +33,11 @@ class AmenityController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = Amenity::query();
+            $query->withTrashed()->with("resortDetail");
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("resortDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();

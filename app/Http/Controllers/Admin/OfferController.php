@@ -31,23 +31,24 @@ class OfferController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = offer::query();
+            $query->withTrashed()->with("resortDetail");
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("resortDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $offers = $query->take($limit)->offset($offset)->latest()->get();
             $i = 0;
-//            dd($amenities->toArray());
             $offerArray = [];
             foreach ($offers as $key => $offer) {
-                $resort = Resort::find($offer->resort_id);
                 $image = offerImage::where("offer_id", $offer->id)->first();
                 $offerImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $offerArray[$key]['image'] = '<img src=' . $offerImage . ' height=70 width=100 class="img-rounded">';
                 $offerArray[$key]['name'] = $offer->name;
                 $checked_status = $offer->is_active ? "checked" : '';
-                $offerArray[$key]['resort_name'] = isset($resort->name) ? $resort->name : "Generalized Offer";
+                $offerArray[$key]['resort_name'] = isset($offer->resortDetail->name) ? $offer->resortDetail->name : "Generalized Offer";
                 $offerArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='offer_status' id=" . $offer->id . " data-status=" . $offer->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $offerArray[$key]['action'] = '<a href="' . route('admin.offer.edit', $offer->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $offer->id . '" ><i class="fa fa-trash"></i> Delete </a>';

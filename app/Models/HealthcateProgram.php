@@ -23,4 +23,8 @@ class HealthcateProgram extends Model {
         return $this->hasMany('App\Models\HealthcateProgramDay', 'health_program_id');
     }
 
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
+
 }

@@ -42,8 +42,11 @@ class ServiceController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = $this->service->query();
+            $query->with("serviceTypeDetail");
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("serviceTypeDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
@@ -54,7 +57,7 @@ class ServiceController extends Controller {
                 $stype = ServiceType::find($service->type_id);
                 $servicesArray[$i]['icon'] = '<img width=50 height=50 src=' . $service->icon . ' >';
                 $servicesArray[$i]['name'] = $service->name;
-                $servicesArray[$i]['type'] = $stype ? $stype->name : '';
+                $servicesArray[$i]['type'] = isset($service->serviceTypeDetail->name) ? $service->serviceTypeDetail->name : '';
                 $checked_status = $service->is_active ? "checked" : '';
                 $servicesArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='service_status' id=" . $service->id . " data-status=" . $service->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $servicesArray[$i]['action'] = '<a href="' . route('admin.service.edit', $service->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
