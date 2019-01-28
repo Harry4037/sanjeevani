@@ -1106,7 +1106,7 @@ class StaffController extends Controller {
                         $created_at = Carbon::parse($amenitiesRequest->created_at);
                         $amenitySlotData[$i]['bookings'][$j]["id"] = $amenitiesRequest->id;
                         $amenitySlotData[$i]['bookings'][$j]["user_name"] = $amenitiesRequest->userDetail->user_name;
-                        $amenitySlotData[$i]['bookings'][$j]["room_no"] = "100";
+                        $amenitySlotData[$i]['bookings'][$j]["room_no"] = $amenitiesRequest->room_no;
                         $amenitySlotData[$i]['bookings'][$j]["created_at"] = $created_at->format("d-m-y h:i A");
                     }
                 } else {
