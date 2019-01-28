@@ -133,8 +133,8 @@ class OrderController extends Controller {
                 $mealOrder->resort_room_no = $user->userBookingDetail ? $user->userBookingDetail->resort_room_no : "";
                 $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
-                $mealOrder->gst_amount = $gst;
-                $mealOrder->total_amount = $total - $gst;
+                $mealOrder->gst_amount = 5;
+                $mealOrder->total_amount = $total + ($total * ($gst/100));
                 if ($mealOrder->save()) {
                     foreach ($cartDataArray as $cartData) {
                         $mealOrderItem = new MealOrderItem();
