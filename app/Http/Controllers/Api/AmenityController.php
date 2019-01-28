@@ -265,7 +265,7 @@ class AmenityController extends Controller {
                             }
                         ])
                         ->first();
-                
+
                 $bookingRequest = new AmenityRequest();
                 $bookingRequest->amenity_id = $request->amenity_id;
                 $bookingRequest->room_no = isset($user->userBookingDetail->resort_room_no) ? $user->userBookingDetail->resort_room_no : "";
@@ -276,8 +276,19 @@ class AmenityController extends Controller {
                 $bookingRequest->from = $request->from_time;
                 $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
-                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-                    $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by " . $request->user()->user_name . " for " . $book_date->format('d M'), $staffDeviceTokens, 1, $request->amenity_id, 1);
+                    $tokens = [];
+                    $l = 0;
+                    $staffs = User::where(["is_active" => 1, "user_type_id" => 2])->get();
+                    foreach ($staffs as $staff) {
+                        $amenityArray = explode("#", $staff->authorise_amenities_id);
+                        if (in_array($request->amenity_id, $amenityArray) && ($staff->device_token != "")) {
+                            $tokens[$l] = $staff->device_token;
+                            $l++;
+                        }
+                    }
+                    if ($tokens) {
+                        $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by " . $request->user()->user_name . " for " . $book_date->format('d M'), $tokens, 1, $request->amenity_id, 1);
+                    }
                     $this->generateNotification($request->user()->id, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), 3);
 
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
