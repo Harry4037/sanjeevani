@@ -261,7 +261,7 @@ class UsersController extends Controller {
         ];
 //        $resorts = Resort::where("is_active", 1)->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
-        $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
+        $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         return view('subadmin.users.add-user', [
             'js' => $js,
             'css' => $css,
@@ -377,7 +377,7 @@ class UsersController extends Controller {
                 'vendors/datatables.net/js/jquery.dataTables.min.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
-            $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
+            $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
             return view('subadmin.users.edit-user', [
                 'js' => $js,
                 'css' => $css,
@@ -570,7 +570,7 @@ class UsersController extends Controller {
         ];
         $resorts = Resort::where(["is_active" => 1])->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
-        $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
+        $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         return view('subadmin.users.booking-create', [
             'js' => $js,
             'css' => $css,
@@ -646,7 +646,7 @@ class UsersController extends Controller {
         $resorts = Resort::where(["is_active" => 1])->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
         $resortRoom = ResortRoom::find($data->resort_room_id);
-        $healcarePackages = HealthcateProgram::where("is_active", 1)->get();
+        $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         $BookingPeoples = BookingpeopleAccompany::where("booking_id", $data->id)->get();
         return view('subadmin.users.booking-edit', [
             'js' => $js,
