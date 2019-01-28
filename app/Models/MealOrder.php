@@ -14,6 +14,10 @@ class MealOrder extends Model {
 		return $this->belongsTo('App\Models\User', 'user_id');
 	}
         
+	public function acceptedBy() {
+		return $this->belongsTo('App\Models\User', 'accepted_by');
+	}
+        
 	public function resortDetail() {
 		return $this->belongsTo('App\Models\Resort', 'resort_id');
 	}

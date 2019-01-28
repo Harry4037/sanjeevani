@@ -87,6 +87,10 @@ class OrderController extends Controller {
                             'userDetail' => function($query) {
                                 $query->select('id', 'user_name');
                             }
+                        ])->with([
+                            'acceptedBy' => function($query) {
+                                $query->select('id', 'user_name');
+                            }
                         ])->with(['resortDetail' => function($query) {
                                 $query->withTrashed();
                             }])

@@ -50,6 +50,12 @@
                                 @endif
                             </div>
                         </div>
+                        @if($mealRequest->status > 1)
+                        <div class="row">
+                            <label class="col-md-1 col-sm-1 col-xs-6">Accepted By</label>
+                            <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->acceptedBy->user_name) ? $mealRequest->acceptedBy->user_name : "" }}</div>
+                        </div>
+                        @endif
                     </div>
                 </div>
 
