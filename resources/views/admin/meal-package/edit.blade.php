@@ -137,7 +137,8 @@
                     required: true
                 },
                 price: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 category: {
                     required: true

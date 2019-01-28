@@ -24,7 +24,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile No.</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
+                            <input readonly="true" value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
                         </div>
                     </div>
                     <div class="form-group">

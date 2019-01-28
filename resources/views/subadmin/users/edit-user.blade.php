@@ -34,9 +34,9 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             @if(isset($user->mobile_number))
-                            <input value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number">
+                            <input readonly="true" value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number">
                             @else
-                            <input type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number">
+                            <input readonly="true" type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number">
                             @endif
 
                         </div>
