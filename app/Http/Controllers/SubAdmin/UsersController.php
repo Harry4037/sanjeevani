@@ -226,8 +226,8 @@ class UsersController extends Controller {
                         $userBooking->package_id = $request->package_id;
                         $userBooking->room_type_id = $request->resort_room_type;
                         $userBooking->resort_room_id = $request->resort_room_id;
-                        $UserBookingDetail->resort_room_no = $roomRoom->room_no;
-                        $UserBookingDetail->room_type_name = $roomType->name;
+                        $userBooking->resort_room_no = $roomRoom->room_no;
+                        $userBooking->room_type_name = $roomType->name;
                         $check_in_date = Carbon::parse($request->check_in);
                         $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
                         $check_out_date = Carbon::parse($request->check_out);
