@@ -7,7 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Udate User Details</h2>
+                <h2>Update User Details</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
