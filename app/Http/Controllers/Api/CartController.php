@@ -261,7 +261,7 @@ class CartController extends Controller {
                 $cartDataArray['item_amount'] = $total;
                 $cartDataArray['gst'] = number_format($total * ($gst/100), 0);
                 $cartDataArray['gst_percentage'] = $gst."%";
-                $cartDataArray['total_amount'] = $total + ($total * ($gst/100));
+                $cartDataArray['total_amount'] = number_format($total + ($total * ($gst/100)), 0);
 
                 return $this->sendSuccessResponse("my cart list", $cartDataArray);
             } else {
