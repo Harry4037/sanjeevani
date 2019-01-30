@@ -43,9 +43,12 @@ class ServiceController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = $this->service->query();
+            $query->with("serviceTypeDetail");
             $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("serviceTypeDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();

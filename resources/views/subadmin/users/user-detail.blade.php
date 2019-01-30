@@ -97,15 +97,15 @@
                             </div>
                             <div class="row">
                                 <label class="col-md-3 col-sm-3 col-xs-6">Check In Date</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_in) ? $user->userBookingDetail->check_in : "Not available" }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_in) ? date("d-M-Y", strtotime($user->userBookingDetail->check_in)) : "Not available" }}</div>
                                 <label class="col-md-3 col-sm-3 col-xs-6">Check In Time</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_in_time) ? $user->userBookingDetail->check_in_time : "Not available" }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_in) ? date("H:s A", strtotime($user->userBookingDetail->check_in)) : "Not available" }}</div>
                             </div>
                             <div class="row">
                                 <label class="col-md-3 col-sm-3 col-xs-6">Check Out Date</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_out) ? $user->userBookingDetail->check_out : "Not available" }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_out) ? date("d-M-Y", strtotime($user->userBookingDetail->check_out)) : "Not available" }}</div>
                                 <label class="col-md-3 col-sm-3 col-xs-6">Check Out Time</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_out_time) ? $user->userBookingDetail->check_out_time : "Not available" }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->check_out) ? date("H:s A", strtotime($user->userBookingDetail->check_out)) : "Not available" }}</div>
                             </div>
                             <div class="row">
                                 <label class="col-md-3 col-sm-3 col-xs-6">Resort Name</label>

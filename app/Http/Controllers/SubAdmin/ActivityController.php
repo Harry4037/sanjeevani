@@ -44,13 +44,13 @@ class ActivityController extends Controller {
 //            dd($amenities->toArray());
             $resortsArray = [];
             foreach ($amenities as $amenity) {
-                $resort = Resort::find($amenity->resort_id);
+//                $resort = Resort::find($amenity->resort_id);
                 $image = ActivityImage::where("amenity_id", $amenity->id)->first();
                 $resortImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $resortsArray[$i]['image'] = '<img src=' . $resortImage . ' height=70 width=100 class="img-rounded">';
                 $resortsArray[$i]['name'] = $amenity->name;
                 $checked_status = $amenity->is_active ? "checked" : '';
-                $resortsArray[$i]['resort_name'] = $resort->name;
+//                $resortsArray[$i]['resort_name'] = $resort->name;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='activity_status' id=" . $amenity->id . " data-status=" . $amenity->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $resortsArray[$i]['action'] = '<a href="' . route('subadmin.activity.edit', $amenity->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $amenity->id . '" ><i class="fa fa-trash"></i> Delete </a>';

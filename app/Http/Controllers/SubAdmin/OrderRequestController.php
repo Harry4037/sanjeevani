@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\ServiceRequest;
 
-
 class OrderRequestController extends Controller {
 
     public function index() {
@@ -44,7 +43,7 @@ class OrderRequestController extends Controller {
                     ])->with([
                         'userDetail'
                     ])->latest()->get();
-            
+
             $dataArray = [];
             foreach ($serviceRequests as $key => $serviceRequest) {
                 $dataArray[$key]['service_type'] = $serviceRequest->serviceDetail->serviceType->name;
@@ -54,7 +53,7 @@ class OrderRequestController extends Controller {
                 $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
                 $dataArray[$key]['action'] = '<a href="' . route('subadmin.order-request.view', $serviceRequest->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
-            
+
             $data['data'] = $dataArray;
             return $data;
         } catch (\Exception $e) {
@@ -62,12 +61,11 @@ class OrderRequestController extends Controller {
         }
     }
 
-
-    public function viewDetail(Request $request, $id){
+    public function viewDetail(Request $request, $id) {
         if ($request->isMethod("post")) {
             $sRequest = ServiceRequest::find($id);
-            if(!$sRequest){
-            return redirect()->route('subadmin.order-request.view')->with('error', 'Record Not found.');
+            if (!$sRequest) {
+                return redirect()->route('subadmin.order-request.view')->with('error', 'Record Not found.');
             }
             $validator = Validator::make($request->all(), [
                         'seleted_status' => 'bail|required',
@@ -80,26 +78,27 @@ class OrderRequestController extends Controller {
             return redirect()->route('subadmin.order-request.view', $id)->with("status", "Status updated successfully.");
         }
 
-        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'resort_room_no')
-                            ->with([
-                                'serviceDetail' => function($query) {
-                                    $query->select('id', 'name', 'type_id');
-                                }
-                            ])->with([
-                        'requestStatus' => function($query) {
-                            $query->select('id')->userRequestStatus();
-                        }
-                    ])->with([
-                        'userDetail'
-                    ])->where("id", $id)->first();
-                    
-        if(!$serviceRequest){
+        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'resort_room_no', 'accepted_by_id')
+                        ->with([
+                            'serviceDetail' => function($query) {
+                                $query->select('id', 'name', 'type_id');
+                            }
+                        ])->with('acceptedBy')
+                        ->with([
+                            'requestStatus' => function($query) {
+                                $query->select('id')->userRequestStatus();
+                            }
+                        ])->with([
+                    'userDetail'
+                ])->where("id", $id)->first();
+
+        if (!$serviceRequest) {
             return redirect()->route('subadmin.order-request.index')->with('error', 'Record Not found.');
         }
 
-        return view("subadmin.order-request.view_detail",[
+        return view("subadmin.order-request.view_detail", [
             "serviceRequest" => $serviceRequest
         ]);
-
     }
+
 }
