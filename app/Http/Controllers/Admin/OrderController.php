@@ -24,18 +24,22 @@ class OrderController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealOrder::query();
+            $query->with([
+                "userDetail" => function($query) {
+                    $query->select('id', 'user_name');
+                }
+            ]);
             if ($searchKeyword) {
-                $query->where("invoice_id", "LIKE", "%$searchKeyword%")
+                $query->whereHas("userDetail", function($query) use($searchKeyword) {
+                            $query->where("user_name", "LIKE", "%$searchKeyword%");
+                        })->orWhere("invoice_id", "LIKE", "%$searchKeyword%")
+                        ->orWhere("resort_room_no", "LIKE", "%$searchKeyword%")
                         ->orWhere("total_amount", "LIKE", "%$searchKeyword%");
             }
 
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
-            $mealOrders = $query->with([
-                        "userDetail" => function($query) {
-                            $query->select('id', 'user_name');
-                        }
-                    ])->take($limit)->offset($offset)->latest()->get();
+            $mealOrders = $query->take($limit)->offset($offset)->latest()->get();
 
             $dataArray = [];
             $stat = "";
@@ -84,17 +88,17 @@ class OrderController extends Controller {
         }
 
         $mealRequest = MealOrder::with([
-                    'userDetail' => function($query) {
-                        $query->select('id', 'user_name');
-                    }
-                ])->with([
-                    'acceptedBy' => function($query) {
-                        $query->select('id', 'user_name');
-                    }
-                ])->with(['resortDetail' => function($query){
-                    $query->withTrashed();
-                }])
-                ->with('orderItems')->where("id", $id)->first();
+                            'userDetail' => function($query) {
+                                $query->select('id', 'user_name');
+                            }
+                        ])->with([
+                            'acceptedBy' => function($query) {
+                                $query->select('id', 'user_name');
+                            }
+                        ])->with(['resortDetail' => function($query) {
+                                $query->withTrashed();
+                            }])
+                        ->with('orderItems')->where("id", $id)->first();
         if (!$mealRequest) {
             return redirect()->route('admin.order.index')->with('error', 'Record Not found.');
         }
