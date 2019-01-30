@@ -31,7 +31,7 @@ class MealController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealItem::query();
-            $query->withTrashed()->with("resortDetail");
+            $query->with("resortDetail");
             if ($searchKeyword) {
                 $query->whereHas("resortDetail", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
