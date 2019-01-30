@@ -108,12 +108,14 @@ class RoomtypeController extends Controller {
                 $room->is_active = $request->status;
                 if ($room->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, 'message' => "Something went be wrong."];
                 }
-                return ['status' => false];
+            } else {
+                return ['status' => false, 'message' => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            return ['status' => false];
+            return ['status' => false, 'message' => $e->getMessage()];
         }
     }
 
@@ -128,6 +130,7 @@ class RoomtypeController extends Controller {
 
     public function deleteImages(Request $request) {
         @unlink('storage/room_images/' . $request->record_val);
+        return ["status" => true, "message" => "Image deleted."];
     }
 
     public function editRoom(Request $request, $id) {
@@ -178,9 +181,9 @@ class RoomtypeController extends Controller {
     public function deleteRoom(Request $request) {
         $room = RoomType::find($request->id);
         if ($room->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Room type deleted successfully."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went bo wrong."];
         }
     }
 
@@ -189,9 +192,9 @@ class RoomtypeController extends Controller {
             $roomImage = RoomtypeImage::select('image_name as resort_img')->find($request->record_id);
             @unlink('storage/room_images/' . $roomImage->resort_img);
             RoomtypeImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ["status" => true, "message" => "Image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ["status" => false, "message" => $ex->getMessage()];
         }
     }
 

@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Image</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="file" class="form-control" name="meal_image" id="meal_image">
+                            <input accept="image/*" type="file" class="form-control" name="meal_image" id="meal_image">
                         </div>
                     </div>
 

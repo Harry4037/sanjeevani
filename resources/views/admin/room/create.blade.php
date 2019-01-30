@@ -65,12 +65,6 @@
 <script>
 $(document).ready(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
 //For ckeditor
     CKEDITOR.replace('description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
@@ -81,7 +75,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                     var hidden_image_html = "<input id='room_image_input_" + response.id + "' type='hidden' name='room_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -94,11 +88,14 @@ $(document).ready(function () {
                             url: _baseUrl + '/admin/room-type/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
-                                console.log(res);
                                 $("#room_image_input_" + record_id).remove();
                                 _this.removeFile(file);
+                                $(".overlay").hide();
+                                showSuccessMessage(res.message);
                             }
                         });
                     });
@@ -107,8 +104,8 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
                 this.removeFile(file);
+                showErrorMessage(message);
             });
         },
         maxFilesize: 2,

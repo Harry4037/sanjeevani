@@ -54,51 +54,50 @@
                             <button type="submit" class="btn btn-success">Send</button>
                         </div>
                     </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2>Notification List</h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                    <table id="list" class="table table-striped table-bordered table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Title</th>
-                                <th>Message</th>
-                                <th>Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Notification List</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="list" class="table table-striped table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Sr.No.</th>
+                            <th>Title</th>
+                            <th>Message</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 @section('script')
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
-            var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+        var t = $('#list').DataTable({
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/notification/notifications-list",
             "columns": [
                 {"data": null,
@@ -106,20 +105,20 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "title"},
-                {"data": "message"},
-                {"data": "created_at"},
+                {"data": "title", sortable: false},
+                {"data": "message", sortable: false},
+                {"data": "created_at", sortable: false},
             ]
         });
 
         $(document).on("change", "#user_type", function () {
             var record_id = $("#user_type :selected").val();
             if (record_id == 2) {
-              $("#users_list_div").css("display", "block");
-          } else {
-            $("#users_list_div").css("display", "none");
-        }
-    }); 
+                $("#users_list_div").css("display", "block");
+            } else {
+                $("#users_list_div").css("display", "none");
+            }
+        });
 
         $("#sendNotificationForm").validate({
             ignore: [],
@@ -129,46 +128,46 @@
                 },
                 title: {
                     required: true,
-                    maxlength:50,
+                    maxlength: 50,
                 },
-                "notify_user[]":{
-                    required:function(){
+                "notify_user[]": {
+                    required: function () {
                         return $("#user_type").val() == 2
                     }
                 },
                 message: {
                     required: true,
-                    maxlength:100,
+                    maxlength: 100,
                 },
             },
 
-            errorPlacement:function(error,el){
+            errorPlacement: function (error, el) {
                 if ($(el).attr('type') == 'checkbox') {
                     error.appendTo("#users_list_div_error");
-                }else{
+                } else {
                     error.insertAfter(el);
                 }
             },
 
-            messages:{
-                user_type:{
-                    required:"Please select a user type."
+            messages: {
+                user_type: {
+                    required: "Please select a user type."
                 },
-                title:{
-                    required:"Please enter the title."
+                title: {
+                    required: "Please enter the title."
                 },
-                "notify_user[]":{
-                    required:"Please select at least one user."
+                "notify_user[]": {
+                    required: "Please select at least one user."
                 },
-                message:{
-                    required:"Please enter the message."
+                message: {
+                    required: "Please enter the message."
                 },
             },
             submitHandler: function (form) {
 
                 let btn = $(form).find('button[type="submit"]');
 
-                btn.text('Sending . . .').attr('disabled','disabled');
+                btn.text('Sending . . .').attr('disabled', 'disabled');
 
                 $.ajax({
                     url: form.action,
@@ -195,7 +194,7 @@
                         }, 2000);
                     },
 
-                    error:function(){
+                    error: function () {
                         btn.text('Send').removeAttr('disabled');
                     }
                 });

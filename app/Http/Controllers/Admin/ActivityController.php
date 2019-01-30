@@ -33,7 +33,7 @@ class ActivityController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = Activity::query();
-            $query->withTrashed()->with("resortDetail");
+            $query->with("resortDetail");
             if ($searchKeyword) {
                 $query->whereHas("resortDetail", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
@@ -46,7 +46,6 @@ class ActivityController extends Controller {
 //            dd($amenities->toArray());
             $resortsArray = [];
             foreach ($amenities as $amenity) {
-                $resort = Resort::find($amenity->resort_id);
                 $image = ActivityImage::where("amenity_id", $amenity->id)->first();
                 $resortImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $resortsArray[$i]['image'] = '<img src=' . $resortImage . ' height=70 width=100 class="img-rounded">';
@@ -146,6 +145,7 @@ class ActivityController extends Controller {
 
     public function deleteImages(Request $request) {
         @unlink('storage/activity_images/' . $request->record_val);
+        return ["status" => true, "message" => "Image deleted."];
     }
 
     public function updateStatus(Request $request) {
@@ -155,12 +155,14 @@ class ActivityController extends Controller {
                 $amenity->is_active = $request->status;
                 if ($amenity->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -237,32 +239,31 @@ class ActivityController extends Controller {
             $amenityImage = ActivityImage::select('image_name as amenity_img')->find($request->record_id);
             @unlink('storage/activity_images/' . $amenityImage->amenity_img);
             ActivityImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ["status" => true, "message" => "Image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ["status" => true, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteTimeSlot(Request $request) {
         try {
             $slot = ActivityTimeSlot::find($request->record_id);
-            if ($slot) {
-                $slot->delete();
-                return ["status" => true];
+            if ($slot->delete()) {
+                return ['status' => TRUE, "message" => "Time slot deleted."];
             } else {
-                return ["status" => false];
+                return ['status' => false, "message" => "Something went be wrong."];
             }
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
     public function deleteActivity(Request $request) {
         $amenity = Activity::find($request->id);
         if ($amenity->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Activity deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

@@ -130,11 +130,6 @@
 <script>
 $(document).ready(function () {
     var index = "<?php echo count($timeSlots); ?>";
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
     $(document).on('focus', ".from_timepicker", function () {
         $(this).daterangepicker({
@@ -188,21 +183,21 @@ $(document).ready(function () {
         var html = "<div class='form-group'>\n\
                 <label class='control-label col-md-2 col-sm-2 col-xs-12'>From</label>\n\
                 <div class='col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control from_timepicker' name='from_time["+index+"]' >"
+                + "<input readonly type='text' class='form-control from_timepicker' name='from_time[" + index + "]' >"
                 + "</div>\n\
             <label class='control-label col-md-1 col-sm-1 col-xs-12'>To</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control to_timepicker' name='to_time["+index+"]'>"
+                + "<input readonly type='text' class='form-control to_timepicker' name='to_time[" + index + "]'>"
                 + "</div>"
                 + "<label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-10'>"
-                + "<input type='number' class='form-control' name='total_people["+index+"]'>"
+                + "<input type='number' class='form-control' name='total_people[" + index + "]'>"
                 + "</div>"
                 + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#time_slot_div").append(html);
-        $("input[name='total_people["+index+"]']").rules("add", {required: true,number:true});
-        $("input[name='from_time["+index+"]']").rules("add", {required: true});
-        $("input[name='to_time["+index+"]']").rules("add", {required: true});
+        $("input[name='total_people[" + index + "]']").rules("add", {required: true, number: true});
+        $("input[name='from_time[" + index + "]']").rules("add", {required: true});
+        $("input[name='to_time[" + index + "]']").rules("add", {required: true});
         index++;
     });
 
@@ -210,7 +205,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "'>Remove file</button>");
                     var hidden_image_html = "<input id='amenity_image_input_" + response.file_name + "' type='hidden' name='amenity_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -226,7 +221,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
         },
@@ -266,12 +261,18 @@ $(document).ready(function () {
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
                         _this.parent("div").remove();
+                        $(".overlay").hide();
+                        showSuccessMessage(res.message);
                     } else {
-                        alert("Something went be wrong");
+                        $(".overlay").hide();
+                        showErrorMessage(res.message);
                     }
                 }
             });
@@ -288,12 +289,18 @@ $(document).ready(function () {
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
                         _this.parent("div").remove();
+                        $(".overlay").hide();
+                        showSuccessMessage(res.message);
                     } else {
-                        alert("Something went be wrong");
+                        $(".overlay").hide();
+                        showErrorMessage(res.message);
                     }
                 }
             });

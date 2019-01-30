@@ -7,8 +7,8 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-<!--                <div style="display: none;" class="alert msg" role="alert">
-                </div>-->
+                <!--                <div style="display: none;" class="alert msg" role="alert">
+                                </div>-->
                 <h2>Users</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.users.add') }}">Add User</a>
@@ -42,7 +42,7 @@
 <script>
     $(document).ready(function () {
         var t = $('#list').DataTable({
-            lengthMenu: [[10, 15, 25, 50], [10, 15, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
@@ -72,12 +72,6 @@
             ]
         });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $(document).on("click", ".user_status", function () {
 
             var record_id = this.id;
@@ -97,12 +91,10 @@
                     if (res.status)
                     {
                         th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 2000);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
                         $(".overlay").hide();
                     }
                 }

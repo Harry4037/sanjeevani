@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Order & Request</h2>
+                <h2>Service's Request List</h2>
                 <div class="pull-right">
 
                 </div>
@@ -42,10 +42,14 @@
     $(document).ready(function () {
 
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/order-request/order-request-list",
             "columns": [
                 {"data": null,
@@ -53,43 +57,13 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "service_type"},
-                {"data": "service_name"},
-                {"data": "customer_name"},
-                {"data": "room_no"},
-                {"data": "status"},
+                {"data": "service_type", sortable: false},
+                {"data": "service_name", sortable: false},
+                {"data": "customer_name", sortable: false},
+                {"data": "room_no", sortable: false},
+                {"data": "status", sortable: false},
                 {"data": "action", sortable: false, },
             ]
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $(document).on("click", ".nearby_status", function () {
-            var record_id = this.id;
-            var th = $(this);
-            var status = th.attr('data-status');
-            var update_status = (status == '1') ? 0 : 1;
-            $.ajax({
-                url: _baseUrl + '/admin/nearby/update-status',
-                type: 'post',
-                data: {status: update_status, record_id: record_id},
-                dataType: 'json',
-                success: function (res) {
-
-                    if (res.status)
-                    {
-                        th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 5000);
-                    }
-                }
-            });
         });
     });
 </script>

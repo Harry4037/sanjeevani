@@ -99,23 +99,25 @@ class StaffController extends Controller {
                 $user->is_active = $request->status;
                 if ($user->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
-    public function viewUser(Request $request, $id) {
-        try {
-            $user = $this->user->find($id);
-            return view('admin.users.user-detail', ["user" => $user]);
-        } catch (Exception $ex) {
-            dd($e);
-        }
-    }
+//    public function viewUser(Request $request, $id) {
+//        try {
+//            $user = $this->user->find($id);
+//            return view('admin.users.user-detail', ["user" => $user]);
+//        } catch (Exception $ex) {
+//            dd($e);
+//        }
+//    }
 
     public function addUser(Request $request) {
         try {

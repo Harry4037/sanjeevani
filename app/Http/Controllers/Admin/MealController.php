@@ -129,12 +129,14 @@ class MealController extends Controller {
                 $meal->is_active = $request->status;
                 if ($meal->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -182,9 +184,9 @@ class MealController extends Controller {
     public function deleteMeal(Request $request) {
         $meal = MealItem::find($request->id);
         if ($meal->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Meal deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

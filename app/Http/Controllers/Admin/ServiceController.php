@@ -134,12 +134,14 @@ class ServiceController extends Controller {
                 $service->is_active = $request->status;
                 if ($service->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -197,18 +199,18 @@ class ServiceController extends Controller {
     public function deleteService(Request $request) {
         $service = Service::find($request->id);
         if ($service->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Service deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 
     public function deleteQuestion(Request $request) {
         $service = ServiceQuestionaire::find($request->record_id);
         if ($service->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Reason deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

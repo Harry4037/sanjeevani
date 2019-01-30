@@ -42,10 +42,14 @@
     $(document).ready(function () {
 
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/order/list",
             "columns": [
                 {"data": null,
@@ -53,18 +57,13 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "user_name"},
-                {"data": "room_no"},
-                {"data": "invoice_id"},
-                {"data": "total_amount"},
-                {"data": "status"},
-                {"data": "action"},
+                {"data": "user_name", sortable: false},
+                {"data": "room_no", sortable: false},
+                {"data": "invoice_id", sortable: false},
+                {"data": "total_amount", sortable: false},
+                {"data": "status", sortable: false},
+                {"data": "action", sortable: false},
             ]
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
         });
 
     });

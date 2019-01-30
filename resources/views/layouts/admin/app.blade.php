@@ -102,10 +102,16 @@
 
         <script>
 
+            //setup CSRF token for ajax forms
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $(document).on('change', "#state", function () {
                 var state_id = $("#state :selected").val();
                 state_id = state_id ? state_id : 0;
-//        if (state_id) {
                 $.ajax({
                     url: _baseUrl + '/admin/city-list/' + state_id,
                     type: 'get',
@@ -118,12 +124,28 @@
                         $("#city").html(res);
                     }
                 });
-//        }
             })
+
+            function showErrorMessage(msg) {
+                $(".msg").addClass("alert-danger");
+                $(".msg").html(msg);
+                $(".msg").fadeIn();
+                setTimeout(function () {
+                    $(".msg").fadeOut();
+                }, 3000);
+            }
+            function showSuccessMessage(msg) {
+                $(".msg").addClass("alert-success");
+                $(".msg").html(msg);
+                $(".msg").fadeIn();
+                setTimeout(function () {
+                    $(".msg").fadeOut();
+                }, 3000);
+            }
 
             setTimeout(function () {
                 $(".alert").fadeOut();
-            }, 1000);
+            }, 3000);
         </script>
     </body>
 </html>

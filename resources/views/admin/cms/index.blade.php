@@ -7,8 +7,6 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
-                </div>
                 <h2>CMS Management</h2>
                 <div class="clearfix"></div>
             </div>
@@ -35,10 +33,14 @@
     $(document).ready(function () {
 
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/cms/cms-list",
             "columns": [
                 {"data": null,
@@ -46,18 +48,10 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "page_name"},
+                {"data": "page_name", sortable: false},
                 {"data": "action", sortable: false, },
             ]
         });
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        
     });
 </script>
 @endsection

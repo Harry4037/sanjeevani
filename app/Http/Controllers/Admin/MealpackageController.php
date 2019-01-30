@@ -33,20 +33,22 @@ class MealpackageController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealPackage::query();
+            $query->with("resortDetail");
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("resortDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $meals = $query->take($limit)->offset($offset)->latest()->get();
             $mealsArray = [];
             foreach ($meals as $key => $meal) {
-                $resort = Resort::find($meal->resort_id);
                 $mealImage = $meal->image_name ? $meal->image_name : asset("img/no-image.jpg");
                 $mealsArray[$key]['image'] = '<img src=' . $mealImage . ' height=70 width=100 class="img-rounded">';
                 $mealsArray[$key]['name'] = $meal->name;
                 $checked_status = $meal->is_active ? "checked" : '';
-                $mealsArray[$key]['resort_name'] = $resort->name;
+                $mealsArray[$key]['resort_name'] = $meal->resortDetail->name;
                 $mealsArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='meal_package_status' id=" . $meal->id . " data-status=" . $meal->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $mealsArray[$key]['action'] = '<a href="' . route('admin.meal-package.edit', $meal->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $meal->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -141,12 +143,14 @@ class MealpackageController extends Controller {
                 $meal->is_active = $request->status;
                 if ($meal->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -220,9 +224,9 @@ class MealpackageController extends Controller {
     public function deleteMealpackage(Request $request) {
         $meal = MealPackage::find($request->id);
         if ($meal->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Meal Package deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

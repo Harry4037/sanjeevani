@@ -157,8 +157,12 @@
                     type: 'post',
                     data: {record_id: record_id},
                     dataType: 'html',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
                     success: function (res) {
                         $("#resort_meal_items").html(res);
+                        $(".overlay").hide();
                     }
                 });
             }

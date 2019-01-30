@@ -38,7 +38,7 @@
     $(document).ready(function () {
 
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
@@ -49,7 +49,7 @@
             ajax: {
                 url: _baseUrl + "/admin/room-type/rooms-list",
                 error: function (xhr, error, thrown) {
-                    alert(error);
+                    showErrorMessage(error);
                 },
             },
             "columns": [
@@ -71,11 +71,7 @@
                 },
             ]
         });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
         $(document).on("click", ".room_status", function () {
             var record_id = this.id;
             var th = $(this);
@@ -94,12 +90,10 @@
                     if (res.status)
                     {
                         th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 1000);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
                         $(".overlay").hide();
                     }
                 }
@@ -122,8 +116,11 @@
                             {
                                 $(".overlay").hide();
                                 t.draw();
+                                showSuccessMessage(res.message);
                             } else {
-                                alert("something went be wrong.")
+                                $(".overlay").hide();
+                                t.draw();
+                                showErrorMessage(res.message);
                             }
                         }
                     });

@@ -82,12 +82,6 @@
 <script>
     $(document).ready(function () {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $("#addMealpackageForm").validate({
             ignore: [],
             rules: {
@@ -109,7 +103,7 @@
                     accept: "image/*"
                 },
             },
-            messages:{
+            messages: {
                 image_name: {
                     accept: "Please select valid type file image."
                 }
@@ -123,9 +117,13 @@
                     url: _baseUrl + '/admin/meal-package/meal-items',
                     type: 'post',
                     data: {record_id: record_id},
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
                     dataType: 'html',
                     success: function (res) {
                         $("#resort_meal_items").html(res);
+                        $(".overlay").hide();
                     }
                 });
             }

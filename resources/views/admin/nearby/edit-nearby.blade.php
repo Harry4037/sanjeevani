@@ -19,7 +19,7 @@
                         @foreach($nearbyImages as $nearbyImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
                             <img src="{{ $nearbyImage->name }}" class="img-pre">
-                            <button style="margin-left: 40px;" class="btn btn-info btn-xs delete_nearby_image" id="{{ $nearbyImage->id }}" >Remove</button>
+                            <button style="margin-left: 40px;" class="btn btn-danger btn-xs delete_nearby_image" id="{{ $nearbyImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
@@ -160,10 +160,10 @@ $(document).ready(function () {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
         removePlugins: 'image, link',
     });
-    
-    jQuery.validator.addMethod("float_number", function(value, element) {
-  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
-}, "Please provide valid float value");
+
+    jQuery.validator.addMethod("float_number", function (value, element) {
+        return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+    }, "Please provide valid float value");
 
     $("#editNearbyForm").validate({
         rules: {
@@ -211,12 +211,6 @@ $(document).ready(function () {
         }
     });
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     Dropzone.options.myDropzone = {
         init: function () {
             this.on("success", function (file, response) {
@@ -234,9 +228,14 @@ $(document).ready(function () {
                             url: _baseUrl + '/admin/nearby/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
                                 $("#nearby_image_input_" + record_id).remove();
                                 _this.removeFile(file);
+                                showSuccessMessage(res.message);
+                                $(".overlay").hide();
                             }
                         });
 
@@ -246,7 +245,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
         },
@@ -264,12 +263,18 @@ $(document).ready(function () {
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
                         _this.parent("div").remove();
+                        showSuccessMessage(res.message);
+                        $(".overlay").hide();
                     } else {
-                        alert("Something went be wrong");
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
                     }
                 }
             });

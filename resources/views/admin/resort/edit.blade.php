@@ -19,7 +19,7 @@
                         @foreach($resortImages as $resortImage)
                         <div class="col-md-2 col-sm-2 col-xs-6">
                             <img src="{{ $resortImage->image_name }}" class="img-pre">
-                            <button style="margin-left: 40px;" class="btn btn-info btn-xs delete_resort_image" id="{{ $resortImage->id }}" >Remove</button>
+                            <button style="margin-left: 40px;" class="btn btn-danger btn-xs delete_resort_image" id="{{ $resortImage->id }}" >Remove</button>
                         </div>
                         @endforeach
                     </div>
@@ -154,7 +154,7 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 text-center">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                             <a class="btn btn-default" href="{{ route('admin.resort.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
@@ -184,9 +184,9 @@ $(document).ready(function () {
             $('label[for="edit_resort_description"]').hide();
         }
     });
-   jQuery.validator.addMethod("float_number", function(value, element) {
-  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
-}, "Please provide valid float value");
+    jQuery.validator.addMethod("float_number", function (value, element) {
+        return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+    }, "Please provide valid lat & long value.");
 
     $("#editResortForm").validate({
         rules: {
@@ -249,11 +249,6 @@ $(document).ready(function () {
         $(this).parent("div").remove();
     });
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
     $(document).on('click', '.delete_room', function () {
         var record_id = this.id;
@@ -272,8 +267,10 @@ $(document).ready(function () {
                     {
                         $(".overlay").hide();
                         _this.parent("div").remove();
+                        showSuccessMessage(res.message);
                     } else {
-                        alert("Something went be wrong");
+                        $(".overlay").hide();
+                        showErrorMessage(res.message);
                     }
                 }
             });
@@ -290,12 +287,18 @@ $(document).ready(function () {
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
                         _this.parent("div").remove();
+                        $(".overlay").hide();
+                        showSuccessMessage(res.message);
                     } else {
-                        alert("Something went be wrong");
+                        $(".overlay").hide();
+                        showErrorMessage(res.message);
                     }
                 }
             });
@@ -307,7 +310,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                     var hidden_image_html = "<input id='resort_image_input_" + response.id + "' type='hidden' name='resort_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -320,11 +323,14 @@ $(document).ready(function () {
                             url: _baseUrl + '/admin/resort/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
-                                console.log(res);
                                 $("#resort_image_input_" + record_id).remove();
                                 _this.removeFile(file);
+                                $(".overlay").hide();
+                                showSuccessMessage(res.message);
                             }
                         });
 
@@ -334,7 +340,13 @@ $(document).ready(function () {
                     $("#resort_images_div").append(hidden_image_html);
                 }
             });
+            this.on("error", function (file, message) {
+                this.removeFile(file);
+                showErrorMessage(message);
+            });
         },
+        maxFilesize: 2,
+        acceptedMimeTypes: 'image/*',
         dictDefaultMessage: "Drop or Select multiple images for resort."
     };
 });

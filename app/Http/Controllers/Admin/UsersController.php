@@ -64,7 +64,9 @@ class UsersController extends Controller {
                     $query->accepted();
                 }]);
             if ($searchKeyword) {
-                $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                $query->where("first_name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
             }
             $query->where("user_type_id", "=", 3);
             $data['recordsTotal'] = $query->count();
@@ -109,12 +111,14 @@ class UsersController extends Controller {
                 $user->is_active = $request->status;
                 if ($user->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -518,7 +522,7 @@ class UsersController extends Controller {
             if ($existingRecord) {
                 return redirect()->route('admin.users.booking-create', $user_id)->withErrors("Booking already exist with these date's.")->withInput();
             }
-            
+
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
             $UserBookingDetail = new UserBookingDetail();
@@ -564,14 +568,13 @@ class UsersController extends Controller {
         ];
         $resorts = Resort::where(["is_active" => 1])->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
-        
+
         return view('admin.users.booking-create', [
             'js' => $js,
             'css' => $css,
             "user_id" => $user_id,
             'resorts' => $resorts,
             'roomTypes' => $roomTypes,
-
         ]);
     }
 
@@ -593,7 +596,7 @@ class UsersController extends Controller {
             }
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
-            
+
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
             $data->resort_id = $request->resort_id;

@@ -40,7 +40,7 @@ class BannerController extends Controller {
             $data['recordsTotal'] = $this->banner->count();
             $data['recordsFiltered'] = $this->banner->count();
             $banners = $query->take($limit)->offset($offset)->latest()->get();
-            
+
             $bannersArray = [];
             foreach ($banners as $k => $banner) {
                 $resort = Resort::find($banner->resort_id);
@@ -100,12 +100,14 @@ class BannerController extends Controller {
                 $banner->is_active = $request->status;
                 if ($banner->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -145,9 +147,9 @@ class BannerController extends Controller {
     public function deleteBanner(Request $request) {
         $banner = Banner::find($request->id);
         if ($banner->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Banner deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

@@ -115,8 +115,8 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-default" href="{{ route('admin.room.index') }}">Cancel</a>
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-4">
+                            <a class="btn btn-default" href="{{ route('admin.nearby.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </div>
@@ -133,11 +133,6 @@
 <script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
 //For ckeditor
     CKEDITOR.replace('place_description', {
@@ -166,9 +161,14 @@ $(document).ready(function () {
                             url: _baseUrl + '/admin/nearby/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
                                 $("#nearby_image_input_" + record_id).remove();
                                 _this.removeFile(file);
+                                showSuccessMessage(res.message);
+                                $(".overlay").hide();
                             }
                         });
 
@@ -178,7 +178,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
 
@@ -188,9 +188,9 @@ $(document).ready(function () {
         dictDefaultMessage: "Drop or Select multiple images for nearny images."
     };
 
-jQuery.validator.addMethod("float_number", function(value, element) {
-  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
-}, "Please provide valid float value");
+    jQuery.validator.addMethod("float_number", function (value, element) {
+        return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+    }, "Please provide valid float value");
 
     $("#addNearbyForm").validate({
         rules: {

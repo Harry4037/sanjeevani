@@ -144,6 +144,7 @@ class HealthcareProgramController extends Controller {
 
     public function deleteImages(Request $request) {
         @unlink('storage/healthcare_images/' . $request->record_val);
+        return ['status' => true, "message" => "Image deleted."];
     }
 
     public function updateStatus(Request $request) {
@@ -153,12 +154,14 @@ class HealthcareProgramController extends Controller {
                 $amenity->is_active = $request->status;
                 if ($amenity->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -233,18 +236,18 @@ class HealthcareProgramController extends Controller {
             $healthcareImage = HealthcateProgramImages::select('image_name as health_img')->find($request->record_id);
             @unlink('storage/healthcare_images/' . $healthcareImage->health_img);
             HealthcateProgramImages::find($request->record_id)->delete();
-            return ["status" => true];
+            return ['status' => true, "message" => "image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ['status' => false, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteHealthcare(Request $request) {
         $amenity = HealthcateProgram::find($request->id);
         if ($amenity->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Healthcare Package deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

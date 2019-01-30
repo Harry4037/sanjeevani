@@ -121,11 +121,15 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
 
         $("#addStaffForm").validate({
             rules: {
@@ -170,8 +174,12 @@
                 type: 'post',
                 data: {resort_id: resort_id},
                 dataType: 'html',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     $("#amenity_list_div").html(res);
+                    $(".overlay").hide();
                 }
             });
         });

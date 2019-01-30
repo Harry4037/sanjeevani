@@ -92,12 +92,6 @@
 <script>
 $(document).ready(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     $('#valid_to').daterangepicker({
         singleDatePicker: true,
         timePicker: false,
@@ -124,7 +118,7 @@ $(document).ready(function () {
         init: function () {
             this.on("success", function (file, response) {
                 if (response.status) {
-                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-info btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
+                    var removeButton = Dropzone.createElement("<button style='margin-left: 22px;' class='btn btn-danger btn-xs' id='" + response.id + "' data-val='" + response.file_name + "'>Remove file</button>");
                     var hidden_image_html = "<input id='offer_image_input_" + response.id + "' type='hidden' name='offer_images[]' value='" + response.file_name + "'>";
                     var _this = this;
                     removeButton.addEventListener("click", function (e) {
@@ -137,10 +131,14 @@ $(document).ready(function () {
                             url: _baseUrl + '/admin/offer/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
                                 $("#offer_image_input_" + record_id).remove();
                                 _this.removeFile(file);
+                                $(".overlay").hide();
+                                showSuccessMessage(res.message);
                             }
                         });
                     });
@@ -149,7 +147,7 @@ $(document).ready(function () {
                 }
             });
             this.on("error", function (file, message) {
-                alert(message);
+                showErrorMessage(message);
                 this.removeFile(file);
             });
         },
@@ -174,7 +172,7 @@ $(document).ready(function () {
             discount: {
                 required: true,
                 number: true,
-                range: [0,100]
+                range: [0, 100]
             },
             valid_to: {
                 required: true

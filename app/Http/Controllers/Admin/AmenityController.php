@@ -33,7 +33,7 @@ class AmenityController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = Amenity::query();
-            $query->withTrashed()->with("resortDetail");
+            $query->with("resortDetail");
             if ($searchKeyword) {
                 $query->whereHas("resortDetail", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
@@ -46,13 +46,12 @@ class AmenityController extends Controller {
 //            dd($amenities->toArray());
             $resortsArray = [];
             foreach ($amenities as $amenity) {
-                $resort = Resort::find($amenity->resort_id);
                 $image = AmenityImage::where("amenity_id", $amenity->id)->first();
                 $resortImage = isset($image) ? $image->image_name : asset("img/no-image.jpg");
                 $resortsArray[$i]['image'] = '<img src=' . $resortImage . ' height=70 width=100 class="img-rounded">';
                 $resortsArray[$i]['name'] = $amenity->name;
                 $checked_status = $amenity->is_active ? "checked" : '';
-                $resortsArray[$i]['resort_name'] = $resort->name;
+                $resortsArray[$i]['resort_name'] = $amenity->resortDetail->name;
                 $resortsArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='amenity_status' id=" . $amenity->id . " data-status=" . $amenity->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $resortsArray[$i]['action'] = '<a href="' . route('admin.amenity.edit', $amenity->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $amenity->id . '" ><i class="fa fa-trash"></i> Delete </a>';
@@ -151,8 +150,10 @@ class AmenityController extends Controller {
 
     public function deleteImages(Request $request) {
         $data = TempImages::find($request->record_id);
-        if ($data) {
-            $data->delete();
+        if ($data->delete()) {
+            return ['status' => true, "message" => "Image deleted."];
+        } else {
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 
@@ -163,12 +164,14 @@ class AmenityController extends Controller {
                 $amenity->is_active = $request->status;
                 if ($amenity->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -218,7 +221,7 @@ class AmenityController extends Controller {
                 }
 
 
-                return redirect()->route('admin.amenity.index')->with('status', 'Resort has been added successfully.');
+                return redirect()->route('admin.amenity.edit', $amenity->id)->with('status', 'Amenity has been updated successfully.');
             } else {
                 return redirect()->route('admin.amenity.index')->with('error', 'Something went be wrong.');
             }
@@ -250,32 +253,31 @@ class AmenityController extends Controller {
             $amenityImage = AmenityImage::select('image_name as amenity_img')->find($request->record_id);
             @unlink('storage/amenity_images/' . $amenityImage->amenity_img);
             AmenityImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ['status' => true, "message" => "image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ['status' => false, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteTimeSlot(Request $request) {
         try {
             $slot = AmenityTimeSlot::find($request->record_id);
-            if ($slot) {
-                $slot->delete();
-                return ["status" => true];
+            if ($slot->delete()) {
+                return ['status' => TRUE, "message" => "Time slot deleted."];
             } else {
-                return ["status" => false];
+                return ['status' => false, "message" => "Something went be wrong."];
             }
-        } catch (\Exception $ex) {
-            dd($ex->getMessage());
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
     public function deleteAmenity(Request $request) {
         $amenity = Amenity::find($request->id);
         if ($amenity->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Amenity deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

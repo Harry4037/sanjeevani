@@ -107,11 +107,6 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $(document).on("click", ".delete_question", function () {
             var _this = $(this);
@@ -122,14 +117,20 @@
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
                         question_count--;
                         $("#question_count").val(question_count);
                         _this.parent("div").remove();
+                        showSuccessMessage(res.message);
+                        $(".overlay").hide();
                     } else {
-                        alert("Something went be wrong");
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
                     }
                 }
             });
@@ -154,7 +155,7 @@
 
                 $("#question_count").val(question_count);
             } else {
-                alert("Only four questions allowed.");
+                showErrorMessage("Only four questions allowed.");
             }
         });
 

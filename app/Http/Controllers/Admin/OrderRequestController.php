@@ -83,22 +83,22 @@ class OrderRequestController extends Controller {
             return redirect()->route('admin.order-request.view', $id)->with("status", "Status updated successfully.");
         }
 
-        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'resort_room_no')
+        $serviceRequest = ServiceRequest::select('id', 'comment', 'service_id', 'request_status_id', 'user_id', 'resort_room_no', 'accepted_by_id')
                         ->with([
                             'serviceDetail' => function($query) {
                                 $query->select('id', 'name', 'type_id');
                             }
+                        ])->with('acceptedBy')
+                        ->with([
+                            'requestStatus' => function($query) {
+                                $query->select('id')->userRequestStatus();
+                            }
                         ])->with([
-                    'requestStatus' => function($query) {
-                        $query->select('id')->userRequestStatus();
-                    }
-                ])->with([
                     'userDetail'
                 ])->where("id", $id)->first();
         if (!$serviceRequest) {
             return redirect()->route('admin.order-request.index')->with('error', 'Record Not found.');
         }
-
         return view("admin.order-request.view_detail", [
             "serviceRequest" => $serviceRequest
         ]);

@@ -327,12 +327,6 @@
             }});
 
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $(document).on("change", "#resort_room_type", function () {
             var resort = $("#resort_id :selected").val();
             var resort_room = $("#resort_room_type :selected").val();
@@ -389,7 +383,6 @@
         
         $(document).on("change", "#resort_room_id", function () {
             var record_val = $("#resort_room_id :selected").text();
-            ;
             $("#resort_room_id_hidden").val(record_val);
         });
     });

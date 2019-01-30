@@ -39,24 +39,28 @@
     $(document).ready(function () {
 
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
-//            ordering: true,
             processing: true,
             serverSide: true,
             language: {
                 'loadingRecords': '&nbsp;',
                 'processing': '<i class="fa fa-refresh fa-spin"></i>'
             },
-            ajax: _baseUrl + "/admin/nearby/nearby-list/",
+            ajax: {
+                url: _baseUrl + "/admin/nearby/nearby-list/",
+                error: function (xhr, error, thrown) {
+                    showErrorMessage(error);
+                },
+            },
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "name",sortable: false},
-                {"data": "distance",sortable: false},
+                {"data": "name", sortable: false},
+                {"data": "distance", sortable: false},
                 {"data": "resort_name", sortable: false},
                 {"data": null,
                     sortable: false,
@@ -67,11 +71,7 @@
                 {"data": "action"},
             ]
         });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
         $(document).on("click", ".nearby_status", function () {
             var record_id = this.id;
             var th = $(this);
@@ -86,16 +86,13 @@
                     $(".overlay").show();
                 },
                 success: function (res) {
-
                     if (res.status)
                     {
                         th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 2000);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
                         $(".overlay").hide();
                     }
                 }
@@ -120,8 +117,10 @@
                             {
                                 $(".overlay").hide();
                                 t.draw();
+                                showSuccessMessage(res.message);
                             } else {
-                                alert("something went be wrong.")
+                                $(".overlay").hide();
+                                showErrorMessage(res.message);
                             }
                         }
                     });

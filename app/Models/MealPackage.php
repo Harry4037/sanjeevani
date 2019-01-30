@@ -15,4 +15,8 @@ class MealPackage extends Model {
         return asset('storage/meal_package_images/' . $name);
     }
 
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
+
 }

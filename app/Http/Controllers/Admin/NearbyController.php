@@ -29,7 +29,7 @@ class NearbyController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = ResortNearbyPlace::query();
-            $query->withTrashed()->with("resortDetail");
+            $query->with("resortDetail");
             if ($searchKeyword) {
                 $query->whereHas("resortDetail", function($query) use($searchKeyword) {
                             $query->where("name", "LIKE", "%$searchKeyword%");
@@ -137,21 +137,24 @@ class NearbyController extends Controller {
 
     public function deleteImages(Request $request) {
         @unlink('storage/nearby_images/' . $request->record_val);
+        return ['status' => true, "message" => "image deleted."];
     }
 
     public function updateStatus(Request $request) {
         try {
             if ($request->isMethod('post')) {
-                $nearby = ResortNearbyPlace::findOrFail($request->record_id);
+                $nearby = ResortNearbyPlace::find($request->record_id);
                 $nearby->is_active = $request->status;
                 if ($nearby->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -216,18 +219,18 @@ class NearbyController extends Controller {
             $nearbyImage = NearbyPlaceImage::select('name as nearby_img')->find($request->record_id);
             @unlink('storage/nearby_images/' . $nearbyImage->nearby_img);
             NearbyPlaceImage::find($request->record_id)->delete();
-            return ["status" => true];
+           return ['status' => true, "message" => "image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ['status' => true, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteNearby(Request $request) {
         $resortNearby = ResortNearbyPlace::find($request->id);
         if ($resortNearby->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Nearby Place deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

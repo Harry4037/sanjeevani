@@ -46,6 +46,10 @@
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/amenity-request/amenity-request-list",
             "columns": [
                 {"data": null,
@@ -53,18 +57,13 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "user_name"},
-                {"data": "room_no"},
-                {"data": "amenity_name"},
-                {"data": "booking_date"},
-                {"data": "from"},
-                {"data": "to"},
+                {"data": "user_name", sortable: false},
+                {"data": "room_no", sortable: false},
+                {"data": "amenity_name", sortable: false},
+                {"data": "booking_date", sortable: false},
+                {"data": "from", sortable: false},
+                {"data": "to", sortable: false},
             ]
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
         });
 
     });

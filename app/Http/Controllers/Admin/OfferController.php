@@ -31,7 +31,7 @@ class OfferController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = offer::query();
-            $query->withTrashed()->with("resortDetail");
+            $query->with("resortDetail");
             if ($searchKeyword) {
                 $query->whereHas("resortDetail", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
@@ -140,12 +140,14 @@ class OfferController extends Controller {
                 $offer->is_active = $request->status;
                 if ($offer->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -208,18 +210,18 @@ class OfferController extends Controller {
             $amenityImage = offerImage::select('image_name as amenity_img')->find($request->record_id);
             @unlink('storage/offer_images/' . $amenityImage->amenity_img);
             offerImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ['status' => true, "message" => "Image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ['status' => false, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteOffer(Request $request) {
         $amenity = offer::find($request->id);
         if ($amenity->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Amenity deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
 

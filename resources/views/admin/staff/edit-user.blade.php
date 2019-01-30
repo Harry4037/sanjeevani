@@ -131,7 +131,7 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-4">
                             <a  class="btn btn-default" href="{{ route('admin.staff.index') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
@@ -149,11 +149,15 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
 
         $("#addStaffForm").validate({
             rules: {
@@ -198,8 +202,12 @@
                 type: 'post',
                 data: {resort_id: resort_id},
                 dataType: 'html',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     $("#amenity_list_div").html(res);
+                    $(".overlay").hide();
                 }
             });
         });

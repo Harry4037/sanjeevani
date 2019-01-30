@@ -71,7 +71,7 @@ class SubadminController extends Controller {
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $usersArray[$key]['view-deatil'] = '<a class="btn btn-info btn-xs" href="' . route('admin.subadmin.edit', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Edit</a>'
-                        .'<a class="btn btn-primary btn-xs" href="' . route('admin.subadmin.change-password', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Change Password</a>';
+                        . '<a class="btn btn-primary btn-xs" href="' . route('admin.subadmin.change-password', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Change Password</a>';
             }
 
             $data['data'] = $usersArray;
@@ -224,12 +224,14 @@ class SubadminController extends Controller {
                 $user->is_active = $request->status;
                 if ($user->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, 'message' => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, 'message' => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, 'message' => $e->getMessage()];
         }
     }
 

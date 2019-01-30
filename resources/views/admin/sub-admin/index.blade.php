@@ -7,9 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-<!--                <div style="display: none;" class="alert msg" role="alert">
-                </div>-->
-                <h2>Staff</h2>
+                <h2>Sub Admin List</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.subadmin.add') }}">Add Subadmin</a>
                 </div>
@@ -40,10 +38,14 @@
 <script>
     $(document).ready(function () {
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
             ajax: _baseUrl + "/admin/subadmin-user/subadmin-list",
             "columns": [
                 {"data": null,
@@ -51,9 +53,9 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "name", sortable: true},
-                {"data": "email", sortable: true},
-                {"data": "resort_name"},
+                {"data": "name", sortable: false},
+                {"data": "email", sortable: false},
+                {"data": "resort_name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
@@ -69,12 +71,6 @@
             ]
         });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $(document).on("click", ".user_status", function () {
 
             var record_id = this.id;
@@ -86,17 +82,19 @@
                 type: 'post',
                 data: {status: update_status, record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
 
                     if (res.status)
                     {
                         th.attr('data-status', res.data.status);
-                        $(".msg").addClass("alert-success");
-                        $(".msg").html(res.data.message);
-                        $(".msg").css("display", "block");
-                        setTimeout(function () {
-                            $(".msg").fadeOut();
-                        }, 5000);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
                     }
                 }
             });

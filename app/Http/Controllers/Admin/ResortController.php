@@ -156,6 +156,7 @@ class ResortController extends Controller {
 
     public function deleteImages(Request $request) {
         @unlink('storage/resort_images/' . $request->record_val);
+        return ["status" => true, "message" => "Image deleted."];
     }
 
     public function updateStatus(Request $request) {
@@ -165,12 +166,14 @@ class ResortController extends Controller {
                 $resort->is_active = $request->status;
                 if ($resort->save()) {
                     return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
                 }
-                return [];
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
             }
-            return [];
         } catch (\Exception $e) {
-            dd($e);
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 
@@ -265,14 +268,13 @@ class ResortController extends Controller {
     public function deleteRoom(Request $request) {
         try {
             $room = $this->resortRoom->find($request->record_id);
-            if ($room) {
-                $room->delete();
-                return ["status" => true];
+            if ($room->delete()) {
+                return ["status" => true, "message" => "Room deleted."];
             } else {
-                return ["status" => false];
+                return ["status" => false, "message" => "Something went be wrong."];
             }
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ["status" => false, "message" => $ex->getMessage()];
         }
     }
 
@@ -281,21 +283,21 @@ class ResortController extends Controller {
             $resortImage = ResortImage::select('image_name as resort_img')->find($request->record_id);
             @unlink('storage/resort_images/' . $resortImage->resort_img);
             ResortImage::find($request->record_id)->delete();
-            return ["status" => true];
+            return ["status" => true, "message" => "Image deleted."];
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+            return ["status" => false, "message" => $ex->getMessage()];
         }
     }
 
     public function deleteResort(Request $request) {
         $resort = Resort::find($request->id);
         if ($resort->delete()) {
-            return ['status' => true];
+            return ['status' => true, "message" => "Resort deleted."];
         } else {
-            return ['status' => true];
+            return ['status' => false, "message" => "Something went be wrong."];
         }
     }
-    
+
     public function getResortHealthcare(Request $request, $id) {
         try {
             $healthcares = \App\Models\HealthcateProgram::where(["resort_id" => $id, "is_active" => 1])->get();

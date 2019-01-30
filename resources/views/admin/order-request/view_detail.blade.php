@@ -51,6 +51,14 @@
                             <input readonly="true" type="text" class="form-control"  name="request_status" id="request_status" value="@if(isset($serviceRequest->requestStatus->status)){{ $serviceRequest->requestStatus->status }}@endif">
                         </div>
                     </div>
+                    @if($serviceRequest->requestStatus->id > 1)
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Accepted by</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input readonly="true" type="text" class="form-control"  name="accepted_by" id="accepted_by" value="@if(isset($serviceRequest->acceptedBy->user_name)){{ $serviceRequest->acceptedBy->user_name }}@endif">
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Status</label>
