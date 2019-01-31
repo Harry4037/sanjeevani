@@ -45,6 +45,7 @@
             searching: true,
             processing: true,
             serverSide: true,
+            stateSave: true,
             ajax: _baseUrl + "/sub-admin/activity-request/activity-request-list",
             "columns": [
                 {"data": null,

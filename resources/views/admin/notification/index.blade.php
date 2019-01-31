@@ -94,6 +94,7 @@
             searching: true,
             processing: true,
             serverSide: true,
+            stateSave: true,
             language: {
                 'loadingRecords': '&nbsp;',
                 'processing': '<i class="fa fa-refresh fa-spin"></i>'

@@ -39,10 +39,11 @@
 <script>
     $(document).ready(function () {
         var t = $('#list').DataTable({
-            lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+            lengthMenu: [[10, 25, 50], [10, 25, 50]],
             searching: true,
             processing: true,
             serverSide: true,
+            stateSave: true,
             ajax: _baseUrl + "/sub-admin/staff/staff-list",
             "columns": [
                 {"data": null,

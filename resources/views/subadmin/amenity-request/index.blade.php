@@ -46,6 +46,7 @@
             searching: true,
             processing: true,
             serverSide: true,
+            stateSave: true,
             ajax: _baseUrl + "/sub-admin/amenity-request/amenity-request-list",
             "columns": [
                 {"data": null,

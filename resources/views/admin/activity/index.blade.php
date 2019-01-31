@@ -43,6 +43,7 @@
             searching: true,
             processing: true,
             serverSide: true,
+            stateSave: true,
             ajax: _baseUrl + "/admin/activity/activities-list",
             "columns": [
                 {"data": null,

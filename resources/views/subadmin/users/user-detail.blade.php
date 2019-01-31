@@ -91,7 +91,7 @@
                             @if($user->userBookingDetail != null)
                             <div class="row">
                                 <label class="col-md-3 col-sm-3 col-xs-6">Booking Id</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->booking_id) ? $user->userBookingDetail->booking_id : "Not available" }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->source_id) ? $user->userBookingDetail->source_id : "Not available" }}</div>
                                 <label class="col-md-3 col-sm-3 col-xs-6">Source Name</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($user->userBookingDetail->source_name) ? $user->userBookingDetail->source_name : "Not available" }}</div>
                             </div>

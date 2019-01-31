@@ -23,6 +23,7 @@
                             <th>Source Name</th>
                             <th>Source Id</th>
                             <th>Resort Name</th>
+                            <th>Room No.</th>
                             <th>Check In</th>
                             <th>Check Out</th>
                             <th>Package Name</th>
@@ -45,10 +46,11 @@
 <script>
     $(document).ready(function () {
     var t = $('#list').DataTable({
-    lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+    lengthMenu: [[10, 25, 50], [10, 25, 50]],
             // searching: true,
             processing: true,
             serverSide: true,
+            stateSave: true,
             ajax: _baseUrl + "/admin/user-booking-list/" + {{ $user->id }},
             "columns": [
             {"data": null,
@@ -60,6 +62,7 @@
             {"data": "source_name"},
             {"data": "source_id"},
             {"data": "resort"},
+            {"data": "room_no"},
             {"data": "check_in"},
             {"data": "check_out"},
             {"data": "package"},

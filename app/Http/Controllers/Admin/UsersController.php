@@ -476,7 +476,7 @@ class UsersController extends Controller {
             $query = UserBookingDetail::query();
             $data['recordsTotal'] = $query->where("user_id", $user_id)->count();
             $data['recordsFiltered'] = $query->where("user_id", $user_id)->count();
-            $userBookingDetails = $query->selectRaw(DB::raw('id, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->get();
+            $userBookingDetails = $query->selectRaw(DB::raw('id, resort_room_no, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->get();
             $bookinDetailArray = [];
             foreach ($userBookingDetails as $i => $userBookingDetail) {
                 $resort = Resort::find($userBookingDetail->resort_id);
@@ -500,6 +500,7 @@ class UsersController extends Controller {
                 $bookinDetailArray[$i]["package"] = isset($healthCareProgram->name) ? $healthCareProgram->name : "";
                 $bookinDetailArray[$i]["check_in"] = isset($userBookingDetail->check_in) ? $userBookingDetail->check_in : "";
                 $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? $userBookingDetail->check_out : "";
+                $bookinDetailArray[$i]["room_no"] = isset($userBookingDetail->resort_room_no) ? $userBookingDetail->resort_room_no : "";
                 $bookinDetailArray[$i]["status"] = $stat;
                 $bookinDetailArray[$i]["action"] = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
             }
