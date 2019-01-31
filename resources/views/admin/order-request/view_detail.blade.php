@@ -18,7 +18,7 @@
             <div class="x_content">
                 <form class="form-horizontal form-label-left" action="{{ route('admin.order-request.view', $serviceRequest->id) }}" method="post" id="addBookingForm">
                     @csrf
-                    
+
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Type</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -64,7 +64,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Status</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="seleted_status" id="seleted_status">
-                                <option value="0">Select Option</option>
+                                <option value="">Select Option</option>
                                 <option value="1">New</option>
                                 <option value="2">Accepted/In-Progress</option>
                                 <option value="3">Mark as complete/Under Approval</option>
@@ -90,3 +90,17 @@
 
 @endsection
 
+@section('script')
+<script>
+    $(document).ready(function () {
+        $("#addBookingForm").validate({
+            ignore: [],
+            rules: {
+                seleted_status: {
+                    required: true
+                },
+            }
+        });
+    });
+</script>
+@endsection
