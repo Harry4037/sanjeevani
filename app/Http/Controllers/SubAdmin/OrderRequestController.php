@@ -24,9 +24,26 @@ class OrderRequestController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = ServiceRequest::query();
+            $query->with([
+                'serviceDetail' => function($query) {
+                    $query->withTrashed()->with("serviceTypeDetail")->select('id', 'name', 'type_id');
+                }
+            ])->with([
+                'requestStatus' => function($query) {
+                    $query->select('id')->userRequestStatus();
+                }
+            ])->with([
+                'userDetail'
+            ]);
             $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
-                $query->where("resort_room_no", "LIKE", "%$searchKeyword%");
+                $query->whereHas("serviceDetail", function($query) use($searchKeyword) {
+                    $query->whereHas("serviceTypeDetail", function($query) use($searchKeyword) {
+                        $query->where("name", "LIKE", "%$searchKeyword%");
+                    })->orWhere("name", "LIKE", "%$searchKeyword%");
+                })->orWhereHas("userDetail", function($query) use($searchKeyword) {
+                    $query->where("user_name", "LIKE", "%$searchKeyword%");
+                })->orWhere("resort_room_no", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();

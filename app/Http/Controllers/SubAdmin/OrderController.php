@@ -24,9 +24,18 @@ class OrderController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealOrder::query();
+            $query->with([
+                "userDetail" => function($query) {
+                    $query->select('id', 'user_name');
+                }
+            ]);
             $query->where("resort_id", $request->get("subadminResort"));
+
             if ($searchKeyword) {
-                $query->where("invoice_id", "LIKE", "%$searchKeyword%")
+                $query->whereHas("userDetail", function($query) use($searchKeyword) {
+                            $query->where("user_name", "LIKE", "%$searchKeyword%");
+                        })->orWhere("invoice_id", "LIKE", "%$searchKeyword%")
+                        ->orWhere("resort_room_no", "LIKE", "%$searchKeyword%")
                         ->orWhere("total_amount", "LIKE", "%$searchKeyword%");
             }
 
