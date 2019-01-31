@@ -192,9 +192,12 @@ class ResortController extends Controller {
                 $data->longitude = $request->longitude;
                 if ($data->save()) {
                     if ($request->room_type && $request->room_no) {
-                        ResortRoom::where("resort_id", $data->id)->delete();
                         foreach ($request->room_type as $k => $room) {
-                            $resortRoom = new ResortRoom();
+                            if ($request->room_id[$k] > 0) {
+                                $resortRoom = ResortRoom::find($request->room_id[$k]);
+                            } else {
+                                $resortRoom = new ResortRoom();
+                            }
                             $resortRoom->resort_id = $data->id;
                             $resortRoom->room_type_id = $room;
                             $resortRoom->room_no = $request->room_no[$k];
@@ -203,7 +206,7 @@ class ResortController extends Controller {
                     }
 
                     if ($request->resort_images) {
-                        ResortImage::where("resort_id", $data->id)->delete();
+//                        ResortImage::where("resort_id", $data->id)->delete();
                         foreach ($request->resort_images as $tempImage) {
                             $resortImage = new ResortImage();
                             $resortImage->resort_id = $data->id;

@@ -64,32 +64,49 @@ class UsersController extends Controller {
                     $query->accepted();
                 }]);
             if ($searchKeyword) {
-                $query->where("first_name", "LIKE", "%$searchKeyword%")
-                        ->orWhere("email_id", "LIKE", "%$searchKeyword%")
-                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
+                    $query->where("first_name", "LIKE", "%$searchKeyword%")
+                            ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                }
             }
             $query->where("user_type_id", "=", 3);
-            $data['recordsTotal'] = $query->count();
-            $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
+
+            if ($searchKeyword) {
+                if (preg_match('/guest/i', $searchKeyword)) {
+                    $users = $users->filter(function ($users) {
+                        return $users->user_type_id == 4;
+                    });
+                } elseif (preg_match('/customer/i', $searchKeyword)) {
+                    $users = $users->filter(function ($users) {
+                        return $users->user_type_id == 3;
+                    });
+                }
+            }
+
+            $data['recordsTotal'] = count($users);
+            $data['recordsFiltered'] = count($users);
             $usersArray = [];
-            foreach ($users as $key => $user) {
-                $usersArray[$key]['name'] = $user->first_name . ' ' . $user->last_ame;
-                $usersArray[$key]['email'] = $user->email_id;
-                $usersArray[$key]['mobileno'] = $user->mobile_number;
-                $usersArray[$key]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
-                $usersArray[$key]['outstanding'] = number_format(($user->mealOrders->sum('total_amount') - $user->payments->sum('amount')), 2);
+            $i = 0;
+            foreach ($users as $user) {
+                $usersArray[$i]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$i]['email'] = $user->email_id;
+                $usersArray[$i]['mobileno'] = $user->mobile_number;
+                $usersArray[$i]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
+                $usersArray[$i]['outstanding'] = number_format(($user->mealOrders->sum('total_amount') - $user->payments->sum('amount')), 2);
                 $checked_status = $user->is_active ? "checked" : '';
-                $usersArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
+                $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 if ($user->user_type_id == 3) {
-                    $usersArray[$key]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
+                    $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
                             . '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                             . '<a href="' . route('admin.users.payments', $user->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-dollar"></i> Payments </a>'
                             . '<a href="' . route('admin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
                 } else {
-                    $usersArray[$key]['action'] = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                    $usersArray[$i]['action'] = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                             . '<a href="' . route('admin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
                 }
+                $i++;
             }
             $data['data'] = $usersArray;
             return $data;

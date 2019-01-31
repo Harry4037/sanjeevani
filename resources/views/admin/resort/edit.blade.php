@@ -127,6 +127,7 @@
                             <label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>
                             <div class='col-md-2 col-sm-2 col-xs-12'>
                                 <input value="{{ $dataRoom->room_no }}" type='text' class='form-control' name='room_no[]'>
+                                <input value="{{ $dataRoom->id }}" type='hidden' name='room_id[]'>
                             </div>
                             <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>                         
                             <div class = 'col-md-2 col-sm-2 col-xs-11'>
@@ -241,6 +242,7 @@ $(document).ready(function () {
 
         var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-2'>"
                 + "<input type='text' class='form-control' name='room_no[]'>"
+                + "<input value=0 type='hidden' class='form-control' name='room_id[]'>"
                 + "</div>" + room_type + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#room_detail_div").append(member_html);
     });
