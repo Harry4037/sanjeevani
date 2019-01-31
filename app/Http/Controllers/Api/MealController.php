@@ -224,7 +224,9 @@ class MealController extends Controller {
                 foreach ($mealPackages as $key => $mealPackage) {
                     $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
                     $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
-                            ->with("mealItem")
+                            ->with(["mealItem" => function($query){
+                                $query->withTrashed();
+                            }])
                             ->get();
                     $packageData[$key]['id'] = $mealPackage->id;
                     $packageData[$key]['name'] = $mealPackage->name;
@@ -234,9 +236,9 @@ class MealController extends Controller {
                     if (count($mealPackageItems) > 0) {
                         foreach ($mealPackageItems as $k => $mealPackageItem) {
                             $packageData[$key]['meal_items'][$k]['id'] = $mealPackageItem->id;
-                            $packageData[$key]['meal_items'][$k]['name'] = $mealPackageItem->mealItem->name;
-                            $packageData[$key]['meal_items'][$k]['image_url'] = $mealPackageItem->mealItem->image_name;
-                            $packageData[$key]['meal_items'][$k]['price'] = $mealPackageItem->mealItem->price;
+                            $packageData[$key]['meal_items'][$k]['name'] = isset($mealPackageItem->mealItem->name) ? $mealPackageItem->mealItem->name : "";
+                            $packageData[$key]['meal_items'][$k]['image_url'] = isset($mealPackageItem->mealItem->image_name) ? $mealPackageItem->mealItem->image_name : "";
+                            $packageData[$key]['meal_items'][$k]['price'] = isset($mealPackageItem->mealItem->price) ? $mealPackageItem->mealItem->price : "";
                         }
                     } else {
                         $packageData[$key]['meal_items'] = [];
