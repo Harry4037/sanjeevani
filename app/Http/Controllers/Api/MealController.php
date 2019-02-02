@@ -224,14 +224,15 @@ class MealController extends Controller {
                 foreach ($mealPackages as $key => $mealPackage) {
                     $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
                     $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
-                            ->with(["mealItem" => function($query){
-                                $query->withTrashed();
-                            }])
+                            ->with(["mealItem" => function($query) {
+                                    $query->withTrashed();
+                                }])
                             ->get();
                     $packageData[$key]['id'] = $mealPackage->id;
                     $packageData[$key]['name'] = $mealPackage->name;
                     $packageData[$key]['image_url'] = $mealPackage->image_name;
                     $packageData[$key]['price'] = $mealPackage->price;
+                    $packageData[$key]['category'] = $mealPackage->category;
                     $packageData[$key]['quantity_count'] = isset($userCartPackage->quantity) && $userCartPackage->quantity ? $userCartPackage->quantity : 0;
                     if (count($mealPackageItems) > 0) {
                         foreach ($mealPackageItems as $k => $mealPackageItem) {
@@ -251,16 +252,16 @@ class MealController extends Controller {
                             $query->where('resort_id', 1);
                         })->with([
                             'menuItems' => function ($query) use($request) {
-                        $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', 1);
-                    }
+                                $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', 1);
+                            }
                         ])->get();
             } else {
                 $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
                             $query->where('resort_id', $request->resort_id);
                         })->with([
                             'menuItems' => function ($query) use($request) {
-                        $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
-                    }
+                                $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+                            }
                         ])->get();
             }
             $mealCatData = [];
