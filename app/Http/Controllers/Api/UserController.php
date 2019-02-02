@@ -294,6 +294,9 @@ class UserController extends Controller {
                 $user->profile_pic_path = $profile_file_name;
             }
 
+            if($request->is_remove_pic){
+                $user->profile_pic_path = "";
+            }
             if ($user->save()) {
                 $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path', 'address1', 'pincode', 'city_id')->find($user->id);
                 $cityState = CityMaster::find($userData->city_id);

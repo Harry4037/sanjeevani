@@ -232,7 +232,6 @@ class MealController extends Controller {
                     $packageData[$key]['name'] = $mealPackage->name;
                     $packageData[$key]['image_url'] = $mealPackage->image_name;
                     $packageData[$key]['price'] = $mealPackage->price;
-                    $packageData[$key]['category'] = $mealPackage->category;
                     $packageData[$key]['quantity_count'] = isset($userCartPackage->quantity) && $userCartPackage->quantity ? $userCartPackage->quantity : 0;
                     if (count($mealPackageItems) > 0) {
                         foreach ($mealPackageItems as $k => $mealPackageItem) {

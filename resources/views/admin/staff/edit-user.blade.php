@@ -7,7 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Add Staff </h2>
+                <h2>Edit Staff </h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
