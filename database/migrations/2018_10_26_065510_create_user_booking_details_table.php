@@ -26,6 +26,7 @@ class CreateUserBookingDetailsTable extends Migration {
             $table->datetime('check_in')->nullable();
             $table->datetime('check_out')->nullable();
             $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_cancelled')->default(0);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(0);
             $table->string('updated_by')->default(0);
