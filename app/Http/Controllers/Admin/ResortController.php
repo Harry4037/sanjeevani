@@ -262,14 +262,20 @@ class ResortController extends Controller {
             $resort = $request->resort;
 
             $roomIds = UserBookingDetail::where("resort_id", $resort)
-//                    ->where(function($query) use($check_in, $check_out){
-//                        $query->where("check_in", "<=", $check_in)
-//                        ->where("check_out", ">=", $check_out);
-//                    })
-//                    ->orWhere(function($query) use($check_out){
-//                        $query->where("check_out", "=", $check_out);
-//                    })
-                    ->where("check_out", "<=", $check_out)
+                    ->where(function($query) use($check_in, $check_out) {
+                        $query->orWhere(function($query) use($check_in) {
+                            $query->where("check_in", "<=", $check_in)
+                            ->where("check_out", ">=", $check_in);
+                        });
+                        $query->orWhere(function($query) use($check_out) {
+                            $query->where("check_in", "<", $check_out)
+                            ->where("check_out", ">=", $check_out);
+                        });
+                        $query->orWhere(function($query) use($check_in, $check_out) {
+                            $query->where("check_in", ">=", $check_in)
+                            ->where("check_out", "<=", $check_out);
+                        });
+                    })
                     ->pluck("resort_room_id");
 
             $resortRooms = ResortRoom::where(["resort_id" => $resort, "room_type_id" => $request->resort_room, "is_active" => 1])
