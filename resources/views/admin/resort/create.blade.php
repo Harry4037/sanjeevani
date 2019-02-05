@@ -108,7 +108,8 @@
                                 <input class="flat" type="checkbox" name="aminities[]" value="7">Gym/Fitness Center
                                 <input class="flat" type="checkbox" name="aminities[]" value="8">Parking
                                 <input class="flat" type="checkbox" name="aminities[]" value="9">Spa
-                                <input class="flat" type="checkbox" name="aminities[]" value="10">Gyser
+                                <input class="flat" type="checkbox" name="aminities[]" value="10">Pets
+                                <input class="flat" type="checkbox" name="aminities[]" value="11">Gyser
                             <p>
                         </div>
                     </div>

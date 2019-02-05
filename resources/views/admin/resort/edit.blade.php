@@ -128,7 +128,8 @@
                                        <input class="flat" type="checkbox" name="aminities[]" value="7" @if(in_array(7, explode("#", $data->amenities))) {{ "checked" }} @endif>Gym/Fitness Center
                                        <input class="flat" type="checkbox" name="aminities[]" value="8" @if(in_array(8, explode("#", $data->amenities))) {{ "checked" }} @endif>Parking
                                        <input class="flat" type="checkbox" name="aminities[]" value="9" @if(in_array(9, explode("#", $data->amenities))) {{ "checked" }} @endif>Spa
-                                       <input class="flat" type="checkbox" name="aminities[]" value="10" @if(in_array(10, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
+                                       <input class="flat" type="checkbox" name="aminities[]" value="10" @if(in_array(10, explode("#", $data->amenities))) {{ "checked" }} @endif>Pets
+                                       <input class="flat" type="checkbox" name="aminities[]" value="11" @if(in_array(11, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
                             <p>
                         </div>
                     </div>
