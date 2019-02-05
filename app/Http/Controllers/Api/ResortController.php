@@ -161,7 +161,7 @@ class ResortController extends Controller {
                 return $this->sendErrorResponse("Resort id missing.", (object) []);
             }
 
-            $resort = Resort::select('id', 'name', 'description', 'address_1 as address', 'latitude', 'longitude')->where(["id" => $request->resort_id, "is_active" => 1])->with([
+            $resort = Resort::select('id', 'amenities', 'other_amenities', 'name', 'description', 'address_1 as address', 'latitude', 'longitude')->where(["id" => $request->resort_id, "is_active" => 1])->with([
                         'resortImages' => function($query) {
                             $query->select('id', 'image_name as banner_image_url', 'resort_id');
                         }
@@ -176,6 +176,7 @@ class ResortController extends Controller {
                     ])->first();
 
             if ($resort) {
+
                 $resortRoomTypes = ResortRoom::select('room_type_id')->where("resort_id", $resort->id)->distinct()->get();
                 $resortRoomArray = [];
                 if ($resortRoomTypes) {
@@ -186,15 +187,32 @@ class ResortController extends Controller {
                         $resortRoomArray[$key]['icon'] = $roomType->icon;
                         $resortRoomArray[$key]['description'] = $roomType->description;
                         $roomImages = RoomtypeImage::select('id', 'image_name as banner_image_url')->where("roomtype_id", $resortRoomType->room_type_id)->get();
-                        if($roomImages){
+                        if ($roomImages) {
                             $resortRoomArray[$key]['room_images'] = $roomImages;
-                        }else{
+                        } else {
                             $resortRoomArray[$key]['room_images'] = [];
                         }
                     }
                 }
 
+                $resortAmenitiesArray = [];
+                if ($resort->amenities) {
+                    foreach (explode("#", $resort->amenities) as $k => $amenity_id) {
+                        $resortAmenitiesArray[$k]['amenity_id'] = $amenity_id;
+                    }
+                }
+
+                $resortOtherAmenitiesArray = [];
+                if ($resort->other_amenities) {
+                    foreach (explode("#", $resort->other_amenities) as $j => $amenity_name) {
+                        $resortOtherAmenitiesArray[$j]['name'] = $amenity_name;
+                    }
+                }
+
+
                 $data['resort'] = $resort;
+                $data['resort_amenities'] = $resortAmenitiesArray;
+                $data['resort_other_amenities'] = $resortOtherAmenitiesArray;
                 $data['resort']['room_types'] = $resortRoomArray;
 
                 return $this->sendSuccessResponse("Resort found.", $data);
@@ -203,6 +221,7 @@ class ResortController extends Controller {
                 return $this->sendErrorResponse("Resort not found.", (object) []);
             }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
@@ -221,7 +240,7 @@ class ResortController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *{
+     * {
      *    "status": true,
      *    "status_code": 200,
      *    "message": "resorts found",
@@ -255,7 +274,7 @@ class ResortController extends Controller {
      *            ]
      *        }
      *    ]
-     *}
+     * }
      * 
      * 
      * 

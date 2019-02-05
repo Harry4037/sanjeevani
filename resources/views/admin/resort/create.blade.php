@@ -221,7 +221,7 @@ $(document).ready(function () {
     
     $(document).on("click", "#add_more_amenity", function () {
 
-        var amenity_html = "<div class='form-group'><label class='control-label col-md-6 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
+        var amenity_html = "<div class='form-group'><label class='control-label col-md-4 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
                 + "<input type='text' class='form-control' name='other_amenities[]'>"
                 + "</div></div>";
         $("#other_amenity_div").append(amenity_html);

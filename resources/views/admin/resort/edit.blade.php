@@ -116,6 +116,44 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenities</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" name="aminities[]" value="1" @if(in_array(1, explode("#", $data->amenities))) {{ "checked" }} @endif>Wifi
+                                       <input class="flat" type="checkbox" name="aminities[]" value="2" @if(in_array(2, explode("#", $data->amenities))) {{ "checked" }} @endif>Swimming Pool
+                                       <input class="flat" type="checkbox" name="aminities[]" value="3" @if(in_array(3, explode("#", $data->amenities))) {{ "checked" }} @endif>Air Conditioner
+                                       <input class="flat" type="checkbox" name="aminities[]" value="4" @if(in_array(4, explode("#", $data->amenities))) {{ "checked" }} @endif>Room Service
+                                       <input class="flat" type="checkbox" name="aminities[]" value="5" @if(in_array(5, explode("#", $data->amenities))) {{ "checked" }} @endif>Restaurant
+                                       <input class="flat" type="checkbox" name="aminities[]" value="6" @if(in_array(6, explode("#", $data->amenities))) {{ "checked" }} @endif>Bar
+                                       <input class="flat" type="checkbox" name="aminities[]" value="7" @if(in_array(7, explode("#", $data->amenities))) {{ "checked" }} @endif>Gym/Fitness Center
+                                       <input class="flat" type="checkbox" name="aminities[]" value="8" @if(in_array(8, explode("#", $data->amenities))) {{ "checked" }} @endif>Parking
+                                       <input class="flat" type="checkbox" name="aminities[]" value="9" @if(in_array(9, explode("#", $data->amenities))) {{ "checked" }} @endif>Spa
+                                       <input class="flat" type="checkbox" name="aminities[]" value="10" @if(in_array(10, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
+                            <p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Other Amenities</label>
+                    </div>
+                    <div id="other_amenity_div">
+                        @if($data->other_amenities)
+                        @foreach(explode("#", $data->other_amenities) as $am)
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-6 col-xs-12"></label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <input type="text" class="form-control" name="other_amenities[]" value="{{ $am }}">
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
+                            <button type="button" class="btn btn-primary" id="add_more_amenity">Add Amenity</button>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
                     </div>
 
@@ -174,6 +212,22 @@
 <script>
 $(document).ready(function () {
 
+    if ($("input.flat")[0]) {
+        $(document).ready(function () {
+            $('input.flat').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            });
+        });
+    }
+
+    $(document).on("click", "#add_more_amenity", function () {
+
+        var amenity_html = "<div class='form-group'><label class='control-label col-md-4 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                + "<input type='text' class='form-control' name='other_amenities[]'>"
+                + "</div></div>";
+        $("#other_amenity_div").append(amenity_html);
+    });
 //For ckeditor
     CKEDITOR.replace('edit_resort_description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
