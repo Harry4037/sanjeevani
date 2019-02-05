@@ -358,6 +358,7 @@ class AuthController extends Controller {
 
             $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
                     ->where("check_out", ">=", date("Y-m-d H:i:s"))
+                    ->where("is_cancelled", "!=", 1)
                     ->first();
             $adultNo = 0;
             $childNo = 0;

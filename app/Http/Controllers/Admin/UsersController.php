@@ -476,7 +476,7 @@ class UsersController extends Controller {
             $query = UserBookingDetail::query();
             $data['recordsTotal'] = $query->where("user_id", $user_id)->count();
             $data['recordsFiltered'] = $query->where("user_id", $user_id)->count();
-            $userBookingDetails = $query->selectRaw(DB::raw('id, resort_room_no, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->get();
+            $userBookingDetails = $query->selectRaw(DB::raw('id, is_cancelled, resort_room_no, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->get();
             $bookinDetailArray = [];
             foreach ($userBookingDetails as $i => $userBookingDetail) {
                 $resort = Resort::find($userBookingDetail->resort_id);
@@ -485,13 +485,16 @@ class UsersController extends Controller {
                 $checkInTime = strtotime($userBookingDetail->check_in);
                 $checkOutTime = strtotime($userBookingDetail->check_out);
                 $stat = "";
-
-                if ($currentDataTime > $checkOutTime) {
-                    $stat = "<span class='label label-primary'>Completed</span>";
-                } elseif ($currentDataTime < $checkInTime) {
-                    $stat = "<span class='label label-info'>Upcoming</span>";
+                if ($userBookingDetail->is_cancelled == 1) {
+                    $stat = "<span class='label label-danger'>Cancelled</span>";
                 } else {
-                    $stat = "<span class='label label-success'>Current</span>";
+                    if ($currentDataTime > $checkOutTime) {
+                        $stat = "<span class='label label-primary'>Completed</span>";
+                    } elseif ($currentDataTime < $checkInTime) {
+                        $stat = "<span class='label label-info'>Upcoming</span>";
+                    } else {
+                        $stat = "<span class='label label-success'>Current</span>";
+                    }
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;

@@ -334,6 +334,7 @@ class HealthcareProgramController extends Controller {
                         ])
                         ->where("check_in", ">", date("Y-m-d H:i:s"))
                         ->where("user_id", $request->user_id)
+                        ->where("is_cancelled", "!=", 1)
                         ->get();
                 $completedArray = [];
                 foreach ($completedPackages as $i => $completedPackage) {
@@ -346,6 +347,7 @@ class HealthcareProgramController extends Controller {
                 $upcomingArray = [];
                 foreach ($upcomingPackages as $i => $upcomingPackage) {
                     $upcomingArray[$i]["id"] = $upcomingPackage->packageDetail->id;
+                    $upcomingArray[$i]["record_id"] = $upcomingPackage->id;
                     $upcomingArray[$i]["name"] = $upcomingPackage->packageDetail->name;
                     $upcomingArray[$i]["duration"] = $upcomingPackage->packageDetail->start_from . " to " . $upcomingPackage->packageDetail->end_to;
                     $upcomingArray[$i]["status"] = "Upcoming";
@@ -409,10 +411,12 @@ class HealthcareProgramController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing", (object) []);
             }
-            if (!$request->health_care_package_id) {
-                return $this->sendErrorResponse("Health care package id missing", (object) []);
+            if (!$request->record_id) {
+                return $this->sendErrorResponse("record id missing", (object) []);
             }
-
+            $userBookingDetail = UserBookingDetail::find($request->record_id);
+            $userBookingDetail->is_cancelled = 1;
+            $userBookingDetail->save();
             return $this->sendSuccessResponse("Healthcare package cancelled successsfully", (object) []);
         } catch (\Exception $ex) {
             return $this->sendErrorResponse($ex->getMessage(), (object) []);

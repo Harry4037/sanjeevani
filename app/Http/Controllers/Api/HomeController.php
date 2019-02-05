@@ -253,8 +253,8 @@ class HomeController extends Controller {
                 $nearbyArray[$k]['distance'] = $near->distance_from_resort;
                 $nearbyArray[$k]['precautions'] = $near->precautions;
                 $nearbyArray[$k]['address'] = $near->address_1;
-                $nearbyArray[$k]['latitude'] = "28.608510";
-                $nearbyArray[$k]['longitude'] = "77.347370";
+                $nearbyArray[$k]['latitude'] = $near->latitude;
+                $nearbyArray[$k]['longitude'] = $near->longitude;
                 if ($nearbyImages) {
                     $j = 0;
                     foreach ($nearbyImages as $nearbyImage) {
