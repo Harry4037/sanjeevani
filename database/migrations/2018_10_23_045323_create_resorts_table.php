@@ -16,6 +16,8 @@ class CreateResortsTable extends Migration {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
+            $table->text('amenities')->nullable();
+            $table->text('other_amenities')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('other_contact_number')->nullable();
             $table->string('address_1')->nullable();

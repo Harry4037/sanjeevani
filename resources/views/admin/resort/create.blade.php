@@ -96,6 +96,34 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenities</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" name="aminities[]" value="1">Wifi
+                                <input class="flat" type="checkbox" name="aminities[]" value="2">Swimming Pool
+                                <input class="flat" type="checkbox" name="aminities[]" value="3">Air Conditioner
+                                <input class="flat" type="checkbox" name="aminities[]" value="4">Room Service
+                                <input class="flat" type="checkbox" name="aminities[]" value="5">Restaurant
+                                <input class="flat" type="checkbox" name="aminities[]" value="6">Bar
+                                <input class="flat" type="checkbox" name="aminities[]" value="7">Gym/Fitness Center
+                                <input class="flat" type="checkbox" name="aminities[]" value="8">Parking
+                                <input class="flat" type="checkbox" name="aminities[]" value="9">Spa
+                                <input class="flat" type="checkbox" name="aminities[]" value="10">Gyser
+                            <p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Other Amenities</label>
+                    </div>
+                    <div id="other_amenity_div">
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
+                            <button type="button" class="btn btn-primary" id="add_more_amenity">Add Amenity</button>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
                     </div>
 
@@ -153,6 +181,15 @@
 <script>
 $(document).ready(function () {
 
+    if ($("input.flat")[0]) {
+        $(document).ready(function () {
+            $('input.flat').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            });
+        });
+    }
+
 //For ckeditor
     CKEDITOR.replace('resort_description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
@@ -180,6 +217,14 @@ $(document).ready(function () {
                 + "<input type='text' class='form-control' name='room_no[]'>"
                 + "</div>" + room_type + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#room_detail_div").append(member_html);
+    });
+    
+    $(document).on("click", "#add_more_amenity", function () {
+
+        var amenity_html = "<div class='form-group'><label class='control-label col-md-6 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                + "<input type='text' class='form-control' name='other_amenities[]'>"
+                + "</div></div>";
+        $("#other_amenity_div").append(amenity_html);
     });
 
 

@@ -90,7 +90,6 @@ class ResortController extends Controller {
                 if ($validator->fails()) {
                     return redirect()->route('admin.resort.add')->withErrors($validator)->withInput();
                 }
-
                 $resort = $this->resort;
                 $resort->name = $request->resort_name;
                 $resort->contact_number = $request->contact_no;
@@ -100,6 +99,8 @@ class ResortController extends Controller {
                 $resort->city_id = $request->city;
                 $resort->latitude = $request->latitude;
                 $resort->longitude = $request->longitude;
+                $resort->amenities = implode("#", $request->aminities);
+                $resort->other_amenities = implode("#", $request->other_amenities);
                 if ($resort->save()) {
                     if ($request->resort_images) {
                         foreach ($request->resort_images as $tempImage) {
@@ -128,9 +129,11 @@ class ResortController extends Controller {
             }
             $css = [
                 "vendors/dropzone/dist/dropzone.css",
+                "vendors/iCheck/skins/flat/green.css",
             ];
             $js = [
                 'vendors/dropzone/dist/dropzone.js',
+                'vendors/iCheck/icheck.min.js',
             ];
             $roomTypes = $this->roomType->all();
             $states = StateMaster::all();
