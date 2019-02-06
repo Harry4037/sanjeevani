@@ -37,7 +37,8 @@
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li><a href="{{ route('subadmin.profile') }}">Profile</a></li>
+                        <li><a href="{{ route('subadmin.profile') }}">Account Profile</a></li>
+                        <li><a href="{{ route('subadmin.resort.edit', $user_resort->resort_id) }}">Resort Profile</a></li>
                         <li><a href="{{ route('subadmin.change-password') }}">Change Password</a></li>
                         <li><a href="{{ route('subadmin.logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                     </ul>

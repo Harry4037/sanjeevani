@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends('layouts.subadmin.app')
 
 @section('content')
 
@@ -7,7 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Edit Resort</h2>
+                <h2>Update Resort Details</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -27,14 +27,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Resort Images</label>
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <form id="my-dropzone" class="dropzone" action="{{ route('admin.resort.upload-image') }}">
+                            <form id="my-dropzone" class="dropzone" action="{{ route('subadmin.resort.upload-image') }}">
                                 @csrf
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="ln_solid"></div>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.resort.edit', $data->id) }}" method="post" id="editResortForm" enctype="multipart/form-data">
+                <form class="form-horizontal form-label-left" action="{{ route('subadmin.resort.edit', $data->id) }}" method="post" id="editResortForm" enctype="multipart/form-data">
                     @csrf
                     <div id="resort_images_div"></div>
                     <div class="form-group">
@@ -116,6 +116,45 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenities</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" name="aminities[]" value="1" @if(in_array(1, explode("#", $data->amenities))) {{ "checked" }} @endif>Wifi
+                                       <input class="flat" type="checkbox" name="aminities[]" value="2" @if(in_array(2, explode("#", $data->amenities))) {{ "checked" }} @endif>Swimming Pool
+                                       <input class="flat" type="checkbox" name="aminities[]" value="3" @if(in_array(3, explode("#", $data->amenities))) {{ "checked" }} @endif>Air Conditioner
+                                       <input class="flat" type="checkbox" name="aminities[]" value="4" @if(in_array(4, explode("#", $data->amenities))) {{ "checked" }} @endif>Room Service
+                                       <input class="flat" type="checkbox" name="aminities[]" value="5" @if(in_array(5, explode("#", $data->amenities))) {{ "checked" }} @endif>Restaurant
+                                       <input class="flat" type="checkbox" name="aminities[]" value="6" @if(in_array(6, explode("#", $data->amenities))) {{ "checked" }} @endif>Bar
+                                       <input class="flat" type="checkbox" name="aminities[]" value="7" @if(in_array(7, explode("#", $data->amenities))) {{ "checked" }} @endif>Gym/Fitness Center
+                                       <input class="flat" type="checkbox" name="aminities[]" value="8" @if(in_array(8, explode("#", $data->amenities))) {{ "checked" }} @endif>Parking
+                                       <input class="flat" type="checkbox" name="aminities[]" value="9" @if(in_array(9, explode("#", $data->amenities))) {{ "checked" }} @endif>Spa
+                                       <input class="flat" type="checkbox" name="aminities[]" value="10" @if(in_array(10, explode("#", $data->amenities))) {{ "checked" }} @endif>Pets
+                                       <input class="flat" type="checkbox" name="aminities[]" value="11" @if(in_array(11, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
+                            <p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Other Amenities</label>
+                    </div>
+                    <div id="other_amenity_div">
+                        @if($data->other_amenities)
+                        @foreach(explode("#", $data->other_amenities) as $am)
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-6 col-xs-12"></label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <input type="text" class="form-control" name="other_amenities[]" value="{{ $am }}">
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
+                            <button type="button" class="btn btn-primary" id="add_more_amenity">Add Amenity</button>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
                     </div>
 
@@ -127,6 +166,7 @@
                             <label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>
                             <div class='col-md-2 col-sm-2 col-xs-12'>
                                 <input value="{{ $dataRoom->room_no }}" type='text' class='form-control' name='room_no[]'>
+                                <input value="{{ $dataRoom->id }}" type='hidden' name='room_id[]'>
                             </div>
                             <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>                         
                             <div class = 'col-md-2 col-sm-2 col-xs-11'>
@@ -155,7 +195,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 text-center">
-                            <a class="btn btn-default" href="{{ route('admin.resort.index') }}">Cancel</a>
+                            <a class="btn btn-default" href="{{ route('subadmin.dashboard') }}">Cancel</a>
                             <button type="submit" class="btn btn-success">Update</button>
                         </div>
                     </div>
@@ -172,6 +212,23 @@
 <script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
+
+    if ($("input.flat")[0]) {
+        $(document).ready(function () {
+            $('input.flat').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            });
+        });
+    }
+
+    $(document).on("click", "#add_more_amenity", function () {
+
+        var amenity_html = "<div class='form-group'><label class='control-label col-md-4 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
+                + "<input type='text' class='form-control' name='other_amenities[]'>"
+                + "</div></div>";
+        $("#other_amenity_div").append(amenity_html);
+    });
 
 //For ckeditor
     CKEDITOR.replace('edit_resort_description', {
@@ -192,7 +249,9 @@ $(document).ready(function () {
             },
             edit_contact_no: {
                 required: true,
-                number: true
+                number: true,
+                minlength: 10,
+                maxlength: 10,
             },
             edit_resort_description: {
                 required: true
@@ -201,10 +260,23 @@ $(document).ready(function () {
                 required: true
             },
             edit_pin_code: {
-                required: true
+                required: true,
+                number: true,
+                minlength: 6,
+                maxlength: 6,
             },
             state: {
                 required: true
+            },
+            latitude: {
+                required: true,
+                number: true,
+                float_number: true,
+            },
+            longitude: {
+                required: true,
+                number: true,
+                float_number: true,
             },
             city: {
                 required: true
@@ -223,6 +295,7 @@ $(document).ready(function () {
 
         var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-2'>"
                 + "<input type='text' class='form-control' name='room_no[]'>"
+                + "<input value=0 type='hidden' class='form-control' name='room_id[]'>"
                 + "</div>" + room_type + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#room_detail_div").append(member_html);
     });
@@ -231,27 +304,27 @@ $(document).ready(function () {
         $(this).parent("div").remove();
     });
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     $(document).on('click', '.delete_room', function () {
         var record_id = this.id;
         var _this = $(this);
         if (record_id) {
             $.ajax({
-                url: _baseUrl + '/admin/resort/delete-room',
+                url: _baseUrl + '/sub-admin/resort/delete-room',
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
+                        $(".overlay").hide();
                         _this.parent("div").remove();
+                        showSuccessMessage(res.message);
                     } else {
-                        alert("Something went be wrong");
+                        $(".overlay").hide();
+                        showErrorMessage(res.message);
                     }
                 }
             });
@@ -264,16 +337,22 @@ $(document).ready(function () {
         var _this = $(this);
         if (record_id) {
             $.ajax({
-                url: _baseUrl + '/admin/resort/delete-resort-images',
+                url: _baseUrl + '/sub-admin/resort/delete-resort-images',
                 type: 'post',
                 data: {record_id: record_id},
                 dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (res) {
                     if (res.status)
                     {
                         _this.parent("div").remove();
+                        $(".overlay").hide();
+                        showSuccessMessage(res.message);
                     } else {
-                        alert("Something went be wrong");
+                        $(".overlay").hide();
+                        showErrorMessage(res.message);
                     }
                 }
             });
@@ -295,14 +374,17 @@ $(document).ready(function () {
                         var record_id = this.id;
                         var record_val = $(this).attr("data-val");
                         $.ajax({
-                            url: _baseUrl + '/admin/resort/delete-images',
+                            url: _baseUrl + '/sub-admin/resort/delete-images',
                             type: 'post',
                             data: {record_val: record_val, record_id: record_id},
-//                            dataType: 'json',
+                            beforeSend: function () {
+                                $(".overlay").show();
+                            },
                             success: function (res) {
-                                console.log(res);
                                 $("#resort_image_input_" + record_id).remove();
                                 _this.removeFile(file);
+                                $(".overlay").hide();
+                                showSuccessMessage(res.message);
                             }
                         });
 

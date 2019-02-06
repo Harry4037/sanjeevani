@@ -318,6 +318,11 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
 
     Route::prefix('resort')->group(function() {
         Route::post('/resort-rooms', 'ResortController@getResortRooms')->name('subadmin.resort.rooms');
+        Route::match(['get', 'post'], '/edit/{id}', 'ResortController@editResort')->name('subadmin.resort.edit');
+        Route::post('/upload-images', 'ResortController@uploadImages')->name('subadmin.resort.upload-image');
+        Route::post('/delete-room', 'ResortController@deleteRoom')->name('subadmin.resort.delete-room');
+        Route::post('/delete-images', 'ResortController@deleteImages')->name('subadmin.resort.delete-image');
+        Route::post('/delete-resort-images', 'ResortController@deleteResortImage')->name('subadmin.resort.delete-resort-image');
     });
     /**
      * Dashboard & Profile routes
