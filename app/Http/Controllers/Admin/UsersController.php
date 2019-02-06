@@ -64,29 +64,30 @@ class UsersController extends Controller {
                     $query->accepted();
                 }]);
             if ($searchKeyword) {
-                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
-                    $query->where("first_name", "LIKE", "%$searchKeyword%")
-                            ->orWhere("email_id", "LIKE", "%$searchKeyword%")
-                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
-                }
+//                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
+                $query->where("first_name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+//                }
             }
             $query->where("user_type_id", "=", 3);
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
 
-            if ($searchKeyword) {
-                if (preg_match('/guest/i', $searchKeyword)) {
-                    $users = $users->filter(function ($users) {
-                        return $users->user_type_id == 4;
-                    });
-                } elseif (preg_match('/customer/i', $searchKeyword)) {
-                    $users = $users->filter(function ($users) {
-                        return $users->user_type_id == 3;
-                    });
-                }
-            }
+//            if ($searchKeyword) {
+//                if (preg_match('/guest/i', $searchKeyword)) {
+//                    $users = $users->filter(function ($users) {
+//                        return $users->user_type_id == 4;
+//                    });
+//                } elseif (preg_match('/customer/i', $searchKeyword)) {
+//                    $users = $users->filter(function ($users) {
+//                        return $users->user_type_id == 3;
+//                    });
+//                }
+//            }
 
-            $data['recordsTotal'] = count($users);
-            $data['recordsFiltered'] = count($users);
+
             $usersArray = [];
             $i = 0;
             foreach ($users as $user) {
