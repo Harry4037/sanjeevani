@@ -118,12 +118,6 @@
 <script>
     $(document).ready(function () {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
@@ -154,7 +148,6 @@
         });
 
         $(document).on("change", "#resort_room_type", function () {
-            alert();
             var resort = $("#resort_id :selected").val();
             var resort_room = $("#resort_room_type :selected").val();
             var check_in = $("#check_in").val();
@@ -167,7 +160,7 @@
                 return false;
             } else {
                 $.ajax({
-                    url: _baseUrl + '/admin/resort/resort-rooms/',
+                    url: _baseUrl + '/admin/resort/resort-rooms',
                     type: 'post',
                     data: {
                         "resort": resort,
