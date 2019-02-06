@@ -154,6 +154,7 @@
         });
 
         $(document).on("change", "#resort_room_type", function () {
+            alert();
             var resort = $("#resort_id :selected").val();
             var resort_room = $("#resort_room_type :selected").val();
             var check_in = $("#check_in").val();
