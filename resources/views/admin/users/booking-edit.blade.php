@@ -49,7 +49,7 @@
                                 @if($resorts)
                                 @foreach($resorts as $resort)
                                 <option value="{{ $resort->id }}"
-                                        @if($data->package_id == $resort->id)
+                                        @if($data->resort_id == $resort->id)
                                         {{ "selected" }}
                                         @endif
                                         >{{ $resort->name }}</option>

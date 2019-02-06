@@ -132,7 +132,15 @@
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
         }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
+            $('#check_out').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            singleClasses: "picker_2",
+            startDate: start,
+            minDate: start,
+            locale: {
+                format: 'YYYY/M/DD hh:mm:ss A'
+            }});
         });
 
         $('#check_out').daterangepicker({

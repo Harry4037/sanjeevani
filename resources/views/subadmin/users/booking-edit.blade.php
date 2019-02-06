@@ -161,7 +161,7 @@
             timePicker: true,
             singleClasses: "picker_2",
             startDate: new Date("{{ $data->check_in }}"),
-            minDate: new Date("{{ $data->check_in }}"),
+//            minDate: new Date("{{ $data->check_in }}"),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
@@ -171,6 +171,7 @@
                 timePicker: true,
                 singleClasses: "picker_2",
                 startDate: start,
+                minDate: start,
                 locale: {
                     format: 'YYYY/M/DD hh:mm:ss A'
                 }});
@@ -197,7 +198,7 @@
         });
 
         $(document).on("change", "#resort_room_type", function () {
-            var resort = {{ $data->resort_id }};
+            var resort = $("#resort_id").val();
             var resort_room = $("#resort_room_type :selected").val();
             var check_in = $("#check_in").val();
             var check_out = $("#check_out").val();

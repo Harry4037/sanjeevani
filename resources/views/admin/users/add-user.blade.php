@@ -38,65 +38,71 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Health Details</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Health Details</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" id="is_medical_document" name="is_medical_document">
+                            <p>
+                        </div>
                     </div>
-                    <div class="ln_solid"></div>
+                    <div id="user_medical_detail_div" style="display: none;">
+                        <div class="ln_solid"></div>
 
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="is_diabeties" id="is_diabeties">
-                                <option value="">Choose option</option>
-                                <option value="1" @if(old('is_diabeties') == '1'){{ "selected" }}@endif>Yes</option>
-                                <option value="0" @if(old('is_diabeties') == '0'){{ "selected" }}@endif>No</option>
-                            </select>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="is_diabeties" id="is_diabeties">
+                                    <option value="">Choose option</option>
+                                    <option value="1" @if(old('is_diabeties') == '1'){{ "selected" }}@endif>Yes</option>
+                                    <option value="0" @if(old('is_diabeties') == '0'){{ "selected" }}@endif>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="is_ppa" id="is_ppa">
+                                    <option value="">Choose option</option>
+                                    <option value="1" @if(old('is_ppa') == '1'){{ "selected" }}@endif>Yes</option>
+                                    <option value="0" @if(old('is_ppa') == '0'){{ "selected" }}@endif>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="hba_1c" id="hba_1c">
+                                    <option value="">Choose option</option>
+                                    <option value="1" @if(old('hba_1c') == '1'){{ "selected" }}@endif>Yes</option>
+                                    <option value="0" @if(old('hba_1c') == '0'){{ "selected" }}@endif>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ old('fasting') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ old('bp') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ old('insullin_dependency') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="file" class="form-control" placeholder="Medical Document" name="medical_documents" id="medical_documents" >
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="is_ppa" id="is_ppa">
-                                <option value="">Choose option</option>
-                                <option value="1" @if(old('is_ppa') == '1'){{ "selected" }}@endif>Yes</option>
-                                <option value="0" @if(old('is_ppa') == '0'){{ "selected" }}@endif>No</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="hba_1c" id="hba_1c">
-                                <option value="">Choose option</option>
-                                <option value="1" @if(old('hba_1c') == '1'){{ "selected" }}@endif>Yes</option>
-                                <option value="0" @if(old('hba_1c') == '0'){{ "selected" }}@endif>No</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ old('fasting') }}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ old('bp') }}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ old('insullin_dependency') }}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="file" class="form-control" placeholder="Medical Document" name="medical_documents" id="medical_documents" >
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
@@ -303,27 +309,27 @@
                 package_id: {
                     required: true
                 },
-                is_diabeties: {
-                    required: true
-                },
-                is_ppa: {
-                    required: true
-                },
-                hba_1c: {
-                    required: true
-                },
-                fasting: {
-                    required: true
-                },
-                bp: {
-                    required: true
-                },
-                insullin_dependency: {
-                    required: true
-                },
-                medical_documents: {
-                    required: true
-                },
+//                is_diabeties: {
+//                    required: true
+//                },
+//                is_ppa: {
+//                    required: true
+//                },
+//                hba_1c: {
+//                    required: true
+//                },
+//                fasting: {
+//                    required: true
+//                },
+//                bp: {
+//                    required: true
+//                },
+//                insullin_dependency: {
+//                    required: true
+//                },
+//                medical_documents: {
+//                    required: true
+//                },
             }});
 
 
@@ -359,7 +365,7 @@
                 });
             }
         });
-        
+
         $(document).on("change", "#resort_id", function () {
             var resort = $("#resort_id :selected").val();
             if (!resort) {
@@ -367,7 +373,7 @@
                 return false;
             } else {
                 $.ajax({
-                    url: _baseUrl + '/admin/resort/resort-healthcare/'+resort,
+                    url: _baseUrl + '/admin/resort/resort-healthcare/' + resort,
                     type: 'get',
                     dataType: 'html',
                     beforeSend: function () {
@@ -380,11 +386,34 @@
                 });
             }
         });
-        
+
         $(document).on("change", "#resort_room_id", function () {
             var record_val = $("#resort_room_id :selected").text();
             $("#resort_room_id_hidden").val(record_val);
         });
+
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
+
+        $('#is_medical_document').on('ifChecked', function () {
+            $("#is_diabeties").rules("add", {required: true});
+            $("#is_ppa").rules("add", {required: true});
+            $("#hba_1c").rules("add", {required: true});
+            $("input[name='fasting']").rules("add", {required: true});
+            $("input[name='bp']").rules("add", {required: true});
+            $("input[name='insullin_dependency']").rules("add", {required: true});
+            $("#user_medical_detail_div").css("display", "block");
+        });
+        $('#is_medical_document').on('ifUnchecked', function () {
+            $("#user_medical_detail_div").css("display", "none");
+        });
+
     });
 </script>
 

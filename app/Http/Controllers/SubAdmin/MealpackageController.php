@@ -71,7 +71,10 @@ class MealpackageController extends Controller {
                             'category' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('subadmin.meal-package.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.meal-package.add')->withErrors($validator)->withInput();
+                }
+                if(MealPackage::where(["name" => $request->name, "resort_id" => $request->get("subadminResort")])->first()){
+                    return redirect()->route('subadmin.meal-package.add')->with('error', 'Meal Package already exist with this name.');
                 }
                 $mealPackage = new MealPackage();
 

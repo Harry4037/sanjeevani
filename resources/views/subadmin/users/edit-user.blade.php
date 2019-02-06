@@ -54,8 +54,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Health Details</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Health Details</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" id="is_medical_document" name="is_medical_document" @if($userHealth) {{ "checked" }} @endif>
+                            <p>
+                        </div>
                     </div>
+                    <div id="user_medical_detail_div" style="display: @if($userHealth) {{ "block" }} @else {{ "none" }} @endif">
                     <div class="ln_solid"></div>
 
                     <div class="form-group">
@@ -139,7 +145,7 @@
                             <input type="file" class="form-control" name="medical_documents" id="medical_documents" >
                         </div>
                     </div>
-
+                    </div>
 <!--                    <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
@@ -379,24 +385,24 @@
             package_id: {
             required: true
             },
-            is_diabeties: {
-            required: true
-            },
-            is_ppa: {
-            required: true
-            },
-            hba_1c: {
-            required: true
-            },
-            fasting: {
-            required: true
-            },
-            bp: {
-            required: true
-            },
-            insullin_dependency: {
-            required: true
-            },
+//            is_diabeties: {
+//            required: true
+//            },
+//            is_ppa: {
+//            required: true
+//            },
+//            hba_1c: {
+//            required: true
+//            },
+//            fasting: {
+//            required: true
+//            },
+//            bp: {
+//            required: true
+//            },
+//            insullin_dependency: {
+//            required: true
+//            },
 //                medical_documents: {
 //                    required: true
 //                },
@@ -428,6 +434,31 @@
     }
 
     });
+    
+            if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
+        
+        $('#is_medical_document').on('ifChecked', function () { 
+            $("#is_diabeties").rules("add", {required: true});
+            $("#is_ppa").rules("add", {required: true});
+            $("#hba_1c").rules("add", {required: true});
+            $("input[name='fasting']").rules("add", {required: true});
+            $("input[name='bp']").rules("add", {required: true});
+            $("input[name='insullin_dependency']").rules("add", {required: true});
+            
+
+            $("#user_medical_detail_div").css("display", "block");
+        });
+        $('#is_medical_document').on('ifUnchecked', function () { 
+                $("#user_medical_detail_div").css("display", "none");
+        });
+        
     });
 </script>
 

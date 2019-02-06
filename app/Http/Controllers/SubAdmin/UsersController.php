@@ -156,7 +156,7 @@ class UsersController extends Controller {
             return view('subadmin.users.user-detail', [
                 "user" => $user,
                 'userBooking' => $userBooking,
-                'userHealth' => $userHealth,
+                'userHealth' => $userHealth ? $userHealth : [],
                 'resortRooms' => isset($resortRooms) ? $resortRooms : [],
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
             ]);
@@ -172,21 +172,21 @@ class UsersController extends Controller {
                     ->where("user_type_id", 3)
                     ->first();
             if ($userExist) {
-                return redirect()->route('subadmin.users.add')->with('error', 'User already exists with thin mobile number');
+                return redirect()->route('subadmin.users.add')->with('error', 'User already exists with this mobile number');
             } else {
 
                 $validator = Validator::make($request->all(), [
                             'user_name' => 'bail|required',
                             'mobile_number' => 'bail|required|numeric',
                             'email_id' => 'bail|required|email',
-                            'is_diabeties' => 'bail|required',
-                            'is_ppa' => 'bail|required',
-                            'hba_1c' => 'bail|required',
-                            'fasting' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'insullin_dependency' => 'bail|required',
-                            'medical_documents' => 'bail|required',
+//                            'is_diabeties' => 'bail|required',
+//                            'is_ppa' => 'bail|required',
+//                            'hba_1c' => 'bail|required',
+//                            'fasting' => 'bail|required',
+//                            'bp' => 'bail|required',
+//                            'bp' => 'bail|required',
+//                            'insullin_dependency' => 'bail|required',
+//                            'medical_documents' => 'bail|required',
                             'booking_source_name' => 'bail|required',
                             'booking_source_id' => 'bail|required',
 //                            'resort_id' => 'bail|required',
@@ -215,24 +215,25 @@ class UsersController extends Controller {
                     $user->updated_by = 1;
 
                     if ($user->save()) {
-                        $doc_file_name = '';
-                        if ($request->hasFile("medical_documents")) {
-                            $medical_documents = $request->file("medical_documents");
-                            $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
-                            $doc_file_name = basename($medical_doc);
+                        if (isset($request->is_medical_document) && ($request->is_medical_document == "on")) {
+                            $doc_file_name = '';
+                            if ($request->hasFile("medical_documents")) {
+                                $medical_documents = $request->file("medical_documents");
+                                $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
+                                $doc_file_name = basename($medical_doc);
+                            }
+
+                            $userHealthDetail = new UserhealthDetail();
+                            $userHealthDetail->is_diabeties = $request->is_diabeties;
+                            $userHealthDetail->is_ppa = $request->is_ppa;
+                            $userHealthDetail->hba_1c = $request->hba_1c;
+                            $userHealthDetail->fasting = $request->fasting;
+                            $userHealthDetail->bp = $request->bp;
+                            $userHealthDetail->insullin_dependency = $request->insullin_dependency;
+                            $userHealthDetail->medical_documents = $doc_file_name;
+                            $userHealthDetail->user_id = $user->id;
+                            $userHealthDetail->save();
                         }
-
-                        $userHealthDetail = new UserhealthDetail();
-                        $userHealthDetail->is_diabeties = $request->is_diabeties;
-                        $userHealthDetail->is_ppa = $request->is_ppa;
-                        $userHealthDetail->hba_1c = $request->hba_1c;
-                        $userHealthDetail->fasting = $request->fasting;
-                        $userHealthDetail->bp = $request->bp;
-                        $userHealthDetail->insullin_dependency = $request->insullin_dependency;
-                        $userHealthDetail->medical_documents = $doc_file_name;
-                        $userHealthDetail->user_id = $user->id;
-                        $userHealthDetail->save();
-
                         $roomType = RoomType::find($request->resort_room_type);
                         $roomRoom = ResortRoom::find($request->resort_room_id);
 
@@ -276,11 +277,13 @@ class UsersController extends Controller {
 
         $css = [
             'vendors/bootstrap-daterangepicker/daterangepicker.css',
+            "vendors/iCheck/skins/flat/green.css",
         ];
         $js = [
             'vendors/moment/min/moment.min.js',
             'vendors/bootstrap-daterangepicker/daterangepicker.js',
             'vendors/datatables.net/js/jquery.dataTables.min.js',
+            'vendors/iCheck/icheck.min.js',
         ];
 //        $resorts = Resort::where("is_active", 1)->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
@@ -311,13 +314,13 @@ class UsersController extends Controller {
                             'user_name' => 'bail|required',
                             'mobile_number' => 'bail|required|numeric',
                             'email_id' => 'bail|required|email',
-                            'is_diabeties' => 'bail|required',
-                            'is_ppa' => 'bail|required',
-                            'hba_1c' => 'bail|required',
-                            'fasting' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'bp' => 'bail|required',
-                            'insullin_dependency' => 'bail|required',
+//                            'is_diabeties' => 'bail|required',
+//                            'is_ppa' => 'bail|required',
+//                            'hba_1c' => 'bail|required',
+//                            'fasting' => 'bail|required',
+//                            'bp' => 'bail|required',
+//                            'bp' => 'bail|required',
+//                            'insullin_dependency' => 'bail|required',
 //                            'medical_documents' => 'bail|required',
 //                    'booking_source_name' => 'bail|required',
 //                    'booking_source_id' => 'bail|required',
@@ -343,27 +346,32 @@ class UsersController extends Controller {
                 $user->updated_by = 1;
 
                 if ($user->save()) {
+                    if (isset($request->is_medical_document) && ($request->is_medical_document == "on")) {
+                        $doc_file_name = '';
+                        if ($request->hasFile("medical_documents")) {
+                            $medical_documents = $request->file("medical_documents");
+                            $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
+                            $doc_file_name = basename($medical_doc);
+                        }
+                        $userHealthDetail = UserhealthDetail::where("user_id", $user->id)->first();
+                        if (!$userHealthDetail) {
+                            $userHealthDetail = new UserhealthDetail();
+                        }
+                        $userHealthDetail->is_diabeties = $request->is_diabeties;
+                        $userHealthDetail->is_ppa = $request->is_ppa;
+                        $userHealthDetail->hba_1c = $request->hba_1c;
+                        $userHealthDetail->fasting = $request->fasting;
+                        $userHealthDetail->bp = $request->bp;
+                        $userHealthDetail->insullin_dependency = $request->insullin_dependency;
+                        $userHealthDetail->medical_documents = $doc_file_name;
+                        $userHealthDetail->user_id = $user->id;
 
-                    $doc_file_name = '';
-                    if ($request->hasFile("medical_documents")) {
-                        $medical_documents = $request->file("medical_documents");
-                        $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
-                        $doc_file_name = basename($medical_doc);
+                        $userHealthDetail->save();
+                    } else {
+                        UserhealthDetail::where("user_id", $id)->delete();
                     }
-                    $userHealthDetail = UserhealthDetail::where("user_id", $user->id)->first();
-                    if (!$userHealthDetail) {
-                        $userHealthDetail = new UserhealthDetail();
-                    }
-                    $userHealthDetail->is_diabeties = $request->is_diabeties;
-                    $userHealthDetail->is_ppa = $request->is_ppa;
-                    $userHealthDetail->hba_1c = $request->hba_1c;
-                    $userHealthDetail->fasting = $request->fasting;
-                    $userHealthDetail->bp = $request->bp;
-                    $userHealthDetail->insullin_dependency = $request->insullin_dependency;
-                    $userHealthDetail->medical_documents = $doc_file_name;
-                    $userHealthDetail->user_id = $user->id;
-                    if ($userHealthDetail->save()) {
-
+                    return redirect()->route('subadmin.users.edit', $id)->with('status', 'User has been updated successfully');
+//                    if ($userHealthDetail->save()) {
 //                    $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
 //                    if (!$userBooking) {
 //                        $userBooking = new UserBookingDetail();
@@ -386,18 +394,18 @@ class UsersController extends Controller {
 //                        $check_out_date = Carbon::parse($request->check_out);
 //                        $roomBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
 //                        $roomBooking->save();
-
-                        return redirect()->route('subadmin.users.edit', $id)->with('status', 'User has been updated successfully');
-                    }
+//                    }
                 }
             }
             $css = [
                 'vendors/bootstrap-daterangepicker/daterangepicker.css',
+                "vendors/iCheck/skins/flat/green.css",
             ];
             $js = [
                 'vendors/moment/min/moment.min.js',
                 'vendors/bootstrap-daterangepicker/daterangepicker.js',
                 'vendors/datatables.net/js/jquery.dataTables.min.js',
+                'vendors/iCheck/icheck.min.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
             $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
@@ -408,7 +416,7 @@ class UsersController extends Controller {
                 'roomTypes' => $roomTypes,
                 'user' => $user,
                 'userBooking' => $userBooking,
-                'userHealth' => $userHealth,
+                'userHealth' => $userHealth ? $userHealth : [],
                 'resortRooms' => isset($resortRooms) ? $resortRooms : [],
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
                 'healcarePackages' => $healcarePackages,
@@ -481,13 +489,24 @@ class UsersController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = UserBookingDetail::query();
+            $query->with(["packageDetail" => function($query) {
+                    $query->withTrashed();
+                }]);
+            $query->where("user_id", $user_id);
+            if ($searchKeyword) {
+                $query->where(function($query) use($searchKeyword) {
+                    $query->whereHas("packageDetail", function($query) use($searchKeyword) {
+                                $query->where("name", "LIKE", "%$searchKeyword%");
+                            })->orWhere("source_name", "LIKE", "%$searchKeyword%")
+                            ->orWhere("source_id", "LIKE", "%$searchKeyword%")
+                            ->orWhere("resort_room_no", "LIKE", "%$searchKeyword%");
+                });
+            }
             $data['recordsTotal'] = $query->where("user_id", $user_id)->count();
             $data['recordsFiltered'] = $query->where("user_id", $user_id)->count();
             $userBookingDetails = $query->selectRaw(DB::raw('id, is_cancelled, resort_room_no, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->get();
             $bookinDetailArray = [];
             foreach ($userBookingDetails as $i => $userBookingDetail) {
-                $resort = Resort::find($userBookingDetail->resort_id);
-                $healthCareProgram = HealthcateProgram::find($userBookingDetail->package_id);
                 $currentDataTime = strtotime(date("d-m-Y H:i:s"));
                 $checkInTime = strtotime($userBookingDetail->check_in);
                 $checkOutTime = strtotime($userBookingDetail->check_out);
@@ -507,10 +526,9 @@ class UsersController extends Controller {
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
                 $bookinDetailArray[$i]["source_id"] = $userBookingDetail->source_id;
-                $bookinDetailArray[$i]["resort"] = isset($resort->name) ? $resort->name : "";
-                $bookinDetailArray[$i]["package"] = isset($healthCareProgram->name) ? $healthCareProgram->name : "";
-                $bookinDetailArray[$i]["check_in"] = isset($userBookingDetail->check_in) ? $userBookingDetail->check_in : "";
-                $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? $userBookingDetail->check_out : "";
+                $bookinDetailArray[$i]["package"] = isset($userBookingDetail->packageDetail->name) ? $userBookingDetail->packageDetail->name : "";
+                $bookinDetailArray[$i]["check_in"] = isset($userBookingDetail->check_in) ? date("d-M-Y h:i A", strtotime($userBookingDetail->check_in)) : "";
+                $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? date("d-M-Y h:i A", strtotime($userBookingDetail->check_out)) : "";
                 $bookinDetailArray[$i]["room_no"] = isset($userBookingDetail->resort_room_no) ? $userBookingDetail->resort_room_no : "";
                 $bookinDetailArray[$i]["status"] = $stat;
                 $bookinDetailArray[$i]["action"] = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
@@ -611,6 +629,7 @@ class UsersController extends Controller {
 
     public function bookingEdit(Request $request, $id) {
         $data = UserBookingDetail::find($id);
+//        dd($data->toArray());
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
                         'booking_source_name' => 'bail|required',

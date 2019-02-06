@@ -45,5 +45,8 @@ class UserBookingDetail extends Model {
     public function packageDetail(){
         return $this->belongsTo('App\Models\HealthcateProgram', 'package_id');
     }
+    public function resortDetail(){
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
 
 }

@@ -22,7 +22,6 @@
                             <th>Sr.No.</th>
                             <th>Source Name</th>
                             <th>Source Id</th>
-                            <th>Resort Name</th>
                             <th>Room No.</th>
                             <th>Check In</th>
                             <th>Check Out</th>
@@ -61,7 +60,6 @@
             },
             {"data": "source_name"},
             {"data": "source_id"},
-            {"data": "resort"},
             {"data": "room_no"},
             {"data": "check_in"},
             {"data": "check_out"},
