@@ -280,7 +280,7 @@ class ResortController extends Controller {
 
             $query = ResortRoom::query();
             $query->where(["resort_id" => $resort, "room_type_id" => $request->resort_room, "is_active" => 1]);
-            if (!emptyArray($roomIds)) {
+            if (!empty($roomIds)) {
                 $query->whereNotIn("id", $roomIds);
             }
 
