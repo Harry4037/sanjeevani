@@ -13,6 +13,7 @@ use App\Models\UserBookingDetail;
 use App\Models\StateMaster;
 use App\Models\CityMaster;
 use App\Models\Amenity;
+use Illuminate\Support\Facades\Storage;
 
 class StaffController extends Controller {
 
@@ -154,7 +155,12 @@ class StaffController extends Controller {
                     $user->pincode = $request->pin_code;
                     $user->created_by = 1;
                     $user->updated_by = 1;
-
+                    if ($request->hasFile("profile_pic")) {
+                        $profile_pic = $request->file("profile_pic");
+                        $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
+                        $profile_file_name = basename($profile);
+                        $user->profile_pic_path = $profile_file_name;
+                    }
                     if ($user->save()) {
                         $userBooking = new UserBookingDetail();
                         $userBooking->source_name = ' ';
@@ -224,7 +230,12 @@ class StaffController extends Controller {
                 $user->pincode = $request->pin_code;
                 $user->created_by = 1;
                 $user->updated_by = 1;
-
+                if ($request->hasFile("profile_pic")) {
+                    $profile_pic = $request->file("profile_pic");
+                    $profile = Storage::disk('public')->put('profile_pic', $profile_pic);
+                    $profile_file_name = basename($profile);
+                    $user->profile_pic_path = $profile_file_name;
+                }
                 if ($user->save()) {
                     if (!$userBooking) {
                         $userBooking = UserBookingDetail::where("user_id", $user->id)->first();

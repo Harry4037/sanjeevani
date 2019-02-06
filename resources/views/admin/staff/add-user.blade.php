@@ -12,7 +12,7 @@
             </div>
             <div class="x_content">
                 <br>
-                <form class="form-horizontal form-label-left" action="{{ route('admin.staff.add') }}" method="post" id="addStaffForm">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.staff.add') }}" method="post" id="addStaffForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
@@ -30,6 +30,12 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ old('staff_email') }}" type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Pic</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input class="form-control" type="file" name="profile_pic" id="profile_pic" >
                         </div>
                     </div>
                     <div class="form-group">

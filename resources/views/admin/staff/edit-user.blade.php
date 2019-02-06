@@ -13,7 +13,7 @@
             <div class="x_content">
                 <br>
 
-                <form class="form-horizontal form-label-left" action="{{ route('admin.staff.edit', $user->id) }}" method="post" id="addStaffForm">
+                <form class="form-horizontal form-label-left" action="{{ route('admin.staff.edit', $user->id) }}" method="post" id="addStaffForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
@@ -31,6 +31,18 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $user->email_id }}" type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile Pic</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input class="form-control" type="file" name="profile_pic" id="profile_pic" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Profile preview</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <img class="img-rounded" style="width: 100px; height: 100px;" src="{{ $user->profile_pic_path }}" >
                         </div>
                     </div>
                     <div class="form-group">
