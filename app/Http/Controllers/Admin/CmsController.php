@@ -31,7 +31,7 @@ class CmsController extends Controller {
 
             $query = Cms::query();
             if ($searchKeyword) {
-                $query->where("content", "LIKE", "%$searchKeyword%");
+                $query->where("page_name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
@@ -62,7 +62,7 @@ class CmsController extends Controller {
             
             if ($cms->save()) {
                 
-                return redirect()->route('admin.cms.edit', $cms->id)->with('status', 'Paget has been update successfully.');
+                return redirect()->route('admin.cms.edit', $cms->id)->with('status', 'Page has been update successfully.');
             } else {
                 return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
             }

@@ -99,8 +99,8 @@ class ResortController extends Controller {
                 $resort->city_id = $request->city;
                 $resort->latitude = $request->latitude;
                 $resort->longitude = $request->longitude;
-                $resort->amenities = implode("#", $request->aminities);
-                $resort->other_amenities = implode("#", $request->other_amenities);
+                $resort->amenities = $request->aminities ? implode("#", $request->aminities) : "";
+                $resort->other_amenities = $request->other_amenities ? implode("#", $request->other_amenities) : "";
                 if ($resort->save()) {
                     if ($request->resort_images) {
                         foreach ($request->resort_images as $tempImage) {
@@ -193,8 +193,8 @@ class ResortController extends Controller {
                 $data->city_id = $request->city;
                 $data->latitude = $request->latitude;
                 $data->longitude = $request->longitude;
-                $data->amenities = implode("#", $request->aminities);
-                $data->other_amenities = implode("#", $request->other_amenities);
+                $data->amenities = $request->aminities ? implode("#", $request->aminities) : "";
+                $data->other_amenities = $request->other_amenities ? implode("#", $request->other_amenities) : "";
                 if ($data->save()) {
                     if ($request->room_type && $request->room_no) {
                         foreach ($request->room_type as $k => $room) {

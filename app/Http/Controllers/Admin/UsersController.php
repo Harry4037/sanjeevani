@@ -91,7 +91,7 @@ class UsersController extends Controller {
             $usersArray = [];
             $i = 0;
             foreach ($users as $user) {
-                $usersArray[$i]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$i]['name'] = $user->user_name;
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $usersArray[$i]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
@@ -513,6 +513,7 @@ class UsersController extends Controller {
                 $stat = "";
                 if ($userBookingDetail->is_cancelled == 1) {
                     $stat = "<span class='label label-danger'>Cancelled</span>";
+                    $actionBtn = '';
                 } else {
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
@@ -521,6 +522,7 @@ class UsersController extends Controller {
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
                     }
+                    $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
@@ -531,7 +533,7 @@ class UsersController extends Controller {
                 $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? date("d-M-Y h:i A", strtotime($userBookingDetail->check_out)) : "";
                 $bookinDetailArray[$i]["room_no"] = isset($userBookingDetail->resort_room_no) ? $userBookingDetail->resort_room_no : "";
                 $bookinDetailArray[$i]["status"] = $stat;
-                $bookinDetailArray[$i]["action"] = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                $bookinDetailArray[$i]["action"] = $actionBtn;
             }
             $data["data"] = $bookinDetailArray;
 

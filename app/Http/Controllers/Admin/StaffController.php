@@ -70,7 +70,7 @@ class StaffController extends Controller {
             foreach ($users as $user) {
                 $staffResort = UserBookingDetail::where("user_id", $user->id)->first();
 
-                $usersArray[$i]['name'] = $user->first_name . ' ' . $user->last_ame;
+                $usersArray[$i]['name'] = $user->user_name;
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $usersArray[$i]['resort_name'] = isset($staffResort->resort->name) ? $staffResort->resort->name : 'N/A';

@@ -207,7 +207,7 @@ class ActivityController extends Controller {
                 }
 
 
-                return redirect()->route('admin.activity.index')->with('status', 'Activity has been added successfully.');
+                return redirect()->route('admin.activity.index')->with('status', 'Activity has been updated successfully.');
             } else {
                 return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
             }

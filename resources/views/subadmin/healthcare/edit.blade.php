@@ -144,7 +144,18 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             locale: {
             format: 'YYYY/M/DD'
             }
-    });
+    }, function (start, end, label) {
+            $('#end_to').daterangepicker({
+            singleDatePicker: true,
+                    timePicker: false,
+                    singleClasses: "picker_1",
+                    startDate: start,
+                    minDate: start,
+                    locale: {
+                    format: 'YYYY/M/DD'
+                    }
+            });
+        });
     $('#end_to').daterangepicker({
     singleDatePicker: true,
             timePicker: false,

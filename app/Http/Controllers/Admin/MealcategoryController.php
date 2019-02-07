@@ -63,6 +63,11 @@ class MealcategoryController extends Controller {
                 if ($validator->fails()) {
                     return redirect()->route('admin.meal-category.index')->withErrors($validator)->withInput();
                 }
+
+                $existMeal = MealType::where(["name" => $request->name])->first();
+                if ($existMeal) {
+                    return redirect()->route('admin.meal-category.add')->with('error', 'Meal category already exist with these details.')->withInput();
+                }
                 $mealType = new MealType();
 
                 $mealType->name = $request->name;
@@ -107,7 +112,7 @@ class MealcategoryController extends Controller {
             }
             $data->name = $request->name;
             if ($data->save()) {
-                return redirect()->route('admin.meal-category.index')->with('status', 'Meal category has been added successfully.');
+                return redirect()->route('admin.meal-category.index')->with('status', 'Meal category has been updated successfully.');
             } else {
                 return redirect()->route('admin.meal-category.index')->with('error', 'Something went be wrong.');
             }

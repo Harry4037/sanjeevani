@@ -156,7 +156,7 @@ class RoomtypeController extends Controller {
                             $roomImage->save();
                         }
                     }
-                    return redirect()->route('admin.room.edit', $id)->with('status', 'Romm Type has been updated successfully.');
+                    return redirect()->route('admin.room.edit', $id)->with('status', 'Room Type has been updated successfully.');
                 }
             }
             $css = [

@@ -677,7 +677,7 @@ class UsersController extends Controller {
                         }
                     }
                 }
-                return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', 'booking created successfully.');
+                return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', 'booking updated successfully.');
             } else {
                 return redirect()->route('subadmin.users.booking-edit', $data->id)->withErrors("Something went be wrong.")->withInput();
             }

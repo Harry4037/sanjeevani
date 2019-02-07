@@ -70,8 +70,8 @@ class ResortController extends Controller {
                 $data->city_id = $request->city;
                 $data->latitude = $request->latitude;
                 $data->longitude = $request->longitude;
-                $data->amenities = implode("#", $request->aminities);
-                $data->other_amenities = implode("#", $request->other_amenities);
+                $data->amenities = $request->aminities ? implode("#", $request->aminities) : "";
+                $data->other_amenities = $request->other_amenities ? implode("#", $request->other_amenities) : "";
                 if ($data->save()) {
                     if ($request->room_type && $request->room_no) {
                         foreach ($request->room_type as $k => $room) {

@@ -200,7 +200,7 @@ class HealthcareProgramController extends Controller {
                 }
 
 
-                return redirect()->route('subadmin.healthcare.index')->with('status', 'Healthcare Package has been added successfully.');
+                return redirect()->route('subadmin.healthcare.index')->with('status', 'Healthcare Package has been updated successfully.');
             } else {
                 return redirect()->route('subadmin.healthcare.index')->with('error', 'Something went be wrong.');
             }

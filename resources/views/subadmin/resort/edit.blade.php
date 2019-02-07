@@ -161,7 +161,7 @@
                             </div>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <input class="flat" type="checkbox" name="aminities[]" value="11" @if(in_array(11, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
+                                    <input class="flat" type="checkbox" name="aminities[]" value="11" @if(in_array(11, explode("#", $data->amenities))) {{ "checked" }} @endif>Geyser
                                 </div>
                             </div>
                             <p>

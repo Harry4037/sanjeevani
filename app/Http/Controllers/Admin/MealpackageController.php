@@ -75,6 +75,10 @@ class MealpackageController extends Controller {
                 if ($validator->fails()) {
                     return redirect()->route('admin.meal-package.index')->withErrors($validator)->withInput();
                 }
+                $existMeal = MealPackage::where(["name" => $request->name, "resort_id" => $request->resort_id])->first();
+                if ($existMeal) {
+                    return redirect()->route('admin.meal-package.add')->with('error', 'Meal package already exist with these details.')->withInput();
+                }
                 $mealPackage = new MealPackage();
 
                 $mealPackage->name = $request->name;

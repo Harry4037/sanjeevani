@@ -141,7 +141,7 @@
                             </div>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <input class="flat" type="checkbox" name="aminities[]" value="11">Gyser
+                                    <input class="flat" type="checkbox" name="aminities[]" value="11">Geyser
                                 </div>
                             </div>
                             <p>

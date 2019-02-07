@@ -92,7 +92,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Status</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="seleted_status" id="seleted_status">
-                                <option value="0">Select Option</option>
+                                <option value="">Select Option</option>
                                 <option value="1">New</option>
                                 <!--<option value="2">Accepted/In-Progress</option>-->
                                 <option value="3">Mark as complete/Under Approval</option>
@@ -116,5 +116,20 @@
     </div>
 </div>
 
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        $("#mealOrderForm").validate({
+            ignore: [],
+            rules: {
+                seleted_status: {
+                    required: true
+                },
+            }
+        });
+    });
+</script>
 @endsection
 

@@ -114,7 +114,7 @@ class AmenityController extends Controller {
                     }
 
 
-                    return redirect()->route('admin.amenity.index')->with('status', 'Resort has been added successfully.');
+                    return redirect()->route('admin.amenity.index')->with('status', 'Amenity has been added successfully.');
                 } else {
                     return redirect()->route('admin.amenity.index')->with('error', 'Something went be wrong.');
                 }
