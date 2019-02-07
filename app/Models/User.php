@@ -57,6 +57,7 @@ class User extends Authenticatable {
         $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
                     // ->where("check_in", "<=", date("Y-m-d H:i:s"))
                 ->where("user_id", $this->id)
+                ->orderBy("id","ASC")
                 ->first();
 
         if ($value == 3) {
