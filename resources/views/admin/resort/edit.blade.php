@@ -119,17 +119,51 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenities</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
-                                <input class="flat" type="checkbox" name="aminities[]" value="1" @if(in_array(1, explode("#", $data->amenities))) {{ "checked" }} @endif>Wifi
-                                       <input class="flat" type="checkbox" name="aminities[]" value="2" @if(in_array(2, explode("#", $data->amenities))) {{ "checked" }} @endif>Swimming Pool
-                                       <input class="flat" type="checkbox" name="aminities[]" value="3" @if(in_array(3, explode("#", $data->amenities))) {{ "checked" }} @endif>Air Conditioner
-                                       <input class="flat" type="checkbox" name="aminities[]" value="4" @if(in_array(4, explode("#", $data->amenities))) {{ "checked" }} @endif>Room Service
-                                       <input class="flat" type="checkbox" name="aminities[]" value="5" @if(in_array(5, explode("#", $data->amenities))) {{ "checked" }} @endif>Restaurant
-                                       <input class="flat" type="checkbox" name="aminities[]" value="6" @if(in_array(6, explode("#", $data->amenities))) {{ "checked" }} @endif>Bar
-                                       <input class="flat" type="checkbox" name="aminities[]" value="7" @if(in_array(7, explode("#", $data->amenities))) {{ "checked" }} @endif>Gym/Fitness Center
-                                       <input class="flat" type="checkbox" name="aminities[]" value="8" @if(in_array(8, explode("#", $data->amenities))) {{ "checked" }} @endif>Parking
-                                       <input class="flat" type="checkbox" name="aminities[]" value="9" @if(in_array(9, explode("#", $data->amenities))) {{ "checked" }} @endif>Spa
-                                       <input class="flat" type="checkbox" name="aminities[]" value="10" @if(in_array(10, explode("#", $data->amenities))) {{ "checked" }} @endif>Pets
-                                       <input class="flat" type="checkbox" name="aminities[]" value="11" @if(in_array(11, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="1" @if(in_array(1, explode("#", $data->amenities))) {{ "checked" }} @endif>Wifi
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="2" @if(in_array(2, explode("#", $data->amenities))) {{ "checked" }} @endif>Swimming Pool
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="3" @if(in_array(3, explode("#", $data->amenities))) {{ "checked" }} @endif>Air Conditioner
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="4" @if(in_array(4, explode("#", $data->amenities))) {{ "checked" }} @endif>Room Service
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="5" @if(in_array(5, explode("#", $data->amenities))) {{ "checked" }} @endif>Restaurant
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="6" @if(in_array(6, explode("#", $data->amenities))) {{ "checked" }} @endif>Bar
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="7" @if(in_array(7, explode("#", $data->amenities))) {{ "checked" }} @endif>Gym/Fitness Center
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="8" @if(in_array(8, explode("#", $data->amenities))) {{ "checked" }} @endif>Parking
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="9" @if(in_array(9, explode("#", $data->amenities))) {{ "checked" }} @endif>Spa
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="10" @if(in_array(10, explode("#", $data->amenities))) {{ "checked" }} @endif>Pets
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="11" @if(in_array(11, explode("#", $data->amenities))) {{ "checked" }} @endif>Gyser
+                                </div>
+                            </div>
                             <p>
                         </div>
                     </div>
@@ -140,10 +174,11 @@
                         @if($data->other_amenities)
                         @foreach(explode("#", $data->other_amenities) as $am)
                         <div class="form-group">
-                            <label class="control-label col-md-4 col-sm-6 col-xs-12"></label>
-                            <div class="col-md-2 col-sm-2 col-xs-12">
+                            <label class="control-label col-md-3 col-sm-6 col-xs-12"></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input type="text" class="form-control" name="other_amenities[]" value="{{ $am }}">
                             </div>
+                            <i style='cursor:pointer' class='fa fa-times delete_this_div'></i>
                         </div>
                         @endforeach
                         @endif
@@ -224,9 +259,13 @@ $(document).ready(function () {
 
     $(document).on("click", "#add_more_amenity", function () {
 
-        var amenity_html = "<div class='form-group'><label class='control-label col-md-4 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
+        var amenity_html = "<div class='form-group'>"
+                + "<label class='control-label col-md-3 col-sm-6 col-xs-12'></label>"
+                + "<div class='col-md-6 col-sm-6 col-xs-12'>"
                 + "<input type='text' class='form-control' name='other_amenities[]'>"
-                + "</div></div>";
+                + "</div>"
+                + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i>"
+                + "</div>";
         $("#other_amenity_div").append(amenity_html);
     });
 //For ckeditor

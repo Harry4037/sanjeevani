@@ -99,17 +99,51 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenities</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
-                                <input class="flat" type="checkbox" name="aminities[]" value="1">Wifi
-                                <input class="flat" type="checkbox" name="aminities[]" value="2">Swimming Pool
-                                <input class="flat" type="checkbox" name="aminities[]" value="3">Air Conditioner
-                                <input class="flat" type="checkbox" name="aminities[]" value="4">Room Service
-                                <input class="flat" type="checkbox" name="aminities[]" value="5">Restaurant
-                                <input class="flat" type="checkbox" name="aminities[]" value="6">Bar
-                                <input class="flat" type="checkbox" name="aminities[]" value="7">Gym/Fitness Center
-                                <input class="flat" type="checkbox" name="aminities[]" value="8">Parking
-                                <input class="flat" type="checkbox" name="aminities[]" value="9">Spa
-                                <input class="flat" type="checkbox" name="aminities[]" value="10">Pets
-                                <input class="flat" type="checkbox" name="aminities[]" value="11">Gyser
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="1">Wifi
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="2">Swimming Pool
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="3">Air Conditioner
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="4">Room Service
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="5">Restaurant
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="6">Bar
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="7">Gym/Fitness Center
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="8">Parking
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="9">Spa
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="10">Pets
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <input class="flat" type="checkbox" name="aminities[]" value="11">Gyser
+                                </div>
+                            </div>
                             <p>
                         </div>
                     </div>
@@ -214,17 +248,23 @@ $(document).ready(function () {
 
     $(document).on("click", "#add_more_room", function () {
 
-        var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-12'>"
+        var member_html = "<div class='form-group'>"
+                + "<label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>"
+                + "<div class='col-md-2 col-sm-2 col-xs-12'>"
                 + "<input type='text' class='form-control' name='room_no[]'>"
                 + "</div>" + room_type + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#room_detail_div").append(member_html);
     });
-    
+
     $(document).on("click", "#add_more_amenity", function () {
 
-        var amenity_html = "<div class='form-group'><label class='control-label col-md-4 col-sm-6 col-xs-12'></label><div class='col-md-2 col-sm-2 col-xs-12'>"
+        var amenity_html = "<div class='form-group'>"
+                + "<label class='control-label col-md-3 col-sm-6 col-xs-12'></label>"
+                + "<div class='col-md-5 col-sm-5 col-xs-11'>"
                 + "<input type='text' class='form-control' name='other_amenities[]'>"
-                + "</div></div>";
+                + "</div>"
+                + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i>"
+                + "</div>";
         $("#other_amenity_div").append(amenity_html);
     });
 
