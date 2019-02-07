@@ -128,19 +128,21 @@
             singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
+            startDate: new Date(),
+            minDate: new Date(),
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }
         }, function (start, end, label) {
             $('#check_out').daterangepicker({
-            singleDatePicker: true,
-            timePicker: true,
-            singleClasses: "picker_2",
-            startDate: start,
-            minDate: start,
-            locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
-            }});
+                singleDatePicker: true,
+                timePicker: true,
+                singleClasses: "picker_2",
+                startDate: start,
+                minDate: start,
+                locale: {
+                    format: 'YYYY/M/DD hh:mm:ss A'
+                }});
         });
 
         $('#check_out').daterangepicker({

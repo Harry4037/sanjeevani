@@ -8,7 +8,7 @@
         <div class="x_panel">
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert"></div>
-                <h2>Admin Profile</h2>
+                <h2>Profile</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
