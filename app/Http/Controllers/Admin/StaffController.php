@@ -57,10 +57,13 @@ class StaffController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = $this->user->query();
-            if ($searchKeyword) {
-                $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
-            }
             $query->where("user_type_id", "=", 2);
+            if ($searchKeyword) {
+                $query->where(function($query) use($searchKeyword){
+                    $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                });
+            }
+            
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();

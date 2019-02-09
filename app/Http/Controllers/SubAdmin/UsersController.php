@@ -68,15 +68,18 @@ class UsersController extends Controller {
             $query = $this->user->query()->with(['payments', 'mealOrders' => function($query) {
                     $query->accepted();
                 }]);
-            if ($searchKeyword) {
-//                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
-                $query->where("first_name", "LIKE", "%$searchKeyword%")
-                        ->orWhere("email_id", "LIKE", "%$searchKeyword%")
-                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
-//                }
-            }
             $query->where("user_type_id", "=", 3);
             $query->whereIn("id", $userIds);
+            if ($searchKeyword) {
+//                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
+                $query->where(function($query) use($searchKeyword){
+                    $query->where("first_name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                });
+//                }
+            }
+            
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
