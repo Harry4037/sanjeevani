@@ -27,4 +27,7 @@ class Service extends Model {
         return $this->belongsTo('App\Models\ServiceType', 'type_id');
     }
 
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
 }

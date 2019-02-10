@@ -43,8 +43,11 @@ class ServiceController extends Controller {
 
             $query = $this->service->query();
             $query->with("serviceTypeDetail");
+            $query->with("resortDetail");
             if ($searchKeyword) {
                 $query->whereHas("serviceTypeDetail", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhereHas("resortDetail", function($query) use($searchKeyword) {
                     $query->where("name", "LIKE", "%$searchKeyword%");
                 })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
@@ -57,6 +60,7 @@ class ServiceController extends Controller {
                 $stype = ServiceType::find($service->type_id);
                 $servicesArray[$i]['icon'] = '<img width=50 height=50 src=' . $service->icon . ' >';
                 $servicesArray[$i]['name'] = $service->name;
+                $servicesArray[$i]['resort_name'] = $service->resortDetail->name;
                 $servicesArray[$i]['type'] = isset($service->serviceTypeDetail->name) ? $service->serviceTypeDetail->name : '';
                 $checked_status = $service->is_active ? "checked" : '';
                 $servicesArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='service_status' id=" . $service->id . " data-status=" . $service->is_active . " " . $checked_status . "><span class='slider round'></span></label>";

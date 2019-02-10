@@ -21,6 +21,7 @@
                             <th>Service Icon</th>
                             <th>Service Name</th>
                             <th>Service Type</th>
+                            <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -57,6 +58,7 @@
                 {"data": "icon", sortable: false},
                 {"data": "name", sortable: false},
                 {"data": "type", sortable: false},
+                {"data": "resort_name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {
