@@ -256,6 +256,8 @@ class UsersController extends Controller {
                             $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
                             $check_out_date = Carbon::parse($request->check_out);
                             $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
+                            $userBooking->check_in_pin = rand(1111, 9999);
+                            $userBooking->check_out_pin = rand(1111, 9999);
                             if ($userBooking->save()) {
                                 if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
 
@@ -628,6 +630,8 @@ class UsersController extends Controller {
             $UserBookingDetail->check_in = $check_in_date->format('Y-m-d H:i:s');
             $check_out_date = Carbon::parse($request->check_out);
             $UserBookingDetail->check_out = $check_out_date->format('Y-m-d H:i:s');
+            $UserBookingDetail->check_in_pin = rand(1111, 9999);
+            $UserBookingDetail->check_out_pin = rand(1111, 9999);
             if ($UserBookingDetail->save()) {
                 if (!empty($request->person_name) && !empty($request->person_age)) {
                     foreach ($request->person_name as $key => $person_name) {
@@ -698,6 +702,8 @@ class UsersController extends Controller {
             $data->check_in = $check_in_date->format('Y-m-d H:i:s');
             $check_out_date = Carbon::parse($request->check_out);
             $data->check_out = $check_out_date->format('Y-m-d H:i:s');
+//            $data->check_in_pin = rand(1111, 9999);
+//            $data->check_out_pin = rand(1111, 9999);
             if ($data->save()) {
                 if (!empty($request->person_name) && !empty($request->person_age)) {
                     foreach ($request->person_name as $key => $person_name) {
