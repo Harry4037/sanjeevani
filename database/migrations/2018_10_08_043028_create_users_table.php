@@ -48,6 +48,7 @@ class CreateUsersTable extends Migration {
             $table->string('other_info')->nullable();
             $table->string('password')->nullable();
             $table->string('remember_token')->nullable();
+            $table->string('other_aadhar_id')->nullable();
             $table->string('aadhar_id')->nullable();
             $table->string('voter_id')->nullable();
             $table->text('authorise_amenities_id')->nullable();

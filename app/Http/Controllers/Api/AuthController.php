@@ -12,6 +12,7 @@ use App\Models\UserBookingDetail;
 use App\Models\Resort;
 use App\Models\CityMaster;
 use App\Models\Cart;
+use App\Models\UserMembership;
 
 class AuthController extends Controller {
 
@@ -375,6 +376,7 @@ class AuthController extends Controller {
                 }
                 $userResort = Resort::find($userBookingDetail->resort_id);
             }
+            $userMembership = UserMembership::where("user_id", $user->id)->first();
             $cityState = CityMaster::find($user->city_id);
             $cart = Cart::where(["user_id" => $user->id])->count();
 
@@ -411,6 +413,9 @@ class AuthController extends Controller {
             $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
             $userArray['no_of_guest'] = $adultNo . " Adult and " . $childNo . " Child";
             $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
+            $userArray['membership']['membership_id'] = isset($userMembership->membership_id) ? $userMembership->membership_id : "";
+            $userArray['membership']['valid_from'] = isset($userMembership->valid_from) ? Carbon::parse($userMembership->valid_from)->format('d-M-Y h:i A') : "";
+            $userArray['membership']['valid_till'] = isset($userMembership->valid_till) ? Carbon::parse($userMembership->valid_till)->format('d-M-Y h:i A') : "";
 
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;

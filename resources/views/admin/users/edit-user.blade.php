@@ -62,88 +62,124 @@
                         </div>
                     </div>
                     <div id="user_medical_detail_div" style="display: @if($userHealth) {{ "block" }} @else {{ "none" }} @endif">
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="is_diabeties" id="is_diabeties">
-                                <option value="">Choose option</option>
-                                @if(isset($userHealth->is_diabeties))
-                                <option value="1" @if($userHealth->is_diabeties == '1'){{ "selected" }}@endif>Yes</option>
-                                <option value="0" @if($userHealth->is_diabeties == '0'){{ "selected" }}@endif>No</option>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="is_diabeties" id="is_diabeties">
+                                    <option value="">Choose option</option>
+                                    @if(isset($userHealth->is_diabeties))
+                                    <option value="1" @if($userHealth->is_diabeties == '1'){{ "selected" }}@endif>Yes</option>
+                                    <option value="0" @if($userHealth->is_diabeties == '0'){{ "selected" }}@endif>No</option>
+                                    @else
+                                    <option value="1" >Yes</option>
+                                    <option value="0" >No</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="is_ppa" id="is_ppa">
+                                    <option value="">Choose option</option>
+                                    @if(isset($userHealth->is_ppa))
+                                    <option value="1" @if($userHealth->is_ppa == '1'){{ "selected" }}@endif>Yes</option>
+                                    <option value="0" @if($userHealth->is_ppa == '0'){{ "selected" }}@endif>No</option>
+                                    @else
+                                    <option value="1" >Yes</option>
+                                    <option value="0" >No</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="hba_1c" id="hba_1c">
+                                    <option value="">Choose option</option>
+                                    @if(isset($userHealth->hba_1c))
+                                    <option value="1" @if($userHealth->hba_1c == '1'){{ "selected" }}@endif>Yes</option>
+                                    <option value="0" @if($userHealth->hba_1c == '0'){{ "selected" }}@endif>No</option>
+                                    @else
+                                    <option value="1" >Yes</option>
+                                    <option value="0" >No</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                @if(isset($userHealth->fasting))
+                                <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ $userHealth->fasting }}">
                                 @else
-                                <option value="1" >Yes</option>
-                                <option value="0" >No</option>
+                                <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" >
                                 @endif
-                            </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="is_ppa" id="is_ppa">
-                                <option value="">Choose option</option>
-                                @if(isset($userHealth->is_ppa))
-                                <option value="1" @if($userHealth->is_ppa == '1'){{ "selected" }}@endif>Yes</option>
-                                <option value="0" @if($userHealth->is_ppa == '0'){{ "selected" }}@endif>No</option>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                @if(isset($userHealth->bp))
+                                <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ $userHealth->bp }}">
                                 @else
-                                <option value="1" >Yes</option>
-                                <option value="0" >No</option>
+                                <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" >
                                 @endif
-                            </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <select class="form-control" name="hba_1c" id="hba_1c">
-                                <option value="">Choose option</option>
-                                @if(isset($userHealth->hba_1c))
-                                <option value="1" @if($userHealth->hba_1c == '1'){{ "selected" }}@endif>Yes</option>
-                                <option value="0" @if($userHealth->hba_1c == '0'){{ "selected" }}@endif>No</option>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                @if(isset($userHealth->insullin_dependency))
+                                <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ $userHealth->insullin_dependency }}">
                                 @else
-                                <option value="1" >Yes</option>
-                                <option value="0" >No</option>
+                                <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" >
                                 @endif
-                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="file" class="form-control" name="medical_documents" id="medical_documents" >
+                            </div>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Details</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userHealth->fasting))
-                            <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ $userHealth->fasting }}">
-                            @else
-                            <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" >
-                            @endif
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" id="is_membership_details" name="is_membership_details" @if($userMembership) {{ "checked" }} @endif>
+                            <p>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userHealth->bp))
-                            <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ $userHealth->bp }}">
-                            @else
-                            <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" >
-                            @endif
+                    <div id="user_membership_div" style="display: @if($userMembership) {{ "block" }} @else {{ "none" }} @endif">
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                @if(isset($userMembership->membership_id))
+                                <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" value="{{ $userMembership->membership_id }}">
+                                @else
+                                <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" >
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            @if(isset($userHealth->insullin_dependency))
-                            <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ $userHealth->insullin_dependency }}">
-                            @else
-                            <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" >
-                            @endif
+                        
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input readonly type="text" class="form-control" placeholder="Membership From" name="membership_from" id="membership_from" >
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="file" class="form-control" name="medical_documents" id="medical_documents" >
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input readonly type="text" class="form-control" placeholder="Membership Till" name="membership_till" id="membership_till" >
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                     <!--                    <div class="form-group">
@@ -316,28 +352,28 @@
 @section('script')
 <script>
     $(document).ready(function () {
-//    $('#check_in').daterangepicker({
-//    singleDatePicker: true,
-//            timePicker: true,
-//            singleClasses: "picker_2",
-//            @if (isset($roomBooking->check_in))
-//            startDate: new Date("{{ $roomBooking->check_in }}"),
-//            @endif
-//            locale: {
-//            format: 'YYYY/M/DD hh:mm:ss A'
-//            }
-//    });
-//    $('#check_out').daterangepicker({
-//    singleDatePicker: true,
-//            timePicker: true,
-//            singleClasses: "picker_2",
-//            @if (isset($roomBooking->check_out))
-//            startDate: new Date("{{ $roomBooking->check_out }}"),
-//            @endif
-//            locale: {
-//            format: 'YYYY/M/DD hh:mm:ss A'
-//            }
-//    });
+    $('#membership_from').daterangepicker({
+    singleDatePicker: true,
+            timePicker: true,
+            singleClasses: "picker_2",
+            @if (isset($userMembership->valid_from))
+            startDate: new Date("{{ $userMembership->valid_from }}"),
+            @endif
+            locale: {
+            format: 'YYYY/M/DD hh:mm:ss A'
+            }
+    });
+    $('#membership_till').daterangepicker({
+    singleDatePicker: true,
+            timePicker: true,
+            singleClasses: "picker_2",
+            @if (isset($userMembership->valid_till))
+            startDate: new Date("{{ $userMembership->valid_till }}"),
+            @endif
+            locale: {
+            format: 'YYYY/M/DD hh:mm:ss A'
+            }
+    });
 //    $(document).on("click", "#add_more_member", function () {
 //    var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
 //            + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
@@ -348,12 +384,12 @@
 //    });
         $("#editUserForm").validate({
             rules: {
-                booking_source_name: {
-                    required: true
-                },
-                booking_source_id: {
-                    required: true
-                },
+//                booking_source_name: {
+//                    required: true
+//                },
+//                booking_source_id: {
+//                    required: true
+//                },
                 user_name: {
                     required: true
                 },
@@ -367,24 +403,24 @@
                     required: true,
                     email: true
                 },
-                check_in: {
-                    required: true
-                },
-                check_out: {
-                    required: true
-                },
-                resort_id: {
-                    required: true
-                },
-                resort_room_type: {
-                    required: true
-                },
-                resort_room_id: {
-                    required: true
-                },
-                package_id: {
-                    required: true
-                },
+//                check_in: {
+//                    required: true
+//                },
+//                check_out: {
+//                    required: true
+//                },
+//                resort_id: {
+//                    required: true
+//                },
+//                resort_room_type: {
+//                    required: true
+//                },
+//                resort_room_id: {
+//                    required: true
+//                },
+//                package_id: {
+//                    required: true
+//                },
 //                is_diabeties: {
 //                    required: true
 //                },
@@ -408,11 +444,7 @@
 //                },
             }
         });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
         $(document).on("change", "#resort_room_type", function () {
             var resort = $("#resort_id :selected").val();
             var resort_room = $("#resort_room_type :selected").val();
@@ -434,7 +466,7 @@
             }
 
         });
-        
+
         if ($("input.flat")[0]) {
             $(document).ready(function () {
                 $('input.flat').iCheck({
@@ -443,20 +475,33 @@
                 });
             });
         }
-        
-        $('#is_medical_document').on('ifChecked', function () { 
+
+        $('#is_medical_document').on('ifChecked', function () {
             $("#is_diabeties").rules("add", {required: true});
             $("#is_ppa").rules("add", {required: true});
             $("#hba_1c").rules("add", {required: true});
             $("input[name='fasting']").rules("add", {required: true});
             $("input[name='bp']").rules("add", {required: true});
             $("input[name='insullin_dependency']").rules("add", {required: true});
-            
+
 
             $("#user_medical_detail_div").css("display", "block");
         });
-        $('#is_medical_document').on('ifUnchecked', function () { 
-                $("#user_medical_detail_div").css("display", "none");
+        $('#is_medical_document').on('ifUnchecked', function () {
+            $("#user_medical_detail_div").css("display", "none");
+        });
+        
+        $('#is_membership_details').on('ifChecked', function () {
+            $("#membership_id").rules("add", {required: true});
+            $("#membership_from").rules("add", {required: true});
+            $("#membership_till").rules("add", {required: true});
+            $("#user_membership_div").css("display", "block");
+        });
+        $('#is_membership_details').on('ifUnchecked', function () {
+            $("#membership_id").rules("remove", "required");
+            $("#membership_from").rules("remove", "required");
+            $("#membership_till").rules("remove", "required");
+            $("#user_membership_div").css("display", "none");
         });
     });
 </script>

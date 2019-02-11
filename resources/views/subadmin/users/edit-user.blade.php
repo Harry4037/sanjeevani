@@ -146,6 +146,43 @@
                         </div>
                     </div>
                     </div>
+                    
+                              <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Details</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" id="is_membership_details" name="is_membership_details" @if($userMembership) {{ "checked" }} @endif>
+                            <p>
+                        </div>
+                    </div>
+                    <div id="user_membership_div" style="display: @if($userMembership) {{ "block" }} @else {{ "none" }} @endif">
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                @if(isset($userMembership->membership_id))
+                                <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" value="{{ $userMembership->membership_id }}">
+                                @else
+                                <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" >
+                                @endif
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input readonly type="text" class="form-control" placeholder="Membership From" name="membership_from" id="membership_from" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input readonly type="text" class="form-control" placeholder="Membership Till" name="membership_till" id="membership_till" >
+                            </div>
+                        </div>
+                    </div>
+                    
 <!--                    <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
@@ -316,23 +353,23 @@
 @section('script')
 <script>
     $(document).ready(function () {
-    $('#check_in').daterangepicker({
+    $('#membership_from').daterangepicker({
     singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            @if (isset($roomBooking->check_in))
-            startDate: new Date("{{ $roomBooking->check_in }}"),
+            @if (isset($userMembership->valid_from))
+            startDate: new Date("{{ $userMembership->valid_from }}"),
             @endif
             locale: {
             format: 'YYYY/M/DD hh:mm:ss A'
             }
     });
-    $('#check_out').daterangepicker({
+    $('#membership_till').daterangepicker({
     singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
-            @if (isset($roomBooking->check_out))
-            startDate: new Date("{{ $roomBooking->check_out }}"),
+            @if (isset($userMembership->valid_till))
+            startDate: new Date("{{ $userMembership->valid_till }}"),
             @endif
             locale: {
             format: 'YYYY/M/DD hh:mm:ss A'
@@ -348,12 +385,12 @@
     });
     $("#editUserForm").validate({
     rules: {
-    booking_source_name: {
-    required: true
-    },
-            booking_source_id: {
-            required: true
-            },
+//    booking_source_name: {
+//    required: true
+//    },
+//            booking_source_id: {
+//            required: true
+//            },
             user_name: {
             required: true
             },
@@ -367,24 +404,24 @@
               required: true,
               email: true
             },
-            check_in: {
-            required: true
-            },
-            check_out: {
-            required: true
-            },
-            resort_id: {
-            required: true
-            },
-            resort_room_type: {
-            required: true
-            },
-            resort_room_id: {
-            required: true
-            },
-            package_id: {
-            required: true
-            },
+//            check_in: {
+//            required: true
+//            },
+//            check_out: {
+//            required: true
+//            },
+//            resort_id: {
+//            required: true
+//            },
+//            resort_room_type: {
+//            required: true
+//            },
+//            resort_room_id: {
+//            required: true
+//            },
+//            package_id: {
+//            required: true
+//            },
 //            is_diabeties: {
 //            required: true
 //            },
@@ -408,11 +445,7 @@
 //                },
     }
     });
-    $.ajaxSetup({
-    headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
+
     $(document).on("change", "#resort_room_type", function () {
     var resort = $("#resort_id :selected").val();
     var resort_room = $("#resort_room_type :selected").val();
@@ -457,6 +490,19 @@
         });
         $('#is_medical_document').on('ifUnchecked', function () { 
                 $("#user_medical_detail_div").css("display", "none");
+        });
+        
+                $('#is_membership_details').on('ifChecked', function () {
+            $("#membership_id").rules("add", {required: true});
+            $("#membership_from").rules("add", {required: true});
+            $("#membership_till").rules("add", {required: true});
+            $("#user_membership_div").css("display", "block");
+        });
+        $('#is_membership_details').on('ifUnchecked', function () {
+            $("#membership_id").rules("remove", "required");
+            $("#membership_from").rules("remove", "required");
+            $("#membership_till").rules("remove", "required");
+            $("#user_membership_div").css("display", "none");
         });
         
     });

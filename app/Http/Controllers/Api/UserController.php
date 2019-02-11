@@ -13,6 +13,7 @@ use App\Models\Banner;
 use Illuminate\Support\Facades\Hash;
 use App\Models\StateMaster;
 use App\Models\CityMaster;
+use App\Models\UserMembership;
 
 class UserController extends Controller {
 
@@ -143,8 +144,14 @@ class UserController extends Controller {
             if (!$request->aadhar_id) {
                 return $this->sendErrorResponse("Aadhar id document missing.", (object) []);
             }
+            if (!$request->other_aadhar_id) {
+                return $this->sendErrorResponse("Aadhar id other side document missing.", (object) []);
+            }
             if (!$request->hasFile('aadhar_id')) {
                 return $this->sendErrorResponse("aadhar id not valid file type.", (object) []);
+            }
+            if (!$request->hasFile('other_aadhar_id')) {
+                return $this->sendErrorResponse("other side aadhar id not valid file type.", (object) []);
             }
 
 
@@ -163,6 +170,12 @@ class UserController extends Controller {
                     $user->voter_id = $other_file_name;
                 }
 
+                $other_aadhar_id = $request->file("other_aadhar_id");
+                $other_aadhar = Storage::disk('public')->put('other_aadhar_id', $other_aadhar_id);
+                $other_aadhar_file_name = basename($other_aadhar);
+
+                $user->other_aadhar_id = $other_aadhar_file_name;
+                
                 $aadhar_id = $request->file("aadhar_id");
                 $aadhar = Storage::disk('public')->put('aadhar_id', $aadhar_id);
                 $aadhar_file_name = basename($aadhar);
@@ -299,9 +312,13 @@ class UserController extends Controller {
             }
             if ($user->save()) {
                 $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path', 'address1', 'pincode', 'city_id')->find($user->id);
+                $userMembership = UserMembership::where("user_id", $user->id)->first();
                 $cityState = CityMaster::find($userData->city_id);
                 $userData['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
                 $userData['city'] = isset($cityState->city) ? $cityState->city : "";
+                $userData['membership']['membership_id'] = isset($userMembership->membership_id) ? $userMembership->membership_id : "";
+                $userData['membership']['valid_from'] = isset($userMembership->valid_from) ? Carbon::parse($userMembership->valid_from)->format('d-M-Y h:i A') : "";
+                $userData['membership']['valid_till'] = isset($userMembership->valid_till) ? Carbon::parse($userMembership->valid_till)->format('d-M-Y h:i A') : "";
                 $response['success'] = true;
                 $response['status_code'] = 200;
                 $response['message'] = "Profile update succesfully.";

@@ -18,6 +18,7 @@ use App\Models\ResortRoom;
 use App\Models\UserhealthDetail;
 use Validator;
 use App\Models\HealthcateProgram;
+use App\Models\UserMembership;
 
 class UsersController extends Controller {
 
@@ -72,14 +73,14 @@ class UsersController extends Controller {
             $query->whereIn("id", $userIds);
             if ($searchKeyword) {
 //                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
-                $query->where(function($query) use($searchKeyword){
+                $query->where(function($query) use($searchKeyword) {
                     $query->where("first_name", "LIKE", "%$searchKeyword%")
-                        ->orWhere("email_id", "LIKE", "%$searchKeyword%")
-                        ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                            ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
                 });
 //                }
             }
-            
+
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
@@ -113,7 +114,7 @@ class UsersController extends Controller {
                             . '<a href="' . route('subadmin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
                 } else {
                     $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('subadmin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
-                    .'<a href="' . route('subadmin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('subadmin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                             . '<a href="' . route('subadmin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
                 }
                 $i++;
@@ -154,6 +155,7 @@ class UsersController extends Controller {
             $user = $this->user->find($id);
             $userBooking = UserBookingDetail::where("user_id", $id)->first();
             $userHealth = UserhealthDetail::where("user_id", $id)->first();
+            $userMembership = UserMembership::where("user_id", $id)->first();
             if ($userBooking) {
                 $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
                 $resortRooms = ResortRoom::where(["resort_id" => $userBooking->resort_id, "room_type_id" => $userBooking->room_type_id])->get();
@@ -163,6 +165,7 @@ class UsersController extends Controller {
                 'userBooking' => $userBooking,
                 'userHealth' => $userHealth ? $userHealth : [],
                 'resortRooms' => isset($resortRooms) ? $resortRooms : [],
+                'userMembership' => $userMembership ? $userMembership : [],
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
             ]);
         } catch (Exception $ex) {
@@ -192,13 +195,13 @@ class UsersController extends Controller {
 //                            'bp' => 'bail|required',
 //                            'insullin_dependency' => 'bail|required',
 //                            'medical_documents' => 'bail|required',
-                            'booking_source_name' => 'bail|required',
-                            'booking_source_id' => 'bail|required',
+//                            'booking_source_name' => 'bail|required',
+//                            'booking_source_id' => 'bail|required',
 //                            'resort_id' => 'bail|required',
-                            'package_id' => 'bail|required',
-                            'resort_room_id' => 'bail|required',
-                            'check_in' => 'bail|required',
-                            'check_out' => 'bail|required',
+//                            'package_id' => 'bail|required',
+//                            'resort_room_id' => 'bail|required',
+//                            'check_in' => 'bail|required',
+//                            'check_out' => 'bail|required',
 //                            'banner_image' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width=1769,height=416',
                 ]);
                 if ($validator->fails()) {
@@ -239,37 +242,52 @@ class UsersController extends Controller {
                             $userHealthDetail->user_id = $user->id;
                             $userHealthDetail->save();
                         }
-                        $roomType = RoomType::find($request->resort_room_type);
-                        $roomRoom = ResortRoom::find($request->resort_room_id);
 
-                        $userBooking = new UserBookingDetail();
-                        $userBooking->source_name = $request->booking_source_name;
-                        $userBooking->source_id = $request->booking_source_id;
-                        $userBooking->user_id = $user->id;
-                        $userBooking->resort_id = $request->get("subadminResort");
-                        $userBooking->package_id = $request->package_id;
-                        $userBooking->room_type_id = $request->resort_room_type;
-                        $userBooking->resort_room_id = $request->resort_room_id;
-                        $userBooking->resort_room_no = $roomRoom->room_no;
-                        $userBooking->room_type_name = $roomType->name;
-                        $check_in_date = Carbon::parse($request->check_in);
-                        $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
-                        $check_out_date = Carbon::parse($request->check_out);
-                        $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
-                        if ($userBooking->save()) {
-                            if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
+                        if (isset($request->is_booking_details) && ($request->is_booking_details == "on")) {
+                            $roomType = RoomType::find($request->resort_room_type);
+                            $roomRoom = ResortRoom::find($request->resort_room_id);
 
-                                foreach ($request->person_name as $key => $person_name) {
-                                    if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
-                                        $familyMember = new BookingpeopleAccompany();
-                                        $familyMember->person_name = $person_name ? $person_name : ' ';
-                                        $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
-                                        $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
-                                        $familyMember->booking_id = $userBooking->id;
-                                        $familyMember->save();
+                            $userBooking = new UserBookingDetail();
+                            $userBooking->source_name = $request->booking_source_name;
+                            $userBooking->source_id = $request->booking_source_id;
+                            $userBooking->user_id = $user->id;
+                            $userBooking->resort_id = $request->get("subadminResort");
+                            $userBooking->package_id = $request->package_id;
+                            $userBooking->room_type_id = $request->resort_room_type;
+                            $userBooking->resort_room_id = $request->resort_room_id;
+                            $userBooking->resort_room_no = $roomRoom->room_no;
+                            $userBooking->room_type_name = $roomType->name;
+                            $check_in_date = Carbon::parse($request->check_in);
+                            $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
+                            $check_out_date = Carbon::parse($request->check_out);
+                            $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
+                            if ($userBooking->save()) {
+                                if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
+
+                                    foreach ($request->person_name as $key => $person_name) {
+                                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                                            $familyMember = new BookingpeopleAccompany();
+                                            $familyMember->person_name = $person_name ? $person_name : ' ';
+                                            $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                                            $familyMember->booking_id = $userBooking->id;
+                                            $familyMember->save();
+                                        }
                                     }
                                 }
                             }
+                        }
+
+                        if (isset($request->is_membership_details) && ($request->is_membership_details == "on")) {
+                            $userMembership = new UserMembership();
+
+                            $userMembership->user_id = $user->id;
+                            $userMembership->membership_id = $request->membership_id;
+                            $membership_from = Carbon::parse($request->membership_from);
+                            $userMembership->valid_from = $membership_from->format('Y-m-d H:i:s');
+                            $membership_till = Carbon::parse($request->membership_till);
+                            $userMembership->valid_till = $membership_till->format('Y-m-d H:i:s');
+                            $userMembership->save();
                         }
 
                         return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
@@ -307,6 +325,7 @@ class UsersController extends Controller {
             $user = User::find($id);
             $userBooking = UserBookingDetail::where("user_id", $id)->first();
             $userHealth = UserhealthDetail::where("user_id", $id)->first();
+            $userMembership = UserMembership::where("user_id", $id)->first();
             $roomTypes = RoomType::where("is_active", 1)->get();
             if ($userBooking) {
                 $bookingAccompany = BookingpeopleAccompany::where("booking_id", $userBooking->id)->get();
@@ -375,6 +394,23 @@ class UsersController extends Controller {
                     } else {
                         UserhealthDetail::where("user_id", $id)->delete();
                     }
+
+                    if (isset($request->is_membership_details) && ($request->is_membership_details == "on")) {
+                        if (!$userMembership) {
+                            $userMembership = new UserMembership();
+                        }
+
+                        $userMembership->user_id = $user->id;
+                        $userMembership->membership_id = $request->membership_id;
+                        $membership_from = Carbon::parse($request->membership_from);
+                        $userMembership->valid_from = $membership_from->format('Y-m-d H:i:s');
+                        $membership_till = Carbon::parse($request->membership_till);
+                        $userMembership->valid_till = $membership_till->format('Y-m-d H:i:s');
+                        $userMembership->save();
+                    } else {
+                        UserMembership::where("user_id", $id)->delete();
+                    }
+
                     return redirect()->route('subadmin.users.edit', $id)->with('status', 'User has been updated successfully');
 //                    if ($userHealthDetail->save()) {
 //                    $userBooking = UserBookingDetail::where("user_id", $user->id)->first();
@@ -423,6 +459,7 @@ class UsersController extends Controller {
                 'userBooking' => $userBooking,
                 'userHealth' => $userHealth ? $userHealth : [],
                 'resortRooms' => isset($resortRooms) ? $resortRooms : [],
+                'userMembership' => $userMembership ? $userMembership : [],
                 'bookingAccompany' => isset($bookingAccompany) ? $bookingAccompany : [],
                 'healcarePackages' => $healcarePackages,
                     ]

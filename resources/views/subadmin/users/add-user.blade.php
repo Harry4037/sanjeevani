@@ -103,6 +103,47 @@
                         </div>
                     </div>
                     </div>
+                    
+                                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Details</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" id="is_membership_details" name="is_membership_details">
+                            <p>
+                        </div>
+                    </div>
+                    <div id="user_membership_div" style="display: none;">
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" value="{{ old('membership_id') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input readonly type="text" class="form-control" placeholder="Membership From" name="membership_from" id="membership_from" value="{{ old('membership_from') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input readonly type="text" class="form-control" placeholder="Membership Till" name="membership_till" id="membership_till" value="{{ old('membership_till') }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Details</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <p style="padding: 5px;">
+                                <input class="flat" type="checkbox" id="is_booking_details" name="is_booking_details">
+                            <p>
+                        </div>
+                    </div>
+                    
+                    <div id="user_booking_div" style="display: none;">
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
@@ -210,6 +251,7 @@
                             <button type="button" class="btn btn-primary" id="add_more_member">Add Members</button>
                         </div>
                     </div>
+            </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-5">
@@ -251,6 +293,36 @@
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }});
+        
+        
+        $('#membership_from').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            singleClasses: "picker_2",
+            minDate: new Date(),
+            locale: {
+                format: 'YYYY/M/DD hh:mm:ss A'
+            }
+        }, function (start, end, label) {
+            $('#membership_till').daterangepicker({
+                singleDatePicker: true,
+                timePicker: true,
+                singleClasses: "picker_2",
+                minDate: start,
+                locale: {
+                    format: 'YYYY/M/DD hh:mm:ss A'
+                }});
+        });
+
+        $('#membership_till').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            singleClasses: "picker_2",
+            minDate: moment().startOf('hour').add(24, 'hour'),
+            locale: {
+                format: 'YYYY/M/DD hh:mm:ss A'
+            }});
+        
         $(document).on("click", "#add_more_member", function () {
             var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Name</label><div class='col-md-2 col-sm-2 col-xs-12'><input type='text' class='form-control' name='person_name[]'>"
                     + "</div><label class='control-label col-md-2 col-sm-2 col-xs-12'>Person Age</label><div class='col-md-2 col-sm-2 col-xs-12'>"
@@ -262,12 +334,12 @@
 
         $("#addUserForm").validate({
             rules: {
-                booking_source_name: {
-                    required: true
-                },
-                booking_source_id: {
-                    required: true
-                },
+//                booking_source_name: {
+//                    required: true
+//                },
+//                booking_source_id: {
+//                    required: true
+//                },
                 user_name: {
                     required: true
                 },
@@ -281,45 +353,45 @@
                     required: true,
                     email: true
                 },
-                check_in: {
-                    required: true
-                },
-                check_out: {
-                    required: true
-                },
+//                check_in: {
+//                    required: true
+//                },
+//                check_out: {
+//                    required: true
+//                },
 //                resort_id: {
 //                    required: true
 //                },
-                resort_room_type: {
-                    required: true
-                },
-                resort_room_id: {
-                    required: true
-                },
-                package_id: {
-                    required: true
-                },
-                is_diabeties: {
-                    required: true
-                },
-                is_ppa: {
-                    required: true
-                },
-                hba_1c: {
-                    required: true
-                },
-                fasting: {
-                    required: true
-                },
-                bp: {
-                    required: true
-                },
-                insullin_dependency: {
-                    required: true
-                },
-                medical_documents: {
-                    required: true
-                },
+//                resort_room_type: {
+//                    required: true
+//                },
+//                resort_room_id: {
+//                    required: true
+//                },
+//                package_id: {
+//                    required: true
+//                },
+//                is_diabeties: {
+//                    required: true
+//                },
+//                is_ppa: {
+//                    required: true
+//                },
+//                hba_1c: {
+//                    required: true
+//                },
+//                fasting: {
+//                    required: true
+//                },
+//                bp: {
+//                    required: true
+//                },
+//                insullin_dependency: {
+//                    required: true
+//                },
+//                medical_documents: {
+//                    required: true
+//                },
             }});
 
         $(document).on("change", "#resort_room_type", function () {
@@ -380,7 +452,49 @@
             $("#user_medical_detail_div").css("display", "block");
         });
         $('#is_medical_document').on('ifUnchecked', function () {
+            $("#is_diabeties").rules("remove", "required");
+            $("#is_ppa").rules("remove", "required");
+            $("#hba_1c").rules("remove", "required");
+            $("input[name='fasting']").rules("remove", "required");
+            $("input[name='bp']").rules("remove", "required");
+            $("input[name='insullin_dependency']").rules("remove", "required");
             $("#user_medical_detail_div").css("display", "none");
+        });
+        
+        $('#is_membership_details').on('ifChecked', function () {
+            $("#membership_id").rules("add", {required: true});
+            $("#membership_from").rules("add", {required: true});
+            $("#membership_till").rules("add", {required: true});
+            $("#user_membership_div").css("display", "block");
+        });
+        $('#is_membership_details').on('ifUnchecked', function () {
+            $("#membership_id").rules("remove", "required");
+            $("#membership_from").rules("remove", "required");
+            $("#membership_till").rules("remove", "required");
+            $("#user_membership_div").css("display", "none");
+        });
+
+        $('#is_booking_details').on('ifChecked', function () {
+            $("#booking_source_name").rules("add", {required: true});
+            $("#booking_source_id").rules("add", {required: true});
+            $("#check_in").rules("add", {required: true});
+            $("#check_out").rules("add", {required: true});
+            $("#resort_id").rules("add", {required: true});
+            $("#resort_room_type").rules("add", {required: true});
+            $("#resort_room_id").rules("add", {required: true});
+            $("#package_id").rules("add", {required: true});
+            $("#user_booking_div").css("display", "block");
+        });
+        $('#is_booking_details').on('ifUnchecked', function () {
+            $("#booking_source_name").rules("add", "required");
+            $("#booking_source_id").rules("add", "required");
+            $("#check_in").rules("add", "required");
+            $("#check_out").rules("add", "required");
+            $("#resort_id").rules("add", "required");
+            $("#resort_room_type").rules("add", "required");
+            $("#resort_room_id").rules("add", "required");
+            $("#package_id").rules("add", "required");
+            $("#user_booking_div").css("display", "none");
         });
     });
 </script>
