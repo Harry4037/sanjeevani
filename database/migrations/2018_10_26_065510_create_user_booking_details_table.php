@@ -14,8 +14,9 @@ class CreateUserBookingDetailsTable extends Migration {
     public function up() {
         Schema::create('user_booking_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('source_name')->nullable(0);
-            $table->string('source_id')->nullable(0);
+            $table->string('source_name')->nullable();
+            $table->string('source_id')->nullable();
+            $table->float('discount',8,2)->default(0);
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('resort_id')->default(0);
             $table->bigInteger('package_id')->default(0);
