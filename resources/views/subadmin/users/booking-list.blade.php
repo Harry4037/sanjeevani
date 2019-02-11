@@ -58,12 +58,12 @@
                     return meta.row + meta.settings._iDisplayStart + 1;
                     }
             },
-            {"data": "source_name"},
-            {"data": "source_id"},
-            {"data": "room_no"},
-            {"data": "check_in"},
-            {"data": "check_out"},
-            {"data": "package"},
+            {"data": "source_name", sortable: false},
+            {"data": "source_id", sortable: false},
+            {"data": "room_no", sortable: false},
+            {"data": "check_in", sortable: false},
+            {"data": "check_out", sortable: false},
+            {"data": "package", sortable: false},
             {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

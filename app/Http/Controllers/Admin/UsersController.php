@@ -564,7 +564,8 @@ class UsersController extends Controller {
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
                     }
-                    $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                    $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
@@ -749,6 +750,37 @@ class UsersController extends Controller {
             'resortRoom' => $resortRoom,
             'data' => $data,
             'BookingPeoples' => $BookingPeoples,
+        ]);
+    }
+
+    public function verifyBooking(Request $request, $id) {
+        $userBookingdetail = UserBookingDetail::find($id);
+        $user = User::find($userBookingdetail->user_id);
+        if ($request->isMethod("post")) {
+            if ($request->check_in_pin == 1) {
+                if ($userBookingdetail->check_in_pin == $request->pin) {
+                    $userBookingdetail->is_verified_check_in_pin = 1;
+                    $userBookingdetail->save();
+                    return redirect()->route('admin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
+                } else {
+                    return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
+                }
+            } elseif ($request->check_in_out == 1) {
+                if ($userBookingdetail->check_out_pin == $request->pin) {
+                    $userBookingdetail->is_verified_check_out_pin = 1;
+                    $userBookingdetail->save();
+                    return redirect()->route('admin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
+                } else {
+                    return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
+                }
+            } else {
+                return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Something went be wrong.');
+            }
+            dd($request->all());
+        }
+        return view("admin.users.user-booking-detail", [
+            "userBookingdetail" => $userBookingdetail ? $userBookingdetail : [],
+            "user" => $user ? $user : [],
         ]);
     }
 

@@ -558,6 +558,7 @@ class UsersController extends Controller {
 
                 if ($userBookingDetail->is_cancelled == 1) {
                     $stat = "<span class='label label-danger'>Cancelled</span>";
+                    $action="";
                 } else {
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
@@ -566,6 +567,8 @@ class UsersController extends Controller {
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
                     }
+                    $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
@@ -575,7 +578,7 @@ class UsersController extends Controller {
                 $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? date("d-M-Y h:i A", strtotime($userBookingDetail->check_out)) : "";
                 $bookinDetailArray[$i]["room_no"] = isset($userBookingDetail->resort_room_no) ? $userBookingDetail->resort_room_no : "";
                 $bookinDetailArray[$i]["status"] = $stat;
-                $bookinDetailArray[$i]["action"] = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                $bookinDetailArray[$i]["action"] = $action;
             }
             $data["data"] = $bookinDetailArray;
 
@@ -752,6 +755,37 @@ class UsersController extends Controller {
             'resortRoom' => $resortRoom,
             'data' => $data,
             'BookingPeoples' => $BookingPeoples,
+        ]);
+    }
+
+    public function verifyBooking(Request $request, $id) {
+        $userBookingdetail = UserBookingDetail::find($id);
+        $user = User::find($userBookingdetail->user_id);
+        if ($request->isMethod("post")) {
+            if ($request->check_in_pin == 1) {
+                if ($userBookingdetail->check_in_pin == $request->pin) {
+                    $userBookingdetail->is_verified_check_in_pin = 1;
+                    $userBookingdetail->save();
+                    return redirect()->route('admin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
+                } else {
+                    return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
+                }
+            } elseif ($request->check_in_out == 1) {
+                if ($userBookingdetail->check_out_pin == $request->pin) {
+                    $userBookingdetail->is_verified_check_out_pin = 1;
+                    $userBookingdetail->save();
+                    return redirect()->route('admin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
+                } else {
+                    return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
+                }
+            } else {
+                return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Something went be wrong.');
+            }
+            dd($request->all());
+        }
+        return view("subadmin.users.user-booking-detail", [
+            "userBookingdetail" => $userBookingdetail ? $userBookingdetail : [],
+            "user" => $user ? $user : [],
         ]);
     }
 
