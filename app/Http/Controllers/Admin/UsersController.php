@@ -619,7 +619,7 @@ class UsersController extends Controller {
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
             $UserBookingDetail = new UserBookingDetail();
-            $UserBookingDetail->discount = $request->discount;
+//            $UserBookingDetail->discount = $request->discount;
             $UserBookingDetail->source_name = $request->booking_source_name;
             $UserBookingDetail->source_id = $request->booking_source_id;
             $UserBookingDetail->user_id = $user->id;
@@ -697,7 +697,7 @@ class UsersController extends Controller {
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
 
-            $data->discount = $request->discount;
+//            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
             $data->resort_id = $request->resort_id;

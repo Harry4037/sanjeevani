@@ -15,12 +15,12 @@
 
                 <form class="form-horizontal form-label-left" action="{{ route('subadmin.users.booking-create', $user_id) }}" method="post" id="addBookingForm">
                     @csrf
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -211,12 +211,12 @@
         $("#addBookingForm").validate({
             ignore: [],
             rules: {
-                discount: {
-                    required: true,
-                    number: true,
-                    min: 0,
-                    max: 100,
-                },
+//                discount: {
+//                    required: true,
+//                    number: true,
+//                    min: 0,
+//                    max: 100,
+//                },
                 user: {
                     required: true
                 },
