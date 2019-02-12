@@ -38,6 +38,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Health Details</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
@@ -340,12 +346,12 @@
 
         $("#addUserForm").validate({
             rules: {
-                booking_source_name: {
-                    required: true
-                },
-                booking_source_id: {
-                    required: true
-                },
+//                booking_source_name: {
+//                    required: true
+//                },
+//                booking_source_id: {
+//                    required: true
+//                },
                 user_name: {
                     required: true
                 },
@@ -358,6 +364,12 @@
                 email_id: {
                     required: true,
                     email: true
+                },
+                discount: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 100,
                 },
 //                check_in: {
 //                    required: true

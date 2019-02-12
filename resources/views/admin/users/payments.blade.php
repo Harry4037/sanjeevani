@@ -62,9 +62,19 @@
                         <form action="{{route('admin.users.pay_outstanding')}}" id="paymentForm">
                             @csrf
                             <input type="hidden" name="user_id" value="{{$user->id}}">
+                            <input type="hidden" id="outstanding_amount" name="outstanding_amount" value="{{$outstanding}}">
+                            <div class="form-group">
+                                <label for="">Discount (%)</label>
+                                <input type="number" id="discount" name="discount" class="form-control" value="{{ $user->discount ? $user->discount : 0 }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Discounted Amount</label>
+                                <input readonly type="number" id="discount_amount" name="discount_amount" class="form-control" value="{{ $discountPrice }}">
+                            </div>
+                            
                             <div class="form-group">
                                 <label for="">Amount</label>
-                                <input type="text" name="amount" class="form-control">
+                                <input type="number" id="amount" name="amount" class="form-control">
                             </div>
 
                             <div class="form-group">
@@ -86,21 +96,42 @@
 @section('script')
 <script>
     $(document).ready(function () {
-
+   
+   $(document).on("keyup", "#discount", function(){
+       var discount = parseFloat($("#discount").val());
+       var outstanding_amount = parseFloat($("#outstanding_amount").val());
+       if(discount <= 100){
+           var dis_price = (outstanding_amount - (outstanding_amount * (discount/100))).toFixed(2);
+           $("#discount_amount").val(dis_price);
+           $("#amount").rules("remove", "max");
+           $("#amount").rules("add", {min: dis_price });
+           $("#amount").rules("add", {max: dis_price });
+       }else{
+           return false;
+       }
+   });
+   
     $("#paymentForm").validate({
     ignore: [],
             rules:{
             amount: {
             required: true,
                     number:true,
-                    max:{{$outstanding}}
+                    min:{{$discountPrice}},
+                    max:{{$discountPrice}},
+            },
+            discount: {
+            required: true,
+                    number:true,
+                    min: 0,
+                    max: 100,
             },
             },
             messages:{
             amount:{
             required:"Please enter the amount.",
                     number:"Please enter a valid amount.",
-                    max:"Amount can't be more than {{$outstanding}}.",
+//                    max:"Amount can't be more than {{$discountPrice}}.",
             },
             },
             submitHandler: function (form) {

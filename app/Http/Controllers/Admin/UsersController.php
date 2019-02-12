@@ -208,6 +208,7 @@ class UsersController extends Controller {
 
                     $user = $this->user;
                     $user->user_type_id = 3;
+                    $user->discount = $request->discount;
                     $user->user_name = $request->user_name;
                     $user->first_name = isset($name[0]) ? $name[0] : '';
                     $user->last_name = isset($name[1]) ? $name[1] : '';
@@ -358,6 +359,7 @@ class UsersController extends Controller {
                 $name = explode(" ", $request->user_name);
 
                 $user->user_name = $request->user_name;
+                $user->discount = $request->discount;
                 $user->first_name = isset($name[0]) ? $name[0] : '';
                 $user->last_name = isset($name[1]) ? $name[1] : '';
                 $user->mobile_number = $request->mobile_number;
@@ -472,8 +474,13 @@ class UsersController extends Controller {
         $total = $user->mealOrders->sum('total_amount');
         $paid = $user->payments->sum('amount');
         $outstanding = $total - $paid;
+        $discountPrice = $outstanding;
+        if($user->discount > 0){
+            $discountPrice = number_format(($outstanding - ($outstanding * ($user->discount/100))), 2);
+        }
+        
 
-        return view('admin.users.payments', compact('user', 'total', 'paid', 'outstanding'));
+        return view('admin.users.payments', compact('user', 'total', 'paid', 'outstanding', 'discountPrice'));
     }
 
     public function payOutstading(Request $request) {
@@ -493,7 +500,7 @@ class UsersController extends Controller {
             $user = User::findOrFail($request->user_id);
 
             $user->payments()->create([
-                'amount' => $request->amount
+                'amount' => $request->outstanding_amount
             ]);
 
             return $this->sendSuccessResponse("Payment Successfull.", (object) []);

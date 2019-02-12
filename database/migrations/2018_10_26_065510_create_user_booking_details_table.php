@@ -16,7 +16,6 @@ class CreateUserBookingDetailsTable extends Migration {
             $table->bigIncrements('id');
             $table->string('source_name')->nullable();
             $table->string('source_id')->nullable();
-            $table->float('discount',8,2)->default(0);
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('resort_id')->default(0);
             $table->bigInteger('package_id')->default(0);

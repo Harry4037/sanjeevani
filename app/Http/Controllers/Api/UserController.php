@@ -316,9 +316,9 @@ class UserController extends Controller {
                 $cityState = CityMaster::find($userData->city_id);
                 $userData['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
                 $userData['city'] = isset($cityState->city) ? $cityState->city : "";
-                $userData['membership']['membership_id'] = isset($userMembership->membership_id) ? $userMembership->membership_id : "";
-                $userData['membership']['valid_from'] = isset($userMembership->valid_from) ? Carbon::parse($userMembership->valid_from)->format('d-M-Y h:i A') : "";
-                $userData['membership']['valid_till'] = isset($userMembership->valid_till) ? Carbon::parse($userMembership->valid_till)->format('d-M-Y h:i A') : "";
+                $userData['membership_id'] = isset($userMembership->membership_id) ? $userMembership->membership_id : "";
+                $userData['valid_from'] = isset($userMembership->valid_from) ? Carbon::parse($userMembership->valid_from)->format('d-M-Y h:i A') : "";
+                $userData['valid_till'] = isset($userMembership->valid_till) ? Carbon::parse($userMembership->valid_till)->format('d-M-Y h:i A') : "";
                 $response['success'] = true;
                 $response['status_code'] = 200;
                 $response['message'] = "Profile update succesfully.";
