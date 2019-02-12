@@ -94,6 +94,10 @@ class User extends Authenticatable {
     public function getAadharIdAttribute($name) {
         return $name ? asset('storage/aadhar_id/' . $name) : null;
     }
+    
+    public function getOtherAadharIdAttribute($name) {
+        return $name ? asset('storage/other_aadhar_id/' . $name) : null;
+    }
 
     public function getAddress1Attribute($value) {
         return $value == null ? "" : $value;

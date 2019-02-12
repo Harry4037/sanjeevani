@@ -384,7 +384,7 @@ class AuthController extends Controller {
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
             $userArray['cart_count'] = $cart;
-            $userArray['user_name'] = $user->user_name != "" ? $user->user_name : "Welcom guest";
+            $userArray['user_name'] = $user->user_name != "" ? $user->user_name : "Welcome guest";
             $userArray['first_name'] = $user->first_name;
             $userArray['mid_name'] = $user->mid_name;
             $userArray['last_name'] = $user->last_name;

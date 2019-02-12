@@ -36,13 +36,16 @@
                     @if($user->aadhar_id)
                     <a target="_blank" href="{{ $user->aadhar_id }}"><img src="{{ $user->aadhar_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
                     @endif
+                    @if($user->other_aadhar_id)
+                    <a target="_blank" href="{{ $user->other_aadhar_id }}"><img src="{{ $user->other_aadhar_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
+                    @endif
                     <label>Other Id</label>
                     @if($user->voter_id)
                     <a target="_blank" href="{{ $user->voter_id }}"><img src="{{ $user->voter_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
                     @endif
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
-                     @if($userHealth)
+                    @if($userHealth)
                     <div class="panel panel-default">
                         <div class="panel-heading"><label>Health Details</label></div>
                         <div class="panel-body">
@@ -86,8 +89,8 @@
                             </div>
                         </div>
                     </div>
-                     @endif
-                                      @if($userMembership)
+                    @endif
+                    @if($userMembership)
                     <div class="panel panel-default">
                         <div class="panel-heading"><label>Membership Details</label></div>
                         <div class="panel-body">
