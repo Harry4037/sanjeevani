@@ -106,9 +106,9 @@ class AuthController extends Controller {
                     if ($userExist->is_active == 0) {
                         return $this->sendInactiveAccountResponse();
                     }
-                     $OTP = rand(1000, 9999);
+                    $OTP = rand(1000, 9999);
                     $this->sendOtp($request->mobile_number, $OTP);
-                    
+
                     $userExist->otp = $OTP;
                     $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
@@ -121,7 +121,7 @@ class AuthController extends Controller {
                 }
             } else {
                 if (!$userExist) {
-                     $OTP = rand(1000, 9999);
+                    $OTP = rand(1000, 9999);
                     $this->sendOtp($request->mobile_number, $OTP);
                     $user = new User([
                         'mobile_number' => $request->mobile_number,
@@ -349,19 +349,23 @@ class AuthController extends Controller {
                 return $this->sendInactiveAccountResponse();
             }
             $user = $request->user();
-            
+
             $this->cleanDeviceToken($request->device_id, $request->user_type);
             $this->invalidateAllUsertokens($user->id);
             $tokenResult = $user->createToken('SanjeevaniToken');
             $token = $tokenResult->token;
 //        $token->expires_at = Carbon::now()->addWeeks(1);
             $token->save();
-
-            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
-                    ->where("check_out", ">=", date("Y-m-d H:i:s"))
-                    ->where("is_cancelled", "!=", 1)
-                    ->orderBy("id","ASC")
-                    ->first();
+            if ($user->user_type_id == 2) {
+                 $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
+                        ->first();
+            } else {
+                $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
+                        ->where("check_out", ">=", date("Y-m-d H:i:s"))
+                        ->where("is_cancelled", "!=", 1)
+                        ->orderBy("id", "ASC")
+                        ->first();
+            }
             $adultNo = 0;
             $childNo = 0;
             if ($userBookingDetail) {
