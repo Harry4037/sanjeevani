@@ -190,4 +190,26 @@ class Controller extends BaseController {
         return $downstreamResponse;
     }
 
+    public function sendRegistration($mobileNumber, $userName) {
+        $url = 'http://mobicomm.dove-sms.com//submitsms.jsp';
+        $OTPMessage = "Dear $userName, You have to registered with us. Please download the our app (APP URL)/";
+        $fields = array(
+            'user' => 'Rizilian',
+            'key' => '83529b3d8eXX',
+            'mobile' => "+91" . $mobileNumber,
+            'message' => $OTPMessage,
+            'senderid' => 'RIZOTP',
+            'accusage' => 1
+        );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_exec($ch);
+        curl_close($ch);
+
+        return true;
+    }
+
 }

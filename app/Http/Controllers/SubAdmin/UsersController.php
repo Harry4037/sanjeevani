@@ -292,6 +292,7 @@ class UsersController extends Controller {
                             $userMembership->save();
                         }
 
+                        $this->sendRegistration($user->mobile_number, $user->user_name);
                         return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
                     }
                 } catch (\Exception $e) {
