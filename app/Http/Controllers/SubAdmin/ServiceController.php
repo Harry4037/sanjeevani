@@ -130,7 +130,7 @@ class ServiceController extends Controller {
                 $service = $this->service->findOrFail($request->record_id);
                 $service->is_active = $request->status;
                 if ($service->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }

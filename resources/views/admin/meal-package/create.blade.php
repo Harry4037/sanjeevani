@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Image</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="file" class="form-control" name="image_name" id="image_name">
+                            <input accept="image/*" type="file" class="form-control" name="image_name" id="image_name">
                         </div>
                     </div>
                     <div class="form-group">

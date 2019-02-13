@@ -78,7 +78,7 @@ class SOSController extends Controller {
             
             if ($cms->save()) {
                 
-                return redirect()->route('admin.cms.edit', $cms->id)->with('status', 'Paget has been update successfully.');
+                return redirect()->route('admin.cms.edit', $cms->id)->with('status', 'Paget has been updated successfully.');
             } else {
                 return redirect()->route('admin.activity.index')->with('error', 'Something went be wrong.');
             }

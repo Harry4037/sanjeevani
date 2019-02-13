@@ -133,7 +133,7 @@ class UsersController extends Controller {
                 $user = $this->user->findOrFail($request->record_id);
                 $user->is_active = $request->status;
                 if ($user->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }
@@ -475,10 +475,10 @@ class UsersController extends Controller {
         $paid = $user->payments->sum('amount');
         $outstanding = $total - $paid;
         $discountPrice = $outstanding;
-        if($user->discount > 0){
-            $discountPrice = number_format(($outstanding - ($outstanding * ($user->discount/100))), 2);
+        if ($user->discount > 0) {
+            $discountPrice = number_format(($outstanding - ($outstanding * ($user->discount / 100))), 2);
         }
-        
+
 
         return view('admin.users.payments', compact('user', 'total', 'paid', 'outstanding', 'discountPrice'));
     }
@@ -750,6 +750,17 @@ class UsersController extends Controller {
             'vendors/bootstrap-daterangepicker/daterangepicker.js',
             'vendors/datatables.net/js/jquery.dataTables.min.js',
         ];
+        $currentDataTime = strtotime(date("d-m-Y H:i:s"));
+        $checkInTime = strtotime($data->check_in);
+        $checkOutTime = strtotime($data->check_out);
+        $flag = true;
+        if ($currentDataTime > $checkOutTime) {
+            $flag = false;
+        } elseif ($currentDataTime < $checkInTime) {
+            $flag = true;
+        } else {
+            $flag = false;
+        }
         $resorts = Resort::where(["is_active" => 1])->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
         $resortRoom = ResortRoom::find($data->resort_room_id);
@@ -764,6 +775,7 @@ class UsersController extends Controller {
             'resortRoom' => $resortRoom,
             'data' => $data,
             'BookingPeoples' => $BookingPeoples,
+            'flag' => $flag,
         ]);
     }
 

@@ -36,14 +36,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In</label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
-                            <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
+                            <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" value='@if(!$flag){{ date("Y/m/d h:s:i A", strtotime($data->check_in))}}@endif' >
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out</label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
-                            <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
+                            <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out" value='@if(!$flag){{ date("Y/m/d h:s:i A", strtotime($data->check_out))}}@endif'>
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
 @section('script')
 <script>
     $(document).ready(function () {
-
+        @if($flag)
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
@@ -188,6 +188,7 @@
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
             }});
+        @endif
 
         $(document).on("click", "#add_more_member", function () {
             var member_html = "<input value='0' type='hidden' name='record_id[]'>"

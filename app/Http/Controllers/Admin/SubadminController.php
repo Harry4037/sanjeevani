@@ -226,7 +226,7 @@ class SubadminController extends Controller {
                 $user = User::findOrFail($request->record_id);
                 $user->is_active = $request->status;
                 if ($user->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, 'message' => "Something went be wrong."];
                 }

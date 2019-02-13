@@ -168,7 +168,7 @@ class ResortController extends Controller {
                 $resort = $this->resort->findOrFail($request->record_id);
                 $resort->is_active = $request->status;
                 if ($resort->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }

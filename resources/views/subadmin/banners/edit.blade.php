@@ -33,12 +33,12 @@
                             <select class="form-control" name="banner_status" id="banner_status">
                                 <option value="">Choose option</option>
                                 <option value="1"
-                                        @if($data->id_active == 1)
+                                        @if($data->is_active == 1)
                                         {{ "selected" }}
                                         @endif
                                         >Yes</option>
                                 <option value="0"
-                                        @if($data->id_active == 0)
+                                        @if($data->is_active == 0)
                                         {{ "selected" }}
                                         @endif
                                         >No</option>

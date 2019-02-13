@@ -371,7 +371,18 @@
             locale: {
             format: 'YYYY/M/DD hh:mm:ss A'
             }
+    }, function (start, end, label) {
+            $('#membership_till').daterangepicker({
+                singleDatePicker: true,
+                timePicker: true,
+                singleClasses: "picker_2",
+                startDate: start,
+                minDate: start,
+                locale: {
+                format: 'YYYY/M/DD hh:mm:ss A'
+                }
     });
+        });
     $('#membership_till').daterangepicker({
     singleDatePicker: true,
             timePicker: true,

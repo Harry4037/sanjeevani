@@ -142,7 +142,7 @@ class NearbyController extends Controller {
                 $nearby = ResortNearbyPlace::findOrFail($request->record_id);
                 $nearby->is_active = $request->status;
                 if ($nearby->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }

@@ -139,7 +139,7 @@ class OfferController extends Controller {
                 $offer = offer::findOrFail($request->record_id);
                 $offer->is_active = $request->status;
                 if ($offer->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }

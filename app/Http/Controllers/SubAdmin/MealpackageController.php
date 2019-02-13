@@ -134,7 +134,7 @@ class MealpackageController extends Controller {
                 $meal = MealPackage::findOrFail($request->record_id);
                 $meal->is_active = $request->status;
                 if ($meal->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }

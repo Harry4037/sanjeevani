@@ -89,7 +89,7 @@ class MealcategoryController extends Controller {
                 $mealcategory = MealType::findOrFail($request->record_id);
                 $mealcategory->is_active = $request->status;
                 if ($mealcategory->save()) {
-                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status update successfully"]];
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Status updated successfully"]];
                 } else {
                     return ['status' => false, "message" => "Something went be wrong."];
                 }

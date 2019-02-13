@@ -57,13 +57,13 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Name</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ $amenity->name }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Amenity Name">
+                            <input value="{{ $amenity->name }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Activity Name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Description</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
-                            <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Amenity Description">{{ $amenity->description }}</textarea>
+                            <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Activity Description">{{ $amenity->description }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">

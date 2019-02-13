@@ -95,11 +95,11 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="seleted_status" id="seleted_status">
                                 <option value="">Select Option</option>
-                                <option value="1">New</option>
+                                <option value="1" @if($mealRequest->status == 1){{ "selected" }}@endif>New</option>
                                 <!--<option value="2">Accepted/In-Progress</option>-->
-                                <option value="3">Mark as complete/Under Approval</option>
-                                <option value="4">Approved/Completed</option>
-                                <option value="5">Rejected/Not Resolved</option>
+                                <option value="3" @if($mealRequest->status == 3){{ "selected" }}@endif>Mark as complete/Under Approval</option>
+                                <option value="4" @if($mealRequest->status == 4){{ "selected" }}@endif>Approved/Completed</option>
+                                <option value="5" @if($mealRequest->status == 5){{ "selected" }}@endif>Rejected/Not Resolved</option>
                             </select>
                         </div>
                     </div>
