@@ -16,6 +16,7 @@ use App\Models\CityMaster;
 use App\Models\UserMembership;
 use App\Models\UserBookingDetail;
 use App\Models\Resort;
+use App\Models\Cart;
 
 class UserController extends Controller {
 
@@ -619,8 +620,27 @@ class UserController extends Controller {
                 }
                 $userResort = Resort::find($userBookingDetail->resort_id);
             }
+            $userMembership = UserMembership::where("user_id", $user->id)->first();
+            $cityState = CityMaster::find($user->city_id);
+            $cart = Cart::where(["user_id" => $user->id])->count();
 
+            $userArray['id'] = $user->id;
+            $userArray['cart_count'] = $cart;
+            $userArray['user_name'] = $user->user_name != "" ? $user->user_name : "Welcome guest";
+            $userArray['first_name'] = $user->first_name;
+            $userArray['mid_name'] = $user->mid_name;
+            $userArray['last_name'] = $user->last_name;
+            $userArray['email_id'] = $user->email_id;
+            $userArray['user_type_id'] = $user->user_type_id;
             $userArray['is_checked_in'] = $user->aadhar_id == null ? false : true;
+            $userArray['address'] = $user->address1;
+            $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
+            $userArray['city'] = isset($cityState->city) ? $cityState->city : "";
+            $userArray['pincode'] = $user->pincode;
+            $userArray['screen_name'] = $user->screen_name;
+            $userArray['profile_pic_path'] = $user->profile_pic_path;
+            $userArray['mobile_number'] = $user->mobile_number;
+            $userArray['mobile_number'] = $user->mobile_number;
             $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
             $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
             $userArray['resort_room_no'] = $userBookingDetail ? $userBookingDetail->resort_room_no : "Not available";
@@ -634,7 +654,9 @@ class UserController extends Controller {
             $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
             $userArray['no_of_guest'] = $adultNo . " Adult and " . $childNo . " Child";
             $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
-
+            $userArray['membership']['membership_id'] = isset($userMembership->membership_id) ? $userMembership->membership_id : "";
+            $userArray['membership']['valid_from'] = isset($userMembership->valid_from) ? Carbon::parse($userMembership->valid_from)->format('d-M-Y h:i A') : "";
+            $userArray['membership']['valid_till'] = isset($userMembership->valid_till) ? Carbon::parse($userMembership->valid_till)->format('d-M-Y h:i A') : "";
             if (isset($userResort)) {
                 $userArray['resort'] = $userResort;
             } else {
