@@ -196,16 +196,16 @@
                     <div id="room_detail_div">
 
                         @if($dataRooms)
-                        @foreach($dataRooms as $dataRoom)
+                        @foreach($dataRooms as $k => $dataRoom)
                         <div class='form-group'>
                             <label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>
                             <div class='col-md-2 col-sm-2 col-xs-12'>
-                                <input value="{{ $dataRoom->room_no }}" type='text' class='form-control' name='room_no[]'>
-                                <input value="{{ $dataRoom->id }}" type='hidden' name='room_id[]'>
+                                <input value="{{ $dataRoom->room_no }}" type='text' class='form-control' name='room_no[{{$k}}]'>
+                                <input value="{{ $dataRoom->id }}" type='hidden' name='room_id[{{$k}}]'>
                             </div>
                             <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>                         
                             <div class = 'col-md-2 col-sm-2 col-xs-11'>
-                                <select class='form-control' name='room_type[]' id='room_type'>
+                                <select class='form-control' name='room_type[{{$k}}]' id='room_type'>
                                     @if($roomTypes)
                                     @foreach($roomTypes as $roomType)
                                     <option value="{{ $roomType->id }}"
@@ -248,6 +248,8 @@
 <script>
 $(document).ready(function () {
 
+var index = {{ count($dataRooms) }};
+
     if ($("input.flat")[0]) {
         $(document).ready(function () {
             $('input.flat').iCheck({
@@ -281,6 +283,10 @@ $(document).ready(function () {
         }
     });
 
+    jQuery.validator.addMethod("float_number", function (value, element) {
+        return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+    }, "Please provide valid lat & long value.");
+    
     $("#editResortForm").validate({
         rules: {
             edit_resort_name: {
@@ -325,18 +331,29 @@ $(document).ready(function () {
 
     var roomTypes = <?php echo json_encode($roomTypes) ?>;
 
-    var room_type = "<label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label><div class = 'col-md-2 col-sm-2 col-xs-2'><select class='form-control' name='room_type[]' id='room_type'>";
+    var room_type = "";
     $.each(roomTypes, function (key, val) {
         room_type += "<option value='" + val.id + "'>" + val.name + "</option>";
     });
-    room_type += "</select></div>";
     $(document).on("click", "#add_more_room", function () {
 
         var member_html = "<div class='form-group'><label class='control-label col-md-2 col-sm-2 col-xs-2'>Room No.</label><div class='col-md-2 col-sm-2 col-xs-2'>"
-                + "<input type='text' class='form-control' name='room_no[]'>"
-                + "<input value=0 type='hidden' class='form-control' name='room_id[]'>"
-                + "</div>" + room_type + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
+                + "<input type='text' class='form-control' name='room_no["+index+"]'>"
+                + "<input value=0 type='hidden' class='form-control' name='room_id["+index+"]'>"
+                + "</div>"
+        +"<label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label><div class = 'col-md-2 col-sm-2 col-xs-2'><select class='form-control' name='room_type["+index+"]' id='room_type'>"
+        + room_type + 
+        "</select></div>"
+        +"<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#room_detail_div").append(member_html);
+        
+        $("input[name='room_no[" + index + "]']").rules("add", {
+            remote:  _baseUrl+ '/sub-admin/resort/check-room?resort={{$data->id}}',
+            messages: {
+                remote: "Room no. already exist.",
+            }
+        });
+        index++;
     });
 
     $(document).on("click", ".delete_this_div", function () {

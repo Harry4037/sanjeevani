@@ -65,6 +65,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/resort-healthcare/{id}', 'ResortController@getResortHealthcare')->name('admin.resort.healthcare-list');
         Route::post('/delete-room', 'ResortController@deleteRoom')->name('admin.resort.delete-room');
         Route::post('/delete', 'ResortController@deleteResort')->name('admin.resort.delete');
+        Route::get('/check-room', 'ResortController@validateRoomNo')->name('admin.resort.validate-room');
     });
 
     /**
@@ -324,6 +325,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::post('/delete-room', 'ResortController@deleteRoom')->name('subadmin.resort.delete-room');
         Route::post('/delete-images', 'ResortController@deleteImages')->name('subadmin.resort.delete-image');
         Route::post('/delete-resort-images', 'ResortController@deleteResortImage')->name('subadmin.resort.delete-resort-image');
+        Route::get('/check-room', 'ResortController@validateRoomNo')->name('subadmin.resort.validate-room');
     });
     /**
      * Dashboard & Profile routes

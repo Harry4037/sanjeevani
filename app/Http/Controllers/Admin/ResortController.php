@@ -113,11 +113,14 @@ class ResortController extends Controller {
                     }
                     if ($request->room_type && $request->room_no) {
                         foreach ($request->room_type as $k => $room) {
-                            $resortRoom = new ResortRoom();
-                            $resortRoom->resort_id = $resort->id;
-                            $resortRoom->room_type_id = $room;
-                            $resortRoom->room_no = $request->room_no[$k];
-                            $resortRoom->save();
+                            $isExist = ResortRoom::where(["resort_id" => $resort->id, "room_no" => $request->room_no[$k]])->first();
+                            if (!$isExist) {
+                                $resortRoom = new ResortRoom();
+                                $resortRoom->resort_id = $resort->id;
+                                $resortRoom->room_type_id = $room;
+                                $resortRoom->room_no = $request->room_no[$k];
+                                $resortRoom->save();
+                            }
                         }
                     }
 
@@ -331,6 +334,16 @@ class ResortController extends Controller {
         } catch (\Exception $ex) {
             dd($ex);
         }
+    }
+
+    public function validateRoomNo(Request $request) {
+        $isExist = ResortRoom::where(["room_no" => implode("", $request->get("room_no")), "resort_id" => $request->get("resort")])->first();
+        if ($isExist) {
+            echo "false";
+        } else {
+            echo "true";
+        }
+        exit;
     }
 
 }

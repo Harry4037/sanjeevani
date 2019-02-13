@@ -106,7 +106,7 @@ class AmenityController extends Controller {
                     }
 
 
-                    return redirect()->route('subadmin.amenity.index')->with('status', 'Resort has been added successfully.');
+                    return redirect()->route('subadmin.amenity.index')->with('status', 'Amenity added successfully.');
                 } else {
                     return redirect()->route('subadmin.amenity.index')->with('error', 'Something went be wrong.');
                 }
@@ -200,7 +200,7 @@ class AmenityController extends Controller {
                 }
 
 
-                return redirect()->route('subadmin.amenity.index')->with('status', 'Resort has been added successfully.');
+                return redirect()->route('subadmin.amenity.index')->with('status', 'Amenity updated successfully.');
             } else {
                 return redirect()->route('subadmin.amenity.index')->with('error', 'Something went be wrong.');
             }

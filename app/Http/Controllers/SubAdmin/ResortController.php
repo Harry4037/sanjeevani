@@ -170,4 +170,14 @@ class ResortController extends Controller {
         }
     }
 
+    public function validateRoomNo(Request $request) {
+        $isExist = ResortRoom::where(["room_no" => implode("", $request->get("room_no")), "resort_id" => $request->get("resort")])->first();
+        if ($isExist) {
+            echo "false";
+        } else {
+            echo "true";
+        }
+        exit;
+    }
+
 }
