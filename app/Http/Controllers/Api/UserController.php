@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\StateMaster;
 use App\Models\CityMaster;
 use App\Models\UserMembership;
+use App\Models\UserBookingDetail;
+use App\Models\Resort;
 
 class UserController extends Controller {
 
@@ -175,7 +177,7 @@ class UserController extends Controller {
                 $other_aadhar_file_name = basename($other_aadhar);
 
                 $user->other_aadhar_id = $other_aadhar_file_name;
-                
+
                 $aadhar_id = $request->file("aadhar_id");
                 $aadhar = Storage::disk('public')->put('aadhar_id', $aadhar_id);
                 $aadhar_file_name = basename($aadhar);
@@ -307,7 +309,7 @@ class UserController extends Controller {
                 $user->profile_pic_path = $profile_file_name;
             }
 
-            if($request->is_remove_pic){
+            if ($request->is_remove_pic) {
                 $user->profile_pic_path = "";
             }
             if ($user->save()) {
@@ -585,6 +587,61 @@ class UserController extends Controller {
                 return $this->sendErrorResponse("User object not found", (object) []);
             }
         } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
+        }
+    }
+
+    public function getCheckInDetail(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User Id missing.", (object) []);
+            }
+            $user = User::find($request->user_id);
+            if (!$user) {
+                return $this->sendErrorResponse("Invalid User.", (object) []);
+            }
+            $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
+                    ->where("check_out", ">=", date("Y-m-d H:i:s"))
+                    ->where("is_cancelled", "!=", 1)
+                    ->orderBy("id", "ASC")
+                    ->first();
+            $adultNo = 0;
+            $childNo = 0;
+            if ($userBookingDetail) {
+                if ($userBookingDetail->bookingpeople_accompany) {
+                    foreach ($userBookingDetail->bookingpeople_accompany as $guest) {
+                        if ($guest->person_type == "Adult") {
+                            $adultNo += 1;
+                        } elseif ($guest->person_type == "Child") {
+                            $childNo += 1;
+                        }
+                    }
+                }
+                $userResort = Resort::find($userBookingDetail->resort_id);
+            }
+
+            $userArray['is_checked_in'] = $user->aadhar_id == null ? false : true;
+            $userArray['source_name'] = $userBookingDetail ? $userBookingDetail->source_name : '';
+            $userArray['source_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
+            $userArray['resort_room_no'] = $userBookingDetail ? $userBookingDetail->resort_room_no : "Not available";
+            $userArray['room_type'] = $userBookingDetail ? $userBookingDetail->room_type_name : "Not available";
+            $userArray['check_in_pin'] = $userBookingDetail ? $userBookingDetail->check_in_pin : '';
+            $userArray['check_out_pin'] = $userBookingDetail ? $userBookingDetail->check_out_pin : '';
+            $userArray['check_in_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('d-M-Y') : '';
+            $userArray['check_in_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_in)->format('h:i A') : '';
+            $userArray['check_out_date'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('d-M-Y') : '';
+            $userArray['check_out_time'] = $userBookingDetail ? Carbon::parse($userBookingDetail->check_out)->format('h:i A') : '';
+            $userArray['booking_id'] = $userBookingDetail ? $userBookingDetail->source_id : '';
+            $userArray['no_of_guest'] = $adultNo . " Adult and " . $childNo . " Child";
+            $userArray['guest_detail'] = isset($userBookingDetail->bookingpeople_accompany) ? $userBookingDetail->bookingpeople_accompany : [];
+
+            if (isset($userResort)) {
+                $userArray['resort'] = $userResort;
+            } else {
+                $userArray['resort'] = (object) [];
+            }
+            return $this->sendSuccessResponse("User.", ["checkin_detail" => $userArray]);
+        } catch (Exception $ex) {
             return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
