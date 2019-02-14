@@ -180,7 +180,43 @@ class UsersController extends Controller {
                     ->where("user_type_id", 3)
                     ->first();
             if ($userExist) {
-                return redirect()->route('subadmin.users.add')->with('error', 'User already exists with this mobile number');
+                if (isset($request->is_booking_details) && ($request->is_booking_details == "on")) {
+                    $roomType = RoomType::find($request->resort_room_type);
+                    $roomRoom = ResortRoom::find($request->resort_room_id);
+
+                    $userBooking = new UserBookingDetail();
+                    $userBooking->source_name = $request->booking_source_name;
+                    $userBooking->source_id = $request->booking_source_id;
+                    $userBooking->user_id = $userExist->id;
+                    $userBooking->resort_id = $request->get("subadminResort");
+                    $userBooking->package_id = $request->package_id;
+                    $userBooking->room_type_id = $request->resort_room_type;
+                    $userBooking->resort_room_id = $request->resort_room_id;
+                    $userBooking->resort_room_no = $roomRoom->room_no;
+                    $userBooking->room_type_name = $roomType->name;
+                    $check_in_date = Carbon::parse($request->check_in);
+                    $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
+                    $check_out_date = Carbon::parse($request->check_out);
+                    $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
+                    $userBooking->check_in_pin = rand(1111, 9999);
+                    $userBooking->check_out_pin = rand(1111, 9999);
+                    if ($userBooking->save()) {
+                        if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
+
+                            foreach ($request->person_name as $key => $person_name) {
+                                if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                                    $familyMember = new BookingpeopleAccompany();
+                                    $familyMember->person_name = $person_name ? $person_name : ' ';
+                                    $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                                    $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                                    $familyMember->booking_id = $userBooking->id;
+                                    $familyMember->save();
+                                }
+                            }
+                        }
+                    }
+                }
+                return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
             } else {
 
                 $validator = Validator::make($request->all(), [
@@ -544,6 +580,7 @@ class UsersController extends Controller {
                     $query->withTrashed();
                 }]);
             $query->where("user_id", $user_id);
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where(function($query) use($searchKeyword) {
                     $query->whereHas("packageDetail", function($query) use($searchKeyword) {
@@ -812,20 +849,19 @@ class UsersController extends Controller {
             "user" => $user ? $user : [],
         ]);
     }
-    
-    public function getUserDetail(Request $request, $mobile_number){
+
+    public function getUserDetail(Request $request, $mobile_number) {
         $user = User::where("mobile_number", $mobile_number)->first();
-        if($user){
+        if ($user) {
             return [
-              "status" => true,
-              "user_name" => $user->user_name,
-              "email_id" => $user->email_id,
-                
+                "status" => true,
+                "user_name" => $user->user_name,
+                "email_id" => $user->email_id,
             ];
-        }else{
-           return [
-              "status" => false,
-            ]; 
+        } else {
+            return [
+                "status" => false,
+            ];
         }
     }
 

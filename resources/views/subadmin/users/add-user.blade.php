@@ -29,6 +29,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input  type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number" value="{{ old('mobile_number') }}">
+                            <span style="color: green; display: none;" id="user_already_msg">User already exist in our database.Please provide booking details.</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -43,7 +44,7 @@
                             <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="health_div">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Health Details</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
@@ -110,7 +111,7 @@
                     </div>
                     </div>
                     
-                    <div class="form-group">
+                    <div class="form-group" id="membership_div">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Details</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
@@ -140,16 +141,16 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Details</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
-                                <input class="flat" type="checkbox" id="is_booking_details" name="is_booking_details">
+                                <input checked class="flat" type="checkbox" id="is_booking_details" name="is_booking_details">
                             <p>
                         </div>
                     </div>
                     
-                    <div id="user_booking_div" style="display: none;">
+                    <div id="user_booking_div" style="display: block;">
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Booking Details</label>
                     </div>
@@ -296,9 +297,30 @@
                                 $("#email_id").val(res.email_id);
                                 $("#user_name").attr("disabled", true);
                                 $("#email_id").attr("disabled", true);
-                                $("#is_booking_details").parent("div").addClass("checked");
-                            }else{
+//                                $("#is_booking_details").parent("div").addClass("checked");
+//                                $("#user_booking_div").css("display","block");
+                                $("#user_already_msg").css("display","block");
+                                $("#health_div").css("display","none");
+                                $("#user_medical_detail_div").css("display","none");
+                                $("#membership_div").css("display","none");
+                                $("#user_membership_div").css("display","none");
                                 
+//                                $("#booking_source_name").rules("add", {required: true});
+//                                $("#booking_source_id").rules("add", {required: true});
+//                                $("#check_in").rules("add", {required: true});
+//                                $("#check_out").rules("add", {required: true});
+//                                $("#resort_id").rules("add", {required: true});
+//                                $("#resort_room_type").rules("add", {required: true});
+//                                $("#resort_room_id").rules("add", {required: true});
+//                                $("#package_id").rules("add", {required: true});
+                            }else{
+//                                $("#user_booking_div").css("display","none");
+                                $("#user_name").attr("disabled", false);
+                                $("#email_id").attr("disabled", false);
+                                $("#health_div").css("display","block");
+                                $("#membership_div").css("display","block");
+//                                $("#is_booking_details").parent("div").removeClass("checked");
+                                $("#user_already_msg").css("display","none");
                             }
                         }
                     });
@@ -367,12 +389,12 @@
 
         $("#addUserForm").validate({
             rules: {
-//                booking_source_name: {
-//                    required: true
-//                },
-//                booking_source_id: {
-//                    required: true
-//                },
+                booking_source_name: {
+                    required: true
+                },
+                booking_source_id: {
+                    required: true
+                },
                 user_name: {
                     required: true
                 },
@@ -392,24 +414,24 @@
                     min: 0,
                     max: 100,
                 },
-//                check_in: {
-//                    required: true
-//                },
-//                check_out: {
-//                    required: true
-//                },
-//                resort_id: {
-//                    required: true
-//                },
-//                resort_room_type: {
-//                    required: true
-//                },
-//                resort_room_id: {
-//                    required: true
-//                },
-//                package_id: {
-//                    required: true
-//                },
+                check_in: {
+                    required: true
+                },
+                check_out: {
+                    required: true
+                },
+                resort_id: {
+                    required: true
+                },
+                resort_room_type: {
+                    required: true
+                },
+                resort_room_id: {
+                    required: true
+                },
+                package_id: {
+                    required: true
+                },
 //                is_diabeties: {
 //                    required: true
 //                },
