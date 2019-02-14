@@ -812,5 +812,21 @@ class UsersController extends Controller {
             "user" => $user ? $user : [],
         ]);
     }
+    
+    public function getUserDetail(Request $request, $mobile_number){
+        $user = User::where("mobile_number", $mobile_number)->first();
+        if($user){
+            return [
+              "status" => true,
+              "user_name" => $user->user_name,
+              "email_id" => $user->email_id,
+                
+            ];
+        }else{
+           return [
+              "status" => false,
+            ]; 
+        }
+    }
 
 }

@@ -377,7 +377,8 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::get('user-booking-list/{id}', 'UsersController@bookingList')->name('subadmin.users.booking-list');
     Route::match(['get', 'post'], 'user-booking-create/{id}', 'UsersController@bookingCreate')->name('subadmin.users.booking-create');
     Route::match(['get', 'post'], 'user-booking-edit/{id}', 'UsersController@bookingEdit')->name('subadmin.users.booking-edit');
-        Route::match(['get', 'post'], 'user-booking-verify/{id}', 'UsersController@verifyBooking')->name('subadmin.users.booking-verify');
+    Route::match(['get', 'post'], 'user-booking-verify/{id}', 'UsersController@verifyBooking')->name('subadmin.users.booking-verify');
+    Route::get('user-detail/{mobile_number}', 'UsersController@getUserDetail')->name('subadmin.users.booking-detail');
         
     /**
      * Staff Management

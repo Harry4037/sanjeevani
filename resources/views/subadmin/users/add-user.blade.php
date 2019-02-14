@@ -278,6 +278,33 @@
 @section('script')
 <script>
     $(document).ready(function () {
+        
+        $(document).on("keyup", "#mobile_number", function(){
+            var value = $("#mobile_number").val();
+            if(value.length){
+                $.ajax({
+                        url: _baseUrl + '/sub-admin/user-detail/'+value,
+                        type: 'get',
+                         dataType: 'json',
+                        beforeSend: function () {
+                            $(".overlay").show();
+                        },
+                        success: function (res) {
+                            $(".overlay").hide();
+                            if(res.status){
+                                $("#user_name").val(res.user_name);
+                                $("#email_id").val(res.email_id);
+                                $("#user_name").attr("disabled", true);
+                                $("#email_id").attr("disabled", true);
+                                $("#is_booking_details").parent("div").addClass("checked");
+                            }else{
+                                
+                            }
+                        }
+                    });
+            }
+        });
+        
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
