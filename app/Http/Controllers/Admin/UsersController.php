@@ -99,7 +99,7 @@ class UsersController extends Controller {
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $usersArray[$i]['user_type'] = $user->user_type_id == 3 ? "Customer" : "Guest";
-                $usersArray[$i]['outstanding'] = number_format(($user->mealOrders->sum('total_amount') - $user->payments->sum('amount')), 2);
+//                $usersArray[$i]['outstanding'] = number_format(($user->mealOrders->sum('total_amount') - $user->payments->sum('amount')), 2);
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 if ($user->user_type_id == 3) {
@@ -466,26 +466,35 @@ class UsersController extends Controller {
         }
     }
 
-    public function viewPayments(User $user) {
-        $user->load(['payments', 'mealOrders' => function($query) {
-                $query->accepted();
-            }]);
+    public function viewPayments(Request $request, User $user) {
+        if ($request->isMethod("post")) {
+            $user->load(['payments', 'mealOrders' => function($query) use($request, $user) {
+                    $query->where(["user_id" => $user->id, "resort_id" => $request->resort_id])->accepted();
+                }]);
+            $resort = Resort::find($request->resort_id);
+            $total = $user->mealOrders->sum('total_amount');
+            $paid = $user->payments->where("resort_id", $request->resort_id)->sum('amount');
+            $discountPrice = $total;
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0);
+            }
+            $outstanding = $discountPrice - $paid;
 
-        $total = $user->mealOrders->sum('total_amount');
-        $paid = $user->payments->sum('amount');
-        $outstanding = $total - $paid;
-        $discountPrice = $outstanding;
-        if ($user->discount > 0) {
-            $discountPrice = number_format(($outstanding - ($outstanding * ($user->discount / 100))), 2);
+
+
+            return view('admin.users.payments', compact('resort', 'user', 'total', 'paid', 'outstanding', 'discountPrice'));
+        } else {
+            $userResort = UserBookingDetail::where("user_booking_details.user_id", $user->id)
+                    ->join("resorts", "user_booking_details.resort_id", "=", "resorts.id")
+                    ->pluck('resorts.name', 'resorts.id')
+                    ->all();
+            return view('admin.users.resort-payments', compact('userResort', 'user'));
         }
-
-
-        return view('admin.users.payments', compact('user', 'total', 'paid', 'outstanding', 'discountPrice'));
     }
 
     public function payOutstading(Request $request) {
         try {
-
+//            dd($request->all());
             $validator = Validator::make($request->all(), [
                         'user_id' => 'required',
                         'amount' => 'required|numeric',
@@ -500,7 +509,8 @@ class UsersController extends Controller {
             $user = User::findOrFail($request->user_id);
 
             $user->payments()->create([
-                'amount' => $request->outstanding_amount
+                'amount' => $request->amount,
+                'resort_id' => $request->resort_id,
             ]);
 
             return $this->sendSuccessResponse("Payment Successfull.", (object) []);

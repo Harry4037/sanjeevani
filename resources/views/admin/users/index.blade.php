@@ -24,7 +24,7 @@
                             <th>Name</th>
                             <th>Email Address</th>
                             <th>User Type</th>
-                            <th>Outstanding</th>
+<!--                            <th>Outstanding</th>-->
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -62,7 +62,7 @@
                 {"data": "name", sortable: false},
                 {"data": "email", sortable: false},
                 {"data": "user_type", sortable: false},
-                {"data": "outstanding", sortable: false},
+//                {"data": "outstanding", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

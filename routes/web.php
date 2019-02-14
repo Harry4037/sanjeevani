@@ -92,7 +92,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::match(['get', 'post'], '/user/add-user', 'UsersController@addUser')->name('admin.users.add');
     Route::get('/user/detail/{id}', 'UsersController@viewUser')->name('admin.users.detail');
     Route::match(['get', 'post'], '/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
-    Route::get('payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
+//    Route::get('payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
+    Route::match(['get', 'post'], 'payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
     Route::post('pay-outstanding', 'UsersController@payOutstading')->name('admin.users.pay_outstanding');
     Route::get('user-booking/{id}', 'UsersController@booking')->name('admin.users.booking');
     Route::get('user-booking-list/{id}', 'UsersController@bookingList')->name('admin.users.booking-list');

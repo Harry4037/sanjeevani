@@ -23,7 +23,7 @@
                                 <i class="fa fa-inr"></i>
                             </div>
                             <div class="count">
-                                {{number_format($total,2)}}
+                                {{number_format($total,0)}}
                             </div>
                             <h3>Total Order</h3>
                         </div>
@@ -35,7 +35,7 @@
                                 <i class="fa fa-inr"></i>
                             </div>
                             <div class="count">
-                                {{number_format($paid,2)}}
+                                {{number_format($paid,0)}}
                             </div>
                             <h3>Total Paid</h3>
                         </div>
@@ -46,8 +46,8 @@
                             <div class="icon">
                                 <i class="fa fa-inr"></i>
                             </div>
-                            <div class="count">
-                                {{number_format($outstanding ,2)}}
+                            <div class="count" id="total_outstanding_amount">
+                                {{number_format($outstanding ,0)}}
                             </div>
                             <h3>Total Outstanding</h3>
                         </div>
@@ -62,7 +62,9 @@
                         <form action="{{route('admin.users.pay_outstanding')}}" id="paymentForm">
                             @csrf
                             <input type="hidden" name="user_id" value="{{$user->id}}">
-                            <input type="hidden" id="outstanding_amount" name="outstanding_amount" value="{{$outstanding}}">
+                            <input type="hidden" name="resort_id" value="{{$resort->id}}">
+                            <input type="hidden" id="total_amount" name="total_amount" value="{{$total}}">
+                            <input type="hidden" id="paid" name="paid" value="{{$paid}}">
                             <div class="form-group">
                                 <label for="">Discount (%)</label>
                                 <input type="number" id="discount" name="discount" class="form-control" value="{{ $user->discount ? $user->discount : 0 }}">
@@ -99,32 +101,40 @@
    
    $(document).on("keyup", "#discount", function(){
        var discount = parseFloat($("#discount").val());
-       var outstanding_amount = parseFloat($("#outstanding_amount").val());
+       var total_amount = parseFloat($("#total_amount").val());
+       var paid = parseFloat($("#paid").val());
        if(discount <= 100){
-           var dis_price = (outstanding_amount - (outstanding_amount * (discount/100))).toFixed(2);
+           var dis_price = parseFloat((total_amount - (total_amount * (discount/100))).toFixed(0));
+           var max_limit = dis_price - paid;
            $("#discount_amount").val(dis_price);
+           $("#total_outstanding_amount").html(max_limit);
            $("#amount").rules("remove", "max");
-           $("#amount").rules("add", {min: dis_price });
-           $("#amount").rules("add", {max: dis_price });
+           $("#amount").rules("add", {max: max_limit });
        }else{
            return false;
        }
    });
    
+    jQuery.validator.addMethod("lessamount", function (value, element) {
+       var dis_amount = parseFloat($("#discount_amount").val());
+       var paid = parseFloat($("#paid").val());
+        return dis_amount > paid;
+    }, "Discounted price not less than total paid amount");
+    
     $("#paymentForm").validate({
     ignore: [],
             rules:{
             amount: {
             required: true,
                     number:true,
-                    min:{{$discountPrice}},
-                    max:{{$discountPrice}},
+                    max:{{$outstanding}},
             },
             discount: {
             required: true,
                     number:true,
                     min: 0,
                     max: 100,
+                    lessamount: true
             },
             },
             messages:{

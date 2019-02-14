@@ -16,6 +16,7 @@ class CreatePaidAmountsTable extends Migration
         Schema::create('paid_amounts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->bigInteger('resort_id');
             $table->float('amount',8,2);
             $table->timestamps();
         });
