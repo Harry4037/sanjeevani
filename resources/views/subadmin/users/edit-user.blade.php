@@ -363,7 +363,7 @@
 <script>
     $(document).ready(function () {
     $('#membership_from').daterangepicker({
-    singleDatePicker: true,
+            singleDatePicker: true,
             timePicker: true,
             singleClasses: "picker_2",
             @if (isset($userMembership->valid_from))
@@ -381,7 +381,7 @@
                 minDate: start,
                 locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
-                }
+                 }});
     });
     $('#membership_till').daterangepicker({
     singleDatePicker: true,
