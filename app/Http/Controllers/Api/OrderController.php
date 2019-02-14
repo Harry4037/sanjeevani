@@ -319,7 +319,7 @@ class OrderController extends Controller {
                     $query->accepted();
                 }]);
 
-            $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, ROUND((total_amount * (gst_amount/100)),2) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["user_id" => $request->user_id])
+            $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["user_id" => $request->user_id])
                     ->with([
                         'orderItems' => function($query) {
                             $query->select('id', 'meal_item_name', 'quantity', 'price', 'meal_order_id');

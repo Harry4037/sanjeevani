@@ -177,7 +177,7 @@ class StaffController extends Controller {
                         $userBooking->resort_id = $request->get("subadminResort");
                         $userBooking->package_id = 0;
                         $userBooking->save();
-                        return redirect()->route('subadmin.staff.index')->with('status', 'User has been added successfully');
+                        return redirect()->route('subadmin.staff.index')->with('status', 'Staff has been added successfully');
                     } else {
                         return redirect()->route('subadmin.staff.add')->with('error', 'Something went be wrong.');
                     }

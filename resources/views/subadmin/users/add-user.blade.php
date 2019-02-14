@@ -20,16 +20,16 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input  type="text" class="form-control" placeholder="Customer Name" name="user_name" id="user_name" value="{{ old('user_name') }}">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input  type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number" value="{{ old('mobile_number') }}">
                             <span style="color: green; display: none;" id="user_already_msg">User already exist in our database.Please provide booking details.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input  type="text" class="form-control" placeholder="Customer Name" name="user_name" id="user_name" value="{{ old('user_name') }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -282,7 +282,7 @@
         
         $(document).on("keyup", "#mobile_number", function(){
             var value = $("#mobile_number").val();
-            if(value.length){
+            if(value.length == 10){
                 $.ajax({
                         url: _baseUrl + '/sub-admin/user-detail/'+value,
                         type: 'get',

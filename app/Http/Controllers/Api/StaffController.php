@@ -200,7 +200,7 @@ class StaffController extends Controller {
                     $mealDataArray[$j]["id"] = $mealOrder->id;
                     $mealDataArray[$j]["invoice_id"] = $mealOrder->invoice_id;
                     $mealDataArray[$j]["item_total_amount"] = $mealOrder->item_total_amount;
-                    $mealDataArray[$j]["gst_amount"] = number_format(($mealOrder->total_amount * ($mealOrder->gst_amount/100)) , 0);
+                    $mealDataArray[$j]["gst_amount"] = ($mealOrder->total_amount - $mealOrder->item_total_amount);
                     $mealDataArray[$j]["gst_percentage"] = $mealOrder->gst_amount;
                     $mealDataArray[$j]["total_amount"] = $mealOrder->total_amount;
                     $mealDataArray[$j]["user_name"] = $mealOrder->userDetail->user_name;
@@ -487,7 +487,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["total_item_count"] = count($mealItems);
                 $ongoingJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
-                $ongoingJobArray[$i]["gst_amount"] = number_format(($ongoingMealOrder->total_amount * ($ongoingMealOrder->gst_amount/100)) , 0);
+                $ongoingJobArray[$i]["gst_amount"] = ($ongoingMealOrder->total_amount - $ongoingMealOrder->item_total_amount);
                 $ongoingJobArray[$i]["gst_percentage"] = $ongoingMealOrder->gst_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
@@ -593,7 +593,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["total_item_count"] = count($mealItems);
                 $underApprovalJobArray[$j]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $underApprovalJobArray[$j]["room_no"] = $ongoingMealOrder->resort_room_no;
-                $underApprovalJobArray[$j]["gst_amount"] = number_format(($ongoingMealOrder->total_amount * ($ongoingMealOrder->gst_amount/100)) , 0);
+                $underApprovalJobArray[$j]["gst_amount"] = ($ongoingMealOrder->total_amount - $ongoingMealOrder->item_total_amount);
                 $underApprovalJobArray[$j]["gst_percentage"] = $ongoingMealOrder->gst_amount;
                 $underApprovalJobArray[$j]["total_amount"] = $ongoingMealOrder->total_amount;
                 $underApprovalJobArray[$j]["status_id"] = $ongoingMealOrder->status;
@@ -690,7 +690,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["total_item_count"] = count($mealItems);
                 $completedJobArray[$i]["user_name"] = $ongoingMealOrder->userDetail->user_name;
                 $completedJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
-                $completedJobArray[$i]["gst_amount"] = number_format(($ongoingMealOrder->total_amount * ($ongoingMealOrder->gst_amount/100)) , 0);
+                $completedJobArray[$i]["gst_amount"] = ($ongoingMealOrder->total_amount - $ongoingMealOrder->item_total_amount);
                 $completedJobArray[$i]["gst_percentage"] = $ongoingMealOrder->gst_amount;
                 $completedJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $completedJobArray[$i]["status_id"] = $ongoingMealOrder->status;

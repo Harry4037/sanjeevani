@@ -340,7 +340,7 @@ class HealthcareProgramController extends Controller {
                 foreach ($completedPackages as $i => $completedPackage) {
                     $completedArray[$i]["id"] = $completedPackage->packageDetail->id;
                     $completedArray[$i]["name"] = $completedPackage->packageDetail->name;
-                    $completedArray[$i]["duration"] = $completedPackage->packageDetail->start_from . " to " . $completedPackage->packageDetail->end_to;
+                    $completedArray[$i]["duration"] = date("d-M-Y",strtotime($completedPackage->check_in)) . " to " . date("d-M-Y", strtotime($completedPackage->check_out));
                     $completedArray[$i]["status"] = "Completed";
                 }
                 $data['complete'] = $completedArray;
@@ -349,7 +349,7 @@ class HealthcareProgramController extends Controller {
                     $upcomingArray[$i]["id"] = $upcomingPackage->packageDetail->id;
                     $upcomingArray[$i]["record_id"] = $upcomingPackage->id;
                     $upcomingArray[$i]["name"] = $upcomingPackage->packageDetail->name;
-                    $upcomingArray[$i]["duration"] = $upcomingPackage->packageDetail->start_from . " to " . $upcomingPackage->packageDetail->end_to;
+                    $upcomingArray[$i]["duration"] = date("d-M-Y",strtotime($upcomingPackage->check_in)) . " to " . date("d-M-Y", strtotime($upcomingPackage->check_out));
                     $upcomingArray[$i]["status"] = "Upcoming";
                 }
                 $data['upcoming'] = $upcomingArray;

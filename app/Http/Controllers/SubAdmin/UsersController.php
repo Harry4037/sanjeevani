@@ -215,6 +215,9 @@ class UsersController extends Controller {
                             }
                         }
                     }
+                    if ($userExist->device_token) {
+                        $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $userExist->device_token);
+                    }
                 }
                 return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
             } else {
@@ -671,7 +674,7 @@ class UsersController extends Controller {
             $UserBookingDetail->source_name = $request->booking_source_name;
             $UserBookingDetail->source_id = $request->booking_source_id;
             $UserBookingDetail->user_id = $user->id;
-            $UserBookingDetail->resort_id = $request->resort_id;
+            $UserBookingDetail->resort_id = $request->get("subadminResort");
             $UserBookingDetail->package_id = $request->package_id;
             $UserBookingDetail->room_type_id = $request->resort_room_type;
             $UserBookingDetail->resort_room_id = $request->resort_room_id;
@@ -720,7 +723,7 @@ class UsersController extends Controller {
             'js' => $js,
             'css' => $css,
             "user_id" => $user_id,
-            'resorts' => $resorts,
+            'resort_id' => $request->get("subadminResort"),
             'roomTypes' => $roomTypes,
             'healcarePackages' => $healcarePackages,
         ]);

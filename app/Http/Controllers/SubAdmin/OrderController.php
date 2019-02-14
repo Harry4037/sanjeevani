@@ -88,6 +88,7 @@ class OrderController extends Controller {
                 return redirect()->route('subadmin.order.view', $id)->withErrors($validator)->withInput();
             }
             $sRequest->status = $request->seleted_status;
+            $sRequest->staff_comment = "not available";
             $sRequest->save();
             return redirect()->route('subadmin.order.view', $id)->with("status", "Status updated successfully.");
         }

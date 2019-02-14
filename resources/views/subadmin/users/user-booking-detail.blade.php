@@ -20,7 +20,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <label class="col-md-3 col-sm-3 col-xs-6">Booking Id</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userBookingdetail->booking_id) ? $userBookingdetail->booking_id : "Not available" }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userBookingdetail->source_id) ? $userBookingdetail->source_id : "Not available" }}</div>
                                 <label class="col-md-3 col-sm-3 col-xs-6">Source Name</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userBookingdetail->source_name) ? $userBookingdetail->source_name : "Not available" }}</div>
                             </div>

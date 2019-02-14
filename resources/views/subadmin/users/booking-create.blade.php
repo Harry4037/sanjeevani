@@ -47,19 +47,7 @@
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="resort_id" name="resort_id">
-                                <option value="">Select option</option>
-                                @if($resorts)
-                                @foreach($resorts as $resort)
-                                <option value="{{ $resort->id }}">{{ $resort->name }}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
+                    <input type="hidden" class="form-control" id="resort_id" name="resort_id" value="{{$resort_id}}">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -170,15 +158,12 @@
         });
 
         $(document).on("change", "#resort_room_type", function () {
-            var resort = $("#resort_id :selected").val();
+            var resort = $("#resort_id").val();
             var resort_room = $("#resort_room_type :selected").val();
             var check_in = $("#check_in").val();
             var check_out = $("#check_out").val();
 
-            if (!resort) {
-                alert("Please select resort.")
-                return false;
-            } else if (!resort_room) {
+            if (!resort_room) {
                 alert("Please select resort room type.")
                 return false;
             } else {

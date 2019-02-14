@@ -88,6 +88,7 @@
 
                 <form class="form-horizontal form-label-left" action="{{ route('subadmin.order.view', $mealRequest->id) }}" method="post" id="mealOrderForm">
                     @csrf
+                   
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Status</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -95,9 +96,9 @@
                                 <option value="">Select Option</option>
                                 <option value="1" @if($mealRequest->status == 1){{ "selected" }}@endif>New</option>
                                 <!--<option value="2">Accepted/In-Progress</option>-->
-                                <option value="3" @if($mealRequest->status == 1){{ "selected" }}@endif>Mark as complete/Under Approval</option>
-                                <option value="4" @if($mealRequest->status == 1){{ "selected" }}@endif>Approved/Completed</option>
-                                <option value="5" @if($mealRequest->status == 1){{ "selected" }}@endif>Rejected/Not Resolved</option>
+                                <option value="3" @if($mealRequest->status == 3){{ "selected" }}@endif>Mark as complete/Under Approval</option>
+                                <option value="4" @if($mealRequest->status == 4){{ "selected" }}@endif>Approved/Completed</option>
+                                <option value="5" @if($mealRequest->status == 5){{ "selected" }}@endif>Rejected/Not Resolved</option>
                             </select>
                         </div>
                     </div>
