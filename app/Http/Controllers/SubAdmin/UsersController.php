@@ -523,7 +523,7 @@ class UsersController extends Controller {
         
         $discountPrice = $total;
         if ($user->discount > 0) {
-            $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0);
+            $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
         }
         $outstanding = $discountPrice - $paid;
         
