@@ -95,19 +95,21 @@
                         <div class="panel-heading"><label>Membership Details</label></div>
                         <div class="panel-body">
                             <div class="row">
-                                <label class="col-md-2 col-sm-2 col-xs-6">Membership Id</label>
+                                <label class="col-md-3 col-sm-3 col-xs-6">Membership Id</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">
                                     @if(isset($userMembership->membership_id))
                                     {{ $userMembership->membership_id }}
                                     @endif
                                 </div>
-                                <label class="col-md-1 col-sm-1 col-xs-6">Valid From</label>
-                                <div class="col-md-2 col-sm-2 col-xs-6">
+                                <label class="col-md-3 col-sm-3 col-xs-6">Valid From</label>
+                                <div class="col-md-3 col-sm-3 col-xs-6">
                                     @if(isset($userMembership->valid_from))    
                                     {{ date("d-m-Y h:i A", strtotime($userMembership->valid_from)) }}
                                     @endif
                                 </div>
-                                <label class="col-md-2 col-sm-2 col-xs-6">Valid Till</label>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-3 col-sm-3 col-xs-6">Valid Till</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">
                                     @if(isset($userMembership->valid_till))    
                                     {{ date("d-m-Y h:i A", strtotime($userMembership->valid_till)) }}
