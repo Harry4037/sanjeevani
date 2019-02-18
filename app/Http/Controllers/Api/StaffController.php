@@ -489,6 +489,7 @@ class StaffController extends Controller {
                 $ongoingJobArray[$i]["room_no"] = $ongoingMealOrder->resort_room_no;
                 $ongoingJobArray[$i]["gst_amount"] = ($ongoingMealOrder->total_amount - $ongoingMealOrder->item_total_amount);
                 $ongoingJobArray[$i]["gst_percentage"] = $ongoingMealOrder->gst_amount;
+                $ongoingJobArray[$i]["item_total_amount"] = $ongoingMealOrder->item_total_amount;
                 $ongoingJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
                 $ongoingJobArray[$i]["status_id"] = $ongoingMealOrder->status;
                 $ongoingJobArray[$i]["status"] = "Pending";
@@ -596,6 +597,7 @@ class StaffController extends Controller {
                 $underApprovalJobArray[$j]["gst_amount"] = ($ongoingMealOrder->total_amount - $ongoingMealOrder->item_total_amount);
                 $underApprovalJobArray[$j]["gst_percentage"] = $ongoingMealOrder->gst_amount;
                 $underApprovalJobArray[$j]["total_amount"] = $ongoingMealOrder->total_amount;
+                $underApprovalJobArray[$j]["item_total_amount"] = $ongoingMealOrder->item_total_amount;
                 $underApprovalJobArray[$j]["status_id"] = $ongoingMealOrder->status;
                 $underApprovalJobArray[$j]["status"] = "Under Apporval";
                 $underApprovalJobArray[$j]["acceptd_by"] = "";
@@ -693,6 +695,7 @@ class StaffController extends Controller {
                 $completedJobArray[$i]["gst_amount"] = ($ongoingMealOrder->total_amount - $ongoingMealOrder->item_total_amount);
                 $completedJobArray[$i]["gst_percentage"] = $ongoingMealOrder->gst_amount;
                 $completedJobArray[$i]["total_amount"] = $ongoingMealOrder->total_amount;
+                $completedJobArray[$i]["item_total_amount"] = $ongoingMealOrder->item_total_amount;
                 $completedJobArray[$i]["status_id"] = $ongoingMealOrder->status;
                 $completedJobArray[$i]["status"] = "Under Apporval";
                 $completedJobArray[$i]["acceptd_by"] = "";
