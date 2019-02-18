@@ -38,25 +38,25 @@
                     @csrf
                     <div id="offer_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->name }}" type="text" class="form-control" name="offer_name" id="offer_name" placeholder="Offer Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->price }}" type="number" class="form-control" name="price" id="price" placeholder="Price">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->discount_percentage }}" type="number" class="form-control" name="discount" id="discount" placeholder="Discount">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Valid To</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Valid To*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input readonly type="text" class="form-control" name="valid_to" id="valid_to" placeholder="Valid To">
                         </div>
@@ -154,9 +154,6 @@ Dropzone.options.myDropzone = {
 $("#addOfferForm").validate({
     ignore: [],
     rules: {
-        resort_id: {
-            required: true
-        },
         offer_name: {
             required: true
         },

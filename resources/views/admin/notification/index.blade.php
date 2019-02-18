@@ -68,7 +68,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table id="list" class="table table-striped table-bordered table-responsive">
+                <table id="list" class="table table-striped table-bordered table-responsive text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>

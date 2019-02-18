@@ -16,19 +16,19 @@
                     @csrf
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->name }}" type="text" class="form-control" name="name" id="name" placeholder="Meal Package Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->price }}" type="text" class="form-control" name="price" id="price" placeholder="Meal Package Price">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="category" name="category">
                                 <option value="">Select option</option>
@@ -127,9 +127,6 @@
                     number: true
                 },
                 category: {
-                    required: true
-                },
-                resort_id: {
                     required: true
                 },
                 image_name: {

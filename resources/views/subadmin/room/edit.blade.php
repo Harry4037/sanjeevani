@@ -37,7 +37,7 @@
                     @csrf
                     <div id="room_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->name }}" type="text" class="form-control" name="name" id="name" placeholder="Room Type">
                         </div>

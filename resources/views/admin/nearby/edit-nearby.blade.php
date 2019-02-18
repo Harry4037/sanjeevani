@@ -38,7 +38,7 @@
                     @csrf
                     <div id="nearby_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_id" id="resort_id">
                                 <option value="">Choose option</option>
@@ -51,13 +51,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" name="place_name" id="place_name" placeholder="Place Name" value="{{ $data->name }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Distance From Resort</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Distance From Resort*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="number" class="form-control" name="distance" id="distance" placeholder="Distance From Resort (in KM)" value="{{ $data->distance_from_resort }}">
                         </div>
@@ -75,13 +75,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" name="address" id="address" placeholder="Address" value="{{ $data->address_1 }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="state" id="state">
                                 <option value="">Choose option</option>
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
@@ -115,19 +115,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $data->pincode }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $data->latitude }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $data->longitude }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
                         </div>
@@ -167,6 +167,9 @@ $(document).ready(function () {
 
     $("#editNearbyForm").validate({
         rules: {
+            resort_id: {
+                required: true
+            },
             place_name: {
                 required: true
             },
@@ -174,12 +177,12 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-            place_description: {
-                required: true
-            },
-            place_precaution: {
-                required: true
-            },
+//            place_description: {
+//                required: true
+//            },
+//            place_precaution: {
+//                required: true
+//            },
             address: {
                 required: true
             },

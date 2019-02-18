@@ -38,7 +38,7 @@
                     @csrf
                     <div id="activity_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->name }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Activity Name">
                         </div>
@@ -50,19 +50,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="address" id="address" placeholder="Address">{{ $amenity->address }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->latitude }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $amenity->longitude }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
                         </div>
@@ -243,9 +243,9 @@ $(document).ready(function () {
 //                    CKEDITOR.instances.cktext.updateElement();
 //                },
 //            },
-            resort_id: {
-                required: true
-            },
+//            resort_id: {
+//                required: true
+//            },
             amenity_name: {
                 required: true
             },

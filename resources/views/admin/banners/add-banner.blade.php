@@ -16,7 +16,7 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.banner.add') }}" method="post" id="addBannerForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_id" id="resort_id">
                                 <option value="">Choose option</option>
@@ -29,13 +29,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Banner</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Banner*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="file" class="form-control" name="banner_image" id="banner_image">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Is Active</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Is Active*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="banner_status" id="banner_status">
                                 <option value="">Choose option</option>

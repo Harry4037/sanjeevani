@@ -66,31 +66,43 @@ class UsersController extends Controller {
                 }]);
             $query->where("user_type_id", "=", 3);
             if ($searchKeyword) {
-//                if ((!preg_match('/guest/i', $searchKeyword)) && (!preg_match('/customer/i', $searchKeyword))) {
-                $query->where(function($query) use($searchKeyword) {
-                    $query->where("first_name", "LIKE", "%$searchKeyword%")
-                            ->orWhere("email_id", "LIKE", "%$searchKeyword%")
-                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
-                });
-//                }
+
+                if (preg_match('/guest/i', $searchKeyword)) {
+                    $users = $query->latest()->get();
+
+                    $users = $users->filter(function ($users) {
+                        return $users->user_type_id == 4;
+                    });
+
+                    $data['recordsTotal'] = count($users);
+                    $data['recordsFiltered'] = count($users);
+
+                    $users = $users->slice($offset, $limit);
+                } elseif (preg_match('/customer/i', $searchKeyword)) {
+                    $users = $query->latest()->get();
+                    $users = $users->filter(function ($users) {
+                        return $users->user_type_id == 3;
+                    });
+
+                    $data['recordsTotal'] = count($users);
+                    $data['recordsFiltered'] = count($users);
+                    $users = $users->slice($offset, $limit);
+                } else {
+                    $query->where(function($query) use($searchKeyword) {
+                        $query->where("first_name", "LIKE", "%$searchKeyword%")
+                                ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                                ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                    });
+
+                    $data['recordsTotal'] = $query->count();
+                    $data['recordsFiltered'] = $query->count();
+                    $users = $query->take($limit)->offset($offset)->latest()->get();
+                }
+            } else {
+                $data['recordsTotal'] = $query->count();
+                $data['recordsFiltered'] = $query->count();
+                $users = $query->take($limit)->offset($offset)->latest()->get();
             }
-
-            $data['recordsTotal'] = $query->count();
-            $data['recordsFiltered'] = $query->count();
-            $users = $query->take($limit)->offset($offset)->latest()->get();
-
-//            if ($searchKeyword) {
-//                if (preg_match('/guest/i', $searchKeyword)) {
-//                    $users = $users->filter(function ($users) {
-//                        return $users->user_type_id == 4;
-//                    });
-//                } elseif (preg_match('/customer/i', $searchKeyword)) {
-//                    $users = $users->filter(function ($users) {
-//                        return $users->user_type_id == 3;
-//                    });
-//                }
-//            }
-
 
             $usersArray = [];
             $i = 0;
@@ -260,14 +272,14 @@ class UsersController extends Controller {
                             $userBooking->check_in_pin = rand(1111, 9999);
                             $userBooking->check_out_pin = rand(1111, 9999);
                             if ($userBooking->save()) {
-                                if (!empty($request->person_name) && !empty($request->person_age) && !empty($request->person_type)) {
+                                if (!empty($request->person_name) && !empty($request->person_age)) {
 
                                     foreach ($request->person_name as $key => $person_name) {
-                                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                                        if (!empty($person_name) && !empty($request->person_age[$key])) {
                                             $familyMember = new BookingpeopleAccompany();
                                             $familyMember->person_name = $person_name ? $person_name : ' ';
                                             $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
-                                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                                            $familyMember->person_type = $request->person_age[$key] > 17 ? "Adult" : "Child";
                                             $familyMember->booking_id = $userBooking->id;
                                             $familyMember->save();
                                         }
@@ -655,11 +667,11 @@ class UsersController extends Controller {
             if ($UserBookingDetail->save()) {
                 if (!empty($request->person_name) && !empty($request->person_age)) {
                     foreach ($request->person_name as $key => $person_name) {
-                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                        if (!empty($person_name) && !empty($request->person_age[$key])) {
                             $familyMember = new BookingpeopleAccompany();
                             $familyMember->person_name = $person_name ? $person_name : ' ';
                             $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
-                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                            $familyMember->person_type = $request->person_age[$key] > 17 ? "Adult" : "Child";
                             $familyMember->booking_id = $UserBookingDetail->id;
                             $familyMember->save();
                         }
@@ -732,7 +744,7 @@ class UsersController extends Controller {
             if ($data->save()) {
                 if (!empty($request->person_name) && !empty($request->person_age)) {
                     foreach ($request->person_name as $key => $person_name) {
-                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                        if (!empty($person_name) && !empty($request->person_age[$key])) {
                             if ($request->record_id[$key]) {
                                 $familyMember = BookingpeopleAccompany::find($request->record_id[$key]);
                             } else {
@@ -740,7 +752,7 @@ class UsersController extends Controller {
                             }
                             $familyMember->person_name = $person_name ? $person_name : ' ';
                             $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
-                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                            $familyMember->person_type = $request->person_age[$key] > 17 ? "Adult" : "Child";
                             $familyMember->booking_id = $data->id;
                             $familyMember->save();
                         }

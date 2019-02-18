@@ -14,7 +14,7 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.meal-category.edit', $data->id) }}" method="post" id="editMealCategoryForm" >
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Category Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Category Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->name }}" type="text" class="form-control" name="name" id="name" placeholder="Category Name">
                         </div>
@@ -39,11 +39,6 @@
 
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $("#editMealCategoryForm").validate({
             ignore: [],

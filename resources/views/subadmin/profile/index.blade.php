@@ -16,13 +16,13 @@
                     @csrf
                     <input type="hidden" name="record_id" id="record_id" value="{{ auth('subadmin')->user()->id }}" >
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">User Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">User Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ auth('subadmin')->user()->user_name }}" class="form-control" type="text" name="user_name" id="user_name" placeholder="User Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Id</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Id*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ auth('subadmin')->user()->email_id }}" class="form-control" type="text" name="email_id" id="email_id" placeholder="Email Address">
                             <small>Note: This email id is used for login into the system.</small>

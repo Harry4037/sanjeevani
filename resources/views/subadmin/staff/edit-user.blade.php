@@ -16,19 +16,19 @@
                 <form class="form-horizontal form-label-left" action="{{ route('subadmin.staff.edit', $user->id) }}" method="post" id="addStaffForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $user->user_name }}" type="text" class="form-control" placeholder="Name" name="staff_name" id="staff_name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile No.</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile No.*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input readonly="true" value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Mobile No." name="staff_mobile_no" id="staff_mobile_no">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $user->email_id }}" type="text" class="form-control" placeholder="Email" name="staff_email" id="staff_email">
                         </div>
@@ -46,13 +46,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address.</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ $user->address1 }}" type="text" class="form-control" placeholder="Address" name="staff_address" id="staff_address">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="state" id="state">
                                 <option value="">Choose option</option>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $user->pincode }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
                         </div>
@@ -159,9 +159,6 @@
                 staff_email: {
                     required: true,
                     email: true
-                },
-                resort_id: {
-                    required: true
                 },
                 staff_address: {
                     required: true

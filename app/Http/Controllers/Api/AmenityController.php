@@ -371,9 +371,15 @@ class AmenityController extends Controller {
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid amenity.", (object) []);
         }
-        $amenityTimeSlots = AmenityTimeSlot::select('id', 'from', 'to', 'allow_no_of_member')->where([
-                    "amenity_id" => $request->amenity_id
-                ])->get();
+        $query = AmenityTimeSlot::query();
+        $query->select('id', 'from', 'to', 'allow_no_of_member');
+        $query->where([
+            "amenity_id" => $request->amenity_id
+        ]);
+        if (strtotime($request->booking_date) == strtotime(date("Y-m-d"))) {
+            $query->where("from", ">", date("H:i:s"));
+        }
+        $amenityTimeSlots = $query->get();
         if ($amenityTimeSlots) {
             $slotArray = [];
             foreach ($amenityTimeSlots as $key => $amenityTimeSlot) {

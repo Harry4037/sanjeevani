@@ -20,7 +20,7 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             @if(isset($user->user_name))
                             <input value="{{ $user->user_name }}" type="text" class="form-control" placeholder="Customer Name" name="user_name" id="user_name">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             @if(isset($user->mobile_number))
                             <input readonly="true" value="{{ $user->mobile_number }}" type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Email Address</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Email Address*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             @if(isset($user->email_id))
                             <input value="{{ $user->email_id }}" type="text" class="form-control" placeholder="Customer Email Address" name="email_id" id="email_id">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             @if(isset($user->discount))
                             <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="{{ $user->discount }}">
@@ -73,7 +73,7 @@
                     <div id="user_medical_detail_div" style="display: @if($userHealth) {{ "block" }} @else {{ "none" }} @endif">
                         <div class="ln_solid"></div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <select class="form-control" name="is_diabeties" id="is_diabeties">
                                     <option value="">Choose option</option>
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">PP*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <select class="form-control" name="is_ppa" id="is_ppa">
                                     <option value="">Choose option</option>
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <select class="form-control" name="hba_1c" id="hba_1c">
                                     <option value="">Choose option</option>
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 @if(isset($userHealth->fasting))
                                 <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ $userHealth->fasting }}">
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">BP*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 @if(isset($userHealth->bp))
                                 <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ $userHealth->bp }}">
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 @if(isset($userHealth->insullin_dependency))
                                 <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ $userHealth->insullin_dependency }}">
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <input type="file" class="form-control" name="medical_documents" id="medical_documents" >
                             </div>
@@ -166,7 +166,7 @@
                     <div id="user_membership_div" style="display: @if($userMembership) {{ "block" }} @else {{ "none" }} @endif">
                         <div class="ln_solid"></div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 @if(isset($userMembership->membership_id))
                                 <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" value="{{ $userMembership->membership_id }}">
@@ -178,13 +178,13 @@
                         
                         
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <input readonly type="text" class="form-control" placeholder="Membership From" name="membership_from" id="membership_from" >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <input readonly type="text" class="form-control" placeholder="Membership Till" name="membership_till" id="membership_till" >
                             </div>

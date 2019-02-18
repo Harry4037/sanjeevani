@@ -15,13 +15,13 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.subadmin.add') }}" method="post" id="addSubadminForm">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ old('name') }}" type="text" class="form-control" placeholder="Name" name="name" id="name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ old('email') }}" type="text" class="form-control" placeholder="Email" name="email" id="email">
                         </div>
@@ -89,11 +89,6 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         $("#addStaffForm").validate({
             rules: {
@@ -104,9 +99,6 @@
                     required: true
                 },
                 staff_email: {
-                    required: true
-                },
-                resort_id: {
                     required: true
                 },
             }

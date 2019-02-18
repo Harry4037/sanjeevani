@@ -26,13 +26,13 @@
                     @csrf
                     <div id="room_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('name') }}" type="text" class="form-control" name="name" id="name" placeholder="Room Type">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Icon</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Icon*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="file" class="form-control" name="room_icon" id="room_icon">
                         </div>

@@ -15,19 +15,19 @@
                 <form class="form-horizontal form-label-left" action="{{ route('subadmin.meal.edit', $data->id) }}" method="post" id="editMealForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->name }}" type="text" class="form-control" name="meal_name" id="meal_name" placeholder="Meal Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->price }}" type="text" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Category</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Category*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="meal_category_id" name="meal_category_id">
                                 <option value="">Select option</option>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="meal_type" name="meal_type">
                                 <option value="">Select option</option>
@@ -97,9 +97,9 @@
         $("#editMealForm").validate({
             ignore: [],
             rules: {
-                resort_id: {
-                    required: true
-                },
+//                resort_id: {
+//                    required: true
+//                },
                 meal_name: {
                     required: true
                 },
@@ -107,9 +107,6 @@
                     required: true
                 },
                 meal_category_id: {
-                    required: true
-                },
-                meal_type: {
                     required: true
                 },
                 meal_type: {

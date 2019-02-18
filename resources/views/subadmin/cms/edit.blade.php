@@ -48,12 +48,6 @@
 <script src="{{ asset("/vendor/unisharp/laravel-ckeditor/ckeditor.js") }}"></script>
 <script>
 $(document).ready(function () {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
 //For ckeditor
     CKEDITOR.replace('content', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',

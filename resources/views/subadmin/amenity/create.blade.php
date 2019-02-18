@@ -27,7 +27,7 @@
                     @csrf
                     <div id="amenity_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('amenity_name') }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Amenity Name">
                         </div>
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="address" id="address" placeholder="Address">{{ old('address') }}</textarea>
                         </div>
@@ -212,9 +212,9 @@ $(document).ready(function () {
 //                    CKEDITOR.instances.cktext.updateElement();
 //                },
 //            },
-            resort_id: {
-                required: true
-            },
+//            resort_id: {
+//                required: true
+//            },
             amenity_name: {
                 required: true
             },

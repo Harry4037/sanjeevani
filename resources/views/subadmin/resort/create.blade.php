@@ -27,13 +27,13 @@
                     @csrf
                     <div id="resort_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('resort_name') }}" type="text" class="form-control" name="resort_name" id="resort_name" placeholder="Resort Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('contact_no') }}" type="text" class="form-control" name="contact_no" id="contact_no" placeholder="Contact Number">
                         </div>
@@ -45,14 +45,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('address') }}" type="text" class="form-control" name="address" id="address" placeholder="Address">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="state" id="state">
                                 <option value="">Choose option</option>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
@@ -77,19 +77,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('pin_code') }}" type="text" class="form-control" name="pin_code" id="pin_code" placeholder="Pincode">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('latitude') }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('longitude') }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
                         </div>

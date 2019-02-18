@@ -38,7 +38,7 @@
                     @csrf
                     <div id="healthcare_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="resort_id" name="resort_id">
                                 <option value="">Select option</option>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $healthcare->name }}" type="text" class="form-control" name="package_name" id="package_name" placeholder="Package Name">
                         </div>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Days</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Days*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="day_id" name="day_id">
                                 <option value="">Select option</option>

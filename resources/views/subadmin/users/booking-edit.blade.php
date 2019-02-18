@@ -22,26 +22,26 @@
                         </div>
                     </div>-->
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name" value="{{ $data->source_name }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id" value="{{ $data->source_id }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In*</label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" value='@if(!$flag){{ date("Y/m/d h:s:i A", strtotime($data->check_in))}}@endif'>
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out*</label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out" value='@if(!$flag){{ date("Y/m/d h:s:i A", strtotime($data->check_out))}}@endif'>
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
@@ -66,7 +66,7 @@
                                             </div>
                                         </div>-->
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_type" id="resort_room_type">
                                 <option value="">Choose option</option>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_id" id="resort_room_id">
                                 @if($resortRoom)
@@ -92,7 +92,7 @@
                         <input type="hidden" name="resort_room_id_hidden" id="resort_room_id_hidden" value="{{ old('resort_room_id_hidden') }}">
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="package_id" id="package_id">
                                 <option value="">Choose option</option>

@@ -20,7 +20,7 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer Phone Number*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input  type="text" class="form-control" placeholder="Customer Phone Number" name="mobile_number" id="mobile_number" value="{{ old('mobile_number') }}">
                             <span style="color: green; display: none;" id="user_already_msg">User already exist in our database.Please provide booking details.</span>
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
                         </div>
@@ -56,7 +56,7 @@
                     <div class="ln_solid"></div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Daibeties*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="is_diabeties" id="is_diabeties">
                                 <option value="">Choose option</option>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PP</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">PP*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="is_ppa" id="is_ppa">
                                 <option value="">Choose option</option>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">HBA1C*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="hba_1c" id="hba_1c">
                                 <option value="">Choose option</option>
@@ -86,25 +86,25 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Fasting*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Fasting" name="fasting" id="fasting" value="{{ old('fasting') }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">BP</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">BP*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="BP" name="bp" id="bp" value="{{ old('bp') }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Insulin Dependency*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Insulin Dependency" name="insullin_dependency" id="insullin_dependency" value="{{ old('insullin_dependency') }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Medical Document*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="file" class="form-control" placeholder="Medical Document" name="medical_documents" id="medical_documents" >
                         </div>
@@ -122,19 +122,19 @@
                     <div id="user_membership_div" style="display: none;">
                         <div class="ln_solid"></div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Id*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <input type="text" class="form-control" placeholder="Membership Id" name="membership_id" id="membership_id" value="{{ old('membership_id') }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership From*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <input readonly type="text" class="form-control" placeholder="Membership From" name="membership_from" id="membership_from" value="{{ old('membership_from') }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Membership Till*</label>
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <input readonly type="text" class="form-control" placeholder="Membership Till" name="membership_till" id="membership_till" value="{{ old('membership_till') }}">
                             </div>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="form-group" style="display: none;">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Details</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Details*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <p style="padding: 5px;">
                                 <input checked class="flat" type="checkbox" id="is_booking_details" name="is_booking_details">
@@ -156,34 +156,34 @@
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Booking Source Name" name="booking_source_name" id="booking_source_name" value="{{ old('booking_source_name') }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id" value="{{ old('booking_source_id') }}">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In*</label>
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" >
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Check Out*</label>
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <input readonly type="text" class="form-control has-feedback-left" id="check_out" name="check_out">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room Type*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_type" id="resort_room_type">
                                 <option value="">Choose option</option>
@@ -196,7 +196,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Room No.*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_id" id="resort_room_id">
                                 @if(old('resort_room_id'))
@@ -207,7 +207,7 @@
                         <input type="hidden" name="resort_room_id_hidden" id="resort_room_id_hidden" value="{{ old('resort_room_id_hidden') }}">
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package detail*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="package_id" id="package_id">
                                 <option value="">Choose option</option>
@@ -395,19 +395,19 @@
                 booking_source_id: {
                     required: true
                 },
-                user_name: {
-                    required: true
-                },
+//                user_name: {
+//                    required: true
+//                },
                 mobile_number: {
                     required: true,
                     number: true,
                     minlength: 10,
                     maxlength: 10,
                 },
-                email_id: {
-                    required: true,
-                    email: true
-                },
+//                email_id: {
+//                    required: true,
+//                    email: true
+//                },
                 discount: {
                     required: true,
                     number: true,

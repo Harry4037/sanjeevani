@@ -16,13 +16,13 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.service.add') }}" method="post" id="addServiceForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input value="{{ old('service_name') }}" type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Type*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="service_type" id="service_type">
                                 <option value="">Choose option</option>
@@ -39,13 +39,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Icon</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Service Icon*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="file" class="form-control" name="service_icon" id="service_icon" >
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_id" id="resort_id">
                                 <option value="">Choose option</option>

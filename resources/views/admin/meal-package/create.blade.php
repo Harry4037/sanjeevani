@@ -15,19 +15,19 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.meal-package.add') }}" method="post" id="addMealpackageForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('name') }}" type="text" class="form-control" name="name" id="name" placeholder="Meal Package Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Price*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('price') }}" type="text" class="form-control" name="price" id="price" placeholder="Meal Package Price">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Type*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="category" name="category">
                                 <option value="">Select option</option>
@@ -37,13 +37,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Image</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Package Image*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input accept="image/*" type="file" class="form-control" name="image_name" id="image_name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="resort_id" name="resort_id">
                                 <option value="">Select option</option>

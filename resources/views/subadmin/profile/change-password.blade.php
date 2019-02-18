@@ -16,20 +16,20 @@
                     @csrf
                     <input type="hidden" name="record_id" id="record_id" value="{{ auth('subadmin')->user()->id }}" >
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">old Password</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">old Password*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input class="form-control" type="password" name="old_password" id="old_password" placeholder="Old Password">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">New Password</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">New Password*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input  class="form-control" type="password" name="new_password" id="new_password" placeholder="New Password">
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Confirm Password</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Confirm Password*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input  class="form-control" type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
 

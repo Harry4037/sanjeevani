@@ -38,32 +38,32 @@
                     @csrf
                     <div id="resort_images_div"></div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" class="form-control" name="edit_resort_name" id="edit_resort_name" placeholder="Resort Name" value="{{ $data->name }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact Number*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" class="form-control" name="edit_contact_no" id="edit_contact_no" placeholder="Contact Number" value="{{ $data->contact_number }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort Description*</label>
                         <div class="col-md-7 col-sm-7 col-xs-12">
                             <textarea class="form-control" name="edit_resort_description" id="edit_resort_description" placeholder="Resort Description">{{ $data->description }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" class="form-control" name="edit_address" id="edit_address" placeholder="Address" value="{{ $data->address_1 }}">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="state" id="state">
                                 <option value="">Choose option</option>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" name="city" id="city">
                                 <option value="">Choose option</option>
@@ -97,19 +97,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" class="form-control" name="edit_pin_code" id="edit_pin_code" placeholder="Pincode" value="{{ $data->pincode }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Latitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->latitude }}" type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Longitude*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ $data->longitude }}" type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
                         </div>
