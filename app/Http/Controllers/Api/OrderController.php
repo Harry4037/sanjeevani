@@ -314,12 +314,20 @@ class OrderController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
-            $user = User::find($request->user_id);
-            $user->load(['payments', 'mealOrders' => function($query) {
-                    $query->accepted();
+            $user = User::with("userBookingDetail")->find($request->user_id);
+             
+            if($user->userBookingDetail == NULL){
+                $data['total_amount'] = 0;
+                $data['paid_amount'] = 0;
+                $data['outstanding_amount'] = 0;
+                $data['invoices'] = [];
+                
+            }else{
+            $user->load(['payments', 'mealOrders' => function($query) use($request, $user){
+                    $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])->accepted();
                 }]);
 
-            $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["user_id" => $request->user_id])
+            $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
                     ->with([
                         'orderItems' => function($query) {
                             $query->select('id', 'meal_item_name', 'quantity', 'price', 'meal_order_id');
@@ -327,16 +335,25 @@ class OrderController extends Controller {
                     ])
                     ->latest()->get();
             $data['total_amount'] = $user->mealOrders->sum('total_amount');
-            $data['paid_amount'] = $user->payments->sum('amount');
-            $data['outstanding_amount'] = $data['total_amount'] - $data['paid_amount'];
+            $data['paid_amount'] = $user->payments->where("resort_id", $user->userBookingDetail->resort->id)->sum('amount');
+             $discountPrice = $data['total_amount'];
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($data['total_amount'] - ($data['total_amount'] * ($user->discount / 100))), 0, ".", "");
+            }
+            $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
             $data['invoices'] = [];
             if ($invoices) {
                 $data['invoices'] = $invoices;
-                return $this->sendSuccessResponse("invoices list found.", $data);
-            } else {
-                return $this->sendErrorResponse("invoices not found", (object) []);
+                }
             }
+            // if ($invoices) {
+            //     $data['invoices'] = $invoices;
+                return $this->sendSuccessResponse("invoices list found.", $data);
+            // } else {
+            //     return $this->sendErrorResponse("invoices not found", (object) []);
+            // }
         } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }
