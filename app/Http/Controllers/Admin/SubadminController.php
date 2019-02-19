@@ -186,7 +186,7 @@ class SubadminController extends Controller {
                         }
                     }
 
-                    return redirect()->route('admin.subadmin.edit', $user->id)->with('status', 'Subadmin has been created successfully.');
+                    return redirect()->route('admin.subadmin.edit', $user->id)->with('status', 'Subadmin has been updated successfully.');
                 } else {
                     return redirect()->route('admin.subadmin.edit', $user->id)->with('error', 'Something went be wrong.');
                 }
