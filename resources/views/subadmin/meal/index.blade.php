@@ -61,7 +61,7 @@
                     }
                 },
                 {"data": "image", sortable: false, },
-                {"data": "name"},
+                {"data": "name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

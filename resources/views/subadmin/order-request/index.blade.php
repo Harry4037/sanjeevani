@@ -16,7 +16,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table id="list" class="table table-striped table-bordered">
+                <table id="list" class="table table-striped table-bordered text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
@@ -54,11 +54,11 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "service_type"},
-                {"data": "service_name"},
-                {"data": "customer_name"},
-                {"data": "room_no"},
-                {"data": "status"},
+                {"data": "service_type", sortable: false},
+                {"data": "service_name", sortable: false},
+                {"data": "customer_name", sortable: false},
+                {"data": "room_no", sortable: false},
+                {"data": "status", sortable: false},
                 {"data": "action", sortable: false, },
             ]
         });

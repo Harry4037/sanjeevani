@@ -15,7 +15,7 @@
             </div>
 
             <div class="x_content">
-                <table id="list" class="table table-striped table-bordered">
+                <table id="list" class="table table-striped table-bordered text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
@@ -61,8 +61,8 @@
                     }
                 },
                 {"data": "icon", sortable: false},
-                {"data": "name"},
-                {"data": "type"},
+                {"data": "name", sortable: false},
+                {"data": "type", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

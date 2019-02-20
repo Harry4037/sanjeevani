@@ -52,7 +52,7 @@
                     }
                 },
                 {"data": "image", sortable: false, },
-                {"data": "name"},
+                {"data": "name", sortable: false},
 //                {"data": "resort_name"},
                 {"data": null,
                     sortable: false,

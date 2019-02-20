@@ -61,12 +61,12 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "user_name"},
+                {"data": "user_name", sortable: false},
 //                {"data": "resort_name"},
-                {"data": "room_type"},
-                {"data": "room_no"},
-                {"data": "latitude"},
-                {"data": "longitude"},
+                {"data": "room_type", sortable: false},
+                {"data": "room_no", sortable: false},
+                {"data": "latitude", sortable: false},
+                {"data": "longitude", sortable: false},
                 {"data": "action", sortable: false, },
             ]
         });

@@ -47,7 +47,7 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "page_name"},
+                {"data": "page_name", sortable: false},
                 {"data": "action", sortable: false, },
             ]
         });

@@ -13,7 +13,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table id="list" class="table table-striped table-bordered">
+                <table id="list" class="table table-striped table-bordered text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
@@ -58,11 +58,11 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "user_name"},
-                {"data": "invoice_id"},
-                {"data": "total_amount"},
-                {"data": "status"},
-                {"data": "action"},
+                {"data": "user_name", sortable: false},
+                {"data": "invoice_id", sortable: false},
+                {"data": "total_amount", sortable: false},
+                {"data": "status", sortable: false},
+                {"data": "action", sortable: false},
             ]
         });
     });
