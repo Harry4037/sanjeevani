@@ -689,11 +689,11 @@ class UsersController extends Controller {
             if ($UserBookingDetail->save()) {
                 if (!empty($request->person_name) && !empty($request->person_age)) {
                     foreach ($request->person_name as $key => $person_name) {
-                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                        if (!empty($person_name) && !empty($request->person_age[$key])) {
                             $familyMember = new BookingpeopleAccompany();
                             $familyMember->person_name = $person_name ? $person_name : ' ';
                             $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
-                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                            $familyMember->person_type = $request->person_age[$key] > 17 ? "Adult" : "Child";
                             $familyMember->booking_id = $UserBookingDetail->id;
                             $familyMember->save();
                         }
@@ -767,7 +767,7 @@ class UsersController extends Controller {
             if ($data->save()) {
                 if (!empty($request->person_name) && !empty($request->person_age)) {
                     foreach ($request->person_name as $key => $person_name) {
-                        if (!empty($person_name) && !empty($request->person_age[$key]) && !empty($request->person_type[$key])) {
+                        if (!empty($person_name) && !empty($request->person_age[$key])) {
                             if ($request->record_id[$key]) {
                                 $familyMember = BookingpeopleAccompany::find($request->record_id[$key]);
                             } else {
@@ -775,7 +775,7 @@ class UsersController extends Controller {
                             }
                             $familyMember->person_name = $person_name ? $person_name : ' ';
                             $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
-                            $familyMember->person_type = $request->person_type[$key] ? $request->person_type[$key] : ' ';
+                            $familyMember->person_type = $request->person_age[$key] ? "Adult" : "Child";
                             $familyMember->booking_id = $data->id;
                             $familyMember->save();
                         }
