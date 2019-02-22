@@ -110,11 +110,11 @@ class ServiceController extends Controller {
      * 
      */
     public function serviceListing(Request $request) {
-        
-        if($request->resort_id == -1){
+
+        if ($request->resort_id == -1) {
             $houseKeeping = Service::where(["resort_id" => 1, "type_id" => 1, "is_active" => 1])->get();
-        }else{
-        $houseKeeping = Service::where(["resort_id" => $request->resort_id, "type_id" => 1, "is_active" => 1])->get();
+        } else {
+            $houseKeeping = Service::where(["resort_id" => $request->resort_id, "type_id" => 1, "is_active" => 1])->get();
         }
         $houseKeepingArrray = [];
         if ($houseKeeping) {
@@ -140,10 +140,10 @@ class ServiceController extends Controller {
         } else {
             $houseKeepingArrray = [];
         }
-        
-        if($request->resort_id == -1){
+
+        if ($request->resort_id == -1) {
             $issues = Service::where(["resort_id" => 1, "type_id" => 2, "is_active" => 1])->get();
-        }else{
+        } else {
             $issues = Service::where(["resort_id" => $request->resort_id, "type_id" => 2, "is_active" => 1])->get();
         }
         $issuesArrray = [];
@@ -278,8 +278,8 @@ class ServiceController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
-            if(!$this->bookBeforeCheckInDate($request->user_id)){
-              return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);   
+            if (!$this->bookBeforeCheckInDate($request->user_id)) {
+                return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);
             }
             if ($request->user_id != $request->user()->id) {
                 return $this->sendErrorResponse("Unauthorized user.", (object) []);
@@ -316,7 +316,7 @@ class ServiceController extends Controller {
                         "service_id" => $request->service_id,
                     ])->where(function($q) {
                         $q->where("request_status_id", 1)
-                        ->orWhere("request_status_id", 2);
+                                ->orWhere("request_status_id", 2);
                     })->first();
             if ($existingServiceRequest) {
                 return $this->sendErrorResponse("Request already raised.", (object) []);
@@ -342,7 +342,7 @@ class ServiceController extends Controller {
                                 ->whereIn("id", $resortUsers->toArray())
                                 ->pluck("device_token");
                         if ($staffDeviceTokens) {
-                            $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# ".$serviceRequest->resort_room_no." by ".$userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 0, 1);
+                            $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# " . $serviceRequest->resort_room_no . " by " . $userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 0, 1);
                             $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                         }
                     }
@@ -547,8 +547,8 @@ class ServiceController extends Controller {
             }
 
             $ongoingAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-            ->where("booking_date" ,">", date("Y-m-d H:i:s"))
-            ->get();
+                    ->where("booking_date", ">", date("Y-m-d H:i:s"))
+                    ->get();
             foreach ($ongoingAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
                 $amenity = Amenity::withTrashed()->find($completedAmenity->amenity_id);
@@ -567,8 +567,8 @@ class ServiceController extends Controller {
             }
 
             $ongoingActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-            ->where("booking_date", ">" , date("Y-m-d H:i:s"))
-            ->get();
+                    ->where("booking_date", ">", date("Y-m-d H:i:s"))
+                    ->get();
             foreach ($ongoingActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
                 $activity = Activity::withTrashed()->find($completedActivity->amenity_id);
@@ -627,8 +627,8 @@ class ServiceController extends Controller {
             }
 
             $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-            ->where("booking_date" ,"<=", date("Y-m-d H:i:s"))
-            ->get();
+                    ->where("booking_date", "<=", date("Y-m-d H:i:s"))
+                    ->get();
             foreach ($completedAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
                 $amenity = Amenity::withTrashed()->find($completedAmenity->amenity_id);
@@ -646,8 +646,8 @@ class ServiceController extends Controller {
                 $j++;
             }
             $completedActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-            ->where("booking_date", "<=" , date("Y-m-d H:i:s"))
-            ->get();
+                    ->where("booking_date", "<=", date("Y-m-d H:i:s"))
+                    ->get();
             foreach ($completedActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
                 $activity = Activity::find($completedActivity->amenity_id);
@@ -685,7 +685,7 @@ class ServiceController extends Controller {
                 $completedDataArray[$j]["total_item_count"] = $totalItem;
                 $completedDataArray[$j]["total_amount"] = $completedMealOrder->total_amount;
                 $completedDataArray[$j]["status_id"] = $completedMealOrder->status;
-                $completedDataArray[$j]["status"] = $completedMealOrder->status == 4 ? "Completed": "Rejected";
+                $completedDataArray[$j]["status"] = $completedMealOrder->status == 4 ? "Completed" : "Rejected";
                 $completedDataArray[$j]["acceptd_by"] = $acceptedBy ? $acceptedBy->user_name : "";
                 $completedDataArray[$j]["staff_comment"] = $completedMealOrder->staff_comment;
                 $completedDataArray[$j]["staff_reasons"] = $completedMealOrder->staff_reasons;
@@ -711,7 +711,7 @@ class ServiceController extends Controller {
                         'status' => false,
                         'status_code' => 404,
                         'message' => $ex->getMessage(),
-                        'data' => (object)[]
+                        'data' => (object) []
             ]);
         }
     }
@@ -811,7 +811,7 @@ class ServiceController extends Controller {
                 $serviceRequest->request_status_id = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by_id);
-                    $this->androidPushNotification(2, "Service Request", "Great! your service request approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->service_id, 0, 2);
+                    $this->androidPushNotification(2, "Service Request", "Great! your service request approved by " . $request->user()->user_name, $staff->device_token, 1, $serviceRequest->service_id, 0, 2);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -824,7 +824,7 @@ class ServiceController extends Controller {
                 $serviceRequest->status = 4;
                 if ($serviceRequest->save()) {
                     $staff = User::find($serviceRequest->accepted_by);
-                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by ".$request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
+                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by " . $request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
                     return $this->sendSuccessResponse("Service approved successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
@@ -833,6 +833,151 @@ class ServiceController extends Controller {
                 return $this->sendErrorResponse("Invalid service & order.", (object) []);
             }
         } catch (\Exception $ex) {
+            return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {post} /api/reject-service-request Reject service Request
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostApproveServicerequest
+     * @apiGroup Services
+     * 
+     * @apiParam {String} user_id User id*.
+     * @apiParam {String} record_id Record id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
+     * @apiSuccess {String} message Service approved successfully.
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true,
+     * "message": "Service approved successfully.",
+     * "data": {}
+     * }
+     * 
+     * 
+     * @apiError UserIdMissing The user id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *      "status": false,
+     *      "status_code": 404,
+     *      "message": "User id missing.",
+     *      "data": {}
+     *  }
+     * 
+     * @apiError UnauthorizedUser The user is unauthorized.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Unauthorized user.",
+     *     "data": {}
+     * }
+     * 
+     * @apiError ServiceIdMissing The service id is missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "service id missing.",
+     *     "data": {}
+     * }
+     * 
+     * @apiError InvalidService The service is invalid.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "status": false,
+     *     "status_code": 404,
+     *     "message": "Invalid service.",
+     *     "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function rejectServiceRequest(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            if ($request->user_id != $request->user()->id) {
+                return $this->sendErrorResponse("Unauthorized user.", (object) []);
+            }
+            $user = User::where(["id" => $request->user_id, "is_active" => 1])->first();
+            if (!$user) {
+                return $this->sendErrorResponse("Invalid user.", (object) []);
+            }
+            if (!$request->type) {
+                return $this->sendErrorResponse("Type missing.", (object) []);
+            }
+            if (!$request->record_id) {
+                return $this->sendErrorResponse("record id missing.", (object) []);
+            }
+            if (!$request->resort_id) {
+                return $this->sendErrorResponse("resort id missing.", (object) []);
+            }
+            if (!$request->comment) {
+                return $this->sendErrorResponse("comment missing.", (object) []);
+            }
+
+
+            if ($request->type == 1) {
+                $serviceRequest = ServiceRequest::with('serviceDetail')->where(["id" => $request->record_id, "request_status_id" => 3, "is_active" => 1])->first();
+                if (!$serviceRequest) {
+                    return $this->sendErrorResponse("Invalid service & order.", (object) []);
+                }
+
+                $serviceRequest->accepted_by_id = 0;
+                $serviceRequest->request_status_id = 1;
+                $serviceRequest->questions = $request->comment;
+                if ($serviceRequest->save()) {
+                    if ($serviceRequest->serviceDetail->name != NULL) {
+                        $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+
+                        if ($resortUsers) {
+                            $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1])
+                                    ->where("device_token", "!=", "")
+                                    ->whereIn("id", $resortUsers->toArray())
+                                    ->pluck("device_token");
+
+                            if ($staffDeviceTokens) {
+                                $this->androidPushNotification(2, "Service Raised", $serviceRequest->serviceDetail->name." request raised from Room# " . $serviceRequest->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 1, $serviceRequest->serviceDetail->id, 0, 1);
+                            }
+
+                            $this->generateNotification($request->user_id, "Service Not Approved", $serviceRequest->serviceDetail->name." request not approved by you", 1);
+                        }
+                    }
+                    return $this->sendSuccessResponse("Service rejected successfully", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } elseif ($request->type == 4) {
+                $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 3, "is_active" => 1])->first();
+                if (!$serviceRequest) {
+                    return $this->sendErrorResponse("Invalid service & order.", (object) []);
+                }
+                $serviceRequest->status = 1;
+                if ($serviceRequest->save()) {
+                    $staff = User::find($serviceRequest->accepted_by);
+                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by " . $request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
+                    return $this->sendSuccessResponse("Service approved successfully", (object) []);
+                } else {
+                    return $this->administratorResponse();
+                }
+            } else {
+                return $this->sendErrorResponse("Invalid service & order.", (object) []);
+            }
+        } catch (\Exception $ex) {
+            dd($ex);
             return $this->administratorResponse();
         }
     }

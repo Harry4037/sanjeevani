@@ -155,5 +155,8 @@ Route::namespace("Api")->group(function () {
         Route::post('update-profile', 'UserController@updateProfile');
 
         Route::post('change-password', 'UserController@changesPassword');
+        
+        //Reject service order & request (by user)
+        Route::post('reject-service-request', 'ServiceController@rejectServiceRequest');
     });
 });
