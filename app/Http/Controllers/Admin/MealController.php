@@ -46,7 +46,7 @@ class MealController extends Controller {
                 $mealsArray[$key]['image'] = '<img src=' . $mealImage . ' height=70 width=100 class="img-rounded">';
                 $mealsArray[$key]['name'] = $meal->name;
                 $checked_status = $meal->is_active ? "checked" : '';
-                $mealsArray[$key]['resort_name'] = isset($meal->resortDetail->name) ? $meal->resortDetail->name : "";
+                $mealsArray[$key]['resort_name'] = $meal->resortDetail ? $meal->resortDetail->name : "";
                 $mealsArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='meal_status' id=" . $meal->id . " data-status=" . $meal->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $mealsArray[$key]['action'] = '<a href="' . route('admin.meal.edit', $meal->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $meal->id . '" ><i class="fa fa-trash"></i> Delete </a>';

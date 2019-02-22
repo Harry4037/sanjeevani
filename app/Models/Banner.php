@@ -17,4 +17,8 @@ class Banner extends Model {
         return asset('storage/banner_images/' . $name);
     }
 
+    public function resortDetail() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
+    }
+
 }

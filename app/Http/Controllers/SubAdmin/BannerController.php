@@ -44,7 +44,7 @@ class BannerController extends Controller {
 
             $bannersArray = [];
             foreach ($banners as $k => $banner) {
-                $resort = Resort::find($banner->resort_id);
+//                $resort = Resort::find($banner->resort_id);
                 $bannersArray[$k]['banner'] = '<img height="100" width="200" src=' . $banner->name . '>';
 //                $bannersArray[$k]['resort_name'] = $resort->name;
                 $checked_status = $banner->is_active ? "checked" : '';

@@ -60,8 +60,8 @@ class ServiceController extends Controller {
                 $stype = ServiceType::find($service->type_id);
                 $servicesArray[$i]['icon'] = '<img width=50 height=50 src=' . $service->icon . ' >';
                 $servicesArray[$i]['name'] = $service->name;
-                $servicesArray[$i]['resort_name'] = $service->resortDetail->name;
-                $servicesArray[$i]['type'] = isset($service->serviceTypeDetail->name) ? $service->serviceTypeDetail->name : '';
+                $servicesArray[$i]['resort_name'] = $service->resortDetail ? $service->resortDetail->name : '';
+                $servicesArray[$i]['type'] = $service->serviceTypeDetail ? $service->serviceTypeDetail->name : '';
                 $checked_status = $service->is_active ? "checked" : '';
                 $servicesArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='service_status' id=" . $service->id . " data-status=" . $service->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $servicesArray[$i]['action'] = '<a href="' . route('admin.service.edit', $service->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'

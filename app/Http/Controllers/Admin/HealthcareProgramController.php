@@ -49,7 +49,7 @@ class HealthcareProgramController extends Controller {
                 $healthArray[$key]['image'] = '<img src=' . $healthImage . ' height=70 width=100 class="img-rounded">';
                 $healthArray[$key]['name'] = $healthcarePackege->name;
                 $checked_status = $healthcarePackege->is_active ? "checked" : '';
-                $healthArray[$key]['resort_name'] = isset($healthcarePackege->resortDetail->name) ? $healthcarePackege->resortDetail->name : "";
+                $healthArray[$key]['resort_name'] = $healthcarePackege->resortDetail ? $healthcarePackege->resortDetail->name : "";
                 $healthArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='health_status' id=" . $healthcarePackege->id . " data-status=" . $healthcarePackege->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $healthArray[$key]['action'] = '<a href="' . route('admin.healthcare.edit', $healthcarePackege->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                         . '<a href="javaScript:void(0);" class="btn btn-danger btn-xs delete" id="' . $healthcarePackege->id . '" ><i class="fa fa-trash"></i> Delete </a>';

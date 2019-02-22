@@ -52,10 +52,10 @@ class OrderRequestController extends Controller {
             $dataArray = [];
             foreach ($serviceRequests as $key => $serviceRequest) {
                 $dataArray[$key]['service_type'] = isset($serviceRequest->serviceDetail->serviceTypeDetail->name) ? $serviceRequest->serviceDetail->serviceTypeDetail->name : "";
-                $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail->name;
-                $dataArray[$key]['customer_name'] = $serviceRequest->userDetail->user_name;
+                $dataArray[$key]['service_name'] = $serviceRequest->serviceDetail ? $serviceRequest->serviceDetail->name : '';
+                $dataArray[$key]['customer_name'] = $serviceRequest->userDetail ? $serviceRequest->userDetail->user_name : '';
                 $dataArray[$key]['room_no'] = $serviceRequest->resort_room_no;
-                $dataArray[$key]['status'] = $serviceRequest->requestStatus->status;
+                $dataArray[$key]['status'] = $serviceRequest->requestStatus ? $serviceRequest->requestStatus->status : '';
                 $dataArray[$key]['action'] = '<a href="' . route('admin.order-request.view', $serviceRequest->id) . '" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View </a>';
             }
 

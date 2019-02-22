@@ -39,13 +39,12 @@ class BannerController extends Controller {
             $query = $this->banner->query();
             $data['recordsTotal'] = $this->banner->count();
             $data['recordsFiltered'] = $this->banner->count();
-            $banners = $query->take($limit)->offset($offset)->latest()->get();
+            $banners = $query->with('resortDetail')->take($limit)->offset($offset)->latest()->get();
 
             $bannersArray = [];
             foreach ($banners as $k => $banner) {
-                $resort = Resort::find($banner->resort_id);
                 $bannersArray[$k]['banner'] = '<img height="100" width="200" src=' . $banner->name . '>';
-                $bannersArray[$k]['resort_name'] = $resort->name;
+                $bannersArray[$k]['resort_name'] = $banner->resortDetail ? $banner->resortDetail->name : "";
                 $checked_status = $banner->is_active ? "checked" : '';
                 $bannersArray[$k]['status'] = "<label class='switch'><input  type='checkbox' class='banner_status' id=" . $banner->id . " data-status=" . $banner->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $bannersArray[$k]['action'] = '<a href="' . route('admin.banner.edit', $banner->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
