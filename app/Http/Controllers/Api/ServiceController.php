@@ -966,10 +966,12 @@ class ServiceController extends Controller {
                     return $this->sendErrorResponse("Invalid service & order.", (object) []);
                 }
                 $serviceRequest->status = 1;
+                $serviceRequest->accepted_by = 0;
+//                $serviceRequest->status = $request->comment;
                 if ($serviceRequest->save()) {
-                    $staff = User::find($serviceRequest->accepted_by);
-                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by " . $request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
-                    return $this->sendSuccessResponse("Service approved successfully", (object) []);
+//                    $staff = User::find($serviceRequest->accepted_by);
+//                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by " . $request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
+                    return $this->sendSuccessResponse("Service rejected successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
                 }
