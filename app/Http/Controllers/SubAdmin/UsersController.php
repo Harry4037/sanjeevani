@@ -832,22 +832,21 @@ class UsersController extends Controller {
                 if ($userBookingdetail->check_in_pin == $request->pin) {
                     $userBookingdetail->is_verified_check_in_pin = 1;
                     $userBookingdetail->save();
-                    return redirect()->route('admin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
+                    return redirect()->route('subadmin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
                 } else {
-                    return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
+                    return redirect()->route('subadmin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
                 }
             } elseif ($request->check_in_out == 1) {
                 if ($userBookingdetail->check_out_pin == $request->pin) {
                     $userBookingdetail->is_verified_check_out_pin = 1;
                     $userBookingdetail->save();
-                    return redirect()->route('admin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
+                    return redirect()->route('subadmin.users.booking-verify', $id)->with('status', 'PIN Number Verified.');
                 } else {
-                    return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
+                    return redirect()->route('subadmin.users.booking-verify', $id)->with('error', 'Wrong PIN Number.');
                 }
             } else {
-                return redirect()->route('admin.users.booking-verify', $id)->with('error', 'Something went be wrong.');
+                return redirect()->route('subadmin.users.booking-verify', $id)->with('error', 'Something went be wrong.');
             }
-            dd($request->all());
         }
         return view("subadmin.users.user-booking-detail", [
             "userBookingdetail" => $userBookingdetail ? $userBookingdetail : [],
