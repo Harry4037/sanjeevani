@@ -122,14 +122,17 @@ class Controller extends BaseController {
     }
 
     public function sendOtp($mobileNumber, $otp) {
-        $url = 'http://mobicomm.dove-sms.com//submitsms.jsp';
+        $url = 'http://sms.hybrid91.com/submitsms.jsp';
         $OTPMessage = "Dear Customer, your One Time Verification (OTP) code is " . $otp . ".";
         $fields = array(
-            'user' => 'Rizilian',
-            'key' => '83529b3d8eXX',
+//            'user' => 'Rizilian',
+            'user' => 'Dintex',
+//            'key' => '83529b3d8eXX',
+            'key' => 'ffeac03584XX',
             'mobile' => "+91" . $mobileNumber,
             'message' => $OTPMessage,
-            'senderid' => 'RIZOTP',
+//            'senderid' => 'RIZOTP',
+            'senderid' => 'RINDEX',
             'accusage' => 1
         );
         $ch = curl_init();

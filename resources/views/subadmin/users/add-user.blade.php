@@ -295,8 +295,8 @@
                             if(res.status){
                                 $("#user_name").val(res.user_name);
                                 $("#email_id").val(res.email_id);
-                                $("#user_name").attr("disabled", true);
-                                $("#email_id").attr("disabled", true);
+//                                $("#user_name").attr("disabled", true);
+//                                $("#email_id").attr("disabled", true);
 //                                $("#is_booking_details").parent("div").addClass("checked");
 //                                $("#user_booking_div").css("display","block");
                                 $("#user_already_msg").css("display","block");
@@ -315,8 +315,8 @@
 //                                $("#package_id").rules("add", {required: true});
                             }else{
 //                                $("#user_booking_div").css("display","none");
-                                $("#user_name").attr("disabled", false);
-                                $("#email_id").attr("disabled", false);
+//                                $("#user_name").attr("disabled", false);
+//                                $("#email_id").attr("disabled", false);
                                 $("#health_div").css("display","block");
                                 $("#membership_div").css("display","block");
 //                                $("#is_booking_details").parent("div").removeClass("checked");
