@@ -617,7 +617,7 @@ class UsersController extends Controller {
                         $stat = "<span class='label label-success'>Current</span>";
                     }
                     $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
+                            . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
