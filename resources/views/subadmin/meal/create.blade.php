@@ -87,7 +87,8 @@
                     required: true
                 },
                 meal_price: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 meal_category_id: {
                     required: true
