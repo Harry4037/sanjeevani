@@ -64,7 +64,7 @@
                             <div class="ln_solid"></div>
                             <div class="row">
                                 <div class="col-md-6 col-md-offset-3">
-                                    <form method="post" action="{{route('admin.users.booking-verify', $userBookingdetail->id)}}" id="pinVerifyForm">
+                                    <form method="post" action="{{route('subadmin.users.booking-verify', $userBookingdetail->id)}}" id="pinVerifyForm">
                                         @csrf
                                         <div class="form-group">
                                             <label for="">
