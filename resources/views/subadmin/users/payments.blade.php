@@ -94,7 +94,7 @@
 <script>
 	$(document).ready(function () {
 
-   $(document).on("keyup", "#discount", function(){
+   $(document).on("keyup click", "#discount", function(){
        var discount = parseFloat($("#discount").val());
        var total_amount = parseFloat($("#total_amount").val());
        var paid = parseFloat($("#paid").val());

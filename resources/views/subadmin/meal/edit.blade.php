@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="{{ $data->price }}" type="text" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
+                            <input value="{{ $data->price }}" type="number" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">
                         </div>
                     </div>
                     <div class="form-group">
@@ -104,7 +104,8 @@
                     required: true
                 },
                 meal_price: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 meal_category_id: {
                     required: true

@@ -40,3 +40,9 @@
 
 </div>
 @endsection
+
+@section('script')
+<script>
+localStorage.clear();
+</script>
+@endsection
