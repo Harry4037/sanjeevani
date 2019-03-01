@@ -194,14 +194,14 @@ class Controller extends BaseController {
     }
 
     public function sendRegistration($mobileNumber, $userName) {
-        $url = 'http://mobicomm.dove-sms.com//submitsms.jsp';
+        $url = 'http://sms.hybrid91.com/submitsms.jsp';
         $OTPMessage = "Dear $userName, You have to registered with us. Please download the our app (APP URL)/";
         $fields = array(
-            'user' => 'Rizilian',
-            'key' => '83529b3d8eXX',
+            'user' => 'Dintex',
+            'key' => 'ffeac03584XX',
             'mobile' => "+91" . $mobileNumber,
             'message' => $OTPMessage,
-            'senderid' => 'RIZOTP',
+            'senderid' => 'RINDEX',
             'accusage' => 1
         );
         $ch = curl_init();
