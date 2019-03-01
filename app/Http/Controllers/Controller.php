@@ -99,7 +99,7 @@ class Controller extends BaseController {
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
-                ->setSound('default');
+                ->setSound('src/res/raw/notification_sound.mp3');
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
@@ -174,7 +174,7 @@ class Controller extends BaseController {
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
-                ->setSound('default');
+                ->setSound('src/res/raw/notification_sound.mp3');
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
