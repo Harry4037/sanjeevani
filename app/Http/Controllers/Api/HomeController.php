@@ -336,7 +336,7 @@ class HomeController extends Controller {
             $response['status_code'] = 200;
             $response['message'] = "service successfully access.";
             $response['data'] = [
-                "user" => $user ? $user->toArray() : (object) [],
+                "user" => isset($user->id) && ($user->id > 0) ? $user->toArray() : (object) [],
                 "banners" => $bannerArray,
                 "nearby_attaractions" => $nearbyArray,
                 "best_offers" => $offerArray,
