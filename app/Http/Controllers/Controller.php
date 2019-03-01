@@ -99,7 +99,7 @@ class Controller extends BaseController {
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
-                ->setSound('src/res/raw/notification_sound.mp3');
+                ->setSound('soundn.mp3');
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
@@ -109,7 +109,7 @@ class Controller extends BaseController {
             "record_id" => $recordId,
             "notification_count" => $userNotificationCount,
             "status_type" => $statusType,
-            "sound" => "src/res/raw/notification_sound.mp3",
+            "sound" => "soundn.mp3",
         ]);
 
         $option = $optionBuilder->build();
@@ -174,7 +174,7 @@ class Controller extends BaseController {
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
-                ->setSound('src/res/raw/notification_sound.mp3');
+                ->setSound('soundn.mp3');
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
@@ -182,7 +182,7 @@ class Controller extends BaseController {
             'message' => $message,
             "type" => 5,
             "user_type_id" => 3,
-            "sound" => "src/res/raw/notification_sound.mp3",
+            "sound" => "soundn.mp3",
         ]);
 
         $option = $optionBuilder->build();
