@@ -180,6 +180,14 @@ class UsersController extends Controller {
                     ->where("user_type_id", 3)
                     ->first();
             if ($userExist) {
+                $name = explode(" ", $request->user_name);
+
+                $userExist->discount = $request->discount;
+                $userExist->user_name = $request->user_name;
+                $userExist->first_name = isset($name[0]) ? $name[0] : '';
+                $userExist->last_name = isset($name[1]) ? $name[1] : '';
+                $userExist->email_id = $request->email_id;
+                $userExist->save();
                 if (isset($request->is_booking_details) && ($request->is_booking_details == "on")) {
                     $roomType = RoomType::find($request->resort_room_type);
                     $roomRoom = ResortRoom::find($request->resort_room_id);
@@ -514,19 +522,19 @@ class UsersController extends Controller {
     }
 
     public function viewPayments(Request $request, User $user) {
-        $user->load(['payments', 'mealOrders' => function($query) use($request){
+        $user->load(['payments', 'mealOrders' => function($query) use($request) {
                 $query->where("resort_id", $request->get("subadminResort"))->accepted();
             }]);
 
         $total = $user->mealOrders->sum('total_amount');
         $paid = $user->payments->where("resort_id", $request->get("subadminResort"))->sum('amount');
-        
+
         $discountPrice = $total;
         if ($user->discount > 0) {
             $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
         }
         $outstanding = $discountPrice - $paid;
-        
+
         return view('subadmin.users.payments', compact('user', 'total', 'paid', 'outstanding', 'discountPrice'));
     }
 
