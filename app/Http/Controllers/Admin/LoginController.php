@@ -165,4 +165,8 @@ class LoginController extends Controller {
         return view('admin.profile.change-password');
     }
 
+//    public function test(){
+//        $this->androidPushNotification(2, "asdas", "adasd", "sadsadsadsadsa", 1, 1);
+//        die;
+//    }
 }

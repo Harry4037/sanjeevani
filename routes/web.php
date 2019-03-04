@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+//Route::get('/test', 'Admin\LoginController@test');
 
 Route::namespace("Admin")->prefix('admin')->group(function() {
     Route::get('/', 'LoginController@showLoginForm')->name('admin.login');
