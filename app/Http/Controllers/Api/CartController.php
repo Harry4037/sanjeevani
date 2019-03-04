@@ -19,11 +19,11 @@ class CartController extends Controller {
      * @apiGroup Order
      * 
      * @apiParam {String} user_id User id*.
-     * @apiParam {String} type 1=>Meal item, 2=> Meal package Item.
-     * @apiParam {String} meal_item_id Meal item id.
-     * @apiParam {String} meal_package_id Meal Package Id.
-     * @apiParam {String} quantity Quantity.
-     * @apiParam {String} flag Increment or add => 1, Decrement => 2.
+     * @apiParam {String} type 1=>Meal item, 2=> Meal package Item*.
+     * @apiParam {String} meal_item_id Meal item id*.
+     * @apiParam {String} meal_package_id Meal Package Id*.
+     * @apiParam {String} quantity Quantity*.
+     * @apiParam {String} flag Increment or add => 1, Decrement => 2*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -32,15 +32,15 @@ class CartController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Item added to cart",
-     *       "data": {
-     *           "cart_count": 4,
-     *           "quantity_count": 2
-     *       }
-     *   }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "Item added to cart",
+            "data": {
+                "cart_count": 1,
+                "quantity_count": "1"
+            }
+        }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -49,6 +49,42 @@ class CartController extends Controller {
      * {
      *  "status": false,
      *  "message": "User id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError typeMissing The type was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "type missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError mealItemIdMissing The meal_item_id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Meal item id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError quantityMissing The quantity was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "quantity missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError flagMissing The flag was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "flag missing.",
      *  "data": {}
      * }
      * 
@@ -160,46 +196,30 @@ class CartController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *       {
-     *           "status": true,
-     *           "status_code": 200,
-     *           "message": "my cart list",
-     *           "data": {
-     *               "cart_items": [
-     *                   {
-     *                       "id": 1,
-     *                       "type": 1,
-     *                       "item_id": 1,
-     *                       "image_url": "http://127.0.0.1:8000/storage/meal_images/yo3fjabmiRMkZJORW2vK3hiUuZd8MrCTM7pQBVlM.jpeg",
-     *                       "item_name": "Pepsi",
-     *                       "item_price": 55,
-     *                       "quantity": 2
-     *                   },
-     *                   {
-     *                       "id": 2,
-     *                       "type": 1,
-     *                       "item_id": 2,
-     *                       "image_url": "http://127.0.0.1:8000/storage/meal_images/eJN5RZidujhG0OYqg0l9Sk62BZu3WYnhThLGZAOn.jpeg",
-     *                       "item_name": "Panner",
-     *                       "item_price": 120,
-     *                       "quantity": 3
-     *                   },
-     *                   {
-     *                       "id": 3,
-     *                       "type": 2,
-     *                       "item_id": 1,
-     *                       "image_url": "http://127.0.0.1:8000/storage/meal_package_images/wS2vOgqhIl4uzR3UZBcuXQBbaPohOtA85eXE9k2Z.jpeg",
-     *                       "item_name": "test",
-     *                       "item_price": 1000,
-     *                       "quantity": 3
-     *                   }
-     *               ],
-     *               "total_no_item": 3,
-     *               "item_amount": 1175,
-     *               "gst": 0,
-     *               "total_amount": 1175
-     *           }
-     *       }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "my cart list",
+            "data": {
+                "cart_items": [
+                    {
+                        "id": 218,
+                        "type": 1,
+                        "item_id": 69,
+                        "image_url": "http://127.0.0.1:1234/storage/meal_images/nRJmJEkN9VsB4zIfMljsdrZMoEg8FZIhLAAbtIT0.jpeg",
+                        "category": "N",
+                        "item_name": "Boiled Egg",
+                        "item_price": 50,
+                        "quantity": 1
+                    }
+                ],
+                "total_no_item": 1,
+                "item_amount": 50,
+                "gst": "3",
+                "gst_percentage": "5%",
+                "total_amount": "53"
+            }
+        }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.

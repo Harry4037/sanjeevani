@@ -19,6 +19,8 @@ class AmenityController extends Controller {
      * @apiName GetAmenitiesList
      * @apiGroup Amenities
      * 
+     * @apiParam {String} resort_id Resort Id* (For guest user use resort id value -1).
+     * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Anemities found.
@@ -26,51 +28,51 @@ class AmenityController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *    "status": true,
-     *    "status_code": 200,
-     *    "message": "Anemities found.",
-     *    "data": [
-     *        {
-     *            "id": 1,
-     *            "name": "Gym",
-     *            "description": "<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Opening Timings</strong>:-</p>\r\n\r\n<p>9:00 AM to 11:00 AM</p>\r\n<p>5:00 PM to 7:00 PM</p>\r\n",
-     *            "address": "sector 62, Noida, UP",
-     *            "is_booking_avaliable": false,
-     *            "amenity_images": [
-     *                {
-     *                    "id": 1,
-     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/ptjHTnrFSngDDbqO20ZHl4YDy035S0z1cIuop8EC.jpeg",
-     *                    "amenity_id": 1
-     *                },
-     *                {
-     *                    "id": 2,
-     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/xQvt0XF682PO9gzaA05gTB2MQKP0ZH62XYGsgn2i.jpeg",
-     *                    "amenity_id": 1
-     *                }
-     *            ]
-     *        },
-     *        {
-     *            "id": 2,
-     *            "name": "SPA",
-     *            "description": "<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Timings</strong>:-</p>\r\n\r\n<p>9:00 AM to 10:00 AM</p>\r\n<p>4:00 PM to 5:00 PM</p>\r\n",
-     *            "address": "sector 62, Noida, UP",
-     *            "is_booking_avaliable": true,
-     *            "amenity_images": [
-     *                {
-     *                    "id": 3,
-     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/NqHeZs8Qw9gIyuRNNg3YgtD3JrS0Cx5QH8OmYaAy.jpeg",
-     *                    "amenity_id": 2
-     *                },
-     *                {
-     *                    "id": 4,
-     *                    "banner_image_url": "http://sanjeevani.dbaquincy.com/storage/amenities_images/kVkodMPi1Y5QfPKeOjY8LXbf0tiKoOS4sHbaQOMu.jpeg",
-     *                    "amenity_id": 2
-     *                }
-     *            ]
-     *        }
-     *    ]
-     * }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Anemities found.",
+     *       "data": [
+     *           {
+     *               "id": 1,
+     *               "name": "Gym",
+     *               "description": "<hr />\r\n<p>The Sanjeevani Health Club encompasses 117 square metres (1,259 square feet) of dedicated workout space with a wide range of state-of-the-art equipment. Facilities include an exercise room, sauna, steam rooms for men and women, sunlit pool, cardiovascular machines and free weights. Certified trainers are available upon request to help guests get the most out of their workouts.</p>\r\n\r\n<p>Keep up with your fitness routine whilst you&rsquo;re away with our free hotel gym. Packed with cardio and resistance equipment and free weights, you can unwind after a busy day in the capital at the Sanjeevani Resort</p>\r\n\r\n<p><strong>Highlights</strong></p>\r\n\r\n<p>&bull; Cross-trainer and treadmills<br />\r\n&bull; Stationary bikes and rowing machine<br />\r\n&bull; Free weights area<br />\r\n&bull; Floor-to-ceiling mirrors<br />\r\n&bull; Healthy snacks and juices available at&nbsp;Sacred Caf&eacute;</p>\r\n\r\n<p><strong>Gym facilities</strong></p>\r\n\r\n<p>All guests over the age of 16 who visit the Sanjeevani Resort are invited to use our in-house hotel gym to exercise and unwind.</p>\r\n\r\n<p>With a mix of equipment and weights, our hotel gym will cater to you whether you want to do a cardio workout, or if you want to give your muscles some strength training or toning exercises.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Timings Morning&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</strong><strong>Timings Evening</strong></p>\r\n\r\n<p><strong>4:00AM - 5:30AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4:30PM - 6:00PM</strong></p>\r\n\r\n<p><strong>5:30AM - 7:00AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;6:00PM - 7:30PM</strong></p>\r\n\r\n<p><strong>7:00AM - 8:30AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;7:30PM - 9:00PM</strong></p>\r\n\r\n<p><strong>8:30AM - 10:00AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;9:00PM - 10:30PM</strong></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<hr />\r\n<p>The Sanjeevani Health Club encompasses 117 square metres (1,259 square feet) of dedicated workout space with a wide range of state-of-the-art equipment. Facilities include an exercise room, sauna, steam rooms for men and women, sunlit pool, cardiovascular machines and free weights. Certified trainers are available upon request to help guests get the most out of their workouts.</p>\r\n\r\n<p>Keep up with your fitness routine whilst you&rsquo;re away with our free hotel gym. Packed with cardio and resistance equipment and free weights, you can unwind after a busy day in the capital at the Sanjeevani Resort</p>\r\n\r\n<p>&nbsp;</p>",
+     *               "address": "Horawala | Dehradoon | Uttarakhand-248197",
+     *               "is_booking_avaliable": true,
+     *               "amenity_images": [
+     *                   {
+     *                       "id": 19,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/amenity_images/a17xfSfM9pwtUzHxGksYEJvEWtvjDluB4HXH9B3Y.jpeg",
+     *                       "amenity_id": 1
+     *                   },
+     *                   {
+     *                       "id": 20,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/amenity_images/0xnhuoEd3bH6fjeY0BaD9Sfn1orxtcjndWx1PFoq.jpeg",
+     *                       "amenity_id": 1
+     *                   }
+     *               ]
+     *           },
+     *           {
+     *               "id": 2,
+     *               "name": "SPA",
+     *               "description": "<p>If it&rsquo;s been a hard day&rsquo;s night, relax and rejuvenate at our decadent Spa. Our on-site spa offers signature Hard Rock swagger in a sophisticated and modern spa environment, catering to your every need. You can also take advantage of our full-service spa menu offered right in your suite. Whether you need a post-party facial or a poolside massage, you&rsquo;re already on our VIP list.</p>\r\n\r\n<p>Sanjeevani is the best of Dehradoon City spa hotels, with a huge menu of signature massages, baths, body treatments, facials, and other beauty services. There&rsquo;s something for every member of the family with treatments designed specifically for men, women, kids, and teens.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong>Timings Mornings&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Timings Evenings</strong></p>\r\n\r\n<p><strong>4:00AM - 5:30AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;4:30PM - 6:00PM</strong></p>\r\n\r\n<p><strong>5:30AM - 7:00AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 6:00PM - 7:30PM</strong></p>\r\n\r\n<p><strong>7:00AM - 8:30AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;7:30PM - 9:00PM</strong></p>\r\n\r\n<p><strong>8:30AM - 10:00AM&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;9:00PM - 10:30PM</strong></p>",
+     *               "address": "Horawala | Dehradoon| Uttrakhand-248197",
+     *               "is_booking_avaliable": true,
+     *               "amenity_images": [
+     *                   {
+     *                       "id": 17,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/amenity_images/QKYvWDznmpjcuowP9UsHMPKm6ruJ8h9pgCtN94Ub.jpeg",
+     *                       "amenity_id": 2
+     *                   },
+     *                   {
+     *                       "id": 18,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/amenity_images/3KIITP6paeE66HhJjNMQlrXERLTPw747z8alN5sb.png",
+     *                       "amenity_id": 2
+     *                   }
+     *               ]
+     *           },
+     *       ]
+     *   }
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
@@ -136,9 +138,9 @@ class AmenityController extends Controller {
      * @apiParam {String} user_id User id*.
      * @apiParam {String} resort_id Resort id*.
      * @apiParam {String} amenity_id Amenity id*.
-     * @apiParam {String} booking_date Booking date (dd/mm/yyyy).
-     * @apiParam {String} from_time From Time (24 hours format).
-     * @apiParam {String} to_time To Time (24 hours format).
+     * @apiParam {String} booking_date Booking date* (DD/MM/YYYY).
+     * @apiParam {String} from_time From Time* (24 hours format).
+     * @apiParam {String} to_time To Time* (24 hours format).
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).

@@ -163,6 +163,7 @@ class AuthController extends Controller {
      * @apiParam {String} mobile_number Users mobile number*.
      * @apiParam {String} otp OTP*.
      * @apiParam {String} user_type User type*. (Staff member => 2 or Customer => 3).
+     * @apiParam {String} device_id* User device Id (IMEI number)*.
      *
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -170,92 +171,85 @@ class AuthController extends Controller {
      * @apiSuccess {JSON}   data User detail with unique token.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *    "status": true,
-     *    "status_code": 200,
-     *    "message": "OTP verified successfully.",
-     *    "data": {
-     *        "id": 2,
-     *        "user_name": "Hariom",
-     *        "first_name": "Hariom",
-     *        "mid_name": null,
-     *        "last_name": "",
-     *        "email_id": "hariom4037@gmail.com",
-     *        "user_type_id": 3,
-     *        "is_checked_in": false,
-     *        "address": null,
-     *        "state": "UP",
-     *        "city": "Noida",
-     *        "pincode": "201301",
-     *        "screen_name": null,
-     *        "profile_pic_path": null,
-     *        "mobile_number": "9808243372",
-     *        "token_type": "Bearer",
-     *        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijg2ZjM5ZTA0ZjQxN2
-     *          QwNDNhZmRkYWY4NDJlNTNlNTQ3NjMxYzJkMTdkMThmZDVlM2VhMTk1OTc3MGZmZjQzMWE2NjI1ZjI
-     * 0YzE5NDk1ZjllIn0.eyJhdWQiOiIxIiwianRpIjoiODZmMzllMDRmNDE3ZDA0M2FmZGRhZjg0MmU1M2U1NDc2M
-     * zFjMmQxN2QxOGZkNWUzZWExOTU5NzcwZmZmNDMxYTY2MjVmMjRjMTk0OTVmOWUiLCJpYXQiOjE1NDIyNTU5MDY
-     * sIm5iZiI6MTU0MjI1NTkwNiwiZXhwIjoxNTczNzkxOTA2LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.qnRi5ZXrBR
-     * Yk2DJdNi8GbsRkb9g3g26MoBinbHJdGYS0hEfYiItve5yAhRmvQhPiIW_GXIhKRKPAcGmy1tHsneiUEScDjD35EW
-     * Zwd39bpQGDx_VQAGp5JlM2rlj5KOVv52BqFiyLiod8621eevI7SvduWm7VojLFXPRqsWbCilVcQQB5WPIFdTNfor
-     * g3giro7Qa_nzmEZH_iUl0_955HWHx9L9XmuSg9pznePzcDqbyG4M7gB6guJUk0hIUP3cO3Aueu91LZtsA-jGXRkj
-     * dT2S9ONpVRWewl1aksPzjYFxtdUSfH2PQveGWsCMCka85i1B5v1JlyqDb38gNeWbB3Gqy8-2rV9AYS5gYy1lAgCv
-     * xrR9XoElyyguLU_BHQCMuU7_-034A1UbHZfg9_r3IR85_u25McRvSTHiZWPQXVDD2tHh5zLyhyDJjcD_Bh9jMxSE
-     * 9E3b9HruJiJv8DVhTkvW6re95astIZe5X7oW8j7fDHvwWBUMdBfSnnBcyCp-6HVl6nByxevw3-OV_ugsCDuhsOKWw
-     * jaUT4KkyJFxFjKjmbSQautj2FBum3Vy85fOMkgye_8rfYADsKXw81RQjixkflRfmifP4Ii68tES77apdXGqxJricNc
-     * VSBPzBiUThcnPCd_X8f4-vuQwp3KM-Jn8-rC0RT1lUHhlnHPyEzAmQ",
-     *        "source_name": "Make my trip",
-     *        "source_id": "QWERT123456",
-     *        "resort_room_no": 1,
-     *        "room_type": "Delux",
-     *        "check_in_date": "15-Nov-2018",
-     *        "check_in_time": "00:00 AM",
-     *        "check_out_date": "17-Nov-2018",
-     *        "check_out_time": "00:00 AM",
-     *        "booking_id": 1,
-     *        "no_of_guest": "1 Adult and 2 Child",
-     *        "guest_detail": [
-     *            {
-     *                "id": 1,
-     *                "person_name": "Ankit",
-     *                "person_age": "25",
-     *                "person_type": "Adult"
-     *            },
-     *            {
-     *                "id": 2,
-     *                "person_name": "Anshu",
-     *                "person_age": "5",
-     *                "person_type": "Child"
-     *            },
-     *            {
-     *                "id": 3,
-     *                "person_name": "om",
-     *                "person_age": "10",
-     *                "person_type": "Child"
-     *            }
-     *        ],
-     *        "resort": {
-     *            "id": 1,
-     *            "name": "Parth Inn",
-     *            "description": "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>",
-     *            "contact_number": "9808243372",
-     *            "other_contact_number": null,
-     *            "address_1": "Sector 66",
-     *            "address_2": null,
-     *            "address_3": null,
-     *            "pincode": 243601,
-     *            "city_id": 50,
-     *            "latitude": 0,
-     *            "longitude": 0,
-     *            "is_active": 1,
-     *            "domain_id": 0,
-     *            "created_by": "1",
-     *            "updated_by": "1",
-     *            "created_at": "2018-11-14 13:51:50",
-     *            "updated_at": "2018-11-14 13:52:58"
-     *        }
-     *    }
-     * }
+     *  {
+     *      "status": true,
+     *      "status_code": 200,
+     *      "message": "OTP verified successfully.",
+     *      "data": {
+     *          "id": 149,
+     *          "cart_count": 0,
+     *          "user_name": "Om",
+     *          "first_name": "Om",
+     *          "mid_name": "",
+     *          "last_name": "",
+     *          "email_id": "om@mail.com",
+     *          "user_type_id": 3,
+     *          "is_checked_in": false,
+     *          "address": "",
+     *          "state": "",
+     *          "city": "",
+     *          "pincode": "",
+     *          "screen_name": "",
+     *          "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
+     *          "mobile_number": "8077575835",
+     *          "token_type": "Bearer",
+     *          "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImMxMjM0MWFmY2JlMzYwMzEwMDEwYTllM2QzZTg0YjM2ZGQ4MDFmNjNmZDA4NzJkNGY2OTk4ODNiZjI0MTBmYmQ5YzVlOWFjYzY2YTMwZDNmIn0.eyJhdWQiOiI1IiwianRpIjoiYzEyMzQxYWZjYmUzNjAzMTAwMTBhOWUzZDNlODRiMzZkZDgwMWY2M2ZkMDg3MmQ0ZjY5OTg4M2JmMjQxMGZiZDljNWU5YWNjNjZhMzBkM2YiLCJpYXQiOjE1NTE2NzUzODcsIm5iZiI6MTU1MTY3NTM4NywiZXhwIjoxNTgzMjk3Nzg3LCJzdWIiOiIxNDkiLCJzY29wZXMiOltdfQ.KS-8efmZcedmsFzqD-AyCZ3jeL07HIvXbrrSnjlciTHl9oHlq5lwtT5UgC6bKaC9nHZx1MHDEKvEcft4SYiguszvhBeJmCSoigaGIKhVJEk-JLBtjA_KU6vqpJKsnC96X00f8lvqoHlNsttj0_4t0JoSCrp2ARbJ18WyRBGHCj1XYFXRzklukJPOX3T5KYQnLKj_op_n50_JUJnhaLX-KoLFFilvNMMuPGMYF-eVhsgQut4kqXgTnK8-6CRC01lk3X-8BCMKh1gtN2pG0KD3NqOapczuuv2raiafphe3OpZSRRsiRbh4KsG_2JX4_6CQ50qCerPy1hWm45sVT11mWb3DiuUgsXLgE4SqdCjmryFZy7AWb65R_DyCWLb0cWDkaMv8ulQfBcI8EHPg7ugUG5LzgSkoBOSitnU8qbD3YBGqhXIviI0yzgfwySPsErE1q1EsiEe_OranNibocSTMJLZn0T3DcPYkFPy5TbHG7N9twzuyAkx9LZ_AFNsDeNCl9U_p0YxFyCiBN6n4DLL3dCRzYPWOwD9NgTCtI-EyTSjvUuIoP9ELw2E7s7WsyPL09vxzo-S-qgrS8fe8aa573H5vgysF0UTmdbu17LFlhu-znYtUDUayPTsz9ThMa0F9X4O8rvYYgYDjluV9mBorv_9Ln2FcFiIFXFOtKAf9cgQ",
+     *          "source_name": "GOIBO",
+     *          "source_id": "GOIBO123456",
+     *          "resort_room_no": "T-2",
+     *          "room_type": "Tent",
+     *          "check_in_pin": 7015,
+     *          "check_out_pin": 3336,
+     *          "check_in_date": "04-Mar-2019",
+     *          "check_in_time": "12:00 AM",
+     *          "check_out_date": "30-Mar-2019",
+     *          "check_out_time": "10:00 AM",
+     *          "booking_id": "GOIBO123456",
+     *          "no_of_guest": "1 Adult and 1 Child",
+     *          "guest_detail": [
+     *              {
+     *                  "id": 23,
+     *                  "person_name": "Ankit",
+     *                  "person_age": "10",
+     *                  "person_type": "Child"
+     *              },
+     *              {
+     *                  "id": 24,
+     *                  "person_name": "Anshu",
+     *                  "person_age": "25",
+     *                  "person_type": "Adult"
+     *             }
+     *         ],
+     *          "membership": {
+     *              "membership_id": "ABCDE",
+     *              "valid_from": "04-Mar-2019 12:00 AM",
+     *              "valid_till": "07-Mar-2019 12:00 AM"
+     *          },
+     *          "resort": {
+     *              "id": 2,
+     *              "name": "Dintex",
+     *              "description": "<p>Rindex Media Pvt. limited, brings to you Sanjeevani, a naturopathy Centre cradled in the valley of nature, in the beautiful city of Dehradun. Sanjeevani is a centre that not only encompasses the treatment of diabetes but also strives to achieve and helps you maintain optimal levels of health with the help of highly professional staff. The various programs and services such as yoga, meditation, naturopathy, treating diabetes are designed to suit individual needs.</p>\r\n\r\n<p>At the Centre, you&rsquo;ll get the chance to detox your body&rsquo;s equilibrium and feel the eternal bliss of wellness.As such, our holistic approach sets new standards and we are prepared to meet the challenging health issues of today&rsquo;s Indian society/lifestyle.</p>",
+     *              "amenities": "1#2#3#4#5#6#7#8#10",
+     *              "other_amenities": "Other Amenity",
+     *              "contact_number": "8588936238",
+     *              "other_contact_number": null,
+     *              "address_1": "U-701",
+     *              "address_2": null,
+     *              "address_3": null,
+     *              "pincode": 201301,
+     *              "city_id": 181,
+     *              "latitude": 28.5355,
+     *              "longitude": 77.391,
+     *              "is_active": 1,
+     *              "domain_id": 0,
+     *              "created_by": "1",
+     *             "updated_by": "1",
+     *              "created_at": "2018-12-20 21:19:14",
+     *              "updated_at": "2019-02-21 08:12:15",
+     *              "deleted_at": null
+     *         }
+     *      }
+     *  }
      *  
      * @apiError MobileNumberMissing The mobile number is missing.
      * @apiErrorExample Error-Response:
@@ -357,7 +351,7 @@ class AuthController extends Controller {
 //        $token->expires_at = Carbon::now()->addWeeks(1);
             $token->save();
             if ($user->user_type_id == 2) {
-                 $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
+                $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
                         ->first();
             } else {
                 $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
@@ -567,6 +561,28 @@ class AuthController extends Controller {
         }
     }
 
+    /**
+     * @api {get} /api/logout  Logout
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetLogout
+     * @apiGroup Auth
+     *
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String}   message logout successfully.
+     * @apiSuccess {JSON}   data {}.
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "logout successfully",
+     *       "data": {}
+     *   }
+     *  
+     * 
+     */
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return $this->sendSuccessResponse("logout successfully", (object) []);

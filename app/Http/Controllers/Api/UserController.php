@@ -29,6 +29,7 @@ class UserController extends Controller {
      *
      * @apiParam {String} user_id User id*.
      * @apiParam {File} aadhar_id User aadhar id document*.
+     * @apiParam {File} other_aadhar_id User Other side aadhar id document*.
      * @apiParam {File} other_id User other document.
      *
      * @apiSuccess {String} success true 
@@ -37,55 +38,67 @@ class UserController extends Controller {
      * @apiSuccess {JSON}   data blank array.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *     "id": 2,
-     *     "salutation_id": 0,
-     *     "user_name": null,
-     *     "first_name": null,
-     *     "mid_name": null,
-     *     "last_name": null,
-     *     "gender": null,
-     *     "user_type_id": 4,
-     *     "designation_id": 0,
-     *     "department_id": 0,
-     *     "city_id": 0,
-     *     "language_id": 0,
-     *     "email_id": null,
-     *     "alternate_email_id": null,
-     *     "screen_name": null,
-     *     "date_of_joining": null,
-     *     "authority_id": "0",
-     *     "user_id_RA": null,
-     *     "date_of_birth": null,
-     *     "profile_pic_path": "http://127.0.0.1:8000/storage/profile_pic",
-     *     "id_card": null,
-     *     "is_user_loked": 0,
-     *     "mobile_number": "9999999999",
-     *     "other_contact_number": null,
-     *     "address1": null,
-     *     "address2": null,
-     *     "address3": null,
-     *     "pincode": null,
-     *     "secuity_question": null,
-     *     "secuity_questio_answer": null,
-     *     "ref_time_zone_id": null,
-     *     "login_expiry_date": null,
-     *     "other_info": null,
-     *     "password": "$2y$10$GqnkutHraNcdrbOw5gFEoe7nR.nJiP9ShiKm2jbtdpELGLLwbbtvK",
-     *     "remember_token": null,
-     *     "aadhar_id": "7SKegf9AESUmVrLhzoWsiEG9xL5RFbwkQyAFPx0J.jpeg",
-     *     "voter_id": null,
-     *     "is_active": 1,
-     *     "domain_id": 0,
-     *     "otp": "9999",
-     *     "oath_token": null,
-     *     "created_by": "0",
-     *     "updated_by": "0",
-     *     "created_at": "2018-12-04 09:05:25",
-     *     "updated_at": "2018-12-04 09:07:07",
-     *     "is_checked_in": true,
-     *     "user_booking_detail": null
-     * }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "User check-in successfully.",
+            "data": {
+                "id": 149,
+                "discount": 10,
+                "salutation_id": 0,
+                "user_name": "Om",
+                "first_name": "Om",
+                "mid_name": "",
+                "last_name": "",
+                "gender": null,
+                "user_type_id": 3,
+                "designation_id": 0,
+                "department_id": 0,
+                "city_id": 0,
+                "language_id": 0,
+                "email_id": "om@mail.com",
+                "alternate_email_id": null,
+                "screen_name": "",
+                "date_of_joining": null,
+                "authority_id": "0",
+                "user_id_RA": null,
+                "date_of_birth": null,
+                "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
+                "id_card": null,
+                "is_user_loked": 0,
+                "mobile_number": "8077575835",
+                "other_contact_number": null,
+                "address1": "",
+                "address2": null,
+                "address3": null,
+                "pincode": "",
+                "secuity_question": null,
+                "secuity_questio_answer": null,
+                "ref_time_zone_id": null,
+                "login_expiry_date": null,
+                "other_info": null,
+                "password": "$2y$10$EeEc0jxjDXyE/rH0Ri20lObAg2JjpMBHeOFsYQLo.zmgzG4oF1K/.",
+                "remember_token": null,
+                "aadhar_id": "http://127.0.0.1:1234/storage/aadhar_id/lH9ghKYDYDDrBYstCe7IlJyJbCwVttZuWa0DC7jc.png",
+                "other_aadhar_id": "http://127.0.0.1:1234/storage/other_aadhar_id/oHBhMKEU8XBLpliH5ja4nRW465iolmRcRRnJg1W6.png",
+                "voter_id": "http://127.0.0.1:1234/img/no-image.jpg",
+                "authorise_amenities_id": null,
+                "is_service_authorise": 0,
+                "is_meal_authorise": 0,
+                "device_token": "153dsf45dsf4d5s31f32ds1f32ds1f32ds1f32s",
+                "device_type": "Android",
+                "device_id": null,
+                "is_active": 1,
+                "domain_id": 0,
+                "otp": "2062",
+                "oath_token": null,
+                "created_by": "1",
+                "updated_by": "1",
+                "created_at": "2019-03-04 10:18:06",
+                "updated_at": "2019-03-04 12:03:48",
+                "is_checked_in": true
+            }
+        }
      *  
      * @apiError UserIdMissing The user id missing.
      * @apiErrorExample Error-Response:
@@ -218,24 +231,27 @@ class UserController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Profile update succesfully.",
-     *       "data": {
-     *           "id": 2,
-     *           "user_name": "Hariom Gangwar n",
-     *           "first_name": "Hariom",
-     *           "last_name": "Gangwar",
-     *           "email_id": "hariom4037@gmail.com",
-     *           "profile_pic_path": "http://127.0.0.1:8000/storage/profile_pic/Kq6zsnPUpHQRWax8bladuQxs9zSxDxr0IE7VkAMI.jpeg",
-     *           "address1": "test",
-     *           "pincode": "222222",
-     *           "city_id": 63,
-     *           "state": "West Bengal",
-     *           "city": "Asansol"
-     *       }
-     *   }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "Profile update succesfully.",
+      "data": {
+      "id": 149,
+      "user_name": "Om",
+      "first_name": "Om",
+      "last_name": "",
+      "email_id": "om@mail.com",
+      "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
+      "address1": "",
+      "pincode": "",
+      "city_id": 0,
+      "state": "",
+      "city": "",
+      "membership_id": "ABCDE",
+      "valid_from": "04-Mar-2019 12:00 AM",
+      "valid_till": "07-Mar-2019 12:00 AM"
+      }
+      }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -351,8 +367,7 @@ class UserController extends Controller {
      * @apiGroup User
      * 
      * @apiParam {String} user_id User id*.
-     * @apiParam {String} old_password old Password.
-     * @apiParam {String} new_password New Password.
+     * @apiParam {String} new_password New Password*.
      * @apiParam {String} confirm_password Confirm Password.
      * 
      * @apiSuccess {String} success true 
@@ -540,7 +555,7 @@ class UserController extends Controller {
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} device_token Device Token*.
-     * @apiParam {String} device_type Device Type*.
+     * @apiParam {String} device_type Device Type* (Android or Iphone).
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -592,6 +607,103 @@ class UserController extends Controller {
         }
     }
 
+    /**
+     * @api {get} /api/update-device-token Update Device Token
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetCheckInDetail
+     * @apiGroup User
+     * 
+     * @apiParam {String} user_id User id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message User check In detail.
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "User.",
+            "data": {
+                "checkin_detail": {
+                    "id": 149,
+                    "cart_count": 0,
+                    "user_name": "Om",
+                    "first_name": "Om",
+                    "mid_name": "",
+                    "last_name": "",
+                    "email_id": "om@mail.com",
+                    "user_type_id": 3,
+                    "is_checked_in": false,
+                    "address": "",
+                    "state": "",
+                    "city": "",
+                    "pincode": "",
+                    "screen_name": "",
+                    "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
+                    "mobile_number": "8077575835",
+                    "source_name": "GOIBO",
+                    "source_id": "GOIBO123456",
+                    "resort_room_no": "T-2",
+                    "room_type": "Tent",
+                    "check_in_pin": 7015,
+                    "check_out_pin": 3336,
+                    "check_in_date": "04-Mar-2019",
+                    "check_in_time": "12:00 AM",
+                    "check_out_date": "30-Mar-2019",
+                    "check_out_time": "10:00 AM",
+                    "booking_id": "GOIBO123456",
+                    "no_of_guest": "1 Adult and 1 Child",
+                    "guest_detail": [
+                        {
+                            "id": 23,
+                            "person_name": "Ankit",
+                            "person_age": "10",
+                            "person_type": "Child"
+                        },
+                        {
+                            "id": 24,
+                            "person_name": "Anshu",
+                            "person_age": "25",
+                            "person_type": "Adult"
+                        }
+                    ],
+                    "membership": {
+                        "membership_id": "ABCDE",
+                        "valid_from": "04-Mar-2019 12:00 AM",
+                        "valid_till": "07-Mar-2019 12:00 AM"
+                    },
+                    "resort": {
+                        "id": 2,
+                        "name": "Dintex",
+                        "description": "<p>Rindex Media Pvt. limited, brings to you Sanjeevani, a naturopathy Centre cradled in the valley of nature, in the beautiful city of Dehradun. Sanjeevani is a centre that not only encompasses the treatment of diabetes but also strives to achieve and helps you maintain optimal levels of health with the help of highly professional staff. The various programs and services such as yoga, meditation, naturopathy, treating diabetes are designed to suit individual needs.</p>\r\n\r\n<p>At the Centre, you&rsquo;ll get the chance to detox your body&rsquo;s equilibrium and feel the eternal bliss of wellness.As such, our holistic approach sets new standards and we are prepared to meet the challenging health issues of today&rsquo;s Indian society/lifestyle.</p>",
+                        "amenities": "1#2#3#4#5#6#7#8#10",
+                        "other_amenities": "Other Amenity",
+                        "contact_number": "8588936238",
+                        "other_contact_number": null,
+                        "address_1": "U-701",
+                        "address_2": null,
+                        "address_3": null,
+                        "pincode": 201301,
+                        "city_id": 181,
+                        "latitude": 28.5355,
+                        "longitude": 77.391,
+                        "is_active": 1,
+                        "domain_id": 0,
+                        "created_by": "1",
+                        "updated_by": "1",
+                        "created_at": "2018-12-20 21:19:14",
+                        "updated_at": "2019-02-21 08:12:15",
+                        "deleted_at": null
+                    }
+                }
+            }
+        }
+     * 
+     * 
+     */
     public function getCheckInDetail(Request $request) {
         try {
             if (!$request->user_id) {
@@ -662,7 +774,7 @@ class UserController extends Controller {
             } else {
                 $userArray['resort'] = (object) [];
             }
-            return $this->sendSuccessResponse("User.", ["checkin_detail" => $userArray]);
+            return $this->sendSuccessResponse("User check In detail", ["checkin_detail" => $userArray]);
         } catch (Exception $ex) {
             return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }

@@ -19,7 +19,7 @@ class HealthcareProgramController extends Controller {
      * @apiName GetHealthcareProgram
      * @apiGroup Healthcare Program
      * 
-     * @apiParam {String} resort_id Resort id*.
+     * @apiParam {String} resort_id Resort id* (For guest user use resort id value -1).
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -28,59 +28,93 @@ class HealthcareProgramController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *    "status": true,
-     *    "status_code": 200,
-     *    "message": "healthcare program found.",
-     *    "data": [
-     *        {
-     *            "id": 1,
-     *            "name": "Diabetes Program",
-     *            "description": "<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>",
-     *            "start_from": "24-11-2018",
-     *            "end_to": "27-11-2018",
-     *            "total_days": 4,
-     *            "healthcare_images": [
-     *                {
-     *                    "id": 1,
-     *                    "banner_image_url": "http://127.0.0.1:8000/storage/offer_images/6ucWdCWKsZeZPDfIxfGVlzbg4VtjpLXG8HhpON8g.jpeg",
-     *                    "health_program_id": 1
-     *                },
-     *                {
-     *                    "id": 2,
-     *                    "banner_image_url": "http://127.0.0.1:8000/storage/offer_images/QKSTxwKTkrHBY1vp3OmMNSONGjse5lUT27xo8PXf.jpeg",
-     *                    "health_program_id": 1
-     *                }
-     *            ],
-     *            "healthcare_days": [
-     *                {
-     *                    "id": 1,
-     *                    "day": "1",
-     *                    "description": "<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>",
-     *                    "health_program_id": 1
-     *                },
-     *                {
-     *                    "id": 2,
-     *                    "day": "2",
-     *                    "description": "<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>",
-     *                    "health_program_id": 1
-     *                },
-     *                {
-     *                    "id": 3,
-     *                    "day": "3",
-     *                    "description": "<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>",
-     *                    "health_program_id": 1
-     *                },
-     *                {
-     *                    "id": 4,
-     *                    "day": "4",
-     *                    "description": "<h1>&nbsp;simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</h1>",
-     *                    "health_program_id": 1
-     *                }
-     *            ]
-     *        }
-     *    ]
-     * }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "healthcare program found.",
+     *       "data": [       
+     *           {
+     *               "id": 11,
+     *               "name": "Healthcare Package Reverse Diabetes in 3 Days",
+     *               "description": "<p>Rindex Media Pvt. Ltd., brings to you Sanjeevani, a naturopathy Centre cradled in the valley of nature, in the beautiful city of Dehradun. Sanjeevani is a centre that not only encompasses the treatment of diabetes but also strives to achieve and helps you maintain optimal levels of health with the help of the highly professional staff. The various programs and services such as yoga, meditation, naturopathy, treating diabetes are designed to suit individual needs.</p>\r\n\r\n<p>___________________________________________________________________________</p>\r\n\r\n<p>At the Centre, you&rsquo;ll get the chance to detox your body&rsquo;s equilibrium and feel the eternal bliss of wellness. As such, our holistic approach sets new standards and we are prepared to meet the challenging health issues of today&rsquo;s Indian society/lifestyle.</p>\r\n\r\n<p>___________________________________________________________________________</p>\r\n\r\n<p>Sanjeevani promises you the best natural and organic therapy to address the root cause of any disorder especially diabetes. This will be the best gift you will gift yourself, a wellness program that will have you feeling complete and give you a sense of being one with your mind and body.</p>",
+     *               "start_from": "14-02-2019",
+     *               "end_to": "09-03-2019",
+     *               "total_days": 3,
+     *               "healthcare_images": [
+     *                   {
+     *                       "id": 31,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/HUjdVCzjj1A51ak7ipjUg9oKWcKQs4dyAtOaOJpT.jpeg",
+     *                       "health_program_id": 11
+     *                   },
+     *                   {
+     *                       "id": 32,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/VcE35u8GzY1FSprjK8aQBP3DSIG5fZoLOa8XYRSy.jpeg",
+     *                       "health_program_id": 11
+     *                   }
+     *               ],
+     *               "healthcare_days": [
+     *                   {
+     *                       "id": 418,
+     *                       "day": "3",
+     *                       "description": "<p><strong>05:00 AM : </strong>Wake Up</p>\r\n\r\n<hr />\r\n<p><strong>05:30 AM :</strong> Fasting Sugar</p>\r\n\r\n<hr />\r\n<p><strong>05:45 AM :</strong> Tulsi - Ginger Tea</p>\r\n\r\n<hr />\r\n<p><strong>06:00 AM :</strong> Walk/Yoga</p>\r\n\r\n<hr />\r\n<p><strong>07:00 AM :</strong> Coconut Water</p>\r\n\r\n<hr />\r\n<p><strong>08:00 AM : </strong>Salad Breakfast</p>\r\n\r\n<hr />\r\n<p><strong>09:00 AM :</strong> Meditation/Massage</p>\r\n\r\n<hr />\r\n<p><strong>12:00 AM :</strong> Lunch</p>\r\n\r\n<hr />\r\n<p><strong>12:30 PM : </strong>Walk</p>\r\n\r\n<hr />\r\n<p><strong>03:00 PM :</strong> Banana/Cashew/Almond Shake</p>\r\n\r\n<hr />\r\n<p><strong>03:30 PM :</strong> Consultancy</p>\r\n\r\n<hr />\r\n<p><strong>04:00 PM :</strong> Routine Check-up</p>\r\n\r\n<hr />\r\n<p><strong>06:00 PM :</strong> Dinner</p>\r\n\r\n<hr />\r\n<p><strong>07:00 PM :</strong> Spritual Classes</p>\r\n\r\n<hr />\r\n<p><strong>08:00 PM :</strong> Bed Time</p>",
+     *                       "health_program_id": 11
+     *                   },
+     *                   {
+     *                       "id": 416,
+     *                       "day": "1",
+     *                       "description": "<p><strong>05:00 AM : </strong>Wake Up</p>\r\n\r\n<hr />\r\n<p><strong>05:30 AM :</strong> Fasting Sugar</p>\r\n\r\n<hr />\r\n<p><strong>05:45 AM :</strong> Tulsi - Ginger Tea</p>\r\n\r\n<hr />\r\n<p><strong>06:00 AM :</strong> Walk/Yoga</p>\r\n\r\n<hr />\r\n<p><strong>07:00 AM :</strong> Coconut Water</p>\r\n\r\n<hr />\r\n<p><strong>08:00 AM : </strong>Salad Breakfast</p>\r\n\r\n<hr />",
+     *                       "health_program_id": 11
+     *                   },
+     *                   {
+     *                       "id": 417,
+     *                       "day": "2",
+     *                       "description": "<p><strong>05:00 AM : </strong>Wake Up</p>\r\n\r\n<hr />\r\n<p><strong>05:30 AM :</strong> Fasting Sugar</p>\r\n\r\n<hr />\r\n<p><strong>05:45 AM :</strong> Tulsi - Ginger Tea</p>\r\n\r\n<hr />\r\n<p><strong>06:00 AM :</strong> Walk/Yoga</p>\r\n\r\n<hr />\r\n<p><strong>07:00 AM :</strong> Coconut Water</p>\r\n\r\n<hr />\r\n<p><strong>08:00 AM : </strong>Salad Breakfast</p>\r\n\r\n<hr />\r\n<p><strong>09:00 AM :</strong> Meditation/Massage</p>\r\n\r\n<hr />\r\n<p><strong>12:00 AM :</strong> Lunch</p>\r\n\r\n<hr />\r\n<p><strong>12:30 PM : </strong>Walk</p>\r\n\r\n<hr />\r\n<p><strong>03:00 PM :</strong> Banana/Cashew/Almond Shake</p>\r\n\r\n<hr />\r\n<p><strong>03:30 PM :</strong> Consultancy</p>\r\n\r\n<hr />\r\n<p><strong>04:00 PM :</strong> Routine Check-up</p>\r\n\r\n<hr />\r\n<p><strong>06:00 PM :</strong> Dinner</p>\r\n\r\n<hr />\r\n<p><strong>07:00 PM :</strong> Spritual Classes</p>\r\n\r\n<hr />\r\n<p><strong>08:00 PM :</strong> Bed Time</p>",
+     *                       "health_program_id": 11
+     *                   }
+     *               ]
+     *           },
+     *           {
+     *               "id": 14,
+     *               "name": "Holiday Package",
+     *               "description": "<p>2Night and 3 Day</p>",
+     *               "start_from": "15-02-2019",
+     *               "end_to": "31-05-2019",
+     *               "total_days": 3,
+     *               "healthcare_images": [
+     *                   {
+     *                       "id": 49,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/FJ6ZhivkTUozs9FANVwNYQZHlLkXlWd8n5L8v35J.jpeg",
+     *                       "health_program_id": 14
+     *                   },
+     *                   {
+     *                       "id": 50,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/FeYWXm2Hho1m5l3fWtNWTfVE02KM4k8r3hfO3QYS.jpeg",
+     *                       "health_program_id": 14
+     *                   }
+     *               ],
+     *               "healthcare_days": [
+     *                   {
+     *                       "id": 440,
+     *                       "day": "1",
+     *                       "description": "<p>1</p>",
+     *                       "health_program_id": 14
+     *                   },
+     *                   {
+     *                       "id": 441,
+     *                       "day": "2",
+     *                       "description": "<p><br />\r\n2</p>",
+     *                       "health_program_id": 14
+     *                   },
+     *                   {
+     *                       "id": 442,
+     *                       "day": "3",
+     *                       "description": "<p>3</p>",
+     *                       "health_program_id": 14
+     *                   }
+     *               ]
+     *           }
+     *       ]
+     *   }
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
@@ -159,50 +193,168 @@ class HealthcareProgramController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "My Health Package",
-     *       "data": {
-     *           "id": 2,
-     *           "name": "Healthcare Package",
-     *           "description": "<p>Testing</p>",
-     *           "start_from": "28-11-2018",
-     *           "end_to": "28-11-2018",
-     *           "healthcare_images": [
-     *               {
-     *                   "id": 2,
-     *                   "banner_image_url": "http://127.0.0.1:8000/storage/healthcare_images/58PUwfdKYmUzP4hO8WdQMLLrhuhUAbXXp5WoNgNO.jpeg",
-     *                   "health_program_id": 2
-     *               },
-     *               {
-     *                   "id": 3,
-     *                   "banner_image_url": "http://127.0.0.1:8000/storage/healthcare_images/m9MW1Nb8LWCMrZa992hcHoLSPgBlMkkjw9fsKAri.jpeg",
-     *                   "health_program_id": 2
-     *               }
-     *           ],
-     *           "healthcare_days": [
-     *               {
-     *                   "id": 4,
-     *                   "day": "1",
-     *                   "description": "<p>Testing</p>",
-     *                   "health_program_id": 2
-     *               },
-     *               {
-     *                   "id": 5,
-     *                   "day": "2",
-     *                   "description": "<p>Testing</p>",
-     *                   "health_program_id": 2
-     *               },
-     *               {
-     *                   "id": 6,
-     *                   "day": "3",
-     *                   "description": "<p>Testing</p>",
-     *                   "health_program_id": 2
-     *               }
-     *           ]
-     *       }
-     *   }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "My Health Package",
+            "data": {
+                "id": 6,
+                "name": "Reverse Diabetes in 21 Days",
+                "description": "<p>Rindex Media Pvt. Ltd., brings to you Sanjeevani, a naturopathy Centre cradled in the valley of nature, in the beautiful city of Dehradun. Sanjeevani is a centre that not only encompasses the treatment of diabetes but also strives to achieve and helps you maintain optimal levels of health with the help of the highly professional staff. The various programs and services such as yoga, meditation, naturopathy, treating diabetes are designed to suit individual needs.</p>\r\n\r\n<p>___________________________________________________________________________</p>\r\n\r\n<p>At the Centre, you&rsquo;ll get the chance to detox your body&rsquo;s equilibrium and feel the eternal bliss of wellness. As such, our holistic approach sets new standards and we are prepared to meet the challenging health issues of today&rsquo;s Indian society/lifestyle.</p>\r\n\r\n<p>___________________________________________________________________________</p>\r\n\r\n<p>Sanjeevani promises you the best natural and organic therapy to address the root cause of any disorder especially diabetes. This will be the best gift you will gift yourself, a wellness program that will have you feeling complete and give you a sense of being one with your mind and body.</p>",
+                "start_from": "24-01-2019",
+                "end_to": "22-01-2019",
+                "healthcare_images": [
+                    {
+                        "id": 17,
+                        "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/Xj6B4ayTdL3F7AkLwGxH6VrfSVzHbkBf3yUregTa.jpeg",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 22,
+                        "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/dHRAYPVxQkmw9yfLVScYCN5QUvO4OJ8NqQRBI0Ag.jpeg",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 23,
+                        "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/2IjaxxOCWYNtHvFs564nkSrkyyKU0TQxddp0qyt0.jpeg",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 24,
+                        "banner_image_url": "http://127.0.0.1:1234/storage/healthcare_images/rTGNijkeoYlZB5xJqQk9JLYU7881mj6O0PqJfns2.jpeg",
+                        "health_program_id": 6
+                    }
+                ],
+                "healthcare_days": [
+                    {
+                        "id": 326,
+                        "day": "2",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 325,
+                        "day": "1",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 327,
+                        "day": "3",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 328,
+                        "day": "4",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 329,
+                        "day": "5",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 330,
+                        "day": "6",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 331,
+                        "day": "7",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 332,
+                        "day": "8",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 333,
+                        "day": "9",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 334,
+                        "day": "10",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 335,
+                        "day": "11",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 336,
+                        "day": "12",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 337,
+                        "day": "13",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 338,
+                        "day": "14",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 339,
+                        "day": "15",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 340,
+                        "day": "16",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 341,
+                        "day": "17",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 342,
+                        "day": "18",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 343,
+                        "day": "19",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 344,
+                        "day": "20",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    },
+                    {
+                        "id": 345,
+                        "day": "21",
+                        "description": "<p>05:00 AM : Wake Up</p>\r\n\r\n<p>05:30 AM : Fasting Sugar</p>\r\n\r\n<p>05:45 AM : Tulsi - Ginger Tea</p>\r\n\r\n<p>06:00 AM : Walk/Yoga</p>\r\n\r\n<p>07:00 AM : Coconut Water</p>\r\n\r\n<p>08:00 AM : Salad Breakfast</p>\r\n\r\n<p>09:00 AM : Meditation/Massage</p>\r\n\r\n<p>12:00 AM : Lunch</p>\r\n\r\n<p>12:30 PM : Walk</p>\r\n\r\n<p>03:00 PM : Banana/Cashew/Almond Shake</p>\r\n\r\n<p>03:30 PM : Consultancy</p>\r\n\r\n<p>04:00 PM : Routine Check-up</p>\r\n\r\n<p>06:00 PM : Dinner</p>\r\n\r\n<p>07:00 PM : Spritual Classes</p>\r\n\r\n<p>08:00 PM : Bed Time</p>",
+                        "health_program_id": 6
+                    }
+                ]
+            }
+        }
      * 
      * @apiError UserIdMissing The user id is missing.
      * @apiErrorExample Error-Response:
@@ -274,29 +426,30 @@ class HealthcareProgramController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Health Package found",
-     *       "data": {
-     *           "upcoming": [
-     *               {
-     *                   "id": 2,
-     *                   "name": "Healthcare Package",
-     *                   "duration": "28-11-2018 to 28-11-2018",
-     *                   "status": "Booking Confirmed"
-     *               }
-     *           ],
-     *           "complete": [
-     *               {
-     *                   "id": 2,
-     *                   "name": "Healthcare Package",
-     *                   "duration": "28-11-2018 to 28-11-2018",
-     *                   "status": "Booking Confirmed"
-     *               }
-     *           ]
-     *       }
-     *   }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "Health Package found",
+            "data": {
+                "complete": [
+                    {
+                        "id": 11,
+                        "name": "Healthcare Package Reverse Diabetes in 3 Days",
+                        "duration": "01-Feb-2019 to 02-Feb-2019",
+                        "status": "Completed"
+                    }
+                ],
+                "upcoming": [
+                    {
+                        "id": 11,
+                        "record_id": 45,
+                        "name": "Healthcare Package Reverse Diabetes in 3 Days",
+                        "duration": "01-Apr-2019 to 03-Apr-2019",
+                        "status": "Upcoming"
+                    }
+                ]
+            }
+        }
      * 
      * @apiError UserIdMissing The user id is missing.
      * @apiErrorExample Error-Response:
@@ -364,12 +517,13 @@ class HealthcareProgramController extends Controller {
 
     /**
      * @api {post} /api/cancel-package  Cancel Healthcare Package
+     * @apiHeader {String} Authorization Users unique access-token.
      * @apiHeader {String} Accept application/json. 
      * @apiName PostCancelHealthcareProgram
      * @apiGroup Healthcare Program
      * 
      * @apiParam {String} user_id User id*.
-     * @apiParam {String} health_care_package_id Package id*.
+     * @apiParam {String} record_id Package record id*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -395,13 +549,13 @@ class HealthcareProgramController extends Controller {
      *       "data": {}
      *   } 
      * 
-     * @apiError UserIdMissing The user id is missing.
+     * @apiError RecordIdMissing The record id is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *   {
      *       "status": false,
      *       "status_code": 404,
-     *       "message": "Health care package id missing.",
+     *       "message": "Record id missing.",
      *       "data": {}
      *   } 
      * 

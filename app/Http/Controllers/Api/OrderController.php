@@ -33,15 +33,15 @@ class OrderController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *    "status": true,
-     *    "status_code": 200,
-     *    "message": "Order created succeffully.",
-     *    "data": {
-     *        "invoice_id": 1544009691,
-     *        "total_amount": 1175
-     *    }
-     * }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "We will serve your food soon.",
+            "data": {
+                "invoice_id": 1551681813,
+                "total_amount": 53
+            }
+        }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.

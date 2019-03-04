@@ -28,7 +28,6 @@ Route::namespace("Api")->group(function () {
     }
 
 
-    //City State list
     Route::get('get-checkin-detail', 'UserController@getCheckInDetail');
     
     //City State list

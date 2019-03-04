@@ -31,6 +31,8 @@ class ServiceController extends Controller {
      * @apiName GetServiceList
      * @apiGroup Services
      * 
+     * @apiParam {String} resort_id Resort Id (For guest user use resort id value -1).
+     * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Services listing.
@@ -50,11 +52,9 @@ class ServiceController extends Controller {
      *                "icon": "http://127.0.0.1:8000/storage/Service_icon/cWpiFZ9YG4duaP7Cfch2DgeVn3AYdSBAZPWFkd6g.png",
      *                "questions": [
      *                    {
-     *                        "id": 1,
      *                        "name": "question 1"
      *                    },
      *                    {
-     *                        "id": 2,
      *                        "name": "question 2"
      *                    }
      *                ]
@@ -65,11 +65,9 @@ class ServiceController extends Controller {
      *                "icon": "http://127.0.0.1:8000/storage/Service_icon/i0hRXnlJoVdUcSENmCNxvHANVZ1drvwyFqtVB14O.png",
      *                "questions": [
      *                     {
-     *                        "id": 1,
      *                        "name": "question 1"
      *                     },
      *                    {
-     *                        "id": 2,
      *                        "name": "question 2"
      *                    }
      *                ]
@@ -82,7 +80,6 @@ class ServiceController extends Controller {
      *                "icon": "http://127.0.0.1:8000/storage/Service_icon/i0hRXnlJoVdUcSENmCNxvHANVZ1drvwyFqtVB14O.png",
      *                "questions": [
      *                    {
-     *                        "id": 1,
      *                        "name": "question 1"
      *                    }
      *                ]
@@ -93,11 +90,9 @@ class ServiceController extends Controller {
      *               "icon": "http://127.0.0.1:8000/storage/Service_icon/i0hRXnlJoVdUcSENmCNxvHANVZ1drvwyFqtVB14O.png",
      *               "questions": [
      *                   {
-     *                       "id": 1,
      *                       "name": "question 1"
      *                   },
      *                   {
-     *                       "id": 2,
      *                       "name": "question 2"
      *                   }
      *               ]
@@ -191,8 +186,8 @@ class ServiceController extends Controller {
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} service_id Service id*.
-     * @apiParam {String} resort_id Service id*.
-     * @apiParam {String} question_id question id.
+     * @apiParam {String} resort_id Resort id*.
+     * @apiParam {String} question_id questions by comma separated.
      * @apiParam {String} comment Comment.
      * 
      * @apiSuccess {String} success true 
@@ -202,11 +197,12 @@ class ServiceController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     * "status": true,
-     * "message": "Request successfully created.",
-     * "data": {}
-     * }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "Our staff member will contact you soon.",
+            "data": {}
+        }
      * 
      * 
      * @apiError UserIdMissing The user id is missing.
@@ -371,66 +367,47 @@ class ServiceController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *   {
-     *       "status": true,
-     *       "status_code": 200,
-     *       "message": "Services list",
-     *       "data": {
-     *           "ongoing_services": [],
-     *           "complete_services": [
-     *               {
-     *                   "id": 1,
-     *                   "record_id": 1,
-     *                   "name": "Do Not Disturbe",
-     *                   "icon": "http://127.0.0.1:8000/storage/Service_icon/XfNlJoZ3L4Pj0dbM8lJIyIXtkqTK4FXaANlUwwOo.jpeg",
-     *                   "date": "13-12-2018",
-     *                   "time": "04:53:09 PM",
-     *                   "status_id": 4,
-     *                   "status": "Completed",
-     *                   "acceptd_by": "",
-     *                   "type": 1
-     *               },
-     *               {
-     *                   "id": 1,
-     *                   "record_id": 2,
-     *                   "name": "sadsaGym",
-     *                   "icon": "",
-     *                   "date": "13-12-2018",
-     *                   "time": "17:48 pm",
-     *                   "status_id": 1,
-     *                   "status": "Booked",
-     *                   "acceptd_by": "",
-     *                   "type": 2
-     *               },
-     *               {
-     *                   "id": 1,
-     *                   "record_id": 1,
-     *                   "name": "Gym",
-     *                   "icon": "",
-     *                   "date": "13-12-2018",
-     *                   "time": "19:05 pm",
-     *                   "status_id": 1,
-     *                   "status": "Booked",
-     *                   "acceptd_by": "",
-     *                   "type": 3
-     *               },
-     *               {
-     *                   "id": 1,
-     *                   "record_id": 1,
-     *                   "name": "1544722346",
-     *                   "icon": "",
-     *                   "date": "13-12-2018",
-     *                   "time": "17:32 pm",
-     *                   "total_item_count": 1,
-     *                   "total_amount": 240.6,
-     *                   "status_id": 1,
-     *                   "status": "Confirmed",
-     *                   "acceptd_by": "",
-     *                   "type": 4
-     *               }
-     *           ]
-     *       }
-     *   }
+        {
+            "status": true,
+            "status_code": 200,
+            "message": "Services list",
+            "data": {
+                "ongoing_services": [
+                    {
+                        "id": 67,
+                        "record_id": 67,
+                        "name": "1551681813",
+                        "icon": "http://devsanjeevani.dbaquincy.com/img/my_meal.png",
+                        "date": "04-Mar-2019",
+                        "time": "12:13 PM",
+                        "date_time": "04-03-2019 12:13:33",
+                        "total_item_count": 1,
+                        "total_amount": 53,
+                        "status_id": 1,
+                        "status": "Pending",
+                        "acceptd_by": "",
+                        "type": 4
+                    }
+                ],
+                "complete_services": [
+                    {
+                        "id": 120,
+                        "record_id": 120,
+                        "name": "Room Cleaning",
+                        "icon": "http://127.0.0.1:1234/storage/Service_icon/bG8tskL0dmA4XmCjBWC35v01uauybI9YyvKx0apH.png",
+                        "date": "04-Mar-2019",
+                        "time": "12:23 PM",
+                        "date_time": "04-03-2019 12:23:31",
+                        "status_id": 4,
+                        "status": "Completed",
+                        "acceptd_by": "Ankit Sharma",
+                        "type": 1,
+                        "staff_reasons": null,
+                        "staff_comment": null
+                    }
+                ]
+            }
+        }
      * 
      * @apiError OrderRequestNotFound The Order & Request not found.
      * @apiErrorExample Error-Response:
@@ -724,7 +701,8 @@ class ServiceController extends Controller {
      * @apiGroup Services
      * 
      * @apiParam {String} user_id User id*.
-     * @apiParam {String} service_id Service id*.
+     * @apiParam {String} type type* (1 => for issues & housekeeping, 4 => for Meals).
+     * @apiParam {String} record_id record_id*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -760,7 +738,7 @@ class ServiceController extends Controller {
      *     "data": {}
      * }
      * 
-     * @apiError ServiceIdMissing The service id is missing.
+     * @apiError RecordIdMissing The service id is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      * {
@@ -770,15 +748,6 @@ class ServiceController extends Controller {
      *     "data": {}
      * }
      * 
-     * @apiError InvalidService The service is invalid.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *     "status": false,
-     *     "status_code": 404,
-     *     "message": "Invalid service.",
-     *     "data": {}
-     * }
      * 
      * 
      * 
@@ -846,6 +815,8 @@ class ServiceController extends Controller {
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} record_id Record id*.
+     * @apiParam {String} type type*(1 => for issues & housekeeping, 4 => for Meals).
+     * @apiParam {String} comment comment*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
@@ -856,7 +827,7 @@ class ServiceController extends Controller {
      * HTTP/1.1 200 OK
      * {
      * "status": true,
-     * "message": "Service approved successfully.",
+     * "message": "Service rejected successfully.",
      * "data": {}
      * }
      * 
@@ -881,25 +852,16 @@ class ServiceController extends Controller {
      *     "data": {}
      * }
      * 
-     * @apiError ServiceIdMissing The service id is missing.
+     * @apiError ResordIdMissing The record id is missing.
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      * {
      *     "status": false,
      *     "status_code": 404,
-     *     "message": "service id missing.",
+     *     "message": "record id missing.",
      *     "data": {}
      * }
-     * 
-     * @apiError InvalidService The service is invalid.
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *     "status": false,
-     *     "status_code": 404,
-     *     "message": "Invalid service.",
-     *     "data": {}
-     * }
+
      * 
      * 
      * 

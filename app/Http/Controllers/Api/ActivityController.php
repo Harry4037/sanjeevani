@@ -18,6 +18,8 @@ class ActivityController extends Controller {
      * @apiName GetActivitiesList
      * @apiGroup Activity
      * 
+     * @apiParam {String} resort_id Resort Id* (For guest user use resort id value -1).
+     * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
      * @apiSuccess {String} message Activities found.
@@ -25,29 +27,55 @@ class ActivityController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *    "status": true,
-     *    "status_code": 200,
-     *    "message": "Activities found.",
-     *    "data": [
-     *        {
-     *            "id": 2,
-     *            "name": "Activity",
-     *            "description": "<p>tretretwfdsf</p>\r\n\r\n<p>gffdwerew</p>",
-     *            "address": "sector 62, Noida, UP",
-     *            "latitude": "28.608510",
-     *            "longitude": "77.347370",
-     *            "is_booking_avaliable": true,
-     *            "activity_images": [
-     *                {
-     *                    "id": 2,
-     *                    "banner_image_url": "http://127.0.0.1:8000/storage/activity_images/ekD0YEH9vfWaSqFIyeufWzroj3MmH2HMQOJHwGNV.jpeg",
-     *                    "amenity_id": 2
-     *                }
-     *            ]
-     *        }
-     *    ]
-     * }
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Activities found.",
+     *       "data": [
+     *           {
+     *               "id": 8,
+     *               "name": "Running",
+     *               "description": "<p>If you like to run, then we&#39;re throwing down a challenge to see who the best runners are. Simply pick up a biometric wristband at the new Porto Sani gym and off you go. When you return from your run we&#39;ll upload the stats onto our computer and make a leader board to show the ranking of all our runners. The challenge is open to all our guests over 16 years old.We will reward the three best runners with personal training sessions and valuable spa credits.</p>",
+     *               "address": "Dehradun | Uttarakhand | India",
+     *               "latitude": 19.53,
+     *               "longitude": 57.524848,
+     *               "is_booking_avaliable": true,
+     *               "activity_images": [
+     *                   {
+     *                       "id": 23,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/activity_images/3HNmS1PqIBpOWHM7z02hmzLNQvf3F8aoyw7SdGhd.jpeg",
+     *                       "amenity_id": 8
+     *                   },
+     *                   {
+     *                       "id": 24,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/activity_images/fUyFGNmOrnHlBYvTTeIfrbmbOzSVJh3dZ9kxBzuy.jpeg",
+     *                       "amenity_id": 8
+     *                   }
+     *               ]
+     *           },
+     *           {
+     *               "id": 9,
+     *               "name": "Yoga",
+     *               "description": "<p>Start a day with morning yoga to balance body and soul at roof top Yoga pavilion while enjoy the cool morning breeze, a warm sunrise entering every space of the jungle leaves. Yoga is ancient art based on a harmonizing system of development for the body, mind, and spirit. The continued practice of yoga will lead to a sense of peace and well-being, and also a feeling of being at one with their environment that help to harmonize human consciousness with the divine consciousness.</p>",
+     *               "address": "Dehradun | Uttarakhand | India",
+     *               "latitude": 19.53,
+     *               "longitude": 57.524848,
+     *               "is_booking_avaliable": true,
+     *               "activity_images": [
+     *                   {
+     *                       "id": 25,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/activity_images/bsAmNB1gLB2Z3QDD3KHK9si6sow6guVrwerOv10R.jpeg",
+     *                       "amenity_id": 9
+     *                   },
+     *                   {
+     *                       "id": 26,
+     *                       "banner_image_url": "http://127.0.0.1:1234/storage/activity_images/bMdjvCYdRpexlenEW2WKSiRqYVkXTTj8e8TZVSDT.jpeg",
+     *                       "amenity_id": 9
+     *                   }
+     *               ]
+     *           },
+     *       ]
+     *   }
      * 
      * @apiError ResortIdMissing The resort id is missing.
      * @apiErrorExample Error-Response:
@@ -64,19 +92,19 @@ class ActivityController extends Controller {
         if (!$request->resort_id) {
             return $this->sendErrorResponse("Resort id missing", (object) []);
         }
-        
-        if($request->resort_id == -1){
+
+        if ($request->resort_id == -1) {
             $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => 1])->with([
-                    'activityImages' => function($query) {
-                        $query->select('id', 'image_name as banner_image_url', 'amenity_id');
-                    }
-                ])->get();
-        }else{
+                        'activityImages' => function($query) {
+                            $query->select('id', 'image_name as banner_image_url', 'amenity_id');
+                        }
+                    ])->get();
+        } else {
             $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => $request->resort_id])->with([
-                    'activityImages' => function($query) {
-                        $query->select('id', 'image_name as banner_image_url', 'amenity_id');
-                    }
-                ])->get();
+                        'activityImages' => function($query) {
+                            $query->select('id', 'image_name as banner_image_url', 'amenity_id');
+                        }
+                    ])->get();
         }
 
         if (count($amenities) > 0) {
@@ -110,7 +138,7 @@ class ActivityController extends Controller {
      * @apiParam {String} user_id User id*.
      * @apiParam {String} resort_id Resort id*.
      * @apiParam {String} activity_id Amenity id*.
-     * @apiParam {String} booking_date Booking date (dd/mm/yyyy).
+     * @apiParam {String} booking_date Booking date (DD/MM/YYYY).
      * @apiParam {String} from_time From Time (24 hours format).
      * @apiParam {String} to_time To Time (24 hours format).
      * 
@@ -193,9 +221,9 @@ class ActivityController extends Controller {
         if (!$request->user_id) {
             return $this->sendErrorResponse("user id missing.", (object) []);
         }
-         if(!$this->bookBeforeCheckInDate($request->user_id)){
-              return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);   
-            }
+        if (!$this->bookBeforeCheckInDate($request->user_id)) {
+            return $this->sendErrorResponse("Sorry! You can not raised request before checkIn date or after checkout date.", (object) []);
+        }
         if (!$request->resort_id) {
             return $this->sendErrorResponse("resort id missing.", (object) []);
         }
@@ -260,7 +288,7 @@ class ActivityController extends Controller {
      * @apiGroup Activity
      * 
      * @apiParam {String} activity_id Activity id*.
-     * @apiParam {String} booking_date Booking date (yyyy/mm/dd).
+     * @apiParam {String} booking_date Booking date* (YYYY/MM/DD).
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
