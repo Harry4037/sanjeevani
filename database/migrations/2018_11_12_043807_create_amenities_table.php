@@ -18,6 +18,7 @@ class CreateAmenitiesTable extends Migration
             $table->bigInteger('resort_id')->default(0);
             $table->string('icon')->nullable();
             $table->string('name')->nullable();
+            $table->text('short_description')->nullable();
             $table->text('description')->nullable();
             $table->text('address')->nullable();
             $table->tinyInteger('is_active')->default(1);

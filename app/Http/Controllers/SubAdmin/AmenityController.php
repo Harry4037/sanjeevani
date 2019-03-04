@@ -78,6 +78,7 @@ class AmenityController extends Controller {
                 $amenity = new Amenity();
 
                 $amenity->name = $request->amenity_name;
+                $amenity->short_description = $request->amenity_short_description;
                 $amenity->description = $request->amenity_description;
                 $amenity->resort_id = $request->get("subadminResort");
                 $amenity->address = $request->address;
@@ -171,6 +172,7 @@ class AmenityController extends Controller {
                 return redirect()->route('subadmin.amenity.index')->withErrors($validator)->withInput();
             }
             $amenity->name = $request->amenity_name;
+            $amenity->short_description = $request->amenity_short_description;
             $amenity->description = $request->amenity_description;
 //            $amenity->resort_id = $request->resort_id;
             $amenity->address = $request->address;

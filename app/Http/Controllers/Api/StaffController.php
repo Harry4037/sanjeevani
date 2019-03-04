@@ -235,6 +235,7 @@ class StaffController extends Controller {
                 $amenitiesBookingCount = AmenityRequest::where(["amenity_id" => $amenitie->id, "booking_date" => date("Y-m-d")])->count();
                 $amenitiesDataArray[$z]["id"] = $amenitie->id;
                 $amenitiesDataArray[$z]["name"] = $amenitie->name;
+                $amenitiesDataArray[$z]["description"] = $amenitie->short_description;
                 $amenitiesDataArray[$z]["icon"] = $amenityImage ? $amenityImage->image_name : '';
                 $amenitiesDataArray[$z]["booking_count"] = $amenitiesBookingCount;
             }
