@@ -786,7 +786,7 @@ class UsersController extends Controller {
         $resorts = Resort::where(["is_active" => 1])->get();
         $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
         $resortRoom = ResortRoom::find($data->resort_room_id);
-        $healcarePackages = HealthcateProgram::where(["resort_id" => $data->package_id, "is_active" => 1])->get();
+        $healcarePackages = HealthcateProgram::where(["resort_id" => $data->resort_id, "is_active" => 1])->get();
         $BookingPeoples = BookingpeopleAccompany::where("booking_id", $data->id)->get();
         return view('admin.users.booking-edit', [
             'js' => $js,

@@ -16,6 +16,7 @@ use App\Models\AmenityTimeSlot;
 use App\Models\User;
 use App\Models\UserBookingDetail;
 use App\Models\Service;
+use App\Models\AmenityImage;
 
 class StaffController extends Controller {
 
@@ -230,10 +231,11 @@ class StaffController extends Controller {
                     ->get();
             $amenitiesDataArray = [];
             foreach ($amenities as $z => $amenitie) {
+                $amenityImage = AmenityImage::where("amenity_id", $amenitie->id)->first();
                 $amenitiesBookingCount = AmenityRequest::where(["amenity_id" => $amenitie->id, "booking_date" => date("Y-m-d")])->count();
                 $amenitiesDataArray[$z]["id"] = $amenitie->id;
                 $amenitiesDataArray[$z]["name"] = $amenitie->name;
-                $amenitiesDataArray[$z]["icon"] = "http://sanjeevani.dbaquincy.com/storage/amenity_images/QKYvWDznmpjcuowP9UsHMPKm6ruJ8h9pgCtN94Ub.jpeg";
+                $amenitiesDataArray[$z]["icon"] = $amenityImage ? $amenityImage->image_name : '';
                 $amenitiesDataArray[$z]["booking_count"] = $amenitiesBookingCount;
             }
 
