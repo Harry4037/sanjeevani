@@ -98,8 +98,14 @@ class Controller extends BaseController {
         $optionBuilder->setTimeToLive(60 * 20);
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
-        $notificationBuilder->setBody($message)
-                ->setSound('soundn.mp3');
+        if ($userType == 3) {
+            $notificationBuilder->setBody($message)
+                    ->setSound('default');
+        } else {
+            $notificationBuilder->setBody($message)
+                    ->setSound('soundn.mp3')
+                    ->setChannelId('RindexStaff');
+        }
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
