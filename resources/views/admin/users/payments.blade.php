@@ -103,7 +103,10 @@
        var discount = parseFloat($("#discount").val());
        var total_amount = parseFloat($("#total_amount").val());
        var paid = parseFloat($("#paid").val());
-       if(discount <= 100){
+       if(discount < 0){
+           $("#discount").val(0)
+           return false;
+       }else if(discount <= 100){
            var dis_price = parseFloat((total_amount - (total_amount * (discount/100))).toFixed(0));
            var max_limit = dis_price - paid;
            $("#discount_amount").val(dis_price);

@@ -244,6 +244,9 @@ var index = 0;
             amenity_name: {
                 required: true
             },
+            amenity_short_description: {
+                required: true
+            },
             address: {
                 required: true
             },

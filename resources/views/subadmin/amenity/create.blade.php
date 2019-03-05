@@ -224,6 +224,9 @@ $(document).ready(function () {
             amenity_name: {
                 required: true
             },
+            amenity_short_description: {
+                required: true
+            },
             address: {
                 required: true
             },
