@@ -35,7 +35,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Short Description</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
-                            <input type="text" class="form-control" name="amenity_short_description" id="amenity_short_description" placeholder="Amenity Short Description">
+                            <textarea type="text" class="form-control" name="amenity_short_description" id="amenity_short_description" placeholder="Amenity Short Description"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
