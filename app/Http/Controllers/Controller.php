@@ -95,16 +95,22 @@ class Controller extends BaseController {
         }
 
         $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60 * 20);
+        $optionBuilder->setTimeToLive(60 * 20)
+                ->setPriority('high')
+                ;
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         if ($userType == 3) {
             $notificationBuilder->setBody($message)
-                    ->setSound('default');
+                    ->setSound('default')
+                    ->setBadge($userNotificationCount)
+                    ;
         } else {
             $notificationBuilder->setBody($message)
                     ->setSound('soundn.mp3')
-                    ->setChannelId('RindexStaff');
+                    ->setChannelId('RindexStaff')
+                    ->setBadge($userNotificationCount)
+                    ;
         }
 
         $dataBuilder = new PayloadDataBuilder();
@@ -176,11 +182,14 @@ class Controller extends BaseController {
 
 
         $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60 * 20);
+        $optionBuilder->setTimeToLive(60 * 20)
+                ->setPriority('high')
+                ;
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
-                ->setSound('soundn.mp3');
+                ->setSound('soundn.mp3')
+                ;
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
