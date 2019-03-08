@@ -306,17 +306,17 @@ class ServiceController extends Controller {
             if (!$service) {
                 return $this->sendErrorResponse("Invalid service.", (object) []);
             }
-            $existingServiceRequest = ServiceRequest::where([
-                        "user_id" => $request->user_id,
-                        "resort_id" => $request->resort_id,
-                        "service_id" => $request->service_id,
-                    ])->where(function($q) {
-                        $q->where("request_status_id", 1)
-                                ->orWhere("request_status_id", 2);
-                    })->first();
-            if ($existingServiceRequest) {
-                return $this->sendErrorResponse("Request already raised.", (object) []);
-            } else {
+//            $existingServiceRequest = ServiceRequest::where([
+//                        "user_id" => $request->user_id,
+//                        "resort_id" => $request->resort_id,
+//                        "service_id" => $request->service_id,
+//                    ])->where(function($q) {
+//                        $q->where("request_status_id", 1)
+//                                ->orWhere("request_status_id", 2);
+//                    })->first();
+//            if ($existingServiceRequest) {
+//                return $this->sendErrorResponse("Request already raised.", (object) []);
+//            } else {
                 $userDetail = User::where("id", $request->user_id)->with([
                             'userBookingDetail' => function($query) {
                                 $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time, resort_room_no, room_type_name'));
@@ -346,7 +346,7 @@ class ServiceController extends Controller {
                 } else {
                     return $this->sendErrorResponse("Something went be wrong.", (object) []);
                 }
-            }
+//            }
         } catch (\Exception $ex) {
             return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
