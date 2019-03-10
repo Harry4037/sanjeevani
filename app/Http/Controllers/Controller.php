@@ -29,9 +29,10 @@ class Controller extends BaseController {
     }
 
     public function bookBeforeCheckInDate($userId) {
-        $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
-                ->where("check_in", "<=", date("Y-m-d H:i:s"))
+        $booking = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s"))
+                ->where("check_out", ">=", date("Y-m-d H:i:s"))
                 ->where("user_id", $userId)
+                ->orderBy("check_out", "ASC")
                 ->first();
         return $booking ? true : false;
     }

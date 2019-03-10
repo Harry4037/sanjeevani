@@ -42,7 +42,7 @@ class User extends Authenticatable {
     }
 
     public function userBookingDetail() {
-        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("check_out", ">=", date("Y-m-d H:i:s"))->orderBy("id","ASC");
+        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("check_out", ">=", date("Y-m-d H:i:s"))->orderBy("check_out","ASC");
     }
 
     public function mealOrders() {
