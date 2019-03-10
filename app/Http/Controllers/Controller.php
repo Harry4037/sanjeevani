@@ -86,6 +86,7 @@ class Controller extends BaseController {
     }
 
     public function androidPushNotification($userType, $title, $message, $token, $notificationType, $recordId, $userNotificationCount = 0, $statusType = 0) {
+
         if ($userType == '3') {
             //Fro customer
             config(['fcm.http.server_key' => 'AAAAZDeprME:APA91bHyGVMy54RTPTZKyj-gsF5L31IsHP0efkEm4RorsITp-yH2Syh-ftIuuaIu2zm7zZpJZp_CBmY4B33yahx1uZWG570_z6bJ9OxnuX2_Zzh9NFwVbtYKANXRh7SpsQZPq328Y-Jj']);

@@ -815,6 +815,7 @@ class ServiceController extends Controller {
      * 
      * @apiParam {String} user_id User id*.
      * @apiParam {String} record_id Record id*.
+     * @apiParam {String} resort_id Resort id*.
      * @apiParam {String} type type*(1 => for issues & housekeeping, 4 => for Meals).
      * @apiParam {String} comment comment*.
      * 
@@ -903,6 +904,7 @@ class ServiceController extends Controller {
                 $serviceRequest->questions = $request->comment;
                 if ($serviceRequest->save()) {
                     if ($serviceRequest->serviceDetail->name != NULL) {
+
                         $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
 
                         if ($resortUsers) {
@@ -910,19 +912,21 @@ class ServiceController extends Controller {
                                     ->where("device_token", "!=", "")
                                     ->whereIn("id", $resortUsers->toArray())
                                     ->pluck("device_token");
-
+                                    // dd($staffDeviceTokens);
                             if ($staffDeviceTokens) {
-                                $this->androidPushNotification(2, "Service Raised", $serviceRequest->serviceDetail->name." request raised from Room# " . $serviceRequest->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 1, $serviceRequest->serviceDetail->id, 0, 1);
+                                $this->androidPushNotification(2, "Service Not Approed", $serviceRequest->serviceDetail->name." request not approved from Room# " . $serviceRequest->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 1, $serviceRequest->serviceDetail->id, 0, 1);
                             }
 
-                            $this->generateNotification($request->user_id, "Service Not Approved", $serviceRequest->serviceDetail->name." request not approved by you", 1);
+                            // $this->generateNotification($request->user_id, "Service Not Approved", $serviceRequest->serviceDetail->name." request not approved by you", 1);
                         }
                     }
+                    
                     return $this->sendSuccessResponse("Service rejected successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
                 }
             } elseif ($request->type == 4) {
+
                 $serviceRequest = MealOrder::where(["id" => $request->record_id, "status" => 3, "is_active" => 1])->first();
                 if (!$serviceRequest) {
                     return $this->sendErrorResponse("Invalid service & order.", (object) []);
@@ -931,8 +935,21 @@ class ServiceController extends Controller {
                 $serviceRequest->accepted_by = 0;
 //                $serviceRequest->status = $request->comment;
                 if ($serviceRequest->save()) {
-//                    $staff = User::find($serviceRequest->accepted_by);
-//                    $this->androidPushNotification(2, "Meal Order Approved", "Great! your meal order approved by " . $request->user()->user_name, $staff->device_token, 1, $serviceRequest->id, 0, 2);
+                // if (1==1) {
+                    
+                    $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+
+                        if ($resortUsers) {
+                            $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1])
+                                    ->where("device_token", "!=", "")
+                                    ->whereIn("id", $resortUsers->toArray())
+                                    ->pluck("device_token");
+                                }
+                                
+                        if (count($staffDeviceTokens) > 0) {
+                            
+                            $this->androidPushNotification(2, "Meal Order Not Approved", "Meal order not approved from Room# " . $serviceRequest->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $serviceRequest->id, 1);
+                        }
                     return $this->sendSuccessResponse("Service rejected successfully", (object) []);
                 } else {
                     return $this->administratorResponse();
