@@ -608,7 +608,7 @@ class UserController extends Controller {
     }
 
     /**
-     * @api {get} /api/update-device-token Update Device Token
+     * @api {get} /api/get-checkin-detail Get Check-In detail
      * @apiHeader {String} Accept application/json. 
      * @apiName GetCheckInDetail
      * @apiGroup User
@@ -716,7 +716,7 @@ class UserController extends Controller {
             $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
                     ->where("check_out", ">=", date("Y-m-d H:i:s"))
                     ->where("is_cancelled", "!=", 1)
-                    ->orderBy("id", "ASC")
+                    ->orderBy("check_out", "ASC")
                     ->first();
             $adultNo = 0;
             $childNo = 0;
