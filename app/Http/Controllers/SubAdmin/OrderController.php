@@ -58,8 +58,10 @@ class OrderController extends Controller {
                     $stat = "Under Approval";
                 } elseif ($mealOrder->status == 4) {
                     $stat = "Completed";
-                } else {
+                } elseif ($mealOrder->status == 5) {
                     $stat = "Rejected";
+                }else {
+                    $stat = "Closed";
                 }
                 $dataArray[$key]['user_name'] = isset($mealOrder->userDetail->user_name) ? $mealOrder->userDetail->user_name : "";
                 $dataArray[$key]['invoice_id'] = $mealOrder->invoice_id;

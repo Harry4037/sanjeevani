@@ -45,6 +45,8 @@
                                 <span class='label label-success'>{{ "Completed" }}</span>
                                 @elseif($mealRequest->status == 5)
                                 <span class='label label-danger'>{{ "Not Resolved" }}</span>
+                                @elseif($mealRequest->status == 6)
+                                <span class='label label-danger'>{{ "Closed" }}</span>
                                 @endif
                             </div>
                         </div>
@@ -106,6 +108,7 @@
                                 <option value="3" @if($mealRequest->status == 3){{ "selected" }}@endif>Mark as complete/Under Approval</option>
                                 <option value="4" @if($mealRequest->status == 4){{ "selected" }}@endif>Approved/Completed</option>
                                 <option value="5" @if($mealRequest->status == 5){{ "selected" }}@endif>Rejected/Not Resolved</option>
+                                <option value="6" @if($mealRequest->status == 6){{ "selected" }}@endif>Close Request</option>
                             </select>
                         </div>
                     </div>

@@ -158,7 +158,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             startDate: new Date("{{ $healthcare->start_from }}"),
             @endif
             locale: {
-            format: 'YYYY/M/DD'
+            format: 'YYYY/MM/DD'
             }
     }, function (start, end, label) {
             $('#end_to').daterangepicker({
@@ -168,7 +168,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
                     startDate: start,
                     minDate: start,
                     locale: {
-                    format: 'YYYY/M/DD'
+                    format: 'YYYY/MM/DD'
                     }
             });
         });
@@ -181,7 +181,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             minDate: new Date("{{ $healthcare->end_to }}"),
             @endif
             locale: {
-            format: 'YYYY/M/DD'
+            format: 'YYYY/MM/DD'
             }
     });
     $(document).on("change", "#day_id", function () {

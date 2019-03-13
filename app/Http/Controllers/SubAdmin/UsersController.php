@@ -754,6 +754,7 @@ class UsersController extends Controller {
             if ($validator->fails()) {
                 return redirect()->route('subadmin.users.booking-edit', $data->id)->withErrors($validator)->withInput();
             }
+            $user = User::find($data->user_id);
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
 
@@ -788,6 +789,9 @@ class UsersController extends Controller {
                             $familyMember->save();
                         }
                     }
+                }
+                if ($user->device_token) {
+                    $this->androidBookingPushNotification("Booking Updated", "Your booking updated successfully", $user->device_token);
                 }
                 return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', 'booking updated successfully.');
             } else {
