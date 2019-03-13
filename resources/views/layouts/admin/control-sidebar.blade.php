@@ -109,7 +109,7 @@
 <li @if(in_array(Route::currentRouteName(), ['admin.meal.edit', 'admin.meal.add','admin.meal.index', 'admin.meal-category.add', 'admin.meal-category.edit', 'admin.meal-package.edit', 'admin.meal-package.add']))
 {{ "class=active" }}
 @endif>
-<a><i class="fa fa-cutlery"></i>Resturant Management<span class="fa fa-chevron-down"></span></a>
+<a><i class="fa fa-cutlery"></i>Restaurant Management<span class="fa fa-chevron-down"></span></a>
 <ul class="nav child_menu"  
 @if(in_array(Route::currentRouteName(), ['admin.meal.edit', 'admin.meal.add','admin.meal.index', 'admin.meal-category.add', 'admin.meal-category.edit', 'admin.meal-package.edit', 'admin.meal-package.add']))
 {{ "style=display:block;" }}

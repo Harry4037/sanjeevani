@@ -9,7 +9,7 @@
             <div class="x_title">
                 <h2>Booking Details ( {{ $user->user_name }} )</h2>
                 <div class="pull-right">
-                    <a class="btn btn-info" href="{{ route('admin.users.index') }}">Back</a>
+                    <a class="btn btn-info" href="{{ route('subadmin.users.index') }}">Back</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
