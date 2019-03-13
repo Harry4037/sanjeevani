@@ -242,10 +242,25 @@ class AmenityController extends Controller {
         if (!$request->to_time) {
             return $this->sendErrorResponse("To time is missing.", (object) []);
         }
+
+        $userBooking = User::with('userBookingDetail')->find($request->user_id);
         $amenity = Amenity::find($request->amenity_id);
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid amenity.", (object) []);
         }
+        if (isset($userBooking->userBookingDetail)) {
+            $user_book_date = Carbon::parse($userBooking->userBookingDetail->check_out)->format("Y/m/d");
+            $user_book_time = Carbon::parse($userBooking->userBookingDetail->check_out)->format("H:i:s");
+
+            if (strtotime($request->booking_date) > strtotime($user_book_date)) {
+                return $this->sendErrorResponse("You can't book amenity after your checkout date.", (object) []);
+            }
+
+            if (strtotime($request->to_time) > strtotime($user_book_time)) {
+                return $this->sendErrorResponse("You can't book amenity after checkout time.", (object) []);
+            }
+        }
+
         $book_date = Carbon::parse($request->booking_date);
         $timeSlot = AmenityTimeSlot::where(["from" => $request->from_time, "to" => $request->to_time])->first();
         if ($timeSlot) {
