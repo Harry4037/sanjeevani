@@ -42,7 +42,9 @@ class User extends Authenticatable {
     }
 
     public function userBookingDetail() {
-        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("check_out", ">=", date("Y-m-d H:i:s"))->orderBy("check_out","ASC");
+        return $this->hasOne('App\Models\UserBookingDetail', 'user_id')->where("check_out", ">=", date("Y-m-d H:i:s"))
+                        ->where("is_cancelled", "!=", 1)
+                        ->orderBy("check_out", "ASC");
     }
 
     public function mealOrders() {
@@ -56,8 +58,8 @@ class User extends Authenticatable {
     public function getUserTypeIdAttribute($value) {
         $booking = UserBookingDetail::where("check_out", ">=", date("Y-m-d H:i:s"))
                     // ->where("check_in", "<=", date("Y-m-d H:i:s"))
-                ->where("user_id", $this->id)
-                ->orderBy("id","ASC")
+                ->where("is_cancelled", "!=", 1)
+                ->orderBy("check_out", "ASC")
                 ->first();
 
         if ($value == 3) {
