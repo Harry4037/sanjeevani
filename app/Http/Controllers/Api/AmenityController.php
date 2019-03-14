@@ -254,10 +254,12 @@ class AmenityController extends Controller {
 
             if (strtotime($request->booking_date) > strtotime($user_book_date)) {
                 return $this->sendErrorResponse("You can't book amenity after your checkout date.", (object) []);
-            }
-
-            if (strtotime($request->to_time) > strtotime($user_book_time)) {
-                return $this->sendErrorResponse("You can't book amenity after checkout time.", (object) []);
+            }elseif(strtotime($request->booking_date) == strtotime($user_book_date)){
+                 if (strtotime($request->to_time) > strtotime($user_book_time)) {
+                    return $this->sendErrorResponse("You can't book amenity after checkout time.", (object) []);
+                }   
+            }else{
+                
             }
         }
 
