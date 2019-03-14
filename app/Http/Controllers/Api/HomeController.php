@@ -696,7 +696,7 @@ class HomeController extends Controller {
                     ])
                     ->with([
                         'userBookingDetail' => function($query) {
-                            $query->selectRaw(DB::raw('id, room_type_id, check_in_pin, check_out_pin, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                            $query->selectRaw(DB::raw('id, room_type_id, check_in_pin, check_out_pin, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, check_out, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out_date, DATE_FORMAT(check_out, "%r") as check_out_time'));
                         }
                     ])
                     ->first();
