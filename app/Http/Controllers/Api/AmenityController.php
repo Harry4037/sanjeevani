@@ -398,7 +398,7 @@ class AmenityController extends Controller {
         if (strtotime($request->booking_date) == strtotime(date("Y-m-d"))) {
             $query->where("from", ">", date("H:i:s"));
         }
-        $amenityTimeSlots = $query->get();
+        $amenityTimeSlots = $query->orderby("from", "ASC")->get();
         if ($amenityTimeSlots) {
             $slotArray = [];
             foreach ($amenityTimeSlots as $key => $amenityTimeSlot) {

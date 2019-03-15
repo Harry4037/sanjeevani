@@ -70,6 +70,7 @@
                                 <option value="3">Mark as complete/Under Approval</option>
                                 <option value="4">Approved/Completed</option>
                                 <option value="5">Rejected/Not Resolved</option>
+                                <option value="6">Closed</option>
                             </select>
                         </div>
                     </div>

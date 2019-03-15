@@ -498,6 +498,7 @@ class UsersController extends Controller {
         } else {
             $userResort = UserBookingDetail::where("user_booking_details.user_id", $user->id)
                     ->join("resorts", "user_booking_details.resort_id", "=", "resorts.id")
+                    ->where("resorts.deleted_at",null)
                     ->pluck('resorts.name', 'resorts.id')
                     ->all();
             return view('admin.users.resort-payments', compact('userResort', 'user'));

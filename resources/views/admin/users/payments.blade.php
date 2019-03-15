@@ -98,6 +98,15 @@
 @section('script')
 <script>
     $(document).ready(function () {
+    $(document).on("keyup click", "#amount", function(){
+       var amount_n = parseFloat($("#amount").val());
+       if(amount_n < 0){
+           $("#amount").val(0)
+           return false;
+       }else{
+           return true;
+       }
+   });
    
    $(document).on("keyup click", "#discount", function(){
        var discount = parseFloat($("#discount").val());

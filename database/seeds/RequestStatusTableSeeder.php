@@ -11,7 +11,7 @@ class RequestStatusTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        $typeArray = ["New", "Accepted", "Under Approval", "Completed","Not Resolved"];
+        $typeArray = ["New", "Accepted", "Under Approval", "Completed","Not Resolved", "Closed"];
         foreach ($typeArray as $type) {
             DB::table('service_request_statuses')->insert([
                 'request_status' => $type,
