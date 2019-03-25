@@ -160,7 +160,7 @@
             singleClasses: "picker_2",
             startDate: new Date("{{ $data->check_in }}"),
             locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
+                format: 'YYYY/MM/DD hh:mm:ss A'
             }
         }, function (start, end, label) {
             $('#check_out').daterangepicker({
@@ -169,7 +169,7 @@
                 singleClasses: "picker_2",
                 startDate: start,
                 locale: {
-                    format: 'YYYY/M/DD hh:mm:ss A'
+                    format: 'YYYY/MM/DD hh:mm:ss A'
                 }});
         });
 
@@ -179,7 +179,7 @@
             singleClasses: "picker_2",
             startDate: new Date("{{ $data->check_out }}"),
             locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
+                format: 'YYYY/MM/DD hh:mm:ss A'
             }});
         @endif
 

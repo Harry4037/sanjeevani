@@ -61,10 +61,10 @@
 <a href="{{ route('admin.service.index') }}"><i class="fa fa-gears"></i>Services Management</a>
 </li>
 <li>
-  <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i>ServiceRequest Management</a>
+  <a href="{{ route('admin.order-request.index') }}"><i class="fa fa-hand-scissors-o"></i>Service Request Management</a>
 </li>
 <li>
-  <a href="{{ route('admin.amenity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
+  <a href="{{ route('admin.amenity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>Amenity Request Management</a>
 </li>
 <!--<li>
   <a href="{{ route('admin.activity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
@@ -129,7 +129,7 @@
 <li @if(in_array(Route::currentRouteName(), ['admin.meal-package.edit', 'admin.meal-package.add']))
 {{ "class=current-page" }}
 @endif
-><a href="{{ route('admin.meal-package.index') }}">MealPackage Management</a>
+><a href="{{ route('admin.meal-package.index') }}">Meal Package Management</a>
 </li>
 </ul>
 </li>

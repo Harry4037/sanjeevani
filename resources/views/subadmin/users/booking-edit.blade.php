@@ -162,7 +162,7 @@
             startDate: new Date("{{ $data->check_in }}"),
 //            minDate: new Date("{{ $data->check_in }}"),
             locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
+                format: 'YYYY/MM/DD hh:mm:ss A'
             }
         }, function (start, end, label) {
             $('#check_out').daterangepicker({
@@ -172,7 +172,7 @@
                 startDate: start,
                 minDate: start,
                 locale: {
-                    format: 'YYYY/M/DD hh:mm:ss A'
+                    format: 'YYYY/MM/DD hh:mm:ss A'
                 }});
         });
 
@@ -183,7 +183,7 @@
             startDate: new Date("{{ $data->check_out }}"),
             minDate: new Date("{{ $data->check_in }}"),
             locale: {
-                format: 'YYYY/M/DD hh:mm:ss A'
+                format: 'YYYY/MM/DD hh:mm:ss A'
             }});
 @endif
         $(document).on("click", "#add_more_member", function () {

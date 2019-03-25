@@ -63,13 +63,13 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Start From</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input readonly value="{{ old('start_from') }}" type="text" class="form-control" name="start_from" id="start_from" placeholder="Start From">
+                            <input readonly  type="text" class="form-control" name="start_from" id="start_from" placeholder="Start From">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">End To</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input readonly value="{{ old('end_to') }}" type="text" class="form-control" name="end_to" id="end_to" placeholder="End To">
+                            <input readonly  type="text" class="form-control" name="end_to" id="end_to" placeholder="End To">
                         </div>
                     </div>
                     <div class="form-group">
