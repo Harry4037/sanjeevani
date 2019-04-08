@@ -136,9 +136,9 @@ class Controller extends BaseController {
         return $downstreamResponse;
     }
 
-    public function sendOtp($mobileNumber, $otp) {
+    public function sendOtp($mobileNumber, $otp, $key) {
         $url = 'http://sms.hybrid91.com/submitsms.jsp';
-        $OTPMessage = "Dear Customer, your One Time Verification (OTP) code is " . $otp . ".";
+        $OTPMessage = "<#> Dear Customer, your One Time Verification (OTP) code is " . $otp . ". ".$key;
         $fields = array(
 //            'user' => 'Rizilian',
             'user' => 'Dintex',
