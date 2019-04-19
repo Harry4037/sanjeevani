@@ -1774,6 +1774,348 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/message-list",
+    "title": "Chat message list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetChatMessageList",
+    "group": "Chat",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sender_id",
+            "description": "<p>Sender id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "receiver_id",
+            "description": "<p>Receiver id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Messages list.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>[].</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": false,\n            \"status_code\": 404,\n            \"message\": \"Messages list.\",\n            \"data\": [\n                {\n                    \"id\": 1,\n                    \"sender_id\": 93,\n                    \"receiver_id\": 94,\n                    \"message\": \"Hi\",\n                    \"is_view\": 0,\n                    \"created_at\": \"2019-04-18 18:10:11\",\n                    \"updated_at\": \"2019-04-18 18:10:11\",\n                    \"sender_detail\": {\n                        \"id\": 93,\n                        \"user_name\": \"SHYAM SINGH\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    },\n                    \"receiver_detail\": {\n                        \"id\": 94,\n                        \"user_name\": \"HONEY KHERA\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    }\n                },\n                {\n                    \"id\": 2,\n                    \"sender_id\": 94,\n                    \"receiver_id\": 93,\n                    \"message\": \"hello\",\n                    \"is_view\": 0,\n                    \"created_at\": \"2019-04-18 18:10:18\",\n                    \"updated_at\": \"2019-04-18 18:10:18\",\n                    \"sender_detail\": {\n                        \"id\": 94,\n                        \"user_name\": \"HONEY KHERA\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    },\n                    \"receiver_detail\": {\n                        \"id\": 93,\n                        \"user_name\": \"SHYAM SINGH\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    }\n                },\n                {\n                    \"id\": 3,\n                    \"sender_id\": 93,\n                    \"receiver_id\": 94,\n                    \"message\": \"How are you?\",\n                    \"is_view\": 0,\n                    \"created_at\": \"2019-04-18 18:10:42\",\n                    \"updated_at\": \"2019-04-18 18:10:42\",\n                    \"sender_detail\": {\n                        \"id\": 93,\n                        \"user_name\": \"SHYAM SINGH\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    },\n                    \"receiver_detail\": {\n                        \"id\": 94,\n                        \"user_name\": \"HONEY KHERA\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    }\n                },\n                {\n                    \"id\": 4,\n                    \"sender_id\": 94,\n                    \"receiver_id\": 93,\n                    \"message\": \"I am fine.\",\n                    \"is_view\": 0,\n                    \"created_at\": \"2019-04-18 18:10:51\",\n                    \"updated_at\": \"2019-04-18 18:10:51\",\n                    \"sender_detail\": {\n                        \"id\": 94,\n                        \"user_name\": \"HONEY KHERA\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    },\n                    \"receiver_detail\": {\n                        \"id\": 93,\n                        \"user_name\": \"SHYAM SINGH\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    }\n                },\n                {\n                    \"id\": 5,\n                    \"sender_id\": 94,\n                    \"receiver_id\": 93,\n                    \"message\": \"and you\",\n                    \"is_view\": 0,\n                    \"created_at\": \"2019-04-18 18:10:57\",\n                    \"updated_at\": \"2019-04-18 18:10:57\",\n                    \"sender_detail\": {\n                        \"id\": 94,\n                        \"user_name\": \"HONEY KHERA\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    },\n                    \"receiver_detail\": {\n                        \"id\": 93,\n                        \"user_name\": \"SHYAM SINGH\",\n                        \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                    }\n                }\n            ]\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SenderIdMissing",
+            "description": "<p>The Sender id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ReceiverIdMissing",
+            "description": "<p>The Receiver id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Sender id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Receiver id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ChatController.php",
+    "groupTitle": "Chat"
+  },
+  {
+    "type": "get",
+    "url": "/api/chat-user-list",
+    "title": "User list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetChatUserList",
+    "group": "Chat",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Messages user list.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>[].</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": false,\n            \"status_code\": 404,\n            \"message\": \"Messages user list.\",\n            \"data\": [\n                {\n                    \"id\": 90,\n                    \"user_name\": \"AKHIL PRATAP SINGH\",\n                    \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                },\n                {\n                    \"id\": 94,\n                    \"user_name\": \"HONEY KHERA\",\n                    \"profile_pic_path\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n                }\n            ]\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"User id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ChatController.php",
+    "groupTitle": "Chat"
+  },
+  {
+    "type": "post",
+    "url": "/api/send-message",
+    "title": "Send Message",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostSendMessage",
+    "group": "Chat",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sender_id",
+            "description": "<p>Sender id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "receiver_id",
+            "description": "<p>Receiver id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Message*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Message send successfully.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>[].</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": true,\n            \"status_code\": 200,\n            \"message\": \"Message send successfully.\",\n            \"data\": {}\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SenderIdMissing",
+            "description": "<p>The Sender id was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ReceiverMissing",
+            "description": "<p>The Receiver was missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "MessageMissing",
+            "description": "<p>The Message was missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Sender id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Receiver id missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Message missing.\",\n \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ChatController.php",
+    "groupTitle": "Chat"
+  },
+  {
+    "type": "get",
     "url": "/api/health-program-listing",
     "title": "Healthcare programs listing & details",
     "header": {
@@ -3570,6 +3912,159 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/reject-service-request",
+    "title": "Reject service Request",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostApproveServicerequest",
+    "group": "Services",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "record_id",
+            "description": "<p>Record id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>type*(1 =&gt; for issues &amp; housekeeping, 4 =&gt; for Meals).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>comment*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Service approved successfully.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>blank object.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"Service rejected successfully.\",\n\"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>The user id is missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UnauthorizedUser",
+            "description": "<p>The user is unauthorized.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResordIdMissing",
+            "description": "<p>The record id is missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n {\n     \"status\": false,\n     \"status_code\": 404,\n     \"message\": \"User id missing.\",\n     \"data\": {}\n }",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Unauthorized user.\",\n    \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"record id missing.\",\n    \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/ServiceController.php",
+    "groupTitle": "Services"
+  },
+  {
+    "type": "post",
     "url": "/api/approve-service-request",
     "title": "Approve service Request",
     "header": {
@@ -3699,152 +4194,6 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"service id missing.\",\n    \"data\": {}\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/ServiceController.php",
-    "groupTitle": "Services"
-  },
-  {
-    "type": "post",
-    "url": "/api/reject-service-request",
-    "title": "Reject service Request",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>Users unique access-token.</p>"
-          },
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Accept",
-            "description": "<p>application/json.</p>"
-          }
-        ]
-      }
-    },
-    "name": "PostApproveServicerequest",
-    "group": "Services",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "user_id",
-            "description": "<p>User id*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "record_id",
-            "description": "<p>Record id*.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>type*(1 =&gt; for issues &amp; housekeeping, 4 =&gt; for Meals).</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "comment",
-            "description": "<p>comment*.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "success",
-            "description": "<p>true</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status_code",
-            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Service approved successfully.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "data",
-            "description": "<p>blank object.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": true,\n\"message\": \"Service rejected successfully.\",\n\"data\": {}\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserIdMissing",
-            "description": "<p>The user id is missing.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UnauthorizedUser",
-            "description": "<p>The user is unauthorized.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "ResordIdMissing",
-            "description": "<p>The record id is missing.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n {\n     \"status\": false,\n     \"status_code\": 404,\n     \"message\": \"User id missing.\",\n     \"data\": {}\n }",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"Unauthorized user.\",\n    \"data\": {}\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"status\": false,\n    \"status_code\": 404,\n    \"message\": \"record id missing.\",\n    \"data\": {}\n}",
           "type": "json"
         }
       ]
@@ -4824,8 +5173,8 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/update-device-token",
-    "title": "Update Device Token",
+    "url": "/api/get-checkin-detail",
+    "title": "Get Check-In detail",
     "header": {
       "fields": {
         "Header": [
