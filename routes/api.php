@@ -95,6 +95,9 @@ Route::namespace("Api")->group(function () {
 
     Route::get('nearby-list-detail', 'NearbyController@nearbyListDetail');
 
+    Route::post('send-message', 'ChatController@sendMessage');
+    Route::get('message-list', 'ChatController@messageList');
+    Route::get('chat-user-list', 'ChatController@chatUserList');
 
 
     Route::middleware('auth:api')->group(function () {
