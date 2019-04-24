@@ -23,6 +23,7 @@ class AuthController extends Controller {
      * @apiGroup Auth
      * 
      * @apiParam {String} mobile_number User unique mobile number*.
+     * @apiParam {String} email_id Email User email id.
      * @apiParam {String} user_type User type*. (Staff member => 2 or Customer => 3).
      * 
      * @apiSuccess {String} success true 

@@ -29,8 +29,10 @@ Route::namespace("Api")->group(function () {
 
 
     Route::get('get-checkin-detail', 'UserController@getCheckInDetail');
-    
+
     //City State list
+    Route::get('country-list', 'LocationController@countrylist');
+
     Route::get('state-city-list', 'UserController@stateCityList');
     //Sent OTP
     Route::post('send-otp', 'AuthController@signup');
@@ -101,8 +103,8 @@ Route::namespace("Api")->group(function () {
 
 
     Route::middleware('auth:api')->group(function () {
-            Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
-            
+        Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
+
         //Raise service request (by user)
         Route::post('raise-service-request', 'ServiceController@raiseServiceRequest');
 
@@ -157,7 +159,7 @@ Route::namespace("Api")->group(function () {
         Route::post('update-profile', 'UserController@updateProfile');
 
         Route::post('change-password', 'UserController@changesPassword');
-        
+
         //Reject service order & request (by user)
         Route::post('reject-service-request', 'ServiceController@rejectServiceRequest');
     });

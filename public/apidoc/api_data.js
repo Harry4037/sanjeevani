@@ -1034,6 +1034,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "email_id",
+            "description": "<p>Email User email id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "user_type",
             "description": "<p>User type*. (Staff member =&gt; 2 or Customer =&gt; 3).</p>"
           }
@@ -2599,6 +2606,70 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "app/Http/Controllers/Api/HomeController.php",
     "groupTitle": "Home"
+  },
+  {
+    "type": "get",
+    "url": "/api/country-list",
+    "title": "Country list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "GetCountryList",
+    "group": "Master_Api",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Country list.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>[].</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": true,\n            \"status_code\": 200,\n            \"message\": \"country list\",\n            \"data\": {\n                \"countries\": [\n                    {\n                        \"id\": 1,\n                        \"conutry\": \"India\",\n                        \"calling_code\": \"+91\",\n                        \"created_by\": \"0\",\n                        \"updated_by\": \"0\",\n                        \"is_active\": 1,\n                        \"created_at\": null,\n                        \"updated_at\": null\n                    },\n                    {\n                        \"id\": 2,\n                        \"conutry\": \"USA\",\n                        \"calling_code\": \"+1\",\n                        \"created_by\": \"0\",\n                        \"updated_by\": \"0\",\n                        \"is_active\": 1,\n                        \"created_at\": null,\n                        \"updated_at\": null\n                    }\n                ]\n            }\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/LocationController.php",
+    "groupTitle": "Master_Api"
   },
   {
     "type": "get",

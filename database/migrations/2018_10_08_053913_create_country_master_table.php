@@ -16,6 +16,7 @@ class CreateCountryMasterTable extends Migration
         Schema::create('country_master', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('conutry')->nullable();
+            $table->string('calling_code')->nullable();
             $table->string('created_by')->default(0);
             $table->string('updated_by')->default(0);
             $table->tinyInteger('is_active')->default(1);
