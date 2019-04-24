@@ -479,11 +479,12 @@ class UserController extends Controller {
     }
 
     /**
-     * @api {get} /api/state-city-list State City list
+     * @api {post} /api/state-city-list State City list
      * @apiHeader {String} Accept application/json. 
-     * @apiName GetStateCity
+     * @apiName PostStateCity
      * @apiGroup User
      * 
+     * @apiParam {String} country_id Country id*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -531,7 +532,8 @@ class UserController extends Controller {
      * 
      */
     public function stateCityList(Request $request) {
-        $states = StateMaster::all();
+        
+        $states = StateMaster::where("countryId", $request->country_id)->get();
         $dataArray = [];
         if ($states) {
             foreach ($states as $key => $state) {

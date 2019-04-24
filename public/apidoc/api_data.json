@@ -5320,70 +5320,6 @@
     "groupTitle": "User"
   },
   {
-    "type": "get",
-    "url": "/api/state-city-list",
-    "title": "State City list",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Accept",
-            "description": "<p>application/json.</p>"
-          }
-        ]
-      }
-    },
-    "name": "GetStateCity",
-    "group": "User",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "success",
-            "description": "<p>true</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status_code",
-            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>state and city listing.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "data",
-            "description": "<p>state city array.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"state and city listing\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"state_name\": \"Andaman & Nicobar Islands\",\n              \"cities\": [\n                  {\n                      \"id\": 93,\n                      \"city_name\": \"Carnicobar\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 149,\n                      \"city_name\": \"Diglipur\",\n                      \"state\": null\n*                   },\n                  {\n                      \"id\": 174,\n                      \"city_name\": \"Ferrargunj\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 220,\n                      \"city_name\": \"Hut Bay\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 331,\n                      \"city_name\": \"Mayabander\",\n                      \"state\": null\n                  },\n.........",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "app/Http/Controllers/Api/UserController.php",
-    "groupTitle": "User"
-  },
-  {
     "type": "post",
     "url": "/api/change-password",
     "title": "Change User Password",
@@ -5693,6 +5629,83 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n \"status\": false,\n \"message\": \"Invalid user.\",\n \"data\": []\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/api/state-city-list",
+    "title": "State City list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "PostStateCity",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "country_id",
+            "description": "<p>Country id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>state and city listing.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>state city array.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"state and city listing\",\n      \"data\": [\n          {\n              \"id\": 1,\n              \"state_name\": \"Andaman & Nicobar Islands\",\n              \"cities\": [\n                  {\n                      \"id\": 93,\n                      \"city_name\": \"Carnicobar\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 149,\n                      \"city_name\": \"Diglipur\",\n                      \"state\": null\n*                   },\n                  {\n                      \"id\": 174,\n                      \"city_name\": \"Ferrargunj\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 220,\n                      \"city_name\": \"Hut Bay\",\n                      \"state\": null\n                  },\n                  {\n                      \"id\": 331,\n                      \"city_name\": \"Mayabander\",\n                      \"state\": null\n                  },\n.........",
           "type": "json"
         }
       ]

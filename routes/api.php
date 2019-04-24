@@ -33,7 +33,7 @@ Route::namespace("Api")->group(function () {
     //City State list
     Route::get('country-list', 'LocationController@countrylist');
 
-    Route::get('state-city-list', 'UserController@stateCityList');
+    Route::post('state-city-list', 'UserController@stateCityList');
     //Sent OTP
     Route::post('send-otp', 'AuthController@signup');
     //Verify OTP
