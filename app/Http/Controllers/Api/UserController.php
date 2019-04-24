@@ -17,6 +17,7 @@ use App\Models\UserMembership;
 use App\Models\UserBookingDetail;
 use App\Models\Resort;
 use App\Models\Cart;
+use App\Models\CountryMaster;
 
 class UserController extends Controller {
 
@@ -38,67 +39,67 @@ class UserController extends Controller {
      * @apiSuccess {JSON}   data blank array.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "User check-in successfully.",
-            "data": {
-                "id": 149,
-                "discount": 10,
-                "salutation_id": 0,
-                "user_name": "Om",
-                "first_name": "Om",
-                "mid_name": "",
-                "last_name": "",
-                "gender": null,
-                "user_type_id": 3,
-                "designation_id": 0,
-                "department_id": 0,
-                "city_id": 0,
-                "language_id": 0,
-                "email_id": "om@mail.com",
-                "alternate_email_id": null,
-                "screen_name": "",
-                "date_of_joining": null,
-                "authority_id": "0",
-                "user_id_RA": null,
-                "date_of_birth": null,
-                "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
-                "id_card": null,
-                "is_user_loked": 0,
-                "mobile_number": "8077575835",
-                "other_contact_number": null,
-                "address1": "",
-                "address2": null,
-                "address3": null,
-                "pincode": "",
-                "secuity_question": null,
-                "secuity_questio_answer": null,
-                "ref_time_zone_id": null,
-                "login_expiry_date": null,
-                "other_info": null,
-                "password": "$2y$10$EeEc0jxjDXyE/rH0Ri20lObAg2JjpMBHeOFsYQLo.zmgzG4oF1K/.",
-                "remember_token": null,
-                "aadhar_id": "http://127.0.0.1:1234/storage/aadhar_id/lH9ghKYDYDDrBYstCe7IlJyJbCwVttZuWa0DC7jc.png",
-                "other_aadhar_id": "http://127.0.0.1:1234/storage/other_aadhar_id/oHBhMKEU8XBLpliH5ja4nRW465iolmRcRRnJg1W6.png",
-                "voter_id": "http://127.0.0.1:1234/img/no-image.jpg",
-                "authorise_amenities_id": null,
-                "is_service_authorise": 0,
-                "is_meal_authorise": 0,
-                "device_token": "153dsf45dsf4d5s31f32ds1f32ds1f32ds1f32s",
-                "device_type": "Android",
-                "device_id": null,
-                "is_active": 1,
-                "domain_id": 0,
-                "otp": "2062",
-                "oath_token": null,
-                "created_by": "1",
-                "updated_by": "1",
-                "created_at": "2019-03-04 10:18:06",
-                "updated_at": "2019-03-04 12:03:48",
-                "is_checked_in": true
-            }
-        }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "User check-in successfully.",
+      "data": {
+      "id": 149,
+      "discount": 10,
+      "salutation_id": 0,
+      "user_name": "Om",
+      "first_name": "Om",
+      "mid_name": "",
+      "last_name": "",
+      "gender": null,
+      "user_type_id": 3,
+      "designation_id": 0,
+      "department_id": 0,
+      "city_id": 0,
+      "language_id": 0,
+      "email_id": "om@mail.com",
+      "alternate_email_id": null,
+      "screen_name": "",
+      "date_of_joining": null,
+      "authority_id": "0",
+      "user_id_RA": null,
+      "date_of_birth": null,
+      "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
+      "id_card": null,
+      "is_user_loked": 0,
+      "mobile_number": "8077575835",
+      "other_contact_number": null,
+      "address1": "",
+      "address2": null,
+      "address3": null,
+      "pincode": "",
+      "secuity_question": null,
+      "secuity_questio_answer": null,
+      "ref_time_zone_id": null,
+      "login_expiry_date": null,
+      "other_info": null,
+      "password": "$2y$10$EeEc0jxjDXyE/rH0Ri20lObAg2JjpMBHeOFsYQLo.zmgzG4oF1K/.",
+      "remember_token": null,
+      "aadhar_id": "http://127.0.0.1:1234/storage/aadhar_id/lH9ghKYDYDDrBYstCe7IlJyJbCwVttZuWa0DC7jc.png",
+      "other_aadhar_id": "http://127.0.0.1:1234/storage/other_aadhar_id/oHBhMKEU8XBLpliH5ja4nRW465iolmRcRRnJg1W6.png",
+      "voter_id": "http://127.0.0.1:1234/img/no-image.jpg",
+      "authorise_amenities_id": null,
+      "is_service_authorise": 0,
+      "is_meal_authorise": 0,
+      "device_token": "153dsf45dsf4d5s31f32ds1f32ds1f32ds1f32s",
+      "device_type": "Android",
+      "device_id": null,
+      "is_active": 1,
+      "domain_id": 0,
+      "otp": "2062",
+      "oath_token": null,
+      "created_by": "1",
+      "updated_by": "1",
+      "created_at": "2019-03-04 10:18:06",
+      "updated_at": "2019-03-04 12:03:48",
+      "is_checked_in": true
+      }
+      }
      *  
      * @apiError UserIdMissing The user id missing.
      * @apiErrorExample Error-Response:
@@ -333,6 +334,13 @@ class UserController extends Controller {
                 $userData = User::select('id', 'user_name', 'first_name', 'last_name', 'email_id', 'profile_pic_path', 'address1', 'pincode', 'city_id')->find($user->id);
                 $userMembership = UserMembership::where("user_id", $user->id)->first();
                 $cityState = CityMaster::find($userData->city_id);
+                if (isset($cityState->state->countryId)) {
+                    $country = CountryMaster::find($cityState->state->countryId);
+                    $userData['country'] = $country->conutry;
+                } else {
+                    $userData['country'] = "";
+                }
+
                 $userData['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
                 $userData['city'] = isset($cityState->city) ? $cityState->city : "";
                 $userData['membership_id'] = isset($userMembership->membership_id) ? $userMembership->membership_id : "";
@@ -532,7 +540,7 @@ class UserController extends Controller {
      * 
      */
     public function stateCityList(Request $request) {
-        
+
         $states = StateMaster::where("countryId", $request->country_id)->get();
         $dataArray = [];
         if ($states) {
@@ -624,85 +632,85 @@ class UserController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "User.",
-            "data": {
-                "checkin_detail": {
-                    "id": 149,
-                    "cart_count": 0,
-                    "user_name": "Om",
-                    "first_name": "Om",
-                    "mid_name": "",
-                    "last_name": "",
-                    "email_id": "om@mail.com",
-                    "user_type_id": 3,
-                    "is_checked_in": false,
-                    "address": "",
-                    "state": "",
-                    "city": "",
-                    "pincode": "",
-                    "screen_name": "",
-                    "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
-                    "mobile_number": "8077575835",
-                    "source_name": "GOIBO",
-                    "source_id": "GOIBO123456",
-                    "resort_room_no": "T-2",
-                    "room_type": "Tent",
-                    "check_in_pin": 7015,
-                    "check_out_pin": 3336,
-                    "check_in_date": "04-Mar-2019",
-                    "check_in_time": "12:00 AM",
-                    "check_out_date": "30-Mar-2019",
-                    "check_out_time": "10:00 AM",
-                    "booking_id": "GOIBO123456",
-                    "no_of_guest": "1 Adult and 1 Child",
-                    "guest_detail": [
-                        {
-                            "id": 23,
-                            "person_name": "Ankit",
-                            "person_age": "10",
-                            "person_type": "Child"
-                        },
-                        {
-                            "id": 24,
-                            "person_name": "Anshu",
-                            "person_age": "25",
-                            "person_type": "Adult"
-                        }
-                    ],
-                    "membership": {
-                        "membership_id": "ABCDE",
-                        "valid_from": "04-Mar-2019 12:00 AM",
-                        "valid_till": "07-Mar-2019 12:00 AM"
-                    },
-                    "resort": {
-                        "id": 2,
-                        "name": "Dintex",
-                        "description": "<p>Rindex Media Pvt. limited, brings to you Sanjeevani, a naturopathy Centre cradled in the valley of nature, in the beautiful city of Dehradun. Sanjeevani is a centre that not only encompasses the treatment of diabetes but also strives to achieve and helps you maintain optimal levels of health with the help of highly professional staff. The various programs and services such as yoga, meditation, naturopathy, treating diabetes are designed to suit individual needs.</p>\r\n\r\n<p>At the Centre, you&rsquo;ll get the chance to detox your body&rsquo;s equilibrium and feel the eternal bliss of wellness.As such, our holistic approach sets new standards and we are prepared to meet the challenging health issues of today&rsquo;s Indian society/lifestyle.</p>",
-                        "amenities": "1#2#3#4#5#6#7#8#10",
-                        "other_amenities": "Other Amenity",
-                        "contact_number": "8588936238",
-                        "other_contact_number": null,
-                        "address_1": "U-701",
-                        "address_2": null,
-                        "address_3": null,
-                        "pincode": 201301,
-                        "city_id": 181,
-                        "latitude": 28.5355,
-                        "longitude": 77.391,
-                        "is_active": 1,
-                        "domain_id": 0,
-                        "created_by": "1",
-                        "updated_by": "1",
-                        "created_at": "2018-12-20 21:19:14",
-                        "updated_at": "2019-02-21 08:12:15",
-                        "deleted_at": null
-                    }
-                }
-            }
-        }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "User.",
+      "data": {
+      "checkin_detail": {
+      "id": 149,
+      "cart_count": 0,
+      "user_name": "Om",
+      "first_name": "Om",
+      "mid_name": "",
+      "last_name": "",
+      "email_id": "om@mail.com",
+      "user_type_id": 3,
+      "is_checked_in": false,
+      "address": "",
+      "state": "",
+      "city": "",
+      "pincode": "",
+      "screen_name": "",
+      "profile_pic_path": "http://127.0.0.1:1234/img/no-image.jpg",
+      "mobile_number": "8077575835",
+      "source_name": "GOIBO",
+      "source_id": "GOIBO123456",
+      "resort_room_no": "T-2",
+      "room_type": "Tent",
+      "check_in_pin": 7015,
+      "check_out_pin": 3336,
+      "check_in_date": "04-Mar-2019",
+      "check_in_time": "12:00 AM",
+      "check_out_date": "30-Mar-2019",
+      "check_out_time": "10:00 AM",
+      "booking_id": "GOIBO123456",
+      "no_of_guest": "1 Adult and 1 Child",
+      "guest_detail": [
+      {
+      "id": 23,
+      "person_name": "Ankit",
+      "person_age": "10",
+      "person_type": "Child"
+      },
+      {
+      "id": 24,
+      "person_name": "Anshu",
+      "person_age": "25",
+      "person_type": "Adult"
+      }
+      ],
+      "membership": {
+      "membership_id": "ABCDE",
+      "valid_from": "04-Mar-2019 12:00 AM",
+      "valid_till": "07-Mar-2019 12:00 AM"
+      },
+      "resort": {
+      "id": 2,
+      "name": "Dintex",
+      "description": "<p>Rindex Media Pvt. limited, brings to you Sanjeevani, a naturopathy Centre cradled in the valley of nature, in the beautiful city of Dehradun. Sanjeevani is a centre that not only encompasses the treatment of diabetes but also strives to achieve and helps you maintain optimal levels of health with the help of highly professional staff. The various programs and services such as yoga, meditation, naturopathy, treating diabetes are designed to suit individual needs.</p>\r\n\r\n<p>At the Centre, you&rsquo;ll get the chance to detox your body&rsquo;s equilibrium and feel the eternal bliss of wellness.As such, our holistic approach sets new standards and we are prepared to meet the challenging health issues of today&rsquo;s Indian society/lifestyle.</p>",
+      "amenities": "1#2#3#4#5#6#7#8#10",
+      "other_amenities": "Other Amenity",
+      "contact_number": "8588936238",
+      "other_contact_number": null,
+      "address_1": "U-701",
+      "address_2": null,
+      "address_3": null,
+      "pincode": 201301,
+      "city_id": 181,
+      "latitude": 28.5355,
+      "longitude": 77.391,
+      "is_active": 1,
+      "domain_id": 0,
+      "created_by": "1",
+      "updated_by": "1",
+      "created_at": "2018-12-20 21:19:14",
+      "updated_at": "2019-02-21 08:12:15",
+      "deleted_at": null
+      }
+      }
+      }
+      }
      * 
      * 
      */

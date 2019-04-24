@@ -89,9 +89,6 @@ class ActivityController extends Controller {
      * 
      */
     public function activitiesListing(Request $request) {
-        if (!$request->resort_id) {
-            return $this->sendErrorResponse("Resort id missing", (object) []);
-        }
 
         if ($request->resort_id == -1) {
             $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => 1])->with([
@@ -138,9 +135,9 @@ class ActivityController extends Controller {
      * @apiParam {String} user_id User id*.
      * @apiParam {String} resort_id Resort id*.
      * @apiParam {String} activity_id Amenity id*.
-     * @apiParam {String} booking_date Booking date (DD/MM/YYYY).
-     * @apiParam {String} from_time From Time (24 hours format).
-     * @apiParam {String} to_time To Time (24 hours format).
+     * @apiParam {String} booking_date Booking date* (DD/MM/YYYY).
+     * @apiParam {String} from_time From Time* (24 hours format).
+     * @apiParam {String} to_time To Time* (24 hours format).
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed).
