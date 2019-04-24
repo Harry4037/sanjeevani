@@ -261,7 +261,7 @@ class ChatController extends Controller {
                     })
                     ->get();
 
-            return $this->sendErrorResponse("Messages list.", $chatMessages);
+            return $this->sendSuccessResponse("Messages list.", $chatMessages);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
         }
@@ -342,7 +342,7 @@ class ChatController extends Controller {
                     $i++;
                 }
             }
-            return $this->sendErrorResponse("Messages user list.", $data);
+            return $this->sendSuccessResponse("Messages user list.", $data);
         } catch (\Exception $ex) {
             dd($ex);
             return $this->administratorResponse();
