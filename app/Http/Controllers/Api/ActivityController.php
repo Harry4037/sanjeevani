@@ -239,10 +239,27 @@ class ActivityController extends Controller {
         if (!$request->to_time) {
             return $this->sendErrorResponse("To time is missing.", (object) []);
         }
+
+        $userBooking = User::with('userBookingDetail')->find($request->user_id);
         $amenity = Activity::find($request->activity_id);
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid activity.", (object) []);
         }
+        if (isset($userBooking->userBookingDetail)) {
+            $user_book_date = Carbon::parse($userBooking->userBookingDetail->check_out)->format("Y/m/d");
+            $user_book_time = Carbon::parse($userBooking->userBookingDetail->check_out)->format("H:i:s");
+
+            if (strtotime($request->booking_date) > strtotime($user_book_date)) {
+                return $this->sendErrorResponse("You can't book amenity after your checkout date.", (object) []);
+            } elseif (strtotime($request->booking_date) == strtotime($user_book_date)) {
+                if (strtotime($request->to_time) > strtotime($user_book_time)) {
+                    return $this->sendErrorResponse("You can't book amenity after checkout time.", (object) []);
+                }
+            } else {
+                
+            }
+        }
+
         $book_date = Carbon::parse($request->booking_date);
         $timeSlot = ActivityTimeSlot::where(["from" => $request->from_time, "to" => $request->to_time])->first();
         if ($timeSlot) {
@@ -256,8 +273,18 @@ class ActivityController extends Controller {
             if ($booking > 0) {
                 return $this->sendErrorResponse("Booking already created with these details", (object) []);
             } else {
+                $user = User::select('id', 'user_name', 'mobile_number', 'email_id', 'voter_id', 'aadhar_id', 'address1', 'city_id', 'user_type_id')
+                        ->where(["id" => $request->user_id])
+                        ->with([
+                            'userBookingDetail' => function($query) {
+                                $query->selectRaw(DB::raw('id, resort_room_no, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                            }
+                        ])
+                        ->first();
+
                 $bookingRequest = new ActivityRequest();
                 $bookingRequest->amenity_id = $request->activity_id;
+                $bookingRequest->room_no = isset($user->userBookingDetail->resort_room_no) ? $user->userBookingDetail->resort_room_no : "";
                 $bookingRequest->activity_name = $amenity->name;
                 $bookingRequest->resort_id = $request->resort_id;
                 $bookingRequest->user_id = $request->user_id;
@@ -265,8 +292,20 @@ class ActivityController extends Controller {
                 $bookingRequest->from = $request->from_time;
                 $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
-//                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2])->pluck("device_token")->toArray();
-//                    $this->androidPushNotification(2, "Booked Activity", "$amenity->name booked by customer", $staffDeviceTokens, 1, $request->activity_id);
+//                    $tokens = [];
+//                    $l = 0;
+//                    $staffs = User::where(["is_active" => 1, "user_type_id" => 2])->get();
+//                    foreach ($staffs as $staff) {
+//                        $amenityArray = explode("#", $staff->authorise_amenities_id);
+//                        if (in_array($request->amenity_id, $amenityArray) && ($staff->device_token != "")) {
+//                            $tokens[$l] = $staff->device_token;
+//                            $l++;
+//                        }
+//                    }
+//                    if ($tokens) {
+//                        $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by " . $request->user()->user_name . " for " . $book_date->format('d M'), $tokens, 1, $request->amenity_id, 1);
+//                    }
+                    $this->generateNotification($request->user()->id, "Activity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), 2);
 
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
                 } else {
@@ -348,9 +387,16 @@ class ActivityController extends Controller {
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid activity.", (object) []);
         }
-        $amenityTimeSlots = ActivityTimeSlot::select('id', 'from', 'to', 'allow_no_of_member')->where([
-                    "amenity_id" => $request->activity_id
-                ])->get();
+
+        $query = ActivityTimeSlot::query();
+        $query->select('id', 'from', 'to', 'allow_no_of_member');
+        $query->where([
+            "amenity_id" => $request->activity_id
+        ]);
+        if (strtotime($request->booking_date) == strtotime(date("Y-m-d"))) {
+            $query->where("from", ">", date("H:i:s"));
+        }
+        $amenityTimeSlots = $query->orderby("from", "ASC")->get();
         if ($amenityTimeSlots) {
             $slotArray = [];
             foreach ($amenityTimeSlots as $key => $amenityTimeSlot) {

@@ -17,6 +17,7 @@ class CreateActivityRequestsTable extends Migration {
             $table->bigInteger('amenity_id')->default(0);
             $table->bigInteger('resort_id')->default(0);
             $table->string('activity_name')->nullable();
+            $table->string('room_no')->nullable();
             $table->bigInteger('user_id')->default(0);
             $table->bigInteger('accepted_by')->default(0);
             $table->Date('booking_date')->nullable();
