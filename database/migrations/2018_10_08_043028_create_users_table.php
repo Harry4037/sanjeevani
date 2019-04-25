@@ -55,6 +55,7 @@ class CreateUsersTable extends Migration {
             $table->text('authorise_amenities_id')->nullable();
             $table->tinyInteger('is_service_authorise')->default(0);
             $table->tinyInteger('is_meal_authorise')->default(0);
+            $table->tinyInteger('is_push_on')->default(0);
             $table->string('device_token')->nullable();
             $table->string('device_type')->nullable();
             $table->string('device_id')->nullable();

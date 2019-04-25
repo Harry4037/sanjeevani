@@ -103,6 +103,8 @@ Route::namespace("Api")->group(function () {
 
 
     Route::middleware('auth:api')->group(function () {
+        Route::post('update-push-status', 'StaffController@updateNotificaionStatus');
+        
         Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
 
         //Raise service request (by user)

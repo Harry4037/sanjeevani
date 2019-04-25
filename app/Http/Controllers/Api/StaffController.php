@@ -141,18 +141,18 @@ class StaffController extends Controller {
                 $newServices = ServiceRequest::select('id', 'comment', 'questions', 'service_id', 'user_id', 'created_at', 'room_type_name', 'resort_room_no')->where(["resort_id" => $userResort->resort_id, "request_status_id" => 1])
                         ->with([
                             'serviceDetail' => function($query) {
-                        $query->select('id', 'name', 'icon', 'type_id');
-                    }
+                                $query->select('id', 'name', 'icon', 'type_id');
+                            }
                         ])
                         ->with([
                             'userDetail' => function($query) {
-                        $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                        ->with([
-                            'userBookingDetail' => function($query) {
-                        $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                    }
-                        ]);
-                    }
+                                $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                                ->with([
+                                    'userBookingDetail' => function($query) {
+                                        $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                    }
+                                ]);
+                            }
                         ])->latest()
                         ->get();
 
@@ -184,13 +184,13 @@ class StaffController extends Controller {
                 $mealOrders = MealOrder::where(["resort_id" => $userResort->resort_id, "status" => 1])
                         ->with([
                             'userDetail' => function($query) {
-                        $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                        ->with([
-                            'userBookingDetail' => function($query) {
-                        $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id', 'room_type_id', 'resort_room_id');
-                    }
-                        ]);
-                    }
+                                $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                                ->with([
+                                    'userBookingDetail' => function($query) {
+                                        $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id', 'room_type_id', 'resort_room_id');
+                                    }
+                                ]);
+                            }
                         ])->latest()
                         ->get();
 
@@ -418,21 +418,21 @@ class StaffController extends Controller {
             $ongoing_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no', 'created_at')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 2, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                    $query->select('id', 'name', 'icon', 'type_id');
-                }
+                            $query->select('id', 'name', 'icon', 'type_id');
+                        }
                     ])->with([
                         'requestStatus' => function($query) {
-                    $query->select('id')->staffRequestStatus();
-                }
+                            $query->select('id')->staffRequestStatus();
+                        }
                     ])->with([
                         'userDetail' => function($query) {
-                    $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                }
-                    ]);
-                }
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->get();
 
@@ -465,13 +465,13 @@ class StaffController extends Controller {
             $ongoingMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
                     ->with([
                         'userDetail' => function($query) {
-                    $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                }
-                    ]);
-                }
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->where(function($q) {
                         $q->where("status", 2);
@@ -517,21 +517,21 @@ class StaffController extends Controller {
             $under_approval_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no', 'created_at')
                     ->with([
                         'serviceDetail' => function($query) {
-                    $query->select('id', 'name', 'icon', 'type_id');
-                }
+                            $query->select('id', 'name', 'icon', 'type_id');
+                        }
                     ])->with([
                         'requestStatus' => function($query) {
-                    $query->select('id')->staffRequestStatus();
-                }
+                            $query->select('id')->staffRequestStatus();
+                        }
                     ])->with([
                         'userDetail' => function($query) {
-                    $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                }
-                    ]);
-                }
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->where(["accepted_by_id" => $request->user()->id, "is_active" => 1])
                     ->where(function($q) {
@@ -570,13 +570,13 @@ class StaffController extends Controller {
             $underMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
                     ->with([
                         'userDetail' => function($query) {
-                    $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                }
-                    ]);
-                }
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->where(function($q) {
                         $q->where("status", 3)
@@ -624,21 +624,21 @@ class StaffController extends Controller {
             $completed_jobs = ServiceRequest::select('id', 'comment', 'questions', 'staff_reasons', 'staff_comment', 'service_id', 'request_status_id', 'user_id', 'room_type_name', 'resort_room_no', 'created_at')->where(["accepted_by_id" => $request->user()->id, "request_status_id" => 4, "is_active" => 1])
                     ->with([
                         'serviceDetail' => function($query) {
-                    $query->select('id', 'name', 'icon', 'type_id');
-                }
+                            $query->select('id', 'name', 'icon', 'type_id');
+                        }
                     ])->with([
                         'requestStatus' => function($query) {
-                    $query->select('id')->staffRequestStatus();
-                }
+                            $query->select('id')->staffRequestStatus();
+                        }
                     ])->with([
                         'userDetail' => function($query) {
-                    $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                }
-                    ]);
-                }
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->get();
             $completedJobArray = [];
@@ -670,13 +670,13 @@ class StaffController extends Controller {
             $comeleteMealOrders = MealOrder::where(["accepted_by" => $request->user_id])
                     ->with([
                         'userDetail' => function($query) {
-                    $query->select('id', 'user_name', 'email_id', 'mobile_number')
-                    ->with([
-                        'userBookingDetail' => function($query) {
-                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
-                }
-                    ]);
-                }
+                            $query->select('id', 'user_name', 'email_id', 'mobile_number')
+                            ->with([
+                                'userBookingDetail' => function($query) {
+                                    $query->select('id', 'user_id', 'source_name', 'source_id', 'resort_id');
+                                }
+                            ]);
+                        }
                     ])
                     ->where(function($q) {
                         $q->where("status", 4);
@@ -1097,17 +1097,17 @@ class StaffController extends Controller {
             //dd($amenitySlots->toArray());
             $amenitySlotData = [];
             foreach ($amenitySlots as $i => $amenitySlot) {
-              
+
                 $amenitiesRequests = AmenityRequest::where(["amenity_id" => $request->amenity_id, "from" => $amenitySlot->from, "to" => $amenitySlot->to, "booking_date" => $request->booking_date])
                         ->with("userDetail")
                         ->get();
-               
-                        
+
+
                 $from = Carbon::parse($amenitySlot->from);
                 $to = Carbon::parse($amenitySlot->to);
                 $amenitySlotData[$i]['slot'] = $from->format("H:i") . "-" . $to->format("H:i");
                 if ($amenitiesRequests) {
-                    
+
                     foreach ($amenitiesRequests as $j => $amenitiesRequest) {
                         $created_at = Carbon::parse($amenitiesRequest->created_at);
                         $amenitySlotData[$i]['bookings'][$j]["id"] = $amenitiesRequest->id;
@@ -1124,6 +1124,56 @@ class StaffController extends Controller {
         } catch (Exception $ex) {
             dd($ex);
             return $this->administratorResponse();
+        }
+    }
+
+    /**
+     * @api {post} /api/update-push-status Update push status
+     * @apiHeader {String} Accept application/json.
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName PostUpdatePushStatus
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} status Status*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Status updated
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *    "status": true,
+     *    "status_code": 200,
+     *    "message": "Service request found.",
+     *    "data": {}
+     * 
+     * 
+     * @apiError StatusMissing The status was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "status missing.",
+     *    "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function updateNotificaionStatus(Request $request) {
+        try {
+            if (!$request->status) {
+                return $this->sendErrorResponse("Status missing.", (object) []);
+            }
+            $user = User::find($request->user()->id);
+            $user->is_push_on = $request->status;
+            $user->save();
+            return $this->sendSuccessResponse("Status updated.", (object) []);
+        } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
     }
 
