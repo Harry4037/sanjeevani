@@ -1165,9 +1165,9 @@ class StaffController extends Controller {
      */
     public function updateNotificaionStatus(Request $request) {
         try {
-            if (!$request->status) {
-                return $this->sendErrorResponse("Status missing.", (object) []);
-            }
+//            if (!$request->status) {
+//                return $this->sendErrorResponse("Status missing.", (object) []);
+//            }
             $user = User::find($request->user()->id);
             $user->is_push_on = $request->status;
             $user->save();
