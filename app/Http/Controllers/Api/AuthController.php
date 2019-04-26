@@ -380,6 +380,7 @@ class AuthController extends Controller {
             $cart = Cart::where(["user_id" => $user->id])->count();
 
             $userArray['id'] = $user->id;
+            $userArray['notification_status'] = $user->is_push_on;
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
             $userArray['cart_count'] = $cart;
