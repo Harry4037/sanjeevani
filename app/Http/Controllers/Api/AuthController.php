@@ -13,6 +13,8 @@ use App\Models\Resort;
 use App\Models\CityMaster;
 use App\Models\Cart;
 use App\Models\UserMembership;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LoginOtp;
 
 class AuthController extends Controller {
 
@@ -131,6 +133,7 @@ class AuthController extends Controller {
                         'password' => bcrypt($OTP)
                     ]);
                     if ($user->save()) {
+//                        Mail::to("ankit@yopmail.com")->send(new LoginOtp(rand(1000, 9999)));
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
                         return $this->administratorResponse();
