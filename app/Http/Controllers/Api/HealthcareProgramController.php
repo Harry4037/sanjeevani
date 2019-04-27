@@ -10,6 +10,7 @@ use App\Models\HealthcateProgramImages;
 use App\Models\HealthcateProgramDay;
 use App\Models\User;
 use App\Models\UserBookingDetail;
+use App\Models\HealthcareBooking;
 
 class HealthcareProgramController extends Controller {
 
@@ -630,6 +631,17 @@ class HealthcareProgramController extends Controller {
             if (!$request->health_care_id) {
                 return $this->sendErrorResponse("Health care id missing", (object) []);
             }
+            $healthcareProgram = HealthcateProgram::find($request->health_care_id);
+            if (!$healthcareProgram) {
+                return $this->sendErrorResponse("Invalid healthcare package", (object) []);
+            }
+
+            $healthBooking = new HealthcareBooking();
+            $healthBooking->user_id = $request->user_id;
+            $healthBooking->health_care_id = $request->health_care_id;
+            $healthBooking->start_from = $healthcareProgram->start_from;
+            $healthBooking->end_to = $healthcareProgram->end_to;
+            $healthBooking->save();
 
             return $this->sendSuccessResponse("Health care Package booked", (object) []);
         } catch (\Exception $ex) {
