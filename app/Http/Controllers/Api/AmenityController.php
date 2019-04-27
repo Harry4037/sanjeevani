@@ -254,11 +254,11 @@ class AmenityController extends Controller {
 
             if (strtotime($request->booking_date) > strtotime($user_book_date)) {
                 return $this->sendErrorResponse("You can't book amenity after your checkout date.", (object) []);
-            }elseif(strtotime($request->booking_date) == strtotime($user_book_date)){
-                 if (strtotime($request->to_time) > strtotime($user_book_time)) {
+            } elseif (strtotime($request->booking_date) == strtotime($user_book_date)) {
+                if (strtotime($request->to_time) > strtotime($user_book_time)) {
                     return $this->sendErrorResponse("You can't book amenity after checkout time.", (object) []);
-                }   
-            }else{
+                }
+            } else {
                 
             }
         }
@@ -297,7 +297,7 @@ class AmenityController extends Controller {
                 if ($bookingRequest->save()) {
                     $tokens = [];
                     $l = 0;
-                    $staffs = User::where(["is_active" => 1, "user_type_id" => 2])->get();
+                    $staffs = User::where(["is_active" => 1, "user_type_id" => 2, "is_push_on" => 1])->get();
                     foreach ($staffs as $staff) {
                         $amenityArray = explode("#", $staff->authorise_amenities_id);
                         if (in_array($request->amenity_id, $amenityArray) && ($staff->device_token != "")) {

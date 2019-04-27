@@ -154,7 +154,7 @@ class OrderController extends Controller {
 
                 $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
                 if ($resortUsers) {
-                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_meal_authorise" => 1])
+                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_meal_authorise" => 1, "is_push_on" => 1])
                             ->whereIn("id", $resortUsers->toArray())
                             ->where("device_token", "!=", "")
                             ->pluck("device_token");

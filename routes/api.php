@@ -103,8 +103,10 @@ Route::namespace("Api")->group(function () {
 
 
     Route::middleware('auth:api')->group(function () {
+        //Healthcare package booking
         Route::post('healthcare-booking', 'HealthcareProgramController@booking');
 
+        //Update push status (by staff)
         Route::post('update-push-status', 'StaffController@updateNotificaionStatus');
 
         Route::get('amenities-bookings-details', 'StaffController@amenitiesBooking');
