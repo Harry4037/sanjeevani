@@ -175,7 +175,7 @@ class CmsController extends Controller {
             if (!$request->message) {
                 return $this->sendErrorResponse("Message missing", (object) []);
             }
-            return $this->sendSuccessResponse("Your message submmited successfully.", (object) []);
+            return $this->sendSuccessResponse("Your message submitted successfully.", (object) []);
         } catch (\Exception $ex) {
             return $this->administratorResponse();
         }
@@ -261,7 +261,7 @@ class CmsController extends Controller {
              $SOS->room_no = isset($user->userBookingDetail->room_detail->room_no) ? $user->userBookingDetail->room_detail->room_no : "";
             $SOS->room_type = isset($user->userBookingDetail->room_type_detail->name) ? $user->userBookingDetail->room_type_detail->name : "";
             $SOS->save();
-            return $this->sendSuccessResponse("Your emergency request submmited successfully.", (object) []);
+            return $this->sendSuccessResponse("Your emergency request submitted successfully.", (object) []);
         } catch (\Exception $ex) {
             dd($ex);
             return $this->administratorResponse();

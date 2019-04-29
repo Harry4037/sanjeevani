@@ -40,22 +40,26 @@ class NotificationController extends Controller {
             return $this->sendErrorResponse($validator->errors()->all()[0], (object) [], 200);
         }
 
-        $tokens = User::where("is_active", 1)
-                        ->where('user_type_id', '!=', 1)
+        $tokens = User::where('user_type_id', '=', 3)
                         ->where("device_token", '!=', null)
                         ->when($request->user_type == 2, function($query) use($request) {
                             return $query->whereIn('id', $request->notify_user);
+                        })
+                        ->when($request->user_type == 3, function($query) use($request) {
+                            return $query->where('is_active', 1);
                         })
                         ->pluck("device_token")->toArray();
         if (count($tokens)) {
             $this->androidPushNotification(3, $request->title, $request->message, $tokens, 123, 0);
         }
 
-        $userIds = User::where("is_active", 1)
-                        ->where('user_type_id', '!=', 1)
+        $userIds = User::where('user_type_id', '=', 3)
                         ->where("device_token", '!=', null)
                         ->when($request->user_type == 2, function($query) use($request) {
                             return $query->whereIn('id', $request->notify_user);
+                        })
+                        ->when($request->user_type == 3, function($query) use($request) {
+                            return $query->where('is_active', 1);
                         })
                         ->pluck("id")->toArray();
         foreach ($userIds as $userId) {

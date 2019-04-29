@@ -20,6 +20,7 @@
                                 <option value="">Choose option</option>
                                 <option value="1">All User's</option>
                                 <option value="2">Selected User's</option>
+                                <option value="3">Active User's</option>
                             </select>
                         </div>
                     </div>
