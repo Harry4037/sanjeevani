@@ -617,15 +617,16 @@ class UsersController extends Controller {
                     $stat = "<span class='label label-danger'>Cancelled</span>";
                     $action = "";
                 } else {
+                    $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
+                        $action .= '<a href="' . route('subadmin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
-                    $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
@@ -881,6 +882,30 @@ class UsersController extends Controller {
                 "status" => false,
             ];
         }
+    }
+
+    public function earlyCheckout(Request $request, $id) {
+        $userBookingdetail = UserBookingDetail::find($id);
+        $user = User::find($userBookingdetail->user_id);
+        if ($request->isMethod("post")) {
+            $userBookingdetail->check_out = $request->early_checkout;
+            $userBookingdetail->save();
+            return redirect()->route('subadmin.users.early-checkout', $id)->with('status', 'Checkout date updated.');
+        }
+
+        $css = [
+            'vendors/bootstrap-daterangepicker/daterangepicker.css',
+        ];
+        $js = [
+            'vendors/moment/min/moment.min.js',
+            'vendors/bootstrap-daterangepicker/daterangepicker.js',
+        ];
+        return view("subadmin.users.user-early-checkout", [
+            "userBookingdetail" => $userBookingdetail ? $userBookingdetail : [],
+            "user" => $user ? $user : [],
+            "css" => $css,
+            "js" => $js
+        ]);
     }
 
 }
