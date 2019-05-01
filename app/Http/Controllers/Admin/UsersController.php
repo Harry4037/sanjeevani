@@ -498,7 +498,7 @@ class UsersController extends Controller {
         } else {
             $userResort = UserBookingDetail::where("user_booking_details.user_id", $user->id)
                     ->join("resorts", "user_booking_details.resort_id", "=", "resorts.id")
-                    ->where("resorts.deleted_at",null)
+                    ->where("resorts.deleted_at", null)
                     ->pluck('resorts.name', 'resorts.id')
                     ->all();
             return view('admin.users.resort-payments', compact('userResort', 'user'));
@@ -588,15 +588,16 @@ class UsersController extends Controller {
                     $stat = "<span class='label label-danger'>Cancelled</span>";
                     $actionBtn = '';
                 } else {
+                    $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
+                        $actionBtn .= '<a href="' . route('admin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
-                    $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                 }
 
                 $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
@@ -726,7 +727,7 @@ class UsersController extends Controller {
                 return redirect()->route('admin.users.booking-edit', $data->id)->withErrors($validator)->withInput();
             }
             $user = User::find($data->user_id);
-            
+
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
 
@@ -762,7 +763,7 @@ class UsersController extends Controller {
                         }
                     }
                 }
-                
+
                 if ($user->device_token) {
                     $this->androidBookingPushNotification("Booking Updated", "Your booking updated successfully", $user->device_token);
                     $this->generateNotification($user->id, "Booking Updated", "Your booking updated successfully", 5);
@@ -838,6 +839,30 @@ class UsersController extends Controller {
         return view("admin.users.user-booking-detail", [
             "userBookingdetail" => $userBookingdetail ? $userBookingdetail : [],
             "user" => $user ? $user : [],
+        ]);
+    }
+
+    public function earlyCheckout(Request $request, $id) {
+        $userBookingdetail = UserBookingDetail::find($id);
+        $user = User::find($userBookingdetail->user_id);
+        if ($request->isMethod("post")) {
+            $userBookingdetail->check_out = $request->early_checkout;
+            $userBookingdetail->save();
+            return redirect()->route('admin.users.early-checkout', $id)->with('status', 'Checkout date updated.');
+        }
+
+        $css = [
+            'vendors/bootstrap-daterangepicker/daterangepicker.css',
+        ];
+        $js = [
+            'vendors/moment/min/moment.min.js',
+            'vendors/bootstrap-daterangepicker/daterangepicker.js',
+        ];
+        return view("admin.users.user-early-checkout", [
+            "userBookingdetail" => $userBookingdetail ? $userBookingdetail : [],
+            "user" => $user ? $user : [],
+            "css" => $css,
+            "js" => $js
         ]);
     }
 
