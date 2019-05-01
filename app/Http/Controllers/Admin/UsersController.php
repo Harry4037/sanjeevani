@@ -680,6 +680,7 @@ class UsersController extends Controller {
                 }
                 if ($user->device_token) {
                     $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
+                    $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
                 }
 
                 return redirect()->route('admin.users.booking', $user_id)->with('status', 'booking created successfully.');
@@ -764,6 +765,7 @@ class UsersController extends Controller {
                 
                 if ($user->device_token) {
                     $this->androidBookingPushNotification("Booking Updated", "Your booking updated successfully", $user->device_token);
+                    $this->generateNotification($user->id, "Booking Updated", "Your booking updated successfully", 5);
                 }
                 return redirect()->route('admin.users.booking-edit', $data->id)->with('status', 'booking created successfully.');
             } else {
