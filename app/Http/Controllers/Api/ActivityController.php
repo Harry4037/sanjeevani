@@ -9,6 +9,7 @@ use App\Models\Activity;
 use App\Models\ActivityTimeSlot;
 use App\Models\ActivityRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller {
 
