@@ -335,6 +335,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
      * Dashboard & Profile routes
      */
     Route::get('/dashboard', 'DashboardController@index')->name('subadmin.dashboard');
+    Route::post('/inventory-detail', 'DashboardController@inventoryDetail')->name('subadmin.dashboard.inventory');
 
     /**
      * Room Management
