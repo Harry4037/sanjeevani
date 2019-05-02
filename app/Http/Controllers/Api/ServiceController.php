@@ -335,6 +335,7 @@ class ServiceController extends Controller {
                     $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
                     if ($resortUsers) {
                         $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1, "is_push_on" => 1])
+                                ->where("device_token", "!=", NULL)
                                 ->whereIn("id", $resortUsers->toArray())
                                 ->pluck("device_token");
                         if ($staffDeviceTokens) {
