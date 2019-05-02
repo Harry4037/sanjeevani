@@ -34,6 +34,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
      * Dashboard & Profile routes
      */
     Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
+    Route::post('/inventory-detail', 'DashboardController@inventoryDetail')->name('admin.dashboard.inventory');
 
     /**
      * Room Management
