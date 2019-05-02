@@ -129,7 +129,11 @@
                     url: form.action,
                     type: form.method,
                     data: $(form).serialize(),
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
                     success: function (response) {
+                        $(".overlay").hide();
                         $("#invantory_detail").html(response);
                     },
                     error: function () {
