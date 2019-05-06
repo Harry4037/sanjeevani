@@ -11,7 +11,7 @@ class UserTypeTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        $userTypeArray = ["Admin", "Staff", "User","Guest"];
+        $userTypeArray = ["Admin", "Staff", "User","Guest", "Operators"];
         foreach ($userTypeArray as $userType) {
             DB::table('user_type')->insert([
                 'user_type_value' => $userType,

@@ -30,6 +30,7 @@ class CreateUserBookingDetailsTable extends Migration {
             $table->integer('check_out_pin')->nullable();
             $table->tinyInteger('is_verified_check_out_pin')->default(0);
             $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_checked_in')->default(0);
             $table->tinyInteger('is_cancelled')->default(0);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(0);

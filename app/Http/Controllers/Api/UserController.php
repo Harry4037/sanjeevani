@@ -199,6 +199,15 @@ class UserController extends Controller {
 
                 $user->aadhar_id = $aadhar_file_name;
                 if ($user->save()) {
+                    $userBookingDetail = UserBookingDetail::where("user_id", $user->id)
+                            ->where("check_out", ">=", date("Y-m-d H:i:s"))
+                            ->where("is_cancelled", "!=", 1)
+                            ->orderBy("check_out", "ASC")
+                            ->first();
+                    if ($userBookingDetail) {
+                        $userBookingDetail->is_checked_in = 1;
+                        $userBookingDetail->save();
+                    }
                     $user['is_checked_in'] = true;
                     return $this->sendSuccessResponse("User check-in successfully.", $user);
                 } else {

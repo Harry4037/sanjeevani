@@ -384,7 +384,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::match(['get', 'post'], 'user-booking-edit/{id}', 'UsersController@bookingEdit')->name('subadmin.users.booking-edit');
     Route::match(['get', 'post'], 'user-booking-verify/{id}', 'UsersController@verifyBooking')->name('subadmin.users.booking-verify');
     Route::get('user-detail/{mobile_number}', 'UsersController@getUserDetail')->name('subadmin.users.booking-detail');
-    Route::match(['get', 'post'], 'user-early-checkout/{id}', 'UsersController@earlyCheckout')->name('subadmin.users.early-checkout');    
+    Route::match(['get', 'post'], 'user-early-checkout/{id}', 'UsersController@earlyCheckout')->name('subadmin.users.early-checkout');
     /**
      * Staff Management
      */
@@ -571,4 +571,16 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::get('/', 'NotificationController@index')->name('subadmin.notification.index');
         Route::post('/send-notification', 'NotificationController@sendNotification')->name('subadmin.notification.send');
     });
+});
+
+
+Route::namespace("Operator")->prefix('operator')->group(function() {
+    Route::get('/', 'LoginController@showLoginForm')->name('operator.login');
+    Route::get('/login', 'LoginController@showLoginForm')->name('operator.login');
+    Route::post('/login', 'LoginController@login')->name('operator.login');
+    Route::get('/logout', 'LoginController@logout')->name('operator.logout');
+});
+
+Route::namespace("Operator")->prefix('operator')->middleware(['operatorGuest'])->group(function() {
+    Route::get('/dashboard', 'DashboardController@index')->name('operator.dashboard');
 });
