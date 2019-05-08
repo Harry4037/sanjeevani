@@ -62,10 +62,10 @@ class StaffController extends Controller {
                 $userIds = [];
             }
             $query = $this->user->query();
-                        $query->where("user_type_id", "=", 2);
+            $query->where("user_type_id", "=", 2);
             $query->whereIn("id", $userIds);
             if ($searchKeyword) {
-                $query->where(function($query) use($searchKeyword){
+                $query->where(function($query) use($searchKeyword) {
                     $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
                 });
             }
@@ -82,6 +82,7 @@ class StaffController extends Controller {
                 $usersArray[$i]['name'] = $user->user_name;
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
+                $usersArray[$i]['is_push_on'] = $user->is_push_on;
 //                $usersArray[$i]['resort_name'] = isset($staffResort->resort->name) ? $staffResort->resort->name : 'N/A';
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
