@@ -525,7 +525,7 @@ class ServiceController extends Controller {
             }
 
             $ongoingAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-                    ->where("booking_date", ">", date("Y-m-d H:i:s"))
+                    ->whereRaw("CONCAT(`booking_date`, ' ', `from`) > '". date("Y-m-d H:i:s")."'")
                     ->get();
             foreach ($ongoingAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
@@ -545,7 +545,7 @@ class ServiceController extends Controller {
             }
 
             $ongoingActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-                    ->where("booking_date", ">", date("Y-m-d H:i:s"))
+                    ->whereRaw("CONCAT(`booking_date`, ' ', `from`) > '". date("Y-m-d H:i:s")."'")
                     ->get();
             foreach ($ongoingActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
@@ -605,7 +605,7 @@ class ServiceController extends Controller {
             }
 
             $completedAmenities = AmenityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-                    ->where("booking_date", "<=", date("Y-m-d H:i:s"))
+                    ->whereRaw("CONCAT(`booking_date`, ' ', `from`) <= '". date("Y-m-d H:i:s")."'")
                     ->get();
             foreach ($completedAmenities as $completedAmenity) {
                 $createdAt = Carbon::parse($completedAmenity->created_at);
@@ -624,7 +624,7 @@ class ServiceController extends Controller {
                 $j++;
             }
             $completedActivities = ActivityRequest::where(["user_id" => $request->user_id, "is_active" => 1])
-                    ->where("booking_date", "<=", date("Y-m-d H:i:s"))
+                    ->whereRaw("CONCAT(`booking_date`, ' ', `from`) <= '". date("Y-m-d H:i:s")."'")
                     ->get();
             foreach ($completedActivities as $completedActivity) {
                 $createdAt = Carbon::parse($completedActivity->created_at);
