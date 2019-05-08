@@ -896,6 +896,11 @@ class UsersController extends Controller {
         if ($request->isMethod("post")) {
             $userBookingdetail->check_out = $request->early_checkout;
             $userBookingdetail->save();
+            if ($user->device_token) {
+                $msg ="You checkout new checkout date is ".$request->early_checkout;
+                $this->androidBookingPushNotification("Early Checkout", $msg, $user->device_token);
+                $this->generateNotification($user->id, "Booking Updated", $msg, 7);
+            }
             return redirect()->route('subadmin.users.early-checkout', $id)->with('status', 'Checkout date updated.');
         }
 
