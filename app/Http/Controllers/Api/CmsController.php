@@ -240,25 +240,28 @@ class CmsController extends Controller {
             if (!$request->user_id) {
                 return $this->sendErrorResponse("User id missing", (object) []);
             }
-             if ($request->user()->id != $request->user_id) {
-                 return $this->sendErrorResponse("invalid user", (object) []);
-             }
+            if (!$this->bookBeforeCheckInDate($request->user_id)) {
+                return $this->sendErrorResponse("Sorry! You can not raise request before checkIn date or after checkout date.", (object) []);
+            }
+            if ($request->user()->id != $request->user_id) {
+                return $this->sendErrorResponse("invalid user", (object) []);
+            }
             if (!$request->latitude) {
                 return $this->sendErrorResponse("Latitude missing", (object) []);
             }
             if (!$request->longitude) {
                 return $this->sendErrorResponse("Longitude missing", (object) []);
             }
-             if($request->user()->user_type_id == 4){
-                     return $this->sendInactiveAccountResponse();
-             }
+            if ($request->user()->user_type_id == 4) {
+                return $this->sendInactiveAccountResponse();
+            }
             $user = User::with("userBookingDetail")->find($request->user_id);
             $SOS = new SOS();
             $SOS->user_id = $request->user_id;
             $SOS->latitude = $request->latitude;
             $SOS->longitude = $request->longitude;
             $SOS->resort_name = isset($user->userBookingDetail->resort->name) ? $user->userBookingDetail->resort->name : "";
-             $SOS->room_no = isset($user->userBookingDetail->room_detail->room_no) ? $user->userBookingDetail->room_detail->room_no : "";
+            $SOS->room_no = isset($user->userBookingDetail->room_detail->room_no) ? $user->userBookingDetail->room_detail->room_no : "";
             $SOS->room_type = isset($user->userBookingDetail->room_type_detail->name) ? $user->userBookingDetail->room_type_detail->name : "";
             $SOS->save();
             return $this->sendSuccessResponse("Your emergency request submitted successfully.", (object) []);
