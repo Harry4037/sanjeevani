@@ -8,7 +8,7 @@
     </head>
     <body>
         <div>
-            OTP:- {{ $data }}
+            Your Rindex App OTP:- {{ $data }}
         </div>
     </body>
 </html>
