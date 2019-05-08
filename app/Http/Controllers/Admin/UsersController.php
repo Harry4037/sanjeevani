@@ -730,7 +730,12 @@ class UsersController extends Controller {
 
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
-
+            $msg = "";
+            if($data->room_type_name != $roomRoom->room_no){
+                $msg = "Your room no. updated successfully.";
+            }else{
+                $msg = "Your booking updated successfully.";
+            }
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
@@ -765,10 +770,10 @@ class UsersController extends Controller {
                 }
 
                 if ($user->device_token) {
-                    $this->androidBookingPushNotification("Booking Updated", "Your booking updated successfully", $user->device_token);
-                    $this->generateNotification($user->id, "Booking Updated", "Your booking updated successfully", 5);
+                    $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token);
+                    $this->generateNotification($user->id, "Booking Updated", $msg, 5);
                 }
-                return redirect()->route('admin.users.booking-edit', $data->id)->with('status', 'booking created successfully.');
+                return redirect()->route('admin.users.booking-edit', $data->id)->with('status', $msg);
             } else {
                 return redirect()->route('admin.users.booking-edit', $data->id)->withErrors("Something went be wrong.")->withInput();
             }
