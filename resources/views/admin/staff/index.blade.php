@@ -22,6 +22,7 @@
                             <th>EmailAddress</th>
                             <th>PhoneNo.</th>
                             <th>Resort Name</th>
+                            <th>Duty Status</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -59,6 +60,17 @@
                 {"data": "email", sortable: false},
                 {"data": "mobileno", sortable: false},
                 {"data": "resort_name", sortable: false},
+                {"data": "is_push_on", sortable: false,
+                    render: function (data, type, row, meta) {
+                        var status = '';
+                        if (row['is_push_on']) {
+                            status = "<button type='button' class='btn btn-xs btn-round btn-success'>On Duty</button>";
+                        } else {
+                            status = "<button type='button' class='btn btn-xs btn-round btn-danger'>Off Duty</button>";
+                        }
+                        return status;
+                    }
+                },
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

@@ -59,11 +59,11 @@ class StaffController extends Controller {
             $query = $this->user->query();
             $query->where("user_type_id", "=", 2);
             if ($searchKeyword) {
-                $query->where(function($query) use($searchKeyword){
+                $query->where(function($query) use($searchKeyword) {
                     $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
                 });
             }
-            
+
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
@@ -77,6 +77,7 @@ class StaffController extends Controller {
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $usersArray[$i]['resort_name'] = isset($staffResort->resort->name) ? $staffResort->resort->name : 'N/A';
+                $usersArray[$i]['is_push_on'] = $user->is_push_on;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $usersArray[$i]['view-deatil'] = '<a class="btn btn-info btn-xs" href="' . route('admin.staff.edit', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Edit</a>';
