@@ -919,7 +919,7 @@ class ServiceController extends Controller {
                                     ->pluck("device_token");
                                     // dd($staffDeviceTokens);
                             if ($staffDeviceTokens) {
-                                $this->androidPushNotification(2, "Service Not Approed", $serviceRequest->serviceDetail->name." request not approved from Room# " . $serviceRequest->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 1, $serviceRequest->serviceDetail->id, 0, 1);
+                                $this->androidPushNotification(2, "Service Not Approved", $serviceRequest->serviceDetail->name." request not approved from Room# " . $serviceRequest->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 1, $serviceRequest->serviceDetail->id, 0, 1);
                             }
 
                             // $this->generateNotification($request->user_id, "Service Not Approved", $serviceRequest->serviceDetail->name." request not approved by you", 1);
