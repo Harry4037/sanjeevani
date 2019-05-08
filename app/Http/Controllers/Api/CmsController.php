@@ -263,7 +263,7 @@ class CmsController extends Controller {
             $SOS->save();
             return $this->sendSuccessResponse("Your emergency request submitted successfully.", (object) []);
         } catch (\Exception $ex) {
-            dd($ex);
+//            dd($ex);
             return $this->administratorResponse();
         }
     }
