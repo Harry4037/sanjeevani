@@ -763,7 +763,7 @@ class UserController extends Controller {
             $userArray['last_name'] = $user->last_name;
             $userArray['email_id'] = $user->email_id;
             $userArray['user_type_id'] = $user->user_type_id;
-            $userArray['is_checked_in'] = $user->aadhar_id == null ? false : true;
+            $userArray['is_checked_in'] = $user->user_type_id == 4 ? false : isset($userBookingDetail->is_checked_in) && ($userBookingDetail->is_checked_in == 1) ? true : false;
             $userArray['address'] = $user->address1;
             $userArray['state'] = isset($cityState->state->state) ? $cityState->state->state : "";
             $userArray['city'] = isset($cityState->city) ? $cityState->city : "";
