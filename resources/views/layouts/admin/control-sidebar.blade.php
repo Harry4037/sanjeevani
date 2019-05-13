@@ -145,6 +145,12 @@
 >
 <a href="{{ route('admin.notification.index') }}"><i class="fa fa-newspaper-o"></i>Notification Management</a>
 </li>
+<li  @if(in_array(Route::currentRouteName(), ['admin.healthcare.booking']))
+{{ "class=current-page" }}
+@endif
+>
+<a href="{{ route('admin.healthcare.booking') }}"><i class="fa fa-newspaper-o"></i>Healthcare Bookings</a>
+</li>
 </ul>
 </div>
 </div>

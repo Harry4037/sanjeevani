@@ -1,20 +1,7 @@
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
     <div class="menu_section">
-        <h3>Navigation</h3>
         <div class="ln_solid"></div>
-        <ul class="nav side-menu sidebar-scroll">
-            <li>
-                <a href="#"><i class="fa fa-dashboard"></i>Dashboard</a>
-            </li>
-            <li>
-                <!--                @if(in_array(Route::currentRouteName(), ['admin.room.add','admin.room.edit']))
-                                 {{ "class=current-page" }}
-                                 @endif-->
-
-                <a href="#"><i class="fa fa-university"></i>Users</a>
-            </li>
-
-        </ul>
+        <ul class="nav side-menu sidebar-scroll" id="chat_user_list"></ul>
     </div>
 </div>
 <!-- /sidebar menu -->

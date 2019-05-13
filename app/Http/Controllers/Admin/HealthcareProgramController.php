@@ -12,6 +12,7 @@ use App\Models\Resort;
 use App\Models\HealthcateProgram;
 use App\Models\HealthcateProgramDay;
 use App\Models\HealthcateProgramImages;
+use App\Models\HealthcareBooking;
 
 class HealthcareProgramController extends Controller {
 
@@ -248,6 +249,54 @@ class HealthcareProgramController extends Controller {
             return ['status' => true, "message" => "Healthcare Package deleted."];
         } else {
             return ['status' => false, "message" => "Something went be wrong."];
+        }
+    }
+
+    public function booking(Request $request) {
+        $css = [
+            'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
+        ];
+        $js = [
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+        ];
+        return view('admin.healthcare.bookings', ['js' => $js, 'css' => $css]);
+    }
+
+    public function bookingList(Request $request) {
+        try {
+            $offset = $request->get('start') ? $request->get('start') : 0;
+            $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
+
+            $query = HealthcareBooking::query();
+
+            $query->with("userDetail")->with("healthcarePackage");
+            if ($searchKeyword) {
+                $query->whereHas("healthcarePackage", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhereHas("userDetail", function($query) use($searchKeyword) {
+                    $query->where("user_name", "LIKE", "%$searchKeyword%")
+                            ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                });
+            }
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $healthcareBooking = $query->take($limit)->offset($offset)->latest()->get();
+
+            $bookingArray = [];
+            foreach ($healthcareBooking as $key => $healthcareBok) {
+                $bookingArray[$key]['user_name'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->user_name : '';
+                $bookingArray[$key]['email_id'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->email_id : '';
+                $bookingArray[$key]['mobile_number'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->mobile_number : '';
+                $bookingArray[$key]['healthcare_program'] = $healthcareBok->healthcarePackage ? $healthcareBok->healthcarePackage->name : '';
+            }
+
+            $data['data'] = $bookingArray;
+            return $data;
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 
