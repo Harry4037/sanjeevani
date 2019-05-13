@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Validator;
+use App\Http\Controllers\firebase;
 
 class LoginController extends Controller {
 
@@ -106,6 +107,19 @@ class LoginController extends Controller {
 
         $this->incrementLoginAttempts($request);
         return $this->sendFailedLoginResponse($request);
+    }
+
+    protected function authenticated(Request $request, $user) {
+        if ($request->ajax()) {
+            $firebase = new firebase();
+
+            return response()->json([
+                        'auth' => auth('operator')->check(),
+                        'user' => $user,
+                        'token' => $firebase->login(auth('operator')->user()),
+                        'intended' => $this->redirectPath(),
+            ]);
+        }
     }
 
     /**

@@ -8,6 +8,7 @@
             {{ csrf_field() }}
             <h1>Operator Login</h1>
             @include('errors.errors-and-messages')
+            <div id="err_msg"></div>
             <div class="form-group">
                 <input type="text" class="form-control"  name="email_id" placeholder="Email*"  />
             </div>
@@ -46,6 +47,56 @@
                 password: {
                     required: true
                 }
+            },
+            submitHandler: function (form) {
+                let btn = $(form).find('button[type="submit"]');
+                btn.text('loading . . .').attr('disabled', 'disabled');
+                $.ajax({
+                    url: form.action,
+                    type: form.method,
+                    data: $(form).serialize(),
+                    success: function (response) {
+                        btn.text('Login in').removeAttr('disabled');
+                        if (response.auth) {
+                            var token = response.token;
+                            firebase.auth().signInWithCustomToken(token).catch(function (error) {
+                                // Handle Errors here.
+                                var errorCode = error.code;
+                                var errorMessage = error.message;
+
+                                $(".msg").html(errorMessage);
+                                $(".msg").removeClass("alert-success");
+                                $(".msg").addClass("alert-danger");
+                                $(".msg").css("display", "block");
+
+                            }).then(function (data) {
+                                btn.text('Login in').removeAttr('disabled');
+                                window.location.href = response.intended;
+                            });
+
+                        } else {
+                            $(".msg").html("Invalid login details.");
+                            $(".msg").removeClass("alert-success");
+                            $(".msg").addClass("alert-danger");
+                            $(".msg").css("display", "block");
+
+                            setTimeout(function () {
+                                $(".msg").fadeOut();
+                            }, 2000);
+                        }
+                    },
+                    error: function (xhr) {
+                        btn.text('Login in').removeAttr('disabled');
+                        $(".msg").html("Invalid login details.");
+                        $(".msg").removeClass("alert-success");
+                        $(".msg").addClass("alert-danger");
+                        $(".msg").css("display", "block");
+
+                        setTimeout(function () {
+                            $(".msg").fadeOut();
+                        }, 2000);
+                    }
+                });
             }
         });
 

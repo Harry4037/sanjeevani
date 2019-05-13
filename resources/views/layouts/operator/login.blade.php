@@ -28,7 +28,11 @@
         <script src="{{ asset("vendors/bootstrap-progressbar/bootstrap-progressbar.min.js") }}"></script>
         <script src="{{ asset("vendors/iCheck/icheck.min.js") }}"></script>   
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script> 
-        
+        <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-firestore.js"></script>
+        <script src="{{ asset("firebase/firestore-config.js") }}"></script>
+
     </head>
 
     <body class="login">

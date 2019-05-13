@@ -25,6 +25,7 @@
         <!-- Add additional services that you want to use -->
         <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-database.js"></script>
         <script src="{{ asset("firebase/firestore-config.js") }}"></script>
 
         @isset($css)

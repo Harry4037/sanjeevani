@@ -232,6 +232,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::match(['get', 'post'], '/edit/{id}', 'HealthcareProgramController@editHealthcare')->name('admin.healthcare.edit');
         Route::post('/delete-healthcare-images', 'HealthcareProgramController@deleteHealthcareImage')->name('admin.healthcare.delete-activity-image');
         Route::post('/delete', 'HealthcareProgramController@deletehealthcare')->name('admin.healthcare.delete');
+        Route::get('/bookings', 'HealthcareProgramController@booking')->name('admin.healthcare.booking');
+        Route::get('/booking-list', 'HealthcareProgramController@bookingList')->name('admin.healthcare.booking-list');
     });
 
     /**
