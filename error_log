@@ -1,0 +1,2 @@
+[13-May-2019 09:04:22 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 16777216 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/Solver.php on line 220
+[13-May-2019 09:05:37 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 16777216 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/Solver.php on line 220
