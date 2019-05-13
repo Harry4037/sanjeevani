@@ -58,7 +58,7 @@
                 {"data": "is_push_on", sortable: false,
                     render: function (data, type, row, meta) {
                         var status = '';
-                        if (row['is_push_on']) {
+                        if (row['is_push_on'] == 1) {
                             status = "<button type='button' class='btn btn-xs btn-round btn-success'>On Duty</button>";
                         } else {
                             status = "<button type='button' class='btn btn-xs btn-round btn-danger'>Off Duty</button>";
