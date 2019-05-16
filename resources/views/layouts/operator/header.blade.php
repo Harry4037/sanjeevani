@@ -1,5 +1,5 @@
 <div class="col-md-3 left_col">
-    <div class="left_col scroll-view">
+    <div class="left_col scroll-view" style="background: #ffffff;">
         <div class="navbar nav_title" style="border: 0;">
             <a href="#" class="site_title"><i class="fa fa-heartbeat"></i> <span>Operator</span></a>
         </div>
@@ -7,7 +7,7 @@
         <div class="clearfix"></div>
 
         <!-- menu profile quick info -->
-        <div class="profile clearfix">
+<!--        <div class="profile clearfix">
             <div class="profile_pic">
                 <img src="{{ auth('operator')->user()->profile_pic_path }}" alt="..." class="img-circle profile_img">
             </div>
@@ -15,7 +15,7 @@
                 <span>Welcome,</span>
                 <h2>{{ auth('operator')->user()->user_name ? auth('operator')->user()->user_name : "Operator" }}</h2>
             </div>
-        </div>
+        </div>-->
         <!-- /menu profile quick info -->
         <br />
         @include('layouts.operator.control-sidebar')

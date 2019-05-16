@@ -49,17 +49,20 @@
                 }
             },
             submitHandler: function (form) {
-                let btn = $(form).find('button[type="submit"]');
-                btn.text('loading . . .').attr('disabled', 'disabled');
+                let btn = $(form).find('input[type="submit"]');
+
                 $.ajax({
                     url: form.action,
                     type: form.method,
                     data: $(form).serialize(),
+                    beforeSend: function () {
+                        btn.val('loading . . .').attr('disabled', 'disabled');
+                    },
                     success: function (response) {
-                        btn.text('Login in').removeAttr('disabled');
                         if (response.auth) {
                             var token = response.token;
                             firebase.auth().signInWithCustomToken(token).catch(function (error) {
+                                btn.val('Log in').removeAttr('disabled');
                                 // Handle Errors here.
                                 var errorCode = error.code;
                                 var errorMessage = error.message;
@@ -70,7 +73,7 @@
                                 $(".msg").css("display", "block");
 
                             }).then(function (data) {
-                                btn.text('Login in').removeAttr('disabled');
+                                btn.val('Log in').removeAttr('disabled');
                                 window.location.href = response.intended;
                             });
 
@@ -86,7 +89,7 @@
                         }
                     },
                     error: function (xhr) {
-                        btn.text('Login in').removeAttr('disabled');
+                        btn.val('Log in').removeAttr('disabled');
                         $(".msg").html("Invalid login details.");
                         $(".msg").removeClass("alert-success");
                         $(".msg").addClass("alert-danger");
