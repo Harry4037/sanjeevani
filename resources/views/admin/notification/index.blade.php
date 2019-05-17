@@ -26,12 +26,15 @@
                     </div>
                     <div class="form-group" style="display:none;" id="users_list_div">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Users</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12" id="users_list">
+                        <div class="col-md-6 col-sm-6 col-xs-12" id="users_list" style="overflow-y: scroll;height: 400px;">
                             <p style="padding: 5px;">
                                 @foreach($users as $key => $user)
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-bottom: 4px;">
                                 <input class="flat" type="checkbox" name="notify_user[]" value="{{ $user->id }}"> 
-                                {{ ucwords($user->user_name) }}
-                                @endforeach
+                                <label>{{ ucwords($user->user_name) }}</label>
+                            </div>
+
+                            @endforeach
                             </p>
                             <span id="users_list_div_error"></span>
                         </div>
@@ -202,6 +205,16 @@
                 });
             }
         });
+
+        if ($("input.flat")[0]) {
+            $(document).ready(function () {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            });
+        }
     });
+
 </script>
 @endsection

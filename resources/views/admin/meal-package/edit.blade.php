@@ -88,12 +88,14 @@
                                             <div class="panel-body">
                                                 <p style="padding: 5px;">
                                                     @foreach($mealCategory->menuItems as $key => $item)
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <input class="flat" type="checkbox" name="meal_item[]" value="{{ $item->id }}"  
                                                            @if(in_array($item->id, $mealPackageItems))
                                                            {{ "checked" }}
                                                            @endif
                                                            > {{ $item->name }}
-                                                           @endforeach
+                                                </div>
+                                                @endforeach
                                                 <p>
                                             </div>
                                         </div>
@@ -139,7 +141,7 @@
                 },
                 resort_id: {
                     required: true
-                },   
+                },
                 image_name: {
                     accept: "image/*"
                 },

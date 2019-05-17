@@ -14,10 +14,12 @@ class NotificationController extends Controller {
     public function index() {
         $css = [
             'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
+            "vendors/iCheck/skins/flat/green.css",
         ];
         $js = [
             'vendors/datatables.net/js/jquery.dataTables.min.js',
             'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+            'vendors/iCheck/icheck.min.js',
         ];
 
         $users = User::where("is_active", 1)->where('user_type_id', '!=', 1)->get();

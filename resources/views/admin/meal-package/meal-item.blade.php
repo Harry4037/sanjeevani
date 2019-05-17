@@ -18,6 +18,7 @@
             <div class="panel-body">
                 <p style="padding: 5px;">
                     @foreach($mealCategory->menuItems as $key => $item)
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <input class="flat" type="checkbox" name="meal_item[]" value="{{ $item->id }}"  
                            @if(isset(old('meal_item')[$key]))
                            @if(old('meal_item')[$key] == $item->id)
@@ -26,8 +27,9 @@
                            @endif
 
                            > {{ $item->name }}
+                </div>
 
-                           @endforeach
+                @endforeach
                 <p>
             </div>
         </div>
