@@ -3,6 +3,15 @@
 @section('content')
 <style>
 
+    .mesgs {
+        float: left;
+        padding: 55px 15px 40px 20px;
+        width: 60%;
+        text-align: center;
+        border: 1px solid black;
+        margin-left: 200px;
+    }
+
     img{ max-width:100%;}
     .inbox_people {
         background: #f8f8f8 none repeat scroll 0 0;
@@ -84,20 +93,22 @@
         width: 100%;
         text-align: left;
     }
-    .time_date {
+    .time_date_incoming {
         color: #747474;
         display: block;
         font-size: 12px;
         margin: 8px 0 0;
+        float: left;
+    }
+    .time_date_outgoing {
+        color: #747474;
+        display: block;
+        font-size: 12px;
+        margin: 8px 0 0;
+        float: right;
     }
     /*.received_withd_msg { width: 57%;}*/
-    .mesgs {
-        float: left;
-        padding: 55px 15px 40px 20px;
-        width: 60%;
-        text-align: center;
-        border: 1px solid black;
-    }
+
 
     .sent_msg p {
         background: #05728f none repeat scroll 0 0;
@@ -163,6 +174,7 @@
 <script>
     var loggedInUser = '';
     var receiverID = '';
+    var unsubscribe = '';
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             loggedInUser = user;
@@ -193,30 +205,24 @@
                         });
                         $("#chat_user_list").prepend(userList);
                     });
-
-
-//            db.collection('rindex_support').get().then(function (querySnapshot) {
-//                var userList = '';
-//                querySnapshot.forEach(function (doc) {
-//                    userList += '<li class="user" data-id="' + doc.id + '"><a href="#" >' + doc.id + '</a></li>';
-//                });
-//                $("#chat_user_list").html(userList);
-//            });
-
         } else {
             alert("You are not connected with chat server.");
         }
 
     });
     $(document).on('click', '.user', function () {
+        $("#chat_user_list").find("li").removeClass("active");
         var _th = $(this);
         _th.addClass("active");
         var user_id = _th.data('id');
         var user_name = _th.data('username');
         var user_collection = 'Customer_' + user_id;
         receiverID = user_id;
-        $("#msg_history").html("");
+        $(".msg_history").html("");
         $("#chat_with").html("<h4>Chat with " + user_name + "</h4>");
+        if (unsubscribe != '') {
+            unsubscribe();
+        }
 //        db.collection('chat_user').where("user_id", '==', user_id.toString()).get().then(function (querySnapshot) {
 //            querySnapshot.forEach(function (doc) {
 //                console.log(doc.data());
@@ -226,30 +232,32 @@
     });
 
     function realTime(user_collection) {
-        db.collection('rindex_support/' + user_collection + '/Customer_Chat').orderBy('timeStamp')
+        unsubscribe = db.collection('rindex_support/' + user_collection + '/Customer_Chat').orderBy('timeStamp')
                 .onSnapshot(function (snapshot) {
                     var newMessage = '';
                     snapshot.docChanges().forEach(function (change) {
+                        var timeAgo = timeSince(change.doc.data().timeStamp);
                         if (change.doc.data().senderID != loggedInUser.uid) {
                             newMessage += '<div class="incoming_msg">'
                                     + '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>'
                                     + '<div class="received_msg">'
                                     + '<div class="received_withd_msg">'
                                     + '<p>' + change.doc.data().messege + '</p>'
+                                    + '<span class="time_date_incoming">'+timeAgo+' ago</span>'
                                     + '</div>'
                                     + '</div>'
                                     + '</div>';
-//                            newMessage += '<div class="left_m">' + change.doc.data().messege + '</div>'
                         } else {
                             newMessage += '<div class="outgoing_msg">'
                                     + '<div class="sent_msg">'
                                     + '<p>' + change.doc.data().messege + '</p>'
+                                    + '<span class="time_date_outgoing">'+timeAgo+' ago</span>'
                                     + '</div>'
                                     + '</div>';
-//                            newMessage += '<div class="right_m">' + change.doc.data().messege + '</div>'
                         }
                     });
                     $(".msg_history").append(newMessage);
+                    $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
                 });
     }
 
@@ -299,5 +307,36 @@
             $(".input_msg_write").css("display", "block");
         }
     });
+
+    function timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    }
+//    var aDay = 24 * 60 * 60 * 1000
+//    console.log(timeSince(new Date(Date.now() - aDay)));
+//    console.log(timeSince(new Date(Date.now() - aDay * 2)));
 </script>
 @endsection
