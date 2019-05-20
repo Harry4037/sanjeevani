@@ -9,7 +9,7 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert">
                 </div>
-                <h2>Amenity Requests</h2>
+                <h2>Activity Requests</h2>
                 <div class="pull-right">
 
                 </div>
@@ -22,7 +22,7 @@
                             <th>Sr.No.</th>
                             <th>User Name</th>
                             <th>Room No.</th>
-                            <th>Amenity Name</th>
+                            <th>Activity Name</th>
                             <th>Booking Date</th>
                             <th>From (Time)</th>
                             <th>To (Time)</th>
