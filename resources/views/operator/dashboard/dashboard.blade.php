@@ -159,7 +159,7 @@
             <div id="chat_with" style="margin-top: -42px;margin-bottom: 22px;border-bottom: 1px solid black;"></div>
             <div class="msg_history"></div>
             <div class="type_msg">
-                <button type="button" class="btn btn-info" id="join_chat" style="text-align: center;">Join Chat</button>
+                <button type="button" class="btn btn-info" id="join_chat" style="text-align: center;margin: auto;">Join Chat</button>
                 <div class="input_msg_write" style="display: none;">
                     <input type="text" class="write_msg" placeholder="Type a message" />
                     <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
@@ -220,6 +220,8 @@
         receiverID = user_id;
         $(".msg_history").html("");
         $("#chat_with").html("<h4>Chat with " + user_name + "</h4>");
+        $(".input_msg_write").css("display", "none");
+        $("#join_chat").css("display", "block");
         if (unsubscribe != '') {
             unsubscribe();
         }
@@ -236,6 +238,7 @@
                 .onSnapshot(function (snapshot) {
                     var newMessage = '';
                     snapshot.docChanges().forEach(function (change) {
+                        
                         var timeAgo = timeSince(change.doc.data().timeStamp);
                         if (change.doc.data().senderID != loggedInUser.uid) {
                             newMessage += '<div class="incoming_msg">'
@@ -243,7 +246,7 @@
                                     + '<div class="received_msg">'
                                     + '<div class="received_withd_msg">'
                                     + '<p>' + change.doc.data().messege + '</p>'
-                                    + '<span class="time_date_incoming">'+timeAgo+' ago</span>'
+                                    + '<span class="time_date_incoming">' + timeAgo + ' ago</span>'
                                     + '</div>'
                                     + '</div>'
                                     + '</div>';
@@ -251,13 +254,14 @@
                             newMessage += '<div class="outgoing_msg">'
                                     + '<div class="sent_msg">'
                                     + '<p>' + change.doc.data().messege + '</p>'
-                                    + '<span class="time_date_outgoing">'+timeAgo+' ago</span>'
+                                    + '<span class="time_date_outgoing">' + timeAgo + ' ago</span>'
                                     + '</div>'
                                     + '</div>';
                         }
                     });
                     $(".msg_history").append(newMessage);
                     $(".msg_history").scrollTop($(".msg_history")[0].scrollHeight);
+                    $(".overlay").hide();
                 });
     }
 
@@ -269,7 +273,7 @@
             console.log(receiverID + '==> recever ID.');
             console.log(message);
             if (message == '') {
-                alert("message missing");
+                alert("Enter message.");
                 return false;
             } else {
                 $(".write_msg").val("");
@@ -300,12 +304,14 @@
     });
 
     $(document).on('click', '#join_chat', function () {
+        $(".overlay").show();
         if (receiverID == '') {
             alert("Please select user.");
         } else {
             $("#join_chat").css("display", "none");
             $(".input_msg_write").css("display", "block");
         }
+        $(".overlay").hide();
     });
 
     function timeSince(date) {
@@ -332,6 +338,9 @@
         interval = Math.floor(seconds / 60);
         if (interval > 1) {
             return interval + " minutes";
+        }
+        if (Math.floor(seconds) <= 0) {
+            return "1 seconds";
         }
         return Math.floor(seconds) + " seconds";
     }
