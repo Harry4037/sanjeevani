@@ -25,17 +25,17 @@ class ActivityRequestController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = ActivityRequest::query();
+            $query->with('userDetail');
             if ($searchKeyword) {
-                $query->orWhere("activity_name", "LIKE", "%$searchKeyword%")
-                        ;
+                $query->whereHas("userDetail", function($query) use($searchKeyword) {
+                            $query->where("user_name", "LIKE", "%$searchKeyword%");
+                        })->orWhere("activity_name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("room_no", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
 
-            $amenityRequests = $query
-                            ->with([
-                                'userDetail'
-                            ])->take($limit)->offset($offset)->latest()->get();
+           $amenityRequests = $query->take($limit)->offset($offset)->latest()->get();
 
             $dataArray = [];
             foreach ($amenityRequests as $key => $serviceRequest) {
@@ -43,6 +43,7 @@ class ActivityRequestController extends Controller {
                 $from  = Carbon::parse($serviceRequest->from);
                 $to  = Carbon::parse($serviceRequest->to);
                 $dataArray[$key]['user_name'] = isset($serviceRequest->userDetail) ? $serviceRequest->userDetail->user_name : "";
+                $dataArray[$key]['room_no'] = $serviceRequest->room_no;
                 $dataArray[$key]['activity_name'] = $serviceRequest->amenity_name;
                 $dataArray[$key]['booking_date'] = $booking->format('d-M-Y');
                 $dataArray[$key]['from'] = $from->format("h:i A");

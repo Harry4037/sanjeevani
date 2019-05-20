@@ -66,10 +66,10 @@
 <li>
   <a href="{{ route('admin.amenity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>Amenity Request Management</a>
 </li>
-<!--<li>
-  <a href="{{ route('admin.activity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>AmenityRequest Management</a>
-</li>-->
-<li  @if(in_array(Route::currentRouteName(), ['admin.amenity.add', 'admin.amenity.edit']))
+<li>
+  <a href="{{ route('admin.activity-request.index') }}"><i class="fa fa-hand-scissors-o"></i>Activity Request Management</a>
+</li>
+<li  @if(in_array(Route::currentRouteName(), ['admin.activity.add', 'admin.activity.edit']))
 {{ "class=current-page" }}
 @endif
 >

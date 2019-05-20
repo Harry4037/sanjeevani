@@ -21,6 +21,7 @@
                         <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
+                            <th>Room No.</th>
                             <th>Amenity Name</th>
                             <th>Booking Date</th>
                             <th>From (Time)</th>
@@ -53,18 +54,15 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "user_name"},
-                {"data": "activity_name"},
-                {"data": "booking_date"},
-                {"data": "from"},
-                {"data": "to"},
+                {"data": "user_name", sortable: false},
+                {"data": "room_no", sortable: false},
+                {"data": "activity_name", sortable: false},
+                {"data": "booking_date", sortable: false},
+                {"data": "from", sortable: false},
+                {"data": "to", sortable: false},
             ]
         });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
 
     });
 </script>
