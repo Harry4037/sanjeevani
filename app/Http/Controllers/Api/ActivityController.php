@@ -277,9 +277,10 @@ class ActivityController extends Controller {
                 $user = User::select('id', 'user_name', 'mobile_number', 'email_id', 'voter_id', 'aadhar_id', 'address1', 'city_id', 'user_type_id')
                         ->where(["id" => $request->user_id])
                         ->with([
-                            'userBookingDetail' => function($query) {
-                                $query->selectRaw(DB::raw('id, resort_room_no, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                            }
+                            'userBookingDetail' 
+//                            => function($query) {
+//                                $query->selectRaw(DB::raw('id, resort_room_no, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+//                            }
                         ])
                         ->first();
 
