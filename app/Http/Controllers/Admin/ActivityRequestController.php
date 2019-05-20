@@ -44,7 +44,7 @@ class ActivityRequestController extends Controller {
                 $to  = Carbon::parse($serviceRequest->to);
                 $dataArray[$key]['user_name'] = isset($serviceRequest->userDetail) ? $serviceRequest->userDetail->user_name : "";
                 $dataArray[$key]['room_no'] = $serviceRequest->room_no;
-                $dataArray[$key]['activity_name'] = $serviceRequest->amenity_name;
+                $dataArray[$key]['activity_name'] = $serviceRequest->activity_name;
                 $dataArray[$key]['booking_date'] = $booking->format('d-M-Y');
                 $dataArray[$key]['from'] = $from->format("h:i A");
                 $dataArray[$key]['to'] = $to->format("h:i A");
