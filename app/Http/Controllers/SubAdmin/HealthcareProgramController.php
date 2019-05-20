@@ -12,6 +12,8 @@ use App\Models\Resort;
 use App\Models\HealthcateProgram;
 use App\Models\HealthcateProgramDay;
 use App\Models\HealthcateProgramImages;
+use App\Models\HealthcareBooking;
+use App\Models\CityMaster;
 
 class HealthcareProgramController extends Controller {
 
@@ -244,6 +246,67 @@ class HealthcareProgramController extends Controller {
             return ['status' => true, "message" => "Healthcare Program deleted succeffully."];
         } else {
             return ['status' => false, "message" => "Something went be wrong."];
+        }
+    }
+
+    public function booking(Request $request) {
+        $css = [
+            'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css',
+        ];
+        $js = [
+            'vendors/datatables.net/js/jquery.dataTables.min.js',
+            'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js',
+        ];
+        return view('subadmin.healthcare.bookings', ['js' => $js, 'css' => $css]);
+    }
+
+    public function bookingList(Request $request) {
+        try {
+            $offset = $request->get('start') ? $request->get('start') : 0;
+            $limit = $request->get('length');
+            $searchKeyword = $request->get('search')['value'];
+
+            $query = HealthcareBooking::query();
+            $query->join('healthcate_programs', 'healthcare_bookings.health_care_id', "=", "healthcate_programs.id")
+                    ->where("healthcate_programs.resort_id", $request->get("subadminResort"));
+            $query->with("userDetail")->with("healthcarePackage");
+            if ($searchKeyword) {
+                $query->whereHas("healthcarePackage", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhereHas("userDetail", function($query) use($searchKeyword) {
+                    $query->where("user_name", "LIKE", "%$searchKeyword%")
+                            ->orWhere("email_id", "LIKE", "%$searchKeyword%")
+                            ->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                });
+            }
+            $data['recordsTotal'] = $query->count();
+            $data['recordsFiltered'] = $query->count();
+            $healthcareBooking = $query->take($limit)->offset($offset)->latest("healthcare_bookings.created_at")->get();
+
+            $bookingArray = [];
+            foreach ($healthcareBooking as $key => $healthcareBok) {
+                $address = "";
+                if (isset($healthcareBok->userDetail->city_id)) {
+                    $cityState = CityMaster::find($healthcareBok->userDetail->city_id);
+                    if (isset($healthcareBok->userDetail->address1)) {
+                        $address = $healthcareBok->userDetail->address1 . "<br>";
+                        if (isset($cityState->state->state)) {
+                            $address .= $cityState->city . ", ";
+                            $address .= $cityState->state->state;
+                        }
+                    }
+                }
+                $bookingArray[$key]['user_name'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->user_name : '';
+                $bookingArray[$key]['email_id'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->email_id : '';
+                $bookingArray[$key]['mobile_number'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->mobile_number : '';
+                $bookingArray[$key]['user_address'] = $address;
+                $bookingArray[$key]['healthcare_program'] = $healthcareBok->healthcarePackage ? $healthcareBok->healthcarePackage->name : '';
+            }
+
+            $data['data'] = $bookingArray;
+            return $data;
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 

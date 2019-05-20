@@ -7,25 +7,19 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
-                </div>
-                <h2>Activity Requests</h2>
-                <div class="pull-right">
-
-                </div>
+                <h2>Healthcare Package Bookings</h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table id="list" class="table table-striped table-bordered text-center">
+                <table id="list" class="table table-striped table-bordered table-responsive text-center">
                     <thead>
                         <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
-                            <th>Activity Name</th>
-                            <th>Room No.</th>
-                            <th>Booking Date</th>
-                            <th>From (Time)</th>
-                            <th>To (Time)</th>
+                            <th>Email</th>
+                            <th>Mobile No.</th>
+                            <th>Address</th>
+                            <th>Healthcare Program</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -47,19 +41,22 @@
             processing: true,
             serverSide: true,
             stateSave: true,
-            ajax: _baseUrl + "/sub-admin/activity-request/activity-request-list",
+            language: {
+                'loadingRecords': '&nbsp;',
+                'processing': '<i class="fa fa-refresh fa-spin"></i>'
+            },
+            ajax: _baseUrl + "/sub-admin/healthcare/booking-list",
             "columns": [
                 {"data": null,
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {"data": "user_name", sortable: false},
-                {"data": "activity_name", sortable: false},
-                {"data": "room_no", sortable: false},
-                {"data": "booking_date", sortable: false},
-                {"data": "from", sortable: false},
-                {"data": "to", sortable: false},
+                {"data": "user_name", sortable: false, },
+                {"data": "email_id", sortable: false},
+                {"data": "mobile_number", sortable: false},
+                {"data": "user_address", sortable: false},
+                {"data": "healthcare_program", sortable: false},
             ]
         });
 

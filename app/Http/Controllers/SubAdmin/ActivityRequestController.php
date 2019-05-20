@@ -25,26 +25,27 @@ class ActivityRequestController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = ActivityRequest::query();
-             $query->where("resort_id", $request->get("subadminResort"));
+            $query->with('userDetail');
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
-                $query->where("activity_name", "LIKE", "%$searchKeyword%")
-                        ;
+                $query->whereHas("userDetail", function($query) use($searchKeyword) {
+                            $query->where("user_name", "LIKE", "%$searchKeyword%");
+                        })->orWhere("amenity_name", "LIKE", "%$searchKeyword%")
+                        ->orWhere("room_no", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
 
-            $amenityRequests = $query
-                            ->with([
-                                'userDetail'
-                            ])->take($limit)->offset($offset)->latest()->get();
+            $amenityRequests = $query->take($limit)->offset($offset)->latest()->get();
 
             $dataArray = [];
             foreach ($amenityRequests as $key => $serviceRequest) {
-                $booking  = Carbon::parse($serviceRequest->booking_date);
-                $from  = Carbon::parse($serviceRequest->from);
-                $to  = Carbon::parse($serviceRequest->to);
+                $booking = Carbon::parse($serviceRequest->booking_date);
+                $from = Carbon::parse($serviceRequest->from);
+                $to = Carbon::parse($serviceRequest->to);
                 $dataArray[$key]['user_name'] = isset($serviceRequest->userDetail) ? $serviceRequest->userDetail->user_name : "";
-                $dataArray[$key]['activity_name'] = $serviceRequest->amenity_name;
+                $dataArray[$key]['activity_name'] = $serviceRequest->activity_name;
+                $dataArray[$key]['room_no'] = $serviceRequest->room_no;
                 $dataArray[$key]['booking_date'] = $booking->format('d-M-Y');
                 $dataArray[$key]['from'] = $from->format("h:i A");
                 $dataArray[$key]['to'] = $to->format("h:i A");

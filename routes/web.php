@@ -503,6 +503,8 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::match(['get', 'post'], '/edit/{id}', 'HealthcareProgramController@editHealthcare')->name('subadmin.healthcare.edit');
         Route::post('/delete-healthcare-images', 'HealthcareProgramController@deleteHealthcareImage')->name('subadmin.healthcare.delete-activity-image');
         Route::post('/delete', 'HealthcareProgramController@deletehealthcare')->name('subadmin.healthcare.delete');
+        Route::get('/bookings', 'HealthcareProgramController@booking')->name('subadmin.healthcare.booking');
+        Route::get('/booking-list', 'HealthcareProgramController@bookingList')->name('subadmin.healthcare.booking-list');
     });
 
     /**
