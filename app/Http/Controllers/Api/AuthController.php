@@ -128,13 +128,16 @@ class AuthController extends Controller {
                     $user = new User([
                         'mobile_number' => $request->mobile_number,
                         'user_type_id' => $request->user_type,
+                        'email_id' => $request->email_id,
                         'otp' => $OTP,
                         'password' => bcrypt($OTP)
                     ]);
                     if ($user->save()) {
 
                         $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
-                        Mail::to("ankit@yopmail.com")->send(new LoginOtp($OTP));
+                        if ($request->email_id) {
+                            Mail::to($request->email_id)->send(new LoginOtp($OTP));
+                        }
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
                         return $this->administratorResponse();
@@ -145,10 +148,13 @@ class AuthController extends Controller {
                     }
                     $OTP = rand(1000, 9999);
                     $userExist->otp = $OTP;
+                    $userExist->email_id = $request->email_id;
                     $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
                         $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
-                        Mail::to("ankit@yopmail.com")->send(new LoginOtp($OTP));
+                        if ($request->email_id) {
+                            Mail::to($request->email_id)->send(new LoginOtp($OTP));
+                        }
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
                         return $this->administratorResponse();
