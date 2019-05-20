@@ -13,6 +13,7 @@ use App\Models\HealthcateProgram;
 use App\Models\HealthcateProgramDay;
 use App\Models\HealthcateProgramImages;
 use App\Models\HealthcareBooking;
+use App\Models\CityMaster;
 
 class HealthcareProgramController extends Controller {
 
@@ -287,9 +288,21 @@ class HealthcareProgramController extends Controller {
 
             $bookingArray = [];
             foreach ($healthcareBooking as $key => $healthcareBok) {
+                $address = "";
+                if (isset($healthcareBok->userDetail->city_id)) {
+                    $cityState = CityMaster::find($healthcareBok->userDetail->city_id);
+                    if (isset($healthcareBok->userDetail->address1)) {
+                        $address = $healthcareBok->userDetail->address1. "<br>";
+                        if (isset($cityState->state->state)) {
+                            $address .= $cityState->city.", ";
+                            $address .= $cityState->state->state;
+                        }
+                    }
+                }
                 $bookingArray[$key]['user_name'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->user_name : '';
                 $bookingArray[$key]['email_id'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->email_id : '';
                 $bookingArray[$key]['mobile_number'] = $healthcareBok->userDetail ? $healthcareBok->userDetail->mobile_number : '';
+                $bookingArray[$key]['user_address'] = $address;
                 $bookingArray[$key]['healthcare_program'] = $healthcareBok->healthcarePackage ? $healthcareBok->healthcarePackage->name : '';
             }
 

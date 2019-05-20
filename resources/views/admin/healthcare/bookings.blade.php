@@ -18,6 +18,7 @@
                             <th>User Name</th>
                             <th>Email</th>
                             <th>Mobile No.</th>
+                            <th>Address</th>
                             <th>Healthcare Program</th>
                         </tr>
                     </thead>
@@ -54,6 +55,7 @@
                 {"data": "user_name", sortable: false, },
                 {"data": "email_id", sortable: false},
                 {"data": "mobile_number", sortable: false},
+                {"data": "user_address", sortable: false},
                 {"data": "healthcare_program", sortable: false},
             ]
         });
