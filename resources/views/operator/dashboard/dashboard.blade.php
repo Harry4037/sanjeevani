@@ -152,6 +152,15 @@
         height: 516px;
         overflow-y: auto;
     }
+    .blink_me {
+        animation: blinker 1s linear infinite;
+    }
+
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
 </style>
 <div class="">
     <div class="row" id="content_screen">
@@ -163,6 +172,7 @@
                 <div class="input_msg_write" style="display: none;">
                     <input type="text" class="write_msg" placeholder="Type a message" />
                     <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-danger" type="button" style="float: right;margin-top: 20px;" id="end_chat">End Chat</button>
                 </div>
             </div>
         </div>
@@ -178,28 +188,56 @@
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             loggedInUser = user;
-
-            db.collection('chat_user').orderBy('time_stamp')
+            db.collection('chat_user').orderBy('time_stamp', 'desc')
                     .onSnapshot(function (snapshot) {
                         var userList = '';
                         snapshot.docChanges().forEach(function (change) {
-                            console.log(change.type);
                             var username = '';
+                            var color = "red";
                             if (change.doc.data().user_name) {
                                 username = change.doc.data().user_name;
                             }
-                            if (change.type === "added") {
-                                userList += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
-                                        <a href="javascript:void(0);" class="user_tab">' + username + '</a></li>';
+                            if (change.doc.data().is_online) {
+                                var color = "green";
                             }
-                            if (change.type === "removed") {
-                                $('#' + change.doc.id).remove();
-                                $(".chat_with").html('');
-                                $(".msg_history").html('');
-                                $(".msg_history").html("User has end the chat.");
-                                $(".input_msg_write").css("display", "none");
-                                $("#join_chat").css("display", "block");
-                                receiverID = '';
+
+                            if (receiverID != '') {
+                                var blinkClass = "";
+                            } else if (change.doc.data().is_message) {
+                                var blinkClass = "blink_me";
+                            } else {
+                                var blinkClass = "";
+                            }
+
+
+                            if (change.type === "added") {
+//                                console.log(change.type);
+                                if ((change.doc.data().operator_id == loggedInUser.uid) || (change.doc.data().operator_id == 0)) {
+                                    userList += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
+                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i><span class="' + blinkClass + '">' + username + '</span></a></li>';
+                                }
+                            }
+                            if (change.type === "modified") {
+                                if ($("#chat_user_list li").is('#' + change.doc.id)) {
+                                    var _th = $('#' + change.doc.id);
+                                    if ((change.doc.data().operator_id == loggedInUser.uid) || (change.doc.data().operator_id == 0)) {
+                                        _th.html('<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i><span class="' + blinkClass + '">' + username + '</span></a>');
+                                    } else {
+                                        _th.remove();
+                                    }
+                                } else if (change.doc.data().operator_id == 0) {
+                                    userList += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
+                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i><span class="' + blinkClass + '">' + username + '</span></a></li>';
+                                } else {
+
+                                }
+
+//                                $(".chat_with").html('');
+//                                $(".msg_history").html('');
+//                                $(".msg_history").html("User has end the chat.");
+//                                $(".input_msg_write").css("display", "none");
+//                                $("#join_chat").css("display", "block");
+//                                receiverID = '';
                             }
 
                         });
@@ -210,26 +248,33 @@
         }
 
     });
+
     $(document).on('click', '.user', function () {
         $("#chat_user_list").find("li").removeClass("active");
         var _th = $(this);
         _th.addClass("active");
+        _th.find('span').removeClass('blink_me');
+        var document_id = _th.attr('id');
         var user_id = _th.data('id');
         var user_name = _th.data('username');
         var user_collection = 'Customer_' + user_id;
+        var operator_id = _th.find("a").attr("operator_id");
         receiverID = user_id;
         $(".msg_history").html("");
         $("#chat_with").html("<h4>Chat with " + user_name + "</h4>");
-        $(".input_msg_write").css("display", "none");
-        $("#join_chat").css("display", "block");
+        if (operator_id > 0) {
+            $(".input_msg_write").css("display", "block");
+            $("#join_chat").css("display", "none");
+        } else {
+            $(".input_msg_write").css("display", "none");
+            $("#join_chat").css("display", "block");
+        }
+
+        $("#join_chat").attr("document_id", document_id);
+        $("#end_chat").attr("document_id", document_id);
         if (unsubscribe != '') {
             unsubscribe();
         }
-//        db.collection('chat_user').where("user_id", '==', user_id.toString()).get().then(function (querySnapshot) {
-//            querySnapshot.forEach(function (doc) {
-//                console.log(doc.data());
-//            });
-//        });
         realTime(user_collection);
     });
 
@@ -238,9 +283,9 @@
                 .onSnapshot(function (snapshot) {
                     var newMessage = '';
                     snapshot.docChanges().forEach(function (change) {
-                        
+
                         var timeAgo = timeSince(change.doc.data().timeStamp);
-                        if (change.doc.data().senderID != loggedInUser.uid) {
+                        if (change.doc.data().senderID == receiverID) {
                             newMessage += '<div class="incoming_msg">'
                                     + '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>'
                                     + '<div class="received_msg">'
@@ -305,13 +350,22 @@
 
     $(document).on('click', '#join_chat', function () {
         $(".overlay").show();
-        if (receiverID == '') {
+        var document_id = $(this).attr('document_id');
+        if (receiverID == '' || document_id == '') {
             alert("Please select user.");
         } else {
+            db.collection("chat_user").doc(document_id).update({operator_id: loggedInUser.uid.toString()});
             $("#join_chat").css("display", "none");
             $(".input_msg_write").css("display", "block");
         }
         $(".overlay").hide();
+    });
+
+    $(document).on('click', '#end_chat', function () {
+        var document_id = $(this).attr('document_id');
+        db.collection("chat_user").doc(document_id).update({operator_id: '0'});
+        $("#join_chat").css("display", "block");
+        $(".input_msg_write").css("display", "none");
     });
 
     function timeSince(date) {
