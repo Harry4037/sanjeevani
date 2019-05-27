@@ -84,9 +84,9 @@
         width: 92%;
     }
     .received_withd_msg p {
-        background: #ebebeb none repeat scroll 0 0;
+        background: #05728f none repeat scroll 0 0;
         border-radius: 3px;
-        color: #646464;
+        color: #fff;
         font-size: 14px;
         margin: 0;
         padding: 5px 10px 5px 12px;
@@ -185,6 +185,7 @@
     var loggedInUser = '';
     var receiverID = '';
     var unsubscribe = '';
+    var documentID = '';
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             loggedInUser = user;
@@ -201,43 +202,60 @@
                                 var color = "green";
                             }
 
-                            if (receiverID != '') {
-                                var blinkClass = "";
-                            } else if (change.doc.data().is_message) {
+                            if (change.doc.data().is_message) {
                                 var blinkClass = "blink_me";
                             } else {
                                 var blinkClass = "";
                             }
 
-
                             if (change.type === "added") {
-//                                console.log(change.type);
                                 if ((change.doc.data().operator_id == loggedInUser.uid) || (change.doc.data().operator_id == 0)) {
                                     userList += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
-                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i><span class="' + blinkClass + '">' + username + '</span></a></li>';
+                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
+                                    if (blinkClass != "") {
+                                        userList += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
+                                    }
+                                    userList += '</a></li>';
                                 }
                             }
                             if (change.type === "modified") {
                                 if ($("#chat_user_list li").is('#' + change.doc.id)) {
                                     var _th = $('#' + change.doc.id);
                                     if ((change.doc.data().operator_id == loggedInUser.uid) || (change.doc.data().operator_id == 0)) {
-                                        _th.html('<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i><span class="' + blinkClass + '">' + username + '</span></a>');
+                                        if (change.doc.id == documentID) {
+                                            userHtml = '<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
+                                            userHtml += '</a>';
+                                            _th.html(userHtml);
+
+                                        } else {
+                                            userHtml = '<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
+                                            if (blinkClass != "") {
+                                                userHtml += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
+                                            }
+                                            userHtml += '</a>';
+                                            _th.html(userHtml);
+                                        }
+
                                     } else {
+                                        if (change.doc.data().user_id == receiverID) {
+                                            $(".chat_with").html('');
+                                            $(".msg_history").html('');
+                                            $(".msg_history").html("User has joined with other operator.");
+                                            $(".input_msg_write").css("display", "none");
+                                            $("#join_chat").css("display", "block");
+                                            receiverID = '';
+                                            documentID = '';
+                                        }
                                         _th.remove();
                                     }
                                 } else if (change.doc.data().operator_id == 0) {
                                     userList += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
-                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i><span class="' + blinkClass + '">' + username + '</span></a></li>';
+                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username + '</a>';
+                                    userList += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
+                                    userList += '</li>';
                                 } else {
 
                                 }
-
-//                                $(".chat_with").html('');
-//                                $(".msg_history").html('');
-//                                $(".msg_history").html("User has end the chat.");
-//                                $(".input_msg_write").css("display", "none");
-//                                $("#join_chat").css("display", "block");
-//                                receiverID = '';
                             }
 
                         });
@@ -260,6 +278,7 @@
         var user_collection = 'Customer_' + user_id;
         var operator_id = _th.find("a").attr("operator_id");
         receiverID = user_id;
+        documentID = document_id;
         $(".msg_history").html("");
         $("#chat_with").html("<h4>Chat with " + user_name + "</h4>");
         if (operator_id > 0) {
@@ -291,7 +310,7 @@
                                     + '<div class="received_msg">'
                                     + '<div class="received_withd_msg">'
                                     + '<p>' + change.doc.data().messege + '</p>'
-                                    + '<span class="time_date_incoming">' + timeAgo + ' ago</span>'
+                                    + '<span class="time_date_incoming">' + timeAgo + '</span>'
                                     + '</div>'
                                     + '</div>'
                                     + '</div>';
@@ -299,7 +318,7 @@
                             newMessage += '<div class="outgoing_msg">'
                                     + '<div class="sent_msg">'
                                     + '<p>' + change.doc.data().messege + '</p>'
-                                    + '<span class="time_date_outgoing">' + timeAgo + ' ago</span>'
+                                    + '<span class="time_date_outgoing">' + timeAgo + '</span>'
                                     + '</div>'
                                     + '</div>';
                         }
@@ -332,6 +351,7 @@
                 })
                         .then(function (docRef) {
                             console.log("Document written with ID: ", docRef.id);
+                            db.collection("chat_user").doc(documentID).update({is_message: false});
                         })
                         .catch(function (error) {
                             console.error("Error adding document: ", error);
@@ -369,7 +389,10 @@
     });
 
     function timeSince(date) {
-
+        var readableFormat = moment(date, "x").format("hh:mm a");
+        return readableFormat;
+        
+        //////////////////////
         var seconds = Math.floor((new Date() - date) / 1000);
 
         var interval = Math.floor(seconds / 31536000);

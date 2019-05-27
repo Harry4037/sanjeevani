@@ -20,6 +20,7 @@
 
         <!-- jQuery -->
         <script src="{{ asset("vendors/jquery/dist/jquery.min.js") }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
         <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
         <!-- Add additional services that you want to use -->
