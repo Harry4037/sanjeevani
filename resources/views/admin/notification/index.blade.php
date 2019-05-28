@@ -196,6 +196,7 @@
 
                         setTimeout(function () {
                             $(".msg").fadeOut();
+                            location.reload();
                         }, 2000);
                     },
 
