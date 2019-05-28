@@ -144,7 +144,7 @@ class LoginController extends Controller {
                             'profile_pic.mimes' => 'Only jpeg,jpg,png images are allowed.',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.profile')->withErrors($validator)->withInput();
+                    return redirect()->route('operator.profile')->withErrors($validator)->withInput();
                 }
 
                 $user = User::find($request->get('record_id'));
@@ -157,11 +157,11 @@ class LoginController extends Controller {
                     $user->profile_pic_path = $profile_file_name;
                 }
                 $user->save();
-                return redirect()->route('admin.profile')->with('status', 'Profile has been updated successfully.');
+                return redirect()->route('operator.profile')->with('status', 'Profile has been updated successfully.');
             }
-            return view('admin.profile.index');
+            return view('operator.profile.index');
         } catch (\Exception $ex) {
-            return redirect()->route('admin.profile')->with('error', $ex->getMessage());
+            return redirect()->route('operator.profile')->with('error', $ex->getMessage());
         }
     }
 
@@ -171,12 +171,12 @@ class LoginController extends Controller {
             if (Hash::check($request->get("old_password"), $user->password)) {
                 $user->password = bcrypt($request->get("new_password"));
                 $user->save();
-                return redirect()->route('admin.change-password')->with('status', 'Password has been updated successfully.');
+                return redirect()->route('operator.change-password')->with('status', 'Password has been updated successfully.');
             } else {
-                return redirect()->route('admin.change-password')->with('error', 'Old password incorrect.');
+                return redirect()->route('operator.change-password')->with('error', 'Old password incorrect.');
             }
         }
-        return view('admin.profile.change-password');
+        return view('operator.profile.change-password');
     }
 
 //    public function test(){

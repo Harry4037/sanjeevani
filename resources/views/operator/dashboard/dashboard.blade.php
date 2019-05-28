@@ -84,13 +84,13 @@
         width: 92%;
     }
     .received_withd_msg p {
-        background: #05728f none repeat scroll 0 0;
+        background: #767979 none repeat scroll 0 0;
         border-radius: 3px;
         color: #fff;
         font-size: 14px;
         margin: 0;
         padding: 5px 10px 5px 12px;
-        width: 100%;
+        width: 50%;
         text-align: left;
     }
     .time_date_incoming {

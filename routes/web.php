@@ -586,5 +586,7 @@ Route::namespace("Operator")->prefix('operator')->group(function() {
 });
 
 Route::namespace("Operator")->prefix('operator')->middleware(['operatorGuest'])->group(function() {
+    Route::match(['get', 'post'], '/profile', 'LoginController@profile')->name('operator.profile');
+    Route::match(['get', 'post'], '/change-password', 'LoginController@changePassword')->name('operator.change-password');
     Route::get('/dashboard', 'DashboardController@index')->name('operator.dashboard');
 });

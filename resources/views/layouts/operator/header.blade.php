@@ -7,15 +7,15 @@
         <div class="clearfix"></div>
 
         <!-- menu profile quick info -->
-<!--        <div class="profile clearfix">
-            <div class="profile_pic">
-                <img src="{{ auth('operator')->user()->profile_pic_path }}" alt="..." class="img-circle profile_img">
-            </div>
-            <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>{{ auth('operator')->user()->user_name ? auth('operator')->user()->user_name : "Operator" }}</h2>
-            </div>
-        </div>-->
+        <!--        <div class="profile clearfix">
+                    <div class="profile_pic">
+                        <img src="{{ auth('operator')->user()->profile_pic_path }}" alt="..." class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info">
+                        <span>Welcome,</span>
+                        <h2>{{ auth('operator')->user()->user_name ? auth('operator')->user()->user_name : "Operator" }}</h2>
+                    </div>
+                </div>-->
         <!-- /menu profile quick info -->
         <br />
         @include('layouts.operator.control-sidebar')
@@ -37,8 +37,8 @@
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-<!--                        <li><a href="{{ route('admin.profile') }}">Profile</a></li>
-                        <li><a href="{{ route('admin.change-password') }}">Change Password</a></li>-->
+                        <li><a href="{{ route('operator.profile') }}">Profile</a></li>
+                        <li><a href="{{ route('operator.change-password') }}">Change Password</a></li>
                         <li><a href="{{ route('operator.logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                     </ul>
                 </li>
