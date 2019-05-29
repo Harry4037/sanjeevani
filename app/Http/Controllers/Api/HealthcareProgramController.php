@@ -490,6 +490,15 @@ class HealthcareProgramController extends Controller {
                         ->where("user_id", $request->user_id)
                         ->where("is_cancelled", "!=", 1)
                         ->get();
+                $cancelledPackages = UserBookingDetail::with([
+                            "packageDetail" => function($query) {
+                                $query->selectRaw(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'));
+                            }
+                        ])
+//                        ->where("check_in", ">", date("Y-m-d H:i:s"))
+                        ->where("user_id", $request->user_id)
+                        ->where("is_cancelled", 1)
+                        ->get();
                 $completedArray = [];
                 foreach ($completedPackages as $i => $completedPackage) {
                     $completedArray[$i]["id"] = $completedPackage->packageDetail->id;
@@ -507,6 +516,14 @@ class HealthcareProgramController extends Controller {
                     $upcomingArray[$i]["status"] = "Upcoming";
                 }
                 $data['upcoming'] = $upcomingArray;
+                $cancelledArray = [];
+                foreach ($cancelledPackages as $i => $cancelledPackage) {
+                    $cancelledArray[$i]["id"] = $cancelledPackage->packageDetail->id;
+                    $cancelledArray[$i]["name"] = $cancelledPackage->packageDetail->name;
+                    $cancelledArray[$i]["duration"] = date("d-M-Y", strtotime($cancelledPackage->check_in)) . " to " . date("d-M-Y", strtotime($cancelledPackage->check_out));
+                    $cancelledArray[$i]["status"] = "Cancelled";
+                }
+                $data['cancel'] = $cancelledArray;
                 return $this->sendSuccessResponse("Health Package found", $data);
             } else {
                 return $this->sendErrorResponse("Invalid User", (object) []);
