@@ -135,7 +135,7 @@ class OrderController extends Controller {
                 $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
                 $mealOrder->gst_amount = $gst;
-                $mealOrder->total_amount = $total + number_format(($total * ($gst/100)),0);
+                $mealOrder->total_amount = $total + number_format(($total * ($gst/100)),0, '.', '');
                 if ($mealOrder->save()) {
                     foreach ($cartDataArray as $cartData) {
                         $mealOrderItem = new MealOrderItem();
