@@ -45,13 +45,13 @@ class Kernel extends ConsoleKernel {
                             ->setPriority('high');
 
                     $notificationBuilder = new PayloadNotificationBuilder("Reminder Notification");
-                    $notificationBuilder->setBody("You upcoming booking date is " . date("d-m-Y", strtotime($userBooking->check_in)))
+                    $notificationBuilder->setBody("Your upcoming booking date is " . date("d-m-Y", strtotime($userBooking->check_in)))
                             ->setSound('soundn.mp3');
 
                     $dataBuilder = new PayloadDataBuilder();
                     $dataBuilder->addData([
                         'title' => "Reminder Notification",
-                        'message' => "You upcoming booking date is " . date("d-m-Y", strtotime($userBooking->check_in)),
+                        'message' => "Your upcoming booking date is " . date("d-m-Y", strtotime($userBooking->check_in)),
                         "type" => 234,
                         "user_type_id" => 3,
                         "sound" => "soundn.mp3",
