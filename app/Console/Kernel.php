@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel {
             $next2days = date('Y-m-d H:i:s', strtotime("+2 days"));
             $next2days24Hour = date('Y-m-d H:i:s', strtotime("+24 hours", strtotime($next2days)));
 
-            $userBookings = DB::table('user_booking_details')->whereBetween("check_in", [$next2days, $next2days24Hour])->get();
+            $userBookings = DB::table('user_booking_details')->whereBetween("check_in", [$next2days, $next2days24Hour])->where("is_cancelled", 0)->get();
             foreach ($userBookings as $userBooking) {
                 $user = DB::table('users')->find($userBooking->user_id);
                 if ($user->device_token) {
@@ -66,7 +66,7 @@ class Kernel extends ConsoleKernel {
                     $downstreamResponse = FCM::sendTo($user->device_token, $option, $notification, $data);
                 }
             }
-        })->everyMinute();
+        })->everyDay();
     }
 
     /**
