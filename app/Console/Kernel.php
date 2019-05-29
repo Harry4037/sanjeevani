@@ -61,9 +61,9 @@ class Kernel extends ConsoleKernel {
                     $notification = $notificationBuilder->build();
                     $data = $dataBuilder->build();
 
-                    $token = "cj2GrsTHQlU:APA91bGw707gSY_IYpVY0_cYHm8GiBVslMc86er03xkNr8_ixiuyN95OmVH0ctLSv9JOjq5acIHjKnWfq_fx0yxw3KidSkSrVdHx2TWjFBzaJhwpt72B6IcB0UN24G_fBbsy3f4OPw-K";
+//                    $token = "cj2GrsTHQlU:APA91bGw707gSY_IYpVY0_cYHm8GiBVslMc86er03xkNr8_ixiuyN95OmVH0ctLSv9JOjq5acIHjKnWfq_fx0yxw3KidSkSrVdHx2TWjFBzaJhwpt72B6IcB0UN24G_fBbsy3f4OPw-K";
 
-                    $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                    $downstreamResponse = FCM::sendTo($user->device_token, $option, $notification, $data);
                 }
             }
         })->everyMinute();
