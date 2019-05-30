@@ -66,7 +66,7 @@ class Kernel extends ConsoleKernel {
                     $downstreamResponse = FCM::sendTo($user->device_token, $option, $notification, $data);
                 }
             }
-        })->everyDay();
+        })->daily();
     }
 
     /**
