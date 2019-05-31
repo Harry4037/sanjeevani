@@ -4816,6 +4816,102 @@
     "groupTitle": "Staff_Service"
   },
   {
+    "type": "get",
+    "url": "/api/search-user",
+    "title": "Search User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "Getsearchuser",
+    "group": "Staff_Service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "search_keyword",
+            "description": "<p>Search keyword*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User",
+            "description": "<p>list</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>{}.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n {\n     \"status\": true,\n     \"status_code\": 200,\n     \"message\": \"user list\",\n     \"data\": {\n         \"user_list\": [\n             {\n                 \"id\": 81,\n                 \"name\": \"Hariom Gangwar\",\n                 \"email_id\": \"hariom4037@gmail.com\",\n                 \"mobile_number\": \"8077575834\",\n                 \"country_code\": \"\"\n             },\n             {\n                 \"id\": 114,\n                 \"name\": \"\",\n                 \"email_id\": \"\",\n                 \"mobile_number\": \"8077575832\",\n                 \"country_code\": \"\"\n             },\n             {\n                 \"id\": 117,\n                 \"name\": \"Ankit Singh\",\n                 \"email_id\": \"ankit@yopmail.com\",\n                 \"mobile_number\": \"8077575837\",\n                 \"country_code\": \"\"\n             },\n             {\n                 \"id\": 118,\n                 \"name\": \"Ankit Singh\",\n                 \"email_id\": \"ankit@yopmail.com\",\n                 \"mobile_number\": \"8077575835\",\n                 \"country_code\": \"\"\n             }\n         ]\n     }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SeacrhKeywordMissing",
+            "description": "<p>Search keyword missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Search Keyword missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
+    "groupTitle": "Staff_Service"
+  },
+  {
     "type": "post",
     "url": "/api/accept-reject-meal-order",
     "title": "Accept/Reject meal order.",

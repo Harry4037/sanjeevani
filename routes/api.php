@@ -100,13 +100,14 @@ Route::namespace("Api")->group(function () {
     Route::post('send-message', 'ChatController@sendMessage');
     Route::get('message-list', 'ChatController@messageList');
     Route::get('chat-user-list', 'ChatController@chatUserList');
-    
+
     Route::get('room-type-list', 'StaffController@resortList');
 
+    Route::get('search-user', 'StaffController@searchUser');
 
     Route::middleware('auth:api')->group(function () {
         Route::post('add-user', 'StaffController@addUser');
-        
+
         //Healthcare package booking
         Route::post('healthcare-booking', 'HealthcareProgramController@booking');
 

@@ -1561,4 +1561,94 @@ class StaffController extends Controller {
         return $this->sendErrorResponse("Somethin went be wrong.", (object) []);
     }
 
+    /**
+     * @api {get} /api/search-user Search User
+     * @apiHeader {String} Accept application/json.
+     * @apiName Getsearchuser
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} search_keyword Search keyword*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} User list
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *  {
+     *      "status": true,
+     *      "status_code": 200,
+     *      "message": "user list",
+     *      "data": {
+     *          "user_list": [
+     *              {
+     *                  "id": 81,
+     *                  "name": "Hariom Gangwar",
+     *                  "email_id": "hariom4037@gmail.com",
+     *                  "mobile_number": "8077575834",
+     *                  "country_code": ""
+     *              },
+     *              {
+     *                  "id": 114,
+     *                  "name": "",
+     *                  "email_id": "",
+     *                  "mobile_number": "8077575832",
+     *                  "country_code": ""
+     *              },
+     *              {
+     *                  "id": 117,
+     *                  "name": "Ankit Singh",
+     *                  "email_id": "ankit@yopmail.com",
+     *                  "mobile_number": "8077575837",
+     *                  "country_code": ""
+     *              },
+     *              {
+     *                  "id": 118,
+     *                  "name": "Ankit Singh",
+     *                  "email_id": "ankit@yopmail.com",
+     *                  "mobile_number": "8077575835",
+     *                  "country_code": ""
+     *              }
+     *          ]
+     *      }
+     *  }
+     * 
+     * 
+     * @apiError SeacrhKeywordMissing Search keyword missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Search Keyword missing.",
+     *    "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function searchUser(Request $request) {
+        if (!$request->search_keyword) {
+            return $this->sendErrorResponse("Search keyword missing", (object) []);
+        }
+        $users = User::where(function ($query) use ($request) {
+                    $query->where('user_name', 'like', "%" . $request->search_keyword . "%")
+                            ->orWhere('email_id', 'like', "%" . $request->search_keyword . "%")
+                            ->orWhere('mobile_number', 'like', "%" . $request->search_keyword . "%");
+                })->where("user_type_id", 3)->get();
+        $dataArray = [];
+        if ($users->count()) {
+            foreach ($users as $k => $user) {
+                $dataArray[$k]['id'] = $user->id;
+                $dataArray[$k]['name'] = $user->user_name ? $user->user_name : '';
+                $dataArray[$k]['email_id'] = $user->email_id ? $user->email_id : '';
+                $dataArray[$k]['mobile_number'] = $user->mobile_number ? $user->mobile_number : '';
+                $dataArray[$k]['country_code'] = $user->country_code ? $user->country_code : '';
+            }
+        }
+        $data['user_list'] = $dataArray;
+        return $this->sendSuccessResponse("user list", $data);
+    }
+
 }
