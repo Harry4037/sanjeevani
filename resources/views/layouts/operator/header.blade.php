@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view" style="background: #ffffff;">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="#" class="site_title"><i class="fa fa-heartbeat"></i> <span>Operator</span></a>
+            <a href="{{ route('operator.dashboard') }}" class="site_title"><i class="fa fa-heartbeat"></i> <span>Operator</span></a>
         </div>
 
         <div class="clearfix"></div>
@@ -37,7 +37,7 @@
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li><a href="{{ route('operator.dashboard') }}">Home</a></li>
+<!--                        <li><a href="{{ route('operator.dashboard') }}">Home</a></li>-->
                         <li><a href="{{ route('operator.profile') }}">Profile</a></li>
                         <li><a href="{{ route('operator.change-password') }}">Change Password</a></li>
                         <li><a href="{{ route('operator.logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
