@@ -17,6 +17,11 @@ use App\Models\User;
 use App\Models\UserBookingDetail;
 use App\Models\Service;
 use App\Models\AmenityImage;
+use App\Models\RoomType;
+use App\Models\ResortRoom;
+use App\Models\UserhealthDetail;
+use App\Models\UserMembership;
+use Illuminate\Support\Facades\Storage;
 
 class StaffController extends Controller {
 
@@ -1175,6 +1180,385 @@ class StaffController extends Controller {
         } catch (\Exception $ex) {
             return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }
+    }
+
+    /**
+     * @api {get} /api/room-type-list Room Type & Package List
+     * @apiHeader {String} Accept application/json.
+     * @apiName Getroomtypelist
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} check_in Check In Date*.
+     * @apiParam {String} check_out Check Out Date*.
+     * @apiParam {String} resort_id Resort Id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} Resort room list
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "Resort room & Package list",
+     *       "data": {
+     *           "room_list": [
+     *               {
+     *                   "id": 1,
+     *                   "room_type": "Tent",
+     *                   "rooms": [
+     *                       {
+     *                           "id": 52,
+     *                           "room_no": "t-2"
+     *                       },
+     *                       {
+     *                           "id": 53,
+     *                           "room_no": "T-3"
+     *                       },
+     *                       {
+     *                           "id": 54,
+     *                           "room_no": "T-4"
+     *                       },
+     *                       {
+     *                           "id": 55,
+     *                           "room_no": "T-5"
+     *                       },
+     *                       {
+     *                           "id": 56,
+     *                           "room_no": "T-6"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "id": 2,
+     *                   "room_type": "Cottage",
+     *                   "rooms": [
+     *                       {
+     *                           "id": 50,
+     *                           "room_no": "C-1"
+     *                       },
+     *                       {
+     *                           "id": 57,
+     *                           "room_no": "C-3"
+     *                       },
+     *                       {
+     *                           "id": 58,
+     *                           "room_no": "C-2"
+     *                       },
+     *                       {
+     *                           "id": 59,
+     *                           "room_no": "C-4"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "id": 4,
+     *                   "room_type": "Villa",
+     *                   "rooms": [
+     *                       {
+     *                           "id": 51,
+     *                           "room_no": "V-1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "id": 8,
+     *                   "room_type": "Dummy",
+     *                   "rooms": [
+     *                       []
+     *                   ]
+     *               }
+     *           ],
+     *           "packages": [
+     *               {
+     *                   "id": 1,
+     *                   "name": "Healthcare Package Reverse Diabetes in 3 Days"
+     *               },
+     *               {
+     *                   "id": 3,
+     *                   "name": "Healthcare Package Reverse Diabetes in 7 Days"
+     *               },
+     *               {
+     *                   "id": 4,
+     *                   "name": "Reverse Diabetes in 14 Days"
+     *               },
+     *               {
+     *                   "id": 5,
+     *                   "name": "Reverse Diabetes in 21 Days"
+     *               }
+     *           ]
+     *       }
+     *   }
+     * 
+     * 
+     * @apiError CheckInMissing The Check In date missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Check In missing.",
+     *    "data": {}
+     * }
+     * 
+     * @apiError CheckOutMissing The Check Out date missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Check Out missing.",
+     *    "data": {}
+     * }
+     * 
+     * @apiError ResortIdMissing The Resort Id date missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "Resort Id missing.",
+     *    "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function resortList(Request $request) {
+        if (!$request->check_in) {
+            return $this->sendErrorResponse("Check In date missing", (object) []);
+        }
+        if (!$request->check_out) {
+            return $this->sendErrorResponse("Check Out date missing", (object) []);
+        }
+        if (!$request->resort_id) {
+            return $this->sendErrorResponse("Resort Id missing", (object) []);
+        }
+
+        $roomTypes = RoomType::where("is_active", 1)->get();
+        if ($roomTypes->count()) {
+            $check_in = date("Y-m-d H:s:i", strtotime($request->check_in));
+            $check_out = date("Y-m-d H:s:i", strtotime($request->check_out));
+            $resort = $request->resort_id;
+
+            $roomIds = UserBookingDetail::where("resort_id", $resort)
+                    ->where(function($query) use($check_in, $check_out) {
+                        $query->orWhere(function($query) use($check_in) {
+                            $query->where("check_in", "<=", $check_in)
+                            ->where("check_out", ">=", $check_in);
+                        });
+                        $query->orWhere(function($query) use($check_out) {
+                            $query->where("check_in", "<", $check_out)
+                            ->where("check_out", ">=", $check_out);
+                        });
+                        $query->orWhere(function($query) use($check_in, $check_out) {
+                            $query->where("check_in", ">=", $check_in)
+                            ->where("check_out", "<=", $check_out);
+                        });
+                    })
+                    ->pluck("resort_room_id");
+            $dataArray = [];
+            foreach ($roomTypes as $key => $roomType) {
+                $dataArray[$key]['id'] = $roomType->id;
+                $dataArray[$key]['room_type'] = $roomType->name;
+
+                $query = ResortRoom::query();
+                $query->where(["resort_id" => $resort, "room_type_id" => $roomType->id, "is_active" => 1]);
+                if (!empty($roomIds)) {
+                    $query->whereNotIn("id", $roomIds);
+                }
+                $resortRooms = $query->get();
+                if ($resortRooms->count()) {
+                    foreach ($resortRooms as $j => $resortRoom) {
+                        $dataArray[$key]['rooms'][$j]['id'] = $resortRoom->id;
+                        $dataArray[$key]['rooms'][$j]['room_no'] = $resortRoom->room_no;
+                    }
+                } else {
+                    $dataArray[$key]['rooms'][$j] = [];
+                }
+            }
+            $data['room_list'] = $dataArray;
+        } else {
+            $data['room_list'] = [];
+        }
+
+        $Programs = \App\Models\HealthcateProgram::where(["resort_id" => $request->resort_id, "is_active" => 1])->get();
+        if ($Programs->count()) {
+            $packageArray = [];
+            foreach ($Programs as $i => $Program) {
+                $packageArray[$i]['id'] = $Program->id;
+                $packageArray[$i]['name'] = $Program->name;
+            }
+            $data['packages'] = $packageArray;
+        } else {
+            $data['packages'] = [];
+        }
+
+        return $this->sendSuccessResponse("Resort room & Package list", $data);
+    }
+
+    /**
+     * @api {post} /api/add-user Add User
+     * @apiHeader {String} Accept application/json.
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiName Postadduser
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} mobile_number Mobile Number*.
+     * @apiParam {String} user_name User Name*.
+     * @apiParam {String} country_code Country code*.
+     * @apiParam {String} email_id Email id.
+     * @apiParam {String} resort_room_type_id Resort room type Id*.
+     * @apiParam {String} resort_room_id Resort room Id*.
+     * @apiParam {String} booking_source_name Booking Source name*.
+     * @apiParam {String} booking_source_id Booking Source Id*.
+     * @apiParam {String} resort_id Resort Id*.
+     * @apiParam {String} package_id Package Id*.
+     * @apiParam {String} check_in Check In date time*.
+     * @apiParam {String} check_out Check Out date time*.
+     * @apiParam {String} check_out Check Out date time*.
+     * @apiParam {String} is_membership Membership (true or false).
+     * @apiParam {String} membership_id Membership Id.
+     * @apiParam {String} membership_from Membership From.
+     * @apiParam {String} membership_till Membership Till.
+     * @apiParam {String} is_medical Medical (true or false).
+     * @apiParam {String} is_diabeties Diabetirs (0 or 1).
+     * @apiParam {String} is_ppa PPA (0 or 1).
+     * @apiParam {String} hba_1c HBA_1C (0 or 1).
+     * @apiParam {String} fasting Fasting.
+     * @apiParam {String} bp BP.
+     * @apiParam {String} insullin_dependency Insullin dependency.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} Something went be wrong
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *      "status": true,
+     *     "status_code": 200,
+     *     "message": "User registered successfully",
+     *      "data": {}
+     *   }
+     * 
+     * 
+     * 
+     * 
+     */
+    public function addUser(Request $request) {
+        if (!$request->user_name) {
+            return $this->sendErrorResponse("Username missing", (object) []);
+        }
+        if (!$request->country_code) {
+            return $this->sendErrorResponse("Country code missing", (object) []);
+        }
+        if (!$request->mobile_number) {
+            return $this->sendErrorResponse("Mobile number missing", (object) []);
+        }
+        if (!$request->resort_room_type_id) {
+            return $this->sendErrorResponse("Room type missing", (object) []);
+        }
+        if (!$request->resort_room_id) {
+            return $this->sendErrorResponse("Room No. missing", (object) []);
+        }
+        if (!$request->booking_source_name) {
+            return $this->sendErrorResponse("Booking Source name missing", (object) []);
+        }
+        if (!$request->booking_source_id) {
+            return $this->sendErrorResponse("Booking Source Id missing", (object) []);
+        }
+        if (!$request->resort_id) {
+            return $this->sendErrorResponse("Resort Id missing", (object) []);
+        }
+        if (!$request->check_in) {
+            return $this->sendErrorResponse("Check In missing", (object) []);
+        }
+        if (!$request->check_out) {
+            return $this->sendErrorResponse("Check Out missing", (object) []);
+        }
+
+        $isExist = User::where(["user_type_id" => 3, "mobile_number" => $request->mobile_number])->get();
+        if ($isExist->count()) {
+            return $this->sendErrorResponse("User already registered", (object) []);
+        }
+        $user = new User();
+        $name = explode(" ", $request->user_name);
+
+        $user->user_type_id = 3;
+        $user->discount = $request->discount ? $request->discount : 0;
+        $user->user_name = $request->user_name;
+        $user->first_name = isset($name[0]) ? $name[0] : '';
+        $user->last_name = isset($name[1]) ? $name[1] : '';
+        $user->mobile_number = $request->mobile_number;
+        $user->otp = 9999;
+        $user->password = bcrypt(9999);
+        $user->email_id = $request->email_id;
+        $user->created_by = 0;
+        $user->updated_by = 0;
+        if ($user->save()) {
+            if (isset($request->is_medical) && ($request->is_medical)) {
+                $doc_file_name = '';
+                if ($request->hasFile("medical_documents")) {
+                    $medical_documents = $request->file("medical_documents");
+                    $medical_doc = Storage::disk('public')->put('medical_document', $medical_documents);
+                    $doc_file_name = basename($medical_doc);
+                }
+
+                $userHealthDetail = new UserhealthDetail();
+                $userHealthDetail->is_diabeties = $request->is_diabeties ? $request->is_diabeties : 0;
+                $userHealthDetail->is_ppa = $request->is_ppa ? $request->is_ppa : 0;
+                $userHealthDetail->hba_1c = $request->hba_1c ? $request->hba_1c : 0;
+                $userHealthDetail->fasting = $request->fasting ? $request->fasting : '';
+                $userHealthDetail->bp = $request->bp ? $request->bp : '';
+                $userHealthDetail->insullin_dependency = $request->insullin_dependency ? $request->insullin_dependency : '';
+                $userHealthDetail->medical_documents = $doc_file_name;
+                $userHealthDetail->user_id = $user->id;
+                $userHealthDetail->save();
+            }
+
+            if (isset($request->is_membership) && ($request->is_membership)) {
+                $userMembership = new UserMembership();
+
+                $userMembership->user_id = $user->id;
+                $userMembership->membership_id = $request->membership_id;
+                $membership_from = Carbon::parse($request->membership_from);
+                $userMembership->valid_from = $membership_from->format('Y-m-d H:i:s');
+                $membership_till = Carbon::parse($request->membership_till);
+                $userMembership->valid_till = $membership_till->format('Y-m-d H:i:s');
+                $userMembership->save();
+            }
+
+//            if (isset($request->is_booking) && ($request->is_booking == "on")) {
+            $roomType = RoomType::find($request->resort_room_type_id);
+            $room = ResortRoom::find($request->resort_room_id);
+            $userBooking = new UserBookingDetail();
+            $userBooking->source_name = $request->booking_source_name;
+            $userBooking->source_id = $request->booking_source_id;
+            $userBooking->user_id = $user->id;
+            $userBooking->resort_id = $request->resort_id;
+            $userBooking->package_id = $request->package_id;
+            $userBooking->room_type_id = $request->resort_room_type_id;
+            $userBooking->room_type_name = $roomType ? $roomType->name : "";
+            $userBooking->resort_room_id = $request->resort_room_id;
+            $userBooking->resort_room_no = $room ? $room->room_no : "";
+            $check_in_date = Carbon::parse($request->check_in);
+            $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
+            $check_out_date = Carbon::parse($request->check_out);
+            $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
+            $userBooking->check_in_pin = rand(1111, 9999);
+            $userBooking->check_out_pin = rand(1111, 9999);
+            $userBooking->save();
+//            }
+
+            $this->sendRegistration($user->mobile_number, $user->user_name);
+            return $this->sendSuccessResponse("User registered successfully", (object) []);
+        }
+
+        return $this->sendErrorResponse("Somethin went be wrong.", (object) []);
     }
 
 }
