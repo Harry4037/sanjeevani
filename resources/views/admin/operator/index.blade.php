@@ -7,7 +7,7 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <h2>Operaor List</h2>
+                <h2>Operator List</h2>
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('admin.operator.add') }}">Add Operator</a>
                 </div>
