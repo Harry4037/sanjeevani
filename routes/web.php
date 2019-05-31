@@ -307,6 +307,20 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/send-notification', 'NotificationController@sendNotification')->name('admin.notification.send');
         Route::get('/notifications-list', 'NotificationController@listNotification')->name('subadmin.notification.list');
     });
+
+    /**
+     * Sub-Admin Management
+     */
+    Route::prefix('operator')->group(function() {
+        Route::get('/', 'OperatorController@index')->name('admin.operator.index');
+        Route::get('/operator-list', 'OperatorController@usersList')->name('admin.operator.list');
+        Route::post('/operator-status', 'OperatorController@updateUserStatus')->name('admin.operator.status');
+        Route::match(['get', 'post'], '/add-operator', 'OperatorController@addUser')->name('admin.operator.add');
+        Route::get('/operator/{id}', 'OperatorController@viewUser')->name('admin.operator.detail');
+        Route::match(['get', 'post'], '/edit/{id}', 'OperatorController@editUser')->name('admin.operator.edit');
+        Route::post('/amenity-list', 'OperatorController@getAmenities')->name('admin.operator.amenity-list');
+        Route::match(['get', 'post'], '/change-password/{id}', 'OperatorController@changePassword')->name('admin.operator.change-password');
+    });
 });
 
 

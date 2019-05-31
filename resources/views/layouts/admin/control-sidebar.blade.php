@@ -45,6 +45,10 @@
 {{ "class=current-page" }}
 @endif
 ><a href="{{ route('admin.subadmin.index') }}">Sub Admin</a></li>
+<li @if(in_array(Route::currentRouteName(), ['admin.operator.edit', 'admin.operator.add', 'admin.operator.index']))
+{{ "class=current-page" }}
+@endif
+><a href="{{ route('admin.operator.index') }}">Operator</a></li>
 </ul>
 </li>
 <li @if(in_array(Route::currentRouteName(), ['admin.banner.add', 'admin.banner.edit']))
