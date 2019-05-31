@@ -432,24 +432,25 @@ class HealthcareProgramController extends Controller {
       "status_code": 200,
       "message": "Health Package found",
       "data": {
-      "complete": [
-      {
-      "id": 11,
-      "name": "Healthcare Package Reverse Diabetes in 3 Days",
-      "duration": "01-Feb-2019 to 02-Feb-2019",
-      "status": "Completed"
-      }
-      ],
-      "upcoming": [
-      {
-      "id": 11,
-      "record_id": 45,
-      "name": "Healthcare Package Reverse Diabetes in 3 Days",
-      "duration": "01-Apr-2019 to 03-Apr-2019",
-      "status": "Upcoming"
-      }
-      ]
-      }
+            "complete": [
+                {
+                "id": 11,
+                "name": "Healthcare Package Reverse Diabetes in 3 Days",
+                "duration": "01-Feb-2019 to 02-Feb-2019",
+                "status": "Completed"
+                }
+                ],
+            "upcoming": [
+                {
+                "id": 11,
+                "record_id": 45,
+                "name": "Healthcare Package Reverse Diabetes in 3 Days",
+                "duration": "01-Apr-2019 to 03-Apr-2019",
+                "status": "Upcoming"
+                }
+                ],
+                "term_condition":"<p>lorem ipsumis the dummy text....."
+            }
       }
      * 
      * @apiError UserIdMissing The user id is missing.
@@ -524,6 +525,7 @@ class HealthcareProgramController extends Controller {
                     $cancelledArray[$i]["status"] = "Cancelled";
                 }
                 $data['cancel'] = $cancelledArray;
+                $data['term_condition'] = "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>";
                 return $this->sendSuccessResponse("Health Package found", $data);
             } else {
                 return $this->sendErrorResponse("Invalid User", (object) []);
