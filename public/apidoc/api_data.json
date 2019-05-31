@@ -2381,7 +2381,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Health Package found\",\n      \"data\": {\n      \"complete\": [\n      {\n      \"id\": 11,\n      \"name\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n      \"duration\": \"01-Feb-2019 to 02-Feb-2019\",\n      \"status\": \"Completed\"\n      }\n      ],\n      \"upcoming\": [\n      {\n      \"id\": 11,\n      \"record_id\": 45,\n      \"name\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n      \"duration\": \"01-Apr-2019 to 03-Apr-2019\",\n      \"status\": \"Upcoming\"\n      }\n      ]\n      }\n      }",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Health Package found\",\n      \"data\": {\n            \"complete\": [\n                {\n                \"id\": 11,\n                \"name\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n                \"duration\": \"01-Feb-2019 to 02-Feb-2019\",\n                \"status\": \"Completed\"\n                }\n                ],\n            \"upcoming\": [\n                {\n                \"id\": 11,\n                \"record_id\": 45,\n                \"name\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n                \"duration\": \"01-Apr-2019 to 03-Apr-2019\",\n                \"status\": \"Upcoming\"\n                }\n                ],\n                \"term_condition\":\"<p>lorem ipsumis the dummy text.....\"\n            }\n      }",
           "type": "json"
         }
       ]
