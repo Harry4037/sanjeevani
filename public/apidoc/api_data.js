@@ -3986,7 +3986,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": true,\n            \"status_code\": 200,\n            \"message\": \"Services list\",\n            \"data\": {\n                \"ongoing_services\": [\n                    {\n                        \"id\": 67,\n                        \"record_id\": 67,\n                        \"name\": \"1551681813\",\n                        \"icon\": \"http://devsanjeevani.dbaquincy.com/img/my_meal.png\",\n                        \"date\": \"04-Mar-2019\",\n                        \"time\": \"12:13 PM\",\n                        \"date_time\": \"04-03-2019 12:13:33\",\n                        \"total_item_count\": 1,\n                        \"total_amount\": 53,\n                        \"status_id\": 1,\n                        \"status\": \"Pending\",\n                        \"acceptd_by\": \"\",\n                        \"type\": 4\n                    }\n                ],\n                \"complete_services\": [\n                    {\n                        \"id\": 120,\n                        \"record_id\": 120,\n                        \"name\": \"Room Cleaning\",\n                        \"icon\": \"http://127.0.0.1:1234/storage/Service_icon/bG8tskL0dmA4XmCjBWC35v01uauybI9YyvKx0apH.png\",\n                        \"date\": \"04-Mar-2019\",\n                        \"time\": \"12:23 PM\",\n                        \"date_time\": \"04-03-2019 12:23:31\",\n                        \"status_id\": 4,\n                        \"status\": \"Completed\",\n                        \"acceptd_by\": \"Ankit Sharma\",\n                        \"type\": 1,\n                        \"staff_reasons\": null,\n                        \"staff_comment\": null\n                    }\n                ]\n            }\n        }",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Services list\",\n      \"data\": {\n      \"ongoing_services\": [\n      {\n      \"id\": 67,\n      \"record_id\": 67,\n      \"name\": \"1551681813\",\n      \"icon\": \"http://devsanjeevani.dbaquincy.com/img/my_meal.png\",\n      \"date\": \"04-Mar-2019\",\n      \"time\": \"12:13 PM\",\n      \"date_time\": \"04-03-2019 12:13:33\",\n      \"total_item_count\": 1,\n      \"total_amount\": 53,\n      \"status_id\": 1,\n      \"status\": \"Pending\",\n      \"acceptd_by\": \"\",\n      \"type\": 4\n      }\n      ],\n      \"complete_services\": [\n      {\n      \"id\": 120,\n      \"record_id\": 120,\n      \"name\": \"Room Cleaning\",\n      \"icon\": \"http://127.0.0.1:1234/storage/Service_icon/bG8tskL0dmA4XmCjBWC35v01uauybI9YyvKx0apH.png\",\n      \"date\": \"04-Mar-2019\",\n      \"time\": \"12:23 PM\",\n      \"date_time\": \"04-03-2019 12:23:31\",\n      \"status_id\": 4,\n      \"status\": \"Completed\",\n      \"acceptd_by\": \"Ankit Sharma\",\n      \"type\": 1,\n      \"staff_reasons\": null,\n      \"staff_comment\": null\n      }\n      ]\n      }\n      }",
           "type": "json"
         }
       ]
@@ -4497,7 +4497,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n        {\n            \"status\": true,\n            \"status_code\": 200,\n            \"message\": \"Our staff member will contact you soon.\",\n            \"data\": {}\n        }",
+          "content": "HTTP/1.1 200 OK\n      {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Our staff member will contact you soon.\",\n      \"data\": {}\n      }",
           "type": "json"
         }
       ]
@@ -4675,6 +4675,138 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"status\": false,\n  \"status_code\": 404,\n  \"message\": \"User id missing.\",\n  \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
+    "groupTitle": "Staff_Service"
+  },
+  {
+    "type": "get",
+    "url": "/api/room-type-list",
+    "title": "Room Type & Package List",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "Getroomtypelist",
+    "group": "Staff_Service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "check_in",
+            "description": "<p>Check In Date*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "check_out",
+            "description": "<p>Check Out Date*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort Id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Resort",
+            "description": "<p>room list</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>{}.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"Resort room & Package list\",\n      \"data\": {\n          \"room_list\": [\n              {\n                  \"id\": 1,\n                  \"room_type\": \"Tent\",\n                  \"rooms\": [\n                      {\n                          \"id\": 52,\n                          \"room_no\": \"t-2\"\n                      },\n                      {\n                          \"id\": 53,\n                          \"room_no\": \"T-3\"\n                      },\n                      {\n                          \"id\": 54,\n                          \"room_no\": \"T-4\"\n                      },\n                      {\n                          \"id\": 55,\n                          \"room_no\": \"T-5\"\n                      },\n                      {\n                          \"id\": 56,\n                          \"room_no\": \"T-6\"\n                      }\n                  ]\n              },\n              {\n                  \"id\": 2,\n                  \"room_type\": \"Cottage\",\n                  \"rooms\": [\n                      {\n                          \"id\": 50,\n                          \"room_no\": \"C-1\"\n                      },\n                      {\n                          \"id\": 57,\n                          \"room_no\": \"C-3\"\n                      },\n                      {\n                          \"id\": 58,\n                          \"room_no\": \"C-2\"\n                      },\n                      {\n                          \"id\": 59,\n                          \"room_no\": \"C-4\"\n                      }\n                  ]\n              },\n              {\n                  \"id\": 4,\n                  \"room_type\": \"Villa\",\n                  \"rooms\": [\n                      {\n                          \"id\": 51,\n                          \"room_no\": \"V-1\"\n                      }\n                  ]\n              },\n              {\n                  \"id\": 8,\n                  \"room_type\": \"Dummy\",\n                  \"rooms\": [\n                      []\n                  ]\n              }\n          ],\n          \"packages\": [\n              {\n                  \"id\": 1,\n                  \"name\": \"Healthcare Package Reverse Diabetes in 3 Days\"\n              },\n              {\n                  \"id\": 3,\n                  \"name\": \"Healthcare Package Reverse Diabetes in 7 Days\"\n              },\n              {\n                  \"id\": 4,\n                  \"name\": \"Reverse Diabetes in 14 Days\"\n              },\n              {\n                  \"id\": 5,\n                  \"name\": \"Reverse Diabetes in 21 Days\"\n              }\n          ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CheckInMissing",
+            "description": "<p>The Check In date missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CheckOutMissing",
+            "description": "<p>The Check Out date missing.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ResortIdMissing",
+            "description": "<p>The Resort Id date missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Check In missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Check Out missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"Resort Id missing.\",\n   \"data\": {}\n}",
           "type": "json"
         }
       ]
@@ -5367,6 +5499,244 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"status missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
+    "groupTitle": "Staff_Service"
+  },
+  {
+    "type": "post",
+    "url": "/api/add-user",
+    "title": "Add User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Users unique access-token.</p>"
+          }
+        ]
+      }
+    },
+    "name": "Postadduser",
+    "group": "Staff_Service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile_number",
+            "description": "<p>Mobile Number*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_name",
+            "description": "<p>User Name*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "country_code",
+            "description": "<p>Country code*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email_id",
+            "description": "<p>Email id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_room_type_id",
+            "description": "<p>Resort room type Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_room_id",
+            "description": "<p>Resort room Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_source_name",
+            "description": "<p>Booking Source name*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_source_id",
+            "description": "<p>Booking Source Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resort_id",
+            "description": "<p>Resort Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "package_id",
+            "description": "<p>Package Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "check_in",
+            "description": "<p>Check In date time*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "check_out",
+            "description": "<p>Check Out date time*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "is_membership",
+            "description": "<p>Membership (true or false).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "membership_id",
+            "description": "<p>Membership Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "membership_from",
+            "description": "<p>Membership From.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "membership_till",
+            "description": "<p>Membership Till.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "is_medical",
+            "description": "<p>Medical (true or false).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "is_diabeties",
+            "description": "<p>Diabetirs (0 or 1).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "is_ppa",
+            "description": "<p>PPA (0 or 1).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "hba_1c",
+            "description": "<p>HBA_1C (0 or 1).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fasting",
+            "description": "<p>Fasting.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "bp",
+            "description": "<p>BP.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "insullin_dependency",
+            "description": "<p>Insullin dependency.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Something",
+            "description": "<p>went be wrong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>{}.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n     \"status\": true,\n    \"status_code\": 200,\n    \"message\": \"User registered successfully\",\n     \"data\": {}\n  }",
           "type": "json"
         }
       ]
