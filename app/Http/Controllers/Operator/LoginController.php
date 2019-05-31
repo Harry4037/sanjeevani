@@ -98,7 +98,7 @@ class LoginController extends Controller {
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-        $request->merge(["user_type_id" => 5]);
+        $request->merge(["user_type_id" => 6]);
 //        $user = User::where('email_id', $request->get('email_id'))->first();
         if ($this->attemptLogin($request)) {
 
