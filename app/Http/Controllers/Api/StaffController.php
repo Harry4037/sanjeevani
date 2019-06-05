@@ -1651,4 +1651,141 @@ class StaffController extends Controller {
         return $this->sendSuccessResponse("user list", $data);
     }
 
+    /**
+     * @api {get} /api/get-bookings User booking list
+     * @apiHeader {String} Accept application/json.
+     * @apiName Getuserbookings
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id User Id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} Booking list
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "booking list",
+     *       "data": [
+     *           {
+     *               "source_name": "Makemy trip",
+     *               "source_id": "QWERTY12345",
+     *               "resort": "Sanjeevani Resorts & Tents",
+     *               "package": "Healthcare Package Reverse Diabetes in 3 Days",
+     *               "check_in": "31-May-2019 12:00 PM",
+     *               "check_out": "31-May-2019 01:00 PM",
+     *               "room_no": "T-1",
+     *               "status": "Completed"
+     *           },
+     *           {
+     *               "source_name": "GOIBIBO",
+     *               "source_id": "GOIBIBO007",
+     *               "resort": "Sanjeevani Resorts & Tents",
+     *               "package": "Healthcare Package Reverse Diabetes in 7 Days",
+     *               "check_in": "31-May-2019 02:00 PM",
+     *               "check_out": "31-May-2019 04:00 PM",
+     *               "room_no": "T-3",
+     *               "status": "Cancelled"
+     *           },
+     *           {
+     *               "source_name": "XYZ",
+     *               "source_id": "12345XYZ",
+     *               "resort": "Sanjeevani Resorts & Tents",
+     *               "package": "Healthcare Package Reverse Diabetes in 3 Days",
+     *               "check_in": "01-Jun-2019 12:00 AM",
+     *               "check_out": "10-Jun-2019 12:00 AM",
+     *               "room_no": "t-2",
+     *               "status": "Current"
+     *           },
+     *           {
+     *               "source_name": "XYZ",
+     *               "source_id": "12345XYZ",
+     *               "resort": "Sanjeevani Resorts & Tents",
+     *               "package": "Healthcare Package Reverse Diabetes in 3 Days",
+     *               "check_in": "01-Jun-2019 12:00 AM",
+     *               "check_out": "10-Jun-2019 12:00 AM",
+     *               "room_no": "t-2",
+     *               "status": "Current"
+     *           },
+     *           {
+     *               "source_name": "XYZ",
+     *               "source_id": "12345XYZ",
+     *               "resort": "Sanjeevani Resorts & Tents",
+     *               "package": "Healthcare Package Reverse Diabetes in 3 Days",
+     *               "check_in": "01-Jun-2019 12:00 AM",
+     *               "check_out": "10-Jun-2019 12:00 AM",
+     *               "room_no": "t-2",
+     *               "status": "Current"
+     *           },
+     *           {
+     *               "source_name": "XYZ",
+     *               "source_id": "12345XYZ",
+     *               "resort": "Sanjeevani Resorts & Tents",
+     *               "package": "Healthcare Package Reverse Diabetes in 3 Days",
+     *               "check_in": "01-Jun-2019 12:00 AM",
+     *               "check_out": "10-Jun-2019 12:00 AM",
+     *               "room_no": "t-2",
+     *               "status": "Current"
+     *           }
+     *       ]
+     *   }
+     * 
+     * 
+     * @apiError UserIdMissing User Id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "User Id missing.",
+     *    "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function getUserBookings(Request $request) {
+        if (!$request->user_id) {
+            return $this->sendErrorResponse("User id missing.", (object) []);
+        }
+        $userBookings = UserBookingDetail::where("user_id", $request->user_id)->get();
+
+        $bookinDetailArray = [];
+        if ($userBookings->count()) {
+            foreach ($userBookings as $i => $userBookingDetail) {
+                $currentDataTime = strtotime(date("d-m-Y H:i:s"));
+                $checkInTime = strtotime($userBookingDetail->check_in);
+                $checkOutTime = strtotime($userBookingDetail->check_out);
+                $stat = "";
+                if ($userBookingDetail->is_cancelled == 1) {
+                    $stat = "Cancelled";
+                } else {
+                    if ($currentDataTime > $checkOutTime) {
+                        $stat = "Completed";
+                    } elseif ($currentDataTime < $checkInTime) {
+                        $stat = "Upcoming";
+                    } else {
+                        $stat = "Current";
+                    }
+                }
+
+                $bookinDetailArray[$i]["source_name"] = $userBookingDetail->source_name;
+                $bookinDetailArray[$i]["source_id"] = $userBookingDetail->source_id;
+                $bookinDetailArray[$i]["resort"] = isset($userBookingDetail->resortDetail->name) ? $userBookingDetail->resortDetail->name : "";
+                $bookinDetailArray[$i]["package"] = isset($userBookingDetail->packageDetail->name) ? $userBookingDetail->packageDetail->name : "";
+                $bookinDetailArray[$i]["check_in"] = isset($userBookingDetail->check_in) ? date("d-M-Y h:i A", strtotime($userBookingDetail->check_in)) : "";
+                $bookinDetailArray[$i]["check_out"] = isset($userBookingDetail->check_out) ? date("d-M-Y h:i A", strtotime($userBookingDetail->check_out)) : "";
+                $bookinDetailArray[$i]["room_no"] = isset($userBookingDetail->resort_room_no) ? $userBookingDetail->resort_room_no : "";
+                $bookinDetailArray[$i]["status"] = $stat;
+            }
+        } else {
+            $bookinDetailArray = [];
+        }
+        return $this->sendSuccessResponse("booking list", $bookinDetailArray);
+    }
+
 }

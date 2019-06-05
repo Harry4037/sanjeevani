@@ -4912,6 +4912,102 @@
     "groupTitle": "Staff_Service"
   },
   {
+    "type": "get",
+    "url": "/api/get-bookings",
+    "title": "User booking list",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p>application/json.</p>"
+          }
+        ]
+      }
+    },
+    "name": "Getuserbookings",
+    "group": "Staff_Service",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User Id*.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status_code",
+            "description": "<p>(200 =&gt; success, 404 =&gt; Not found or failed).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Booking",
+            "description": "<p>list</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "data",
+            "description": "<p>{}.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"status\": true,\n      \"status_code\": 200,\n      \"message\": \"booking list\",\n      \"data\": [\n          {\n              \"source_name\": \"Makemy trip\",\n              \"source_id\": \"QWERTY12345\",\n              \"resort\": \"Sanjeevani Resorts & Tents\",\n              \"package\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n              \"check_in\": \"31-May-2019 12:00 PM\",\n              \"check_out\": \"31-May-2019 01:00 PM\",\n              \"room_no\": \"T-1\",\n              \"status\": \"Completed\"\n          },\n          {\n              \"source_name\": \"GOIBIBO\",\n              \"source_id\": \"GOIBIBO007\",\n              \"resort\": \"Sanjeevani Resorts & Tents\",\n              \"package\": \"Healthcare Package Reverse Diabetes in 7 Days\",\n              \"check_in\": \"31-May-2019 02:00 PM\",\n              \"check_out\": \"31-May-2019 04:00 PM\",\n              \"room_no\": \"T-3\",\n              \"status\": \"Cancelled\"\n          },\n          {\n              \"source_name\": \"XYZ\",\n              \"source_id\": \"12345XYZ\",\n              \"resort\": \"Sanjeevani Resorts & Tents\",\n              \"package\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n              \"check_in\": \"01-Jun-2019 12:00 AM\",\n              \"check_out\": \"10-Jun-2019 12:00 AM\",\n              \"room_no\": \"t-2\",\n              \"status\": \"Current\"\n          },\n          {\n              \"source_name\": \"XYZ\",\n              \"source_id\": \"12345XYZ\",\n              \"resort\": \"Sanjeevani Resorts & Tents\",\n              \"package\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n              \"check_in\": \"01-Jun-2019 12:00 AM\",\n              \"check_out\": \"10-Jun-2019 12:00 AM\",\n              \"room_no\": \"t-2\",\n              \"status\": \"Current\"\n          },\n          {\n              \"source_name\": \"XYZ\",\n              \"source_id\": \"12345XYZ\",\n              \"resort\": \"Sanjeevani Resorts & Tents\",\n              \"package\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n              \"check_in\": \"01-Jun-2019 12:00 AM\",\n              \"check_out\": \"10-Jun-2019 12:00 AM\",\n              \"room_no\": \"t-2\",\n              \"status\": \"Current\"\n          },\n          {\n              \"source_name\": \"XYZ\",\n              \"source_id\": \"12345XYZ\",\n              \"resort\": \"Sanjeevani Resorts & Tents\",\n              \"package\": \"Healthcare Package Reverse Diabetes in 3 Days\",\n              \"check_in\": \"01-Jun-2019 12:00 AM\",\n              \"check_out\": \"10-Jun-2019 12:00 AM\",\n              \"room_no\": \"t-2\",\n              \"status\": \"Current\"\n          }\n      ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserIdMissing",
+            "description": "<p>User Id missing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n   \"status\": false,\n   \"status_code\": 404,\n   \"message\": \"User Id missing.\",\n   \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/Http/Controllers/Api/StaffController.php",
+    "groupTitle": "Staff_Service"
+  },
+  {
     "type": "post",
     "url": "/api/accept-reject-meal-order",
     "title": "Accept/Reject meal order.",

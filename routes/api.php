@@ -104,6 +104,8 @@ Route::namespace("Api")->group(function () {
     Route::get('room-type-list', 'StaffController@resortList');
 
     Route::get('search-user', 'StaffController@searchUser');
+    
+    Route::get('get-bookings', 'StaffController@getUserBookings');
 
     Route::middleware('auth:api')->group(function () {
         Route::post('add-user', 'StaffController@addUser');
