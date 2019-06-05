@@ -109,6 +109,7 @@ Route::namespace("Api")->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::post('add-user', 'StaffController@addUser');
+        Route::post('create-booking', 'StaffController@createBooking');
 
         //Healthcare package booking
         Route::post('healthcare-booking', 'HealthcareProgramController@booking');

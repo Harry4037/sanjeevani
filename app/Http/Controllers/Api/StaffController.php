@@ -1788,4 +1788,106 @@ class StaffController extends Controller {
         return $this->sendSuccessResponse("booking list", $bookinDetailArray);
     }
 
+    /**
+     * @api {post} /api/create-booking Create user booking.
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName Postcreateuserbooking
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id User Id*.
+     * @apiParam {String} check_in Check In(YYYY-MM-DD H:i:s)*.
+     * @apiParam {String} check_out Check Out(YYYY-MM-DD H:i:s)*.
+     * @apiParam {String} resort_id Resort Id*.
+     * @apiParam {String} resort_room_type_id Resort room type Id*.
+     * @apiParam {String} resort_room_id Resort room Id*.
+     * @apiParam {String} booking_source_name Booking source name*.
+     * @apiParam {String} booking_source_id Booking source Id*.
+     * @apiParam {String} package_id Package Id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} Booking list
+     * @apiSuccess {JSON}   data {}.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "User booking created successfully.",
+     *       "data": {}
+     *   }
+     * 
+     * 
+     * @apiError UserIdMissing User Id missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "status": false,
+     *    "status_code": 404,
+     *    "message": "User Id missing.",
+     *    "data": {}
+     * }
+     * 
+     * 
+     * 
+     */
+    public function createBooking(Request $request) {
+        if (!$request->user_id) {
+            return $this->sendErrorResponse("User id missing.", (object) []);
+        }
+        if (!$request->check_in) {
+            return $this->sendErrorResponse("Check In missing.", (object) []);
+        }
+        if (!$request->check_out) {
+            return $this->sendErrorResponse("Check Out missing.", (object) []);
+        }
+        if (!$request->resort_room_type_id) {
+            return $this->sendErrorResponse("Room type missing", (object) []);
+        }
+        if (!$request->resort_room_id) {
+            return $this->sendErrorResponse("Room No. missing", (object) []);
+        }
+        if (!$request->booking_source_name) {
+            return $this->sendErrorResponse("Booking Source name missing", (object) []);
+        }
+        if (!$request->booking_source_id) {
+            return $this->sendErrorResponse("Booking Source Id missing", (object) []);
+        }
+        if (!$request->resort_id) {
+            return $this->sendErrorResponse("Resort Id missing", (object) []);
+        }
+        $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
+                ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
+                ->where("user_id", $user_id)
+                ->first();
+        if ($existingRecord) {
+            return $this->sendErrorResponse("Booking already exist with these date's.", (object) []);
+        }
+
+        $roomType = RoomType::find($request->resort_room_type_id);
+        $room = ResortRoom::find($request->resort_room_id);
+        $userBooking = new UserBookingDetail();
+        $userBooking->source_name = $request->booking_source_name;
+        $userBooking->source_id = $request->booking_source_id;
+        $userBooking->user_id = $request->user_id;
+        $userBooking->resort_id = $request->resort_id;
+        $userBooking->package_id = $request->package_id ? $request->package_id : 0;
+        $userBooking->room_type_id = $request->resort_room_type_id;
+        $userBooking->room_type_name = $roomType ? $roomType->name : "";
+        $userBooking->resort_room_id = $request->resort_room_id;
+        $userBooking->resort_room_no = $room ? $room->room_no : "";
+        $check_in_date = Carbon::parse($request->check_in);
+        $userBooking->check_in = $check_in_date->format('Y-m-d H:i:s');
+        $check_out_date = Carbon::parse($request->check_out);
+        $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
+        $userBooking->check_in_pin = rand(1111, 9999);
+        $userBooking->check_out_pin = rand(1111, 9999);
+        $userBooking->save();
+
+//        $this->sendRegistration($user->mobile_number, $user->user_name);
+        return $this->sendSuccessResponse("User booking created successfully.", (object) []);
+    }
+
 }
