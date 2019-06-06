@@ -1860,7 +1860,7 @@ class StaffController extends Controller {
         }
         $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
                 ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
-                ->where("user_id", $user_id)
+                ->where("user_id", $request->user_id)
                 ->first();
         if ($existingRecord) {
             return $this->sendErrorResponse("Booking already exist with these date's.", (object) []);
