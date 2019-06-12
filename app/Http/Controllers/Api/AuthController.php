@@ -148,11 +148,12 @@ class AuthController extends Controller {
                     }
                     $OTP = rand(1000, 9999);
                     $userExist->otp = $OTP;
-                    $userExist->email_id = $request->email_id;
+
                     $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
                         $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
                         if ($request->email_id) {
+                            $userExist->email_id = $request->email_id;
                             Mail::to($request->email_id)->send(new LoginOtp($OTP));
                         }
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
