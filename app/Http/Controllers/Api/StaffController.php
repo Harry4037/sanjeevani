@@ -1865,7 +1865,7 @@ class StaffController extends Controller {
         if ($existingRecord) {
             return $this->sendErrorResponse("Booking already exist with these date's.", (object) []);
         }
-
+        $user = User::find($request->user_id);
         $roomType = RoomType::find($request->resort_room_type_id);
         $room = ResortRoom::find($request->resort_room_id);
         $userBooking = new UserBookingDetail();
@@ -1885,6 +1885,11 @@ class StaffController extends Controller {
         $userBooking->check_in_pin = rand(1111, 9999);
         $userBooking->check_out_pin = rand(1111, 9999);
         $userBooking->save();
+
+        if ($user->device_token) {
+            $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
+            $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
+        }
 
 //        $this->sendRegistration($user->mobile_number, $user->user_name);
         return $this->sendSuccessResponse("User booking created successfully.", (object) []);
