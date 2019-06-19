@@ -73,7 +73,7 @@
                     <div class="panel-heading">Items Detail</div>
                     <div class="panel-body">
                         <div class="row">
-                            <table class="table table-responsive  table-bordered">
+                            <table class="table table-responsive  table-bordered text-center">
                                 <thead>
                                     <tr>
                                         <th>Meal Item Name</th>
