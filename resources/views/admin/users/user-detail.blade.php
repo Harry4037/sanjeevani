@@ -32,7 +32,7 @@
                         </li>
                     </ul>
                     <div class="ln_solid"></div>
-                    <label>Adhaar Id</label>
+                    <label>Aadhaar Id</label>
                     @if($user->aadhar_id)
                     <a target="_blank" href="{{ $user->aadhar_id }}"><img src="{{ $user->aadhar_id }}" class="img-rounded img-responsive" style="height: 200px; width: 500px;"></a>
                     @endif
@@ -51,28 +51,30 @@
                         <div class="panel-body">
                             <div class="row">
                                 <!--                                <div class="col-md-12">-->
-                                <label class="col-md-1 col-sm-1 col-xs-6">Daibeties:</label>
+                                <label class="col-md-3 col-sm-3 col-xs-6">Daibeties:</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userHealth->is_diabeties) && $userHealth->is_diabeties ? "Yes" : "No" }}</div>
-                                <label class="col-md-1 col-sm-1 col-xs-6">PP:</label>
+                                <label class="col-md-3 col-sm-3 col-xs-6">PP:</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userHealth->is_ppa) && $userHealth->is_ppa ? "Yes" : "No" }}</div>
-                                <label class="col-md-1 col-sm-1 col-xs-6">HBA1C:</label>
-                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userHealth->hba_1c) && $userHealth->hba_1c ? "Yes" : "No" }}</div>
                                 <!--</div>-->
                             </div>
                             <div class="row">
-                                <label class="col-md-1 col-sm-1 col-xs-6">Fasting:</label>
+                                <label class="col-md-3 col-sm-3 col-xs-6">HBA1C:</label>
+                                <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($userHealth->hba_1c) && $userHealth->hba_1c ? "Yes" : "No" }}</div>
+                                <label class="col-md-3 col-sm-3 col-xs-6">Fasting:</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">
                                     @if(isset($userHealth->fasting))
                                     {{ $userHealth->fasting }}
                                     @endif
                                 </div>
-                                <label class="col-md-1 col-sm-1 col-xs-6">BP:</label>
-                                <div class="col-md-2 col-sm-2 col-xs-6">
+                            </div>
+                            <div class="row">
+                                <label class="col-md-3 col-sm-3 col-xs-6">BP:</label>
+                                <div class="col-md-3 col-sm-3 col-xs-6">
                                     @if(isset($userHealth->bp))    
                                     {{ $userHealth->bp }}
                                     @endif
                                 </div>
-                                <label class="col-md-2 col-sm-2 col-xs-6">Insulin Dependency:</label>
+                                <label class="col-md-3 col-sm-3 col-xs-6">Insulin Dependency:</label>
                                 <div class="col-md-3 col-sm-3 col-xs-6">
                                     @if(isset($userHealth->insullin_dependency))    
                                     {{ $userHealth->insullin_dependency }}

@@ -21,19 +21,21 @@
                     <div class="panel-heading">Order Detail</div>
                     <div class="panel-body">
                         <div class="row">
-                            <label class="col-md-1 col-sm-1 col-xs-6">Invoice No. :</label>
+                            <label class="col-md-3 col-sm-3 col-xs-6">Invoice No. :</label>
                             <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->invoice_id) ? $mealRequest->invoice_id : "" }}</div>
-                            <label class="col-md-1 col-sm-1 col-xs-6">User Name :</label>
+                            <label class="col-md-3 col-sm-3 col-xs-6">User Name :</label>
                             <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->userDetail->user_name) ? $mealRequest->userDetail->user_name : "" }}</div>
-                            <label class="col-md-1 col-sm-1 col-xs-6">Resort Name :</label>
-                            <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->resortDetail->name) ? $mealRequest->resortDetail->name : "" }}</div>
                         </div>
                         <div class="row">
-                            <label class="col-md-1 col-sm-1 col-xs-6">Room No. :</label>
+                            <label class="col-md-3 col-sm-3 col-xs-6">Resort Name :</label>
+                            <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->resortDetail->name) ? $mealRequest->resortDetail->name : "" }}</div>
+                            <label class="col-md-3 col-sm-3 col-xs-6">Room No. :</label>
                             <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->resort_room_no) ? $mealRequest->resort_room_no : "" }}</div>
-                            <label class="col-md-1 col-sm-1 col-xs-6">Total Amount :</label>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-3 col-sm-3 col-xs-6">Total Amount :</label>
                             <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->total_amount) ? $mealRequest->total_amount : "" }}</div>
-                            <label class="col-md-1 col-sm-1 col-xs-6">Status :</label>
+                            <label class="col-md-3 col-sm-3 col-xs-6">Status :</label>
                             <div class="col-md-3 col-sm-3 col-xs-6">
                                 @if($mealRequest->status == 1)
                                 <span class='label label-success'>{{ "New" }}</span>
@@ -52,7 +54,7 @@
                         </div>
                         @if($mealRequest->status > 1)
                         <div class="row">
-                            <label class="col-md-2 col-sm-2 col-xs-6">Accepted By :</label>
+                            <label class="col-md-3 col-sm-3 col-xs-6">Accepted By :</label>
                             <div class="col-md-3 col-sm-3 col-xs-6">{{ isset($mealRequest->acceptedBy->user_name) ? $mealRequest->acceptedBy->user_name : "" }}</div>
                         </div>
                         @endif
