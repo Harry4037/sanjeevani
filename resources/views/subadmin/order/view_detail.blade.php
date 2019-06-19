@@ -58,8 +58,8 @@
                         @endif
                         @if($mealRequest->status == 5)
                         <div class="row">
-                            <label class="col-md-2 col-sm-2 col-xs-6">Staff comment :</label>
-                            <div class="col-md-10 col-sm-10 col-xs-6" style="word-wrap: break-word;"> 
+                            <label class="col-md-3 col-sm-3 col-xs-6">Staff comment :</label>
+                            <div class="col-md-9 col-sm-9 col-xs-6" style="word-wrap: break-word;"> 
                             {{ $mealRequest->staff_comment }}
                             </div>
                         </div>
