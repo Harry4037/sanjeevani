@@ -1376,7 +1376,7 @@ class StaffController extends Controller {
                         $dataArray[$key]['rooms'][$j]['room_no'] = $resortRoom->room_no;
                     }
                 } else {
-                    $dataArray[$key]['rooms'][$j] = [];
+                    $dataArray[$key]['rooms'] = [];
                 }
             }
             $data['room_list'] = $dataArray;
