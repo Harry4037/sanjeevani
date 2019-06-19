@@ -5817,7 +5817,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "is_membership",
-            "description": "<p>Membership (true or false).</p>"
+            "description": "<p>Membership (0 or 1).</p>"
           },
           {
             "group": "Parameter",
@@ -5845,7 +5845,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "is_medical",
-            "description": "<p>Medical (true or false).</p>"
+            "description": "<p>Medical (0 or 1).</p>"
           },
           {
             "group": "Parameter",
@@ -5888,6 +5888,13 @@ define({ "api": [
             "optional": false,
             "field": "insullin_dependency",
             "description": "<p>Insullin dependency.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "medical_documents",
+            "description": "<p>Medical document.</p>"
           }
         ]
       }

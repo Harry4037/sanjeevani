@@ -1419,17 +1419,18 @@ class StaffController extends Controller {
      * @apiParam {String} check_in Check In date time*.
      * @apiParam {String} check_out Check Out date time*.
      * @apiParam {String} check_out Check Out date time*.
-     * @apiParam {String} is_membership Membership (true or false).
+     * @apiParam {String} is_membership Membership (0 or 1).
      * @apiParam {String} membership_id Membership Id.
      * @apiParam {String} membership_from Membership From.
      * @apiParam {String} membership_till Membership Till.
-     * @apiParam {String} is_medical Medical (true or false).
+     * @apiParam {String} is_medical Medical (0 or 1).
      * @apiParam {String} is_diabeties Diabetirs (0 or 1).
      * @apiParam {String} is_ppa PPA (0 or 1).
      * @apiParam {String} hba_1c HBA_1C (0 or 1).
      * @apiParam {String} fasting Fasting.
      * @apiParam {String} bp BP.
      * @apiParam {String} insullin_dependency Insullin dependency.
+     * @apiParam {File} medical_documents Medical document.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
