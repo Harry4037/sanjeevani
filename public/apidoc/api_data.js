@@ -5895,6 +5895,20 @@ define({ "api": [
             "optional": false,
             "field": "medical_documents",
             "description": "<p>Medical document.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "person_name",
+            "description": "<p>Person name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "person_age",
+            "description": "<p>Person age.</p>"
           }
         ]
       }
@@ -6035,6 +6049,20 @@ define({ "api": [
             "optional": false,
             "field": "package_id",
             "description": "<p>Package Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "person_name",
+            "description": "<p>Person name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "person_age",
+            "description": "<p>Person age.</p>"
           }
         ]
       }

@@ -15,6 +15,7 @@ use App\Models\AmenityRequest;
 use App\Models\AmenityTimeSlot;
 use App\Models\User;
 use App\Models\UserBookingDetail;
+use App\Models\BookingpeopleAccompany;
 use App\Models\Service;
 use App\Models\AmenityImage;
 use App\Models\RoomType;
@@ -1431,6 +1432,8 @@ class StaffController extends Controller {
      * @apiParam {String} bp BP.
      * @apiParam {String} insullin_dependency Insullin dependency.
      * @apiParam {File} medical_documents Medical document.
+     * @apiParam {Array} person_name Person name.
+     * @apiParam {Array} person_age Person age.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -1552,7 +1555,20 @@ class StaffController extends Controller {
             $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
             $userBooking->check_in_pin = rand(1111, 9999);
             $userBooking->check_out_pin = rand(1111, 9999);
-            $userBooking->save();
+            if ($userBooking->save()) {
+                if (!empty($request->person_name) && !empty($request->person_age)) {
+                    foreach ($request->person_name as $key => $person_name) {
+                        if (!empty($person_name) && !empty($request->person_age[$key])) {
+                            $familyMember = new BookingpeopleAccompany();
+                            $familyMember->person_name = $person_name ? $person_name : ' ';
+                            $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                            $familyMember->person_type = $request->person_age[$key] > 17 ? "Adult" : "Child";
+                            $familyMember->booking_id = $userBooking->id;
+                            $familyMember->save();
+                        }
+                    }
+                }
+            }
 //            }
 
             $this->sendRegistration($user->mobile_number, $user->user_name);
@@ -1805,6 +1821,8 @@ class StaffController extends Controller {
      * @apiParam {String} booking_source_name Booking source name*.
      * @apiParam {String} booking_source_id Booking source Id*.
      * @apiParam {String} package_id Package Id*.
+     * @apiParam {Array} person_name Person name.
+     * @apiParam {Array} person_age Person age.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
@@ -1885,7 +1903,20 @@ class StaffController extends Controller {
         $userBooking->check_out = $check_out_date->format('Y-m-d H:i:s');
         $userBooking->check_in_pin = rand(1111, 9999);
         $userBooking->check_out_pin = rand(1111, 9999);
-        $userBooking->save();
+        if ($userBooking->save()) {
+            if (!empty($request->person_name) && !empty($request->person_age)) {
+                foreach ($request->person_name as $key => $person_name) {
+                    if (!empty($person_name) && !empty($request->person_age[$key])) {
+                        $familyMember = new BookingpeopleAccompany();
+                        $familyMember->person_name = $person_name ? $person_name : ' ';
+                        $familyMember->person_age = $request->person_age[$key] ? $request->person_age[$key] : ' ';
+                        $familyMember->person_type = $request->person_age[$key] > 17 ? "Adult" : "Child";
+                        $familyMember->booking_id = $userBooking->id;
+                        $familyMember->save();
+                    }
+                }
+            }
+        }
 
         if ($user->device_token) {
             $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
