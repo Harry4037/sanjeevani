@@ -1855,6 +1855,9 @@ class StaffController extends Controller {
      * 
      */
     public function createBooking(Request $request) {
+        if (!$request->$request->person_name) {
+            return $this->sendErrorResponse("Person name missing.", (object) []);
+        }
         if (!$request->user_id) {
             return $this->sendErrorResponse("User id missing.", (object) []);
         }
