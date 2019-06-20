@@ -1433,7 +1433,7 @@ class StaffController extends Controller {
      * @apiParam {String} insullin_dependency Insullin dependency.
      * @apiParam {File} medical_documents Medical document.
      * @apiParam {String} discount Discount.
-     * @apiParam {Array} person_age Person age.
+     * @apiParam {Array} person_name Person name.
      * @apiParam {Array} person_age Person age.
      * 
      * @apiSuccess {String} success true 

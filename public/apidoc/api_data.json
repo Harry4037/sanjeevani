@@ -5907,6 +5907,13 @@
             "group": "Parameter",
             "type": "Array",
             "optional": false,
+            "field": "person_name",
+            "description": "<p>Person name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
             "field": "person_age",
             "description": "<p>Person age.</p>"
           }
