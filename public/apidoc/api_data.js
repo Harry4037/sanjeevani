@@ -5898,10 +5898,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Array",
+            "type": "String",
             "optional": false,
-            "field": "person_name",
-            "description": "<p>Person name.</p>"
+            "field": "discount",
+            "description": "<p>Discount.</p>"
           },
           {
             "group": "Parameter",

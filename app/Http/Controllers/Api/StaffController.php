@@ -1432,7 +1432,8 @@ class StaffController extends Controller {
      * @apiParam {String} bp BP.
      * @apiParam {String} insullin_dependency Insullin dependency.
      * @apiParam {File} medical_documents Medical document.
-     * @apiParam {Array} person_name Person name.
+     * @apiParam {String} discount Discount.
+     * @apiParam {Array} person_age Person age.
      * @apiParam {Array} person_age Person age.
      * 
      * @apiSuccess {String} success true 
@@ -1503,6 +1504,7 @@ class StaffController extends Controller {
         $user->email_id = $request->email_id;
         $user->created_by = 0;
         $user->updated_by = 0;
+        $user->discount = $request->discount ? $request->discount : 0;
         if ($user->save()) {
             if (isset($request->is_medical) && ($request->is_medical)) {
                 $doc_file_name = '';
