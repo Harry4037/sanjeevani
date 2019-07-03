@@ -223,17 +223,28 @@
                                     var _th = $('#' + change.doc.id);
                                     if ((change.doc.data().operator_id == loggedInUser.uid) || (change.doc.data().operator_id == 0)) {
                                         if (change.doc.id == documentID) {
+
                                             userHtml = '<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
                                             userHtml += '</a>';
                                             _th.html(userHtml);
 
                                         } else {
-                                            userHtml = '<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
-                                            if (blinkClass != "") {
-                                                userHtml += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
-                                            }
-                                            userHtml += '</a>';
-                                            _th.html(userHtml);
+                                            console.log("else modified...");
+                                            var html = '';
+                                            html += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
+                                        <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
+//                                            if (blinkClass != "") {
+                                            html += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
+//                                            }
+                                            html += '</a>';
+                                            html += '</li>';
+//                                            userHtml = '<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
+//                                            if (blinkClass != "") {
+//                                                userHtml += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
+//                                            }
+//                                            userHtml += '</a>';
+                                            _th.remove();
+                                            $("#chat_user_list").prepend(html);
                                         }
 
                                     } else {
@@ -302,7 +313,6 @@
                 .onSnapshot(function (snapshot) {
                     var newMessage = '';
                     snapshot.docChanges().forEach(function (change) {
-
                         var timeAgo = timeSince(change.doc.data().timeStamp);
                         if (change.doc.data().senderID == receiverID) {
                             newMessage += '<div class="incoming_msg">'
@@ -391,7 +401,7 @@
     function timeSince(date) {
         var readableFormat = moment(date, "x").format("hh:mm a");
         return readableFormat;
-        
+
         //////////////////////
         var seconds = Math.floor((new Date() - date) / 1000);
 
