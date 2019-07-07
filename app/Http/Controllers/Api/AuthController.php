@@ -154,7 +154,11 @@ class AuthController extends Controller {
                         $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
                         if ($request->email_id) {
                             $userExist->email_id = $request->email_id;
-                            Mail::to($request->email_id)->send(new LoginOtp($OTP));
+                            try {
+                                Mail::to($request->email_id)->send(new LoginOtp($OTP));
+                            } catch (\Exception $e) {
+                                
+                            }
                         }
                         return $this->sendSuccessResponse("OTP sent successfully.", (object) []);
                     } else {
