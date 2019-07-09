@@ -639,11 +639,15 @@ class UsersController extends Controller {
             if (!$user) {
                 return redirect()->route('admin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
             }
-            $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
-                    ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
-                    ->where("user_id", $user_id)
-                    ->first();
-            if ($existingRecord) {
+
+            $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $user_id);
+
+//            $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
+//                    ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
+//                    ->where("user_id", $user_id)
+//                    ->first();
+
+            if ($existingBookingCount > 0) {
                 return redirect()->route('admin.users.booking-create', $user_id)->withErrors("Booking already exist with these date's.")->withInput();
             }
 
@@ -855,7 +859,7 @@ class UsersController extends Controller {
             $userBookingdetail->save();
             if ($user->device_token) {
 //                $msg ="You checkout new checkout date is ".$request->early_checkout;
-                $msg ="Ohh! It seems you checked out early. Your checked out date is ".$request->early_checkout;
+                $msg = "Ohh! It seems you checked out early. Your checked out date is " . $request->early_checkout;
                 $this->androidBookingPushNotification("Early Checkout", $msg, $user->device_token);
                 $this->generateNotification($user->id, "Booking Updated", $msg, 7);
             }

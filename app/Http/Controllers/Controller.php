@@ -99,20 +99,20 @@ class Controller extends BaseController {
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60 * 20)
                 ->setPriority('high')
-                ;
+        ;
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         if ($userType == 3) {
             $notificationBuilder->setBody($message)
                     ->setSound('default')
                     ->setBadge($userNotificationCount)
-                    ;
+            ;
         } else {
             $notificationBuilder->setBody($message)
                     ->setSound('soundn.mp3')
                     ->setChannelId('RindexStaff')
                     ->setBadge($userNotificationCount)
-                    ;
+            ;
         }
 
         $dataBuilder = new PayloadDataBuilder();
@@ -138,7 +138,7 @@ class Controller extends BaseController {
 
     public function sendOtp($mobileNumber, $otp, $key) {
         $url = 'http://sms.hybrid91.com/submitsms.jsp';
-        $OTPMessage = "<#> Dear Customer, your One Time Verification (OTP) code is " . $otp . ". ".$key;
+        $OTPMessage = "<#> Dear Customer, your One Time Verification (OTP) code is " . $otp . ". " . $key;
         $fields = array(
 //            'user' => 'Rizilian',
             'user' => 'Dintex',
@@ -186,12 +186,12 @@ class Controller extends BaseController {
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60 * 20)
                 ->setPriority('high')
-                ;
+        ;
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
                 ->setSound('soundn.mp3')
-                ;
+        ;
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData([
@@ -232,6 +232,28 @@ class Controller extends BaseController {
         curl_close($ch);
 
         return true;
+    }
+
+    public function checkUserbookingExist($checkIn, $checkOut, $user_id) {
+        $check_in = date("Y-m-d H:s:i", strtotime($checkIn));
+        $check_out = date("Y-m-d H:s:i", strtotime($checkOut));
+        $existingRecord = UserBookingDetail::where("user_id", $user_id)
+                        ->where(function($query) use($check_in, $check_out) {
+                            $query->orWhere(function($query) use($check_in) {
+                                $query->where("check_in", "<=", $check_in)
+                                ->where("check_out", ">=", $check_in);
+                            });
+                            $query->orWhere(function($query) use($check_out) {
+                                $query->where("check_in", "<", $check_out)
+                                ->where("check_out", ">=", $check_out);
+                            });
+                            $query->orWhere(function($query) use($check_in, $check_out) {
+                                $query->where("check_in", ">=", $check_in)
+                                ->where("check_out", "<=", $check_out);
+                            });
+                        })->get();
+
+        return count($existingRecord) > 0 ? count($existingRecord) : 0;
     }
 
 }
