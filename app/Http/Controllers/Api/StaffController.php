@@ -1880,11 +1880,13 @@ class StaffController extends Controller {
         if (!$request->resort_id) {
             return $this->sendErrorResponse("Resort Id missing", (object) []);
         }
-        $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
-                ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
-                ->where("user_id", $request->user_id)
-                ->first();
-        if ($existingRecord) {
+
+        $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $request->user_id);
+//        $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
+//                ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
+//                ->where("user_id", $request->user_id)
+//                ->first();
+        if ($existingBookingCount > 0) {
             return $this->sendErrorResponse("Booking already exist with these date's.", (object) []);
         }
         $user = User::find($request->user_id);
