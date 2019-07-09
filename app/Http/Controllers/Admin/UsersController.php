@@ -640,7 +640,7 @@ class UsersController extends Controller {
                 return redirect()->route('admin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
             }
 
-            $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $user_id);
+            $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $user_id, $request->resort_id);
 
 //            $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
 //                    ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))

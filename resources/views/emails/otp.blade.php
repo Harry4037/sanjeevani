@@ -8,7 +8,10 @@
     </head>
     <body>
         <div>
-            Your Rindex App OTP:- {{ $data }}
+            Dear Customer,
+            <br><br>
+            The One Time Password (OTP) is {{ $data }}. This OTP is valid for 10 minutes or 1 successful attempt whichever is earlier. 
+            Please do not share this One Time Password with anyone.
         </div>
     </body>
 </html>

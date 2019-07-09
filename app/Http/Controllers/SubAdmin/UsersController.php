@@ -189,7 +189,7 @@ class UsersController extends Controller {
                 $userExist->email_id = $request->email_id;
                 $userExist->save();
                 if (isset($request->is_booking_details) && ($request->is_booking_details == "on")) {
-                    $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $userExist->id);
+                    $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $userExist->id, $request->get("subadminResort"));
 //                    $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
 //                            ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
 //                            ->where("user_id", $userExist->id)
@@ -676,7 +676,7 @@ class UsersController extends Controller {
             if (!$user) {
                 return redirect()->route('subadmin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
             }
-            $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $user_id);
+            $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $user_id, $request->get("subadminResort"));
 //            $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
 //                    ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
 //                    ->where("user_id", $user_id)

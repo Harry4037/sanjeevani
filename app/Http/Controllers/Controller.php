@@ -234,10 +234,11 @@ class Controller extends BaseController {
         return true;
     }
 
-    public function checkUserbookingExist($checkIn, $checkOut, $user_id) {
+    public function checkUserbookingExist($checkIn, $checkOut, $user_id, $resortId) {
         $check_in = date("Y-m-d H:s:i", strtotime($checkIn));
         $check_out = date("Y-m-d H:s:i", strtotime($checkOut));
         $existingRecord = UserBookingDetail::where("user_id", $user_id)
+                        ->where("resort_id", $resortId)
                         ->where(function($query) use($check_in, $check_out) {
                             $query->orWhere(function($query) use($check_in) {
                                 $query->where("check_in", "<=", $check_in)
