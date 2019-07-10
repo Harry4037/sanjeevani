@@ -233,9 +233,9 @@
                                             var html = '';
                                             html += '<li class="user" id="' + change.doc.id + '" data-id="' + change.doc.data().user_id + '" data-username="' + username + '">\n\
                                         <a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
-//                                            if (blinkClass != "") {
-                                            html += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
-//                                            }
+                                            if (blinkClass != "") {
+                                                html += '<i class="fa fa-bell ' + blinkClass + '" style="color: #35d65f;float: right;"></i>';
+                                            }
                                             html += '</a>';
                                             html += '</li>';
 //                                            userHtml = '<a href="javascript:void(0);" class="user_tab" operator_id="' + change.doc.data().operator_id + '"><i class="fa fa-circle" style="color:' + color + ';"></i>' + username;
