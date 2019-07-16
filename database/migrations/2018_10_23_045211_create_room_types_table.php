@@ -18,6 +18,7 @@ class CreateRoomTypesTable extends Migration
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->string('icon')->nullable();
+            $table->bigInteger('resort_id')->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);

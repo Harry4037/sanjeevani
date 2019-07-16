@@ -27,6 +27,19 @@
                     @csrf
                     <div id="room_images_div"></div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Resort*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" name="resort_id" id="resort_id">
+                                <option value="">Select Option</option>
+                                @if($resorts)
+                                @foreach($resorts as $resort)
+                                <option value="{{$resort->id}}">{{$resort->name}}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('name') }}" type="text" class="form-control" name="name" id="name" placeholder="Room Type">
@@ -116,6 +129,9 @@ $(document).ready(function () {
     $("#addRoomForm").validate({
         ignore: [],
         rules: {
+            resort_id: {
+                required: true
+            },
             name: {
                 required: true
             },

@@ -20,6 +20,7 @@
                             <th>Sr.No.</th>
                             <th>Image</th>
                             <th>Name</th>
+                            <th>Resort Name</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -61,6 +62,7 @@
                 },
                 {"data": "image", sortable: false},
                 {"data": "name", sortable: false},
+                {"data": "resort_name", sortable: false},
                 {"data": null,
                     sortable: false,
                     render: function (data, type, row, meta) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\RoomType;
+use App\Models\Resort;
 use App\Models\RoomtypeImage;
 use Validator;
 
@@ -28,7 +29,7 @@ class RoomtypeController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = RoomType::query();
+            $query = RoomType::query()->with('resort');
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -41,6 +42,7 @@ class RoomtypeController extends Controller {
                 $img = !empty($roomImage->image_name) ? $roomImage->image_name : asset('img/noimage.png');
                 $roomsArray[$key]['image'] = "<img class='img-rounded' width=80 height=70 src='" . $img . "'>";
                 $roomsArray[$key]['name'] = $room->name;
+                $roomsArray[$key]['resort_name'] = $room->resort ? $room->resort->name : '';
                 $checked_status = $room->is_active ? "checked" : '';
                 $roomsArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='room_status' id=" . $room->id . " data-status=" . $room->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $roomsArray[$key]['action'] = '<a href="' . route('admin.room.edit', $room->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -66,6 +68,8 @@ class RoomtypeController extends Controller {
                 }
 
                 $room = new RoomType();
+                $room->resort_id = $request->resort_id;
+                $room->name = $request->name;
                 $room->name = $request->name;
                 $room->description = $request->description;
                 if ($request->file("room_icon")) {
@@ -92,7 +96,10 @@ class RoomtypeController extends Controller {
             }
             $css = ["vendors/dropzone/dist/dropzone.css",];
             $js = ['vendors/dropzone/dist/dropzone.js',];
+
+            $resorts = Resort::where('is_active', 1)->get();
             return view('admin.room.create', [
+                'resorts' => $resorts,
                 'js' => $js,
                 'css' => $css
             ]);
@@ -137,6 +144,7 @@ class RoomtypeController extends Controller {
         try {
             $data = RoomType::find($id);
             if ($request->isMethod("post")) {
+                $data->resort_id = $request->resort_id;
                 $data->name = $request->name;
                 $data->description = $request->description;
                 if ($request->file("room_icon")) {
@@ -166,12 +174,14 @@ class RoomtypeController extends Controller {
                 'vendors/dropzone/dist/dropzone.js',
             ];
             $roomImages = RoomtypeImage::where("roomtype_id", $data->id)->get();
+            $resorts = Resort::where("is_active", 1)->get();
 
             return view('admin.room.edit', [
                 'data' => $data,
                 'css' => $css,
                 'js' => $js,
                 'roomImages' => $roomImages,
+                'resorts' => $resorts,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.room.index')->with('error', $ex->getMessage());

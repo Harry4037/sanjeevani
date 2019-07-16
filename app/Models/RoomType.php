@@ -14,9 +14,13 @@ class RoomType extends Model {
     public function getIconAttribute($name) {
         return asset('storage/room_icon/' . $name);
     }
-    
+
     public function getImageAttribute($name) {
         return asset('storage/room_images/' . $name);
+    }
+
+    public function resort() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
     }
 
 }
