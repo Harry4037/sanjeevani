@@ -26,51 +26,51 @@ class NearbyController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "Nearby places found.",
-            "data": {
-                "nearby": [
-                    {
-                        "id": 7,
-                        "name": "Tibetan Buddhist Temple",
-                        "description": "<p>Buddha Temple is a Tibetan monestary, also called as Mindrolling Monastery and was build in 1965 by his eminence the Kochen Rinpoche and few other monks for the promotion and protection of religious &amp;amp; cultural understanding of Buddhism. Built in Japanese architecture style, Buddha Temple complex atmosphere provides a mental peace equal to Buddhist monk. Buddha temple complex was created as one of the four schools of Tibetan religion. This temple complex is known as &#39;Nyigma&#39; while other schools known as Sakya, Kagyu and Geluk respectively.</p>",
-                        "distance": 28,
-                        "precautions": "<p>Temple garden and shops are open for all seven days for but temple remains open for Sunday only for public.Visitors are requested to remove shoes before entering the main hall of Buddha temple.</p>",
-                        "address": "New Basti, Clement Town Uttrakhand Dehradun-248197",
-                        "latitude": 30.3231,
-                        "longitude": 78.0473,
-                        "images": [
-                            {
-                                "id": 14,
-                                "banner_image_url": "http://127.0.0.1:1234/storage/nearby_images/PeIZtPLOGu0nCi4WCW7nRPUT6o5sMxfjfwnz4V13.jpeg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": 8,
-                        "name": "Forest Research Institute",
-                        "description": "<p>For a bargain entrance fee you get to enjoy the architecture and grounds, several brilliantly old-fashioned museums, and the botanical gardens (though the latter need quite a bit of attention). We wandered into the paper-making office and got a free guided tour of a disused mill by a Dr Gupta and his staff which was fantastic. One of the best afternoons we had in Dehradun and a complete accident! This place is definitely worth a visit.</p>",
-                        "distance": 15,
-                        "precautions": "<p>One of the Iconic places in India and especially in Dehradun. Student of the Year has been shot here, and after that, this place has become one of the most visited places in the town.</p>",
-                        "address": "Mason Rd | Indian Military Academy, Dehradun - 248001",
-                        "latitude": 25.22222,
-                        "longitude": 36.55555,
-                        "images": [
-                            {
-                                "id": 16,
-                                "banner_image_url": "http://127.0.0.1:1234/storage/nearby_images/KZMoKARmBBYICyyQjwkzbApwdS4KtA8cSMWE9XAL.jpeg"
-                            },
-                            {
-                                "id": 20,
-                                "banner_image_url": "http://127.0.0.1:1234/storage/nearby_images/qiSrpffmBDT8DO3ZqE8xeoswKqFJ7kwsesqoyzoJ.jpeg"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "Nearby places found.",
+      "data": {
+      "nearby": [
+      {
+      "id": 7,
+      "name": "Tibetan Buddhist Temple",
+      "description": "<p>Buddha Temple is a Tibetan monestary, also called as Mindrolling Monastery and was build in 1965 by his eminence the Kochen Rinpoche and few other monks for the promotion and protection of religious &amp;amp; cultural understanding of Buddhism. Built in Japanese architecture style, Buddha Temple complex atmosphere provides a mental peace equal to Buddhist monk. Buddha temple complex was created as one of the four schools of Tibetan religion. This temple complex is known as &#39;Nyigma&#39; while other schools known as Sakya, Kagyu and Geluk respectively.</p>",
+      "distance": 28,
+      "precautions": "<p>Temple garden and shops are open for all seven days for but temple remains open for Sunday only for public.Visitors are requested to remove shoes before entering the main hall of Buddha temple.</p>",
+      "address": "New Basti, Clement Town Uttrakhand Dehradun-248197",
+      "latitude": 30.3231,
+      "longitude": 78.0473,
+      "images": [
+      {
+      "id": 14,
+      "banner_image_url": "http://127.0.0.1:1234/storage/nearby_images/PeIZtPLOGu0nCi4WCW7nRPUT6o5sMxfjfwnz4V13.jpeg"
+      }
+      ]
+      },
+      {
+      "id": 8,
+      "name": "Forest Research Institute",
+      "description": "<p>For a bargain entrance fee you get to enjoy the architecture and grounds, several brilliantly old-fashioned museums, and the botanical gardens (though the latter need quite a bit of attention). We wandered into the paper-making office and got a free guided tour of a disused mill by a Dr Gupta and his staff which was fantastic. One of the best afternoons we had in Dehradun and a complete accident! This place is definitely worth a visit.</p>",
+      "distance": 15,
+      "precautions": "<p>One of the Iconic places in India and especially in Dehradun. Student of the Year has been shot here, and after that, this place has become one of the most visited places in the town.</p>",
+      "address": "Mason Rd | Indian Military Academy, Dehradun - 248001",
+      "latitude": 25.22222,
+      "longitude": 36.55555,
+      "images": [
+      {
+      "id": 16,
+      "banner_image_url": "http://127.0.0.1:1234/storage/nearby_images/KZMoKARmBBYICyyQjwkzbApwdS4KtA8cSMWE9XAL.jpeg"
+      },
+      {
+      "id": 20,
+      "banner_image_url": "http://127.0.0.1:1234/storage/nearby_images/qiSrpffmBDT8DO3ZqE8xeoswKqFJ7kwsesqoyzoJ.jpeg"
+      }
+      ]
+      }
+      ]
+      }
+      }
      * 
      * 
      * @apiError ResortIdMissing The resort id was missing.
@@ -117,7 +117,7 @@ class NearbyController extends Controller {
                         $data['nearby'][$i]['address'] = $near->address_1;
                         $data['nearby'][$i]['latitude'] = $near->latitude;
                         $data['nearby'][$i]['longitude'] = $near->longitude;
-                        if ($nearbyImages) {
+                        if (count($nearbyImages) > 0) {
                             $j = 0;
                             foreach ($nearbyImages as $nearbyImage) {
                                 $data['nearby'][$i]['images'][$j]['id'] = $nearbyImage->id;
@@ -125,7 +125,11 @@ class NearbyController extends Controller {
                                 $j++;
                             }
                         } else {
-                            $data['nearby'][$i]['images'][$j] = [];
+                            $data['nearby'][$i]['images'][0] = [
+                                'id' => 0,
+                                'banner_image_url' => asset('img/image_loader.png')
+                            ];
+                            ;
                         }
                         $i++;
                     }
@@ -150,7 +154,7 @@ class NearbyController extends Controller {
                         $data['nearby'][$i]['address'] = $near->address_1;
                         $data['nearby'][$i]['latitude'] = $near->latitude;
                         $data['nearby'][$i]['longitude'] = $near->longitude;
-                        if ($nearbyImages) {
+                        if (count($nearbyImages) > 0) {
                             $j = 0;
                             foreach ($nearbyImages as $nearbyImage) {
                                 $data['nearby'][$i]['images'][$j]['id'] = $nearbyImage->id;
@@ -158,7 +162,10 @@ class NearbyController extends Controller {
                                 $j++;
                             }
                         } else {
-                            $data['nearby'][$i]['images'][$j] = [];
+                            $data['nearby'][$i]['images'][0] = [
+                                'id' => 0,
+                                'banner_image_url' => asset('img/image_loader.png')
+                            ];
                         }
                         $i++;
                     }

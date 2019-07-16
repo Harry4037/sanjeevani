@@ -109,8 +109,17 @@ class AmenityController extends Controller {
 
         if (count($amenities) > 0) {
             foreach ($amenities as $key => $amenity) {
-                $slots = AmenityTimeSlot::where('amenity_id', $amenity->id)->count();
+                $amenity = $amenity->toArray();
+                $slots = AmenityTimeSlot::where('amenity_id', $amenity['id'])->count();
                 $dataArray[$key] = $amenity;
+                if (count($amenity['amenity_images']) > 0) {
+                    $dataArray[$key]['amenity_images'] = $amenity['amenity_images'];
+                } else {
+                    $dataArray[$key]['amenity_images'][0] = [
+                        'id' => 0,
+                        'banner_image_url' => asset('img/image_loader.png')
+                    ];
+                }
                 $dataArray[$key]['is_booking_avaliable'] = $slots > 0 ? true : false;
             }
 

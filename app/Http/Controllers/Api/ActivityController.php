@@ -107,8 +107,17 @@ class ActivityController extends Controller {
 
         if (count($amenities) > 0) {
             foreach ($amenities as $key => $amenity) {
-                $slots = ActivityTimeSlot::where('amenity_id', $amenity->id)->count();
+                $amenity = $amenity->toArray();
+                $slots = ActivityTimeSlot::where('amenity_id', $amenity['id'])->count();
                 $dataArray[$key] = $amenity;
+                if (count($amenity['activity_images']) > 0) {
+                    $dataArray[$key]['activity_images'] = $amenity['activity_images'];
+                } else {
+                    $dataArray[$key]['activity_images'][0] = [
+                        'id' => 0,
+                        'banner_image_url' => asset('img/image_loader.png')
+                    ];
+                }
                 $dataArray[$key]['is_booking_avaliable'] = $slots > 0 ? true : false;
             }
 
@@ -277,7 +286,7 @@ class ActivityController extends Controller {
                 $user = User::select('id', 'user_name', 'mobile_number', 'email_id', 'voter_id', 'aadhar_id', 'address1', 'city_id', 'user_type_id')
                         ->where(["id" => $request->user_id])
                         ->with([
-                            'userBookingDetail' 
+                            'userBookingDetail'
 //                            => function($query) {
 //                                $query->selectRaw(DB::raw('id, resort_room_no, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
 //                            }

@@ -157,8 +157,8 @@
                             <button type="button" class="btn btn-primary" id="add_more_amenity">Add Amenity</button>
                         </div>
                     </div>
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
+                    <!--<div class="ln_solid"></div>-->
+<!--                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
                     </div>
 
@@ -194,7 +194,8 @@
                         <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
                             <button type="button" class="btn btn-primary" id="add_more_room">Add Room</button>
                         </div>
-                    </div>
+                    </div>-->
+                    
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
