@@ -58,11 +58,11 @@
                         <label>Room Type</label>
                         <select class="form-control" name="resort_room_id" id="resort_room_id">
                             <option value="">--select otpion--</option>
-                            @if($roomTypes)
-                            @foreach($roomTypes as $roomType)
-                            <option value="{{ $roomType->id }}">{{ $roomType->name }}</option>
-                            @endforeach
-                            @endif
+                            <!--                            @if($roomTypes)
+                                                        @foreach($roomTypes as $roomType)
+                                                        <option value="{{ $roomType->id }}">{{ $roomType->name }}</option>
+                                                        @endforeach
+                                                        @endif-->
                         </select>
                     </div>
                     <div class="form-group col-md-2">
@@ -153,6 +153,21 @@
                     }
                 });
             }
+        });
+
+        $(document).on('change', '#resort_id', function () {
+            var resort_id = $("#resort_id :selected").val();
+            $.ajax({
+                url: _baseUrl + '/admin/room-type/resort-room-type/' + resort_id,
+                type: 'get',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+                    $(".overlay").hide();
+                    $("#resort_room_id").html(res);
+                }
+            });
         });
 
     });

@@ -208,4 +208,11 @@ class RoomtypeController extends Controller {
         }
     }
 
+    public function getResortRoomType(Request $request, $id) {
+        $roomTypes = RoomType::where(["is_active" => 1, "resort_id" => $id])->get();
+        return view('admin.resort.room-type', [
+            'roomTypes' => $roomTypes
+        ]);
+    }
+
 }

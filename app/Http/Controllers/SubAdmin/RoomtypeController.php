@@ -32,7 +32,7 @@ class RoomtypeController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = RoomType::query();
+            $query = RoomType::query()->where('resort_id', $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }

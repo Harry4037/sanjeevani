@@ -24,7 +24,7 @@ class DashboardController extends Controller {
         $inactiveUser = User::where(["is_active" => 0, "user_type_id" => 3])->whereIn("id", $userIds)->count();
         $inactiveStaff = User::where(["is_active" => 0, "user_type_id" => 2])->whereIn("id", $userIds)->count();
 
-        $roomTypes = RoomType::where("is_active", 1)->get();
+        $roomTypes = RoomType::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
 
         $css = [
             'vendors/bootstrap-daterangepicker/daterangepicker.css',

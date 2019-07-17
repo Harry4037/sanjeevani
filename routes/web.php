@@ -50,6 +50,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/delete-room-images', 'RoomtypeController@deleteRoomImage')->name('admin.room.delete-room-image');
         Route::match(['get', 'post'], '/edit/{id}', 'RoomtypeController@editRoom')->name('admin.room.edit');
         Route::post('/delete', 'RoomtypeController@deleteRoom')->name('admin.room.delete');
+        Route::get('/resort-room-type/{id}', 'RoomtypeController@getResortRoomType')->name('admin.room.resort-room-type');
     });
 
     /**
