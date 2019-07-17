@@ -70,6 +70,7 @@ class RoomtypeController extends Controller {
                 }
 
                 $room = new RoomType();
+                $room->resort_id = $request->get("subadminResort");
                 $room->name = $request->name;
                 $room->description = $request->description;
                 if ($request->file("room_icon")) {
