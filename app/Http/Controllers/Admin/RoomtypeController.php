@@ -31,8 +31,14 @@ class RoomtypeController extends Controller {
 
             $query = RoomType::query()->with('resort');
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("resort", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
+
+//            if ($searchKeyword) {
+//                $query->where("name", "LIKE", "%$searchKeyword%");
+//            }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $rooms = $query->take($limit)->offset($offset)->latest()->get();

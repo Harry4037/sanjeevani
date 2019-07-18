@@ -111,9 +111,9 @@ class NearbyController extends Controller {
                         $nearbyImages = NearbyPlaceImage::where("nearby_place_id", $near->id)->get();
                         $data['nearby'][$i]['id'] = $near->id;
                         $data['nearby'][$i]['name'] = $near->name;
-                        $data['nearby'][$i]['description'] = $near->description;
+                        $data['nearby'][$i]['description'] = $near->description ? $near->description : '';
                         $data['nearby'][$i]['distance'] = $near->distance_from_resort;
-                        $data['nearby'][$i]['precautions'] = $near->precautions;
+                        $data['nearby'][$i]['precautions'] = $near->precautions ? $near->precautions : '';
                         $data['nearby'][$i]['address'] = $near->address_1;
                         $data['nearby'][$i]['latitude'] = $near->latitude;
                         $data['nearby'][$i]['longitude'] = $near->longitude;
@@ -148,9 +148,9 @@ class NearbyController extends Controller {
                         $nearbyImages = NearbyPlaceImage::where("nearby_place_id", $near->id)->get();
                         $data['nearby'][$i]['id'] = $near->id;
                         $data['nearby'][$i]['name'] = $near->name;
-                        $data['nearby'][$i]['description'] = $near->description;
+                        $data['nearby'][$i]['description'] = $near->description ? $near->description : '';
                         $data['nearby'][$i]['distance'] = $near->distance_from_resort;
-                        $data['nearby'][$i]['precautions'] = $near->precautions;
+                        $data['nearby'][$i]['precautions'] = $near->precautions ? $near->precautions : '';
                         $data['nearby'][$i]['address'] = $near->address_1;
                         $data['nearby'][$i]['latitude'] = $near->latitude;
                         $data['nearby'][$i]['longitude'] = $near->longitude;
