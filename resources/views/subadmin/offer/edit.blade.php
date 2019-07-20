@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="offer_description" id="offer_description" placeholder="Offer Description">{{ $amenity->description }}</textarea>
                         </div>
@@ -90,15 +90,15 @@
 $(document).ready(function () {
 
     $('#valid_to').daterangepicker({
-        singleDatePicker: true,
-        timePicker: false,
-        singleClasses: "picker_1",
-        @if (isset($amenity->valid_to))
-        startDate: new Date("{{ $amenity->valid_to }}"),
-        @endif
-        locale: {
-        format: 'YYYY/M/DD'
-        }
+    singleDatePicker: true,
+            timePicker: false,
+            singleClasses: "picker_1",
+            @if (isset($amenity - > valid_to))
+    startDate: new Date("{{ $amenity->valid_to }}"),
+            @endif
+            locale: {
+            format: 'YYYY/M/DD'
+            }
 });
 
 
@@ -106,11 +106,6 @@ $(document).ready(function () {
 CKEDITOR.replace('offer_description', {
     removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
     removePlugins: 'image, link',
-});
-CKEDITOR.instances.offer_description.on('change', function () {
-    if (CKEDITOR.instances.offer_description.getData().length > 0) {
-        $('label[for="offer_description"]').hide();
-    }
 });
 
 Dropzone.options.myDropzone = {
@@ -157,6 +152,13 @@ $("#addOfferForm").validate({
         offer_name: {
             required: true
         },
+        offer_description: {
+            required: function (textarea) {
+                CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                return editorcontent.length === 0;
+            }
+        },
         price: {
             required: true
         },
@@ -170,25 +172,26 @@ $("#addOfferForm").validate({
 });
 
 $(document).on('click', '.delete_offer_image', function () {
-var record_id = this.id;
-        var _this = $(this);
-        if (record_id) {
-$.ajax({
-url: _baseUrl + '/sub-admin/offer/delete-offer-images',
-        type: 'post',
-        data: {record_id: record_id},
-        dataType: 'json',
-        success: function (res) {
-        if (res.status)
-        {
-        _this.parent("div").remove();
-        } else {
-        alert("Something went be wrong");
+    var record_id = this.id;
+    var _this = $(this);
+    if (record_id) {
+        $.ajax({
+            url: _baseUrl + '/sub-admin/offer/delete-offer-images',
+            type: 'post',
+            data: {record_id: record_id},
+            dataType: 'json',
+            success: function (res) {
+                if (res.status)
+                {
+                    _this.parent("div").remove();
+                } else {
+                    alert("Something went be wrong");
+                }
+            }
+        });
         }
-        }
-});
-        }
-});
+    }
+    );
 }
 );
 </script>

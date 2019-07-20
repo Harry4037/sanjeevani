@@ -193,6 +193,7 @@ $(document).ready(function () {
     }, "Please provide valid float value");
 
     $("#addNearbyForm").validate({
+        ignore: [],
         rules: {
             resort_id: {
                 required: true
@@ -204,12 +205,20 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-//                place_description: {
-//                    required: true
-//                },
-//                place_precaution: {
-//                    required: true
-//                },
+            place_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
+            place_precaution: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
             address: {
                 required: true
             },

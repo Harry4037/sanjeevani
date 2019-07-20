@@ -276,19 +276,23 @@ $(document).ready(function () {
         removePlugins: 'image, link',
 //        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
     });
-    CKEDITOR.instances.edit_resort_description.on('change', function () {
-        if (CKEDITOR.instances.edit_resort_description.getData().length > 0) {
-            $('label[for="edit_resort_description"]').hide();
-        }
-    });
+
     jQuery.validator.addMethod("float_number", function (value, element) {
         return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
     }, "Please provide valid lat & long value.");
 
     $("#editResortForm").validate({
+        ignore: [],
         rules: {
             edit_resort_name: {
                 required: true
+            },
+            edit_resort_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
             },
             edit_contact_no: {
                 required: true,

@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="package_description" id="package_description" placeholder="Package Description">{{ $healthcare->description }}</textarea>
                         </div>
@@ -193,11 +193,7 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
             removePlugins: 'image, link',
 //        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
     });
-    CKEDITOR.instances.package_description.on('change', function () {
-    if (CKEDITOR.instances.resort_description.getData().length > 0) {
-    $('label[for="package_description"]').hide();
-    }
-    });
+
     Dropzone.options.myDropzone = {
     init: function () {
     this.on("success", function (file, response) {
@@ -232,15 +228,13 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
     $("#addHealthcareForm").validate({
     ignore: [],
             rules: {
-//            cktext: {
-//                required: function ()
-//                {
-//                    CKEDITOR.instances.cktext.updateElement();
-//                },
-//            },
-//            resort_id: {
-//            required: true
-//            },
+            package_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
                     package_name: {
                     required: true
                     },

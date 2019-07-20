@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Activity Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Activity Description">{{ $amenity->description }}</textarea>
                         </div>
@@ -178,11 +178,6 @@ $(document).ready(function () {
         removePlugins: 'image, link',
 //        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
     });
-    CKEDITOR.instances.amenity_description.on('change', function () {
-        if (CKEDITOR.instances.resort_description.getData().length > 0) {
-            $('label[for="amenity_description"]').hide();
-        }
-    });
 
 
     $(document).on("click", "#add_time_slot", function () {
@@ -258,12 +253,13 @@ $(document).ready(function () {
     $("#addActivityForm").validate({
         ignore: [],
         rules: {
-//            cktext: {
-//                required: function ()
-//                {
-//                    CKEDITOR.instances.cktext.updateElement();
-//                },
-//            },
+            amenity_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
             resort_id: {
                 required: true
             },

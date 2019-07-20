@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offer Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="offer_description" id="offer_description" placeholder="Offer Description">{{ old('offer_description') }}</textarea>
                         </div>
@@ -93,11 +93,6 @@ $(document).ready(function () {
     CKEDITOR.replace('offer_description', {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
         removePlugins: 'image, link',
-    });
-    CKEDITOR.instances.offer_description.on('change', function () {
-        if (CKEDITOR.instances.offer_description.getData().length > 0) {
-            $('label[for="offer_description"]').hide();
-        }
     });
 
     Dropzone.options.myDropzone = {
@@ -143,6 +138,13 @@ $(document).ready(function () {
         rules: {
             offer_name: {
                 required: true
+            },
+            offer_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
             },
             price: {
                 required: true

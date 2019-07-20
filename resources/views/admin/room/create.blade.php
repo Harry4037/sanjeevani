@@ -139,6 +139,13 @@ $(document).ready(function () {
                 required: true,
                 accept: "image/*",
             },
+            description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            }
         },
         messages: {
             room_icon: {

@@ -369,7 +369,7 @@ class UsersController extends Controller {
             'vendors/iCheck/icheck.min.js',
         ];
 //        $resorts = Resort::where("is_active", 1)->get();
-        $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
+        $roomTypes = \App\Models\RoomType::where(["is_active"=> 1, "resort_id" => $request->get("subadminResort")])->get();
         $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         return view('subadmin.users.add-user', [
             'js' => $js,
@@ -737,7 +737,7 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
         ];
         $resorts = Resort::where(["is_active" => 1])->get();
-        $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
+        $roomTypes = \App\Models\RoomType::where(["is_active"=> 1, "resort_id" => $request->get("subadminResort")])->get();
         $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         return view('subadmin.users.booking-create', [
             'js' => $js,
@@ -838,7 +838,7 @@ class UsersController extends Controller {
             $flag = false;
         }
         $resorts = Resort::where(["is_active" => 1])->get();
-        $roomTypes = \App\Models\RoomType::where("is_active", 1)->get();
+        $roomTypes = \App\Models\RoomType::where(["is_active"=> 1, "resort_id" => $request->get("subadminResort")])->get();
         $resortRoom = ResortRoom::find($data->resort_room_id);
         $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         $BookingPeoples = BookingpeopleAccompany::where("booking_id", $data->id)->get();

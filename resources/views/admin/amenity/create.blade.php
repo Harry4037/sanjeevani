@@ -45,7 +45,7 @@
                             <input value="{{ old('amenity_name') }}" type="text" class="form-control" name="amenity_name" id="amenity_name" placeholder="Amenity Name">
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Icon</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="file" class="form-control" name="amenity_icon" id="amenity_icon">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amenity Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="amenity_description" id="amenity_description" placeholder="Amenity Description">{{ old('amenity_description') }}</textarea>
                         </div>
@@ -129,7 +129,7 @@
 <script>
 $(document).ready(function () {
 
-var index = 0;
+    var index = 0;
     $(document).on('focus', ".from_timepicker", function () {
         $(this).daterangepicker({
             timePicker: true,
@@ -170,11 +170,6 @@ var index = 0;
         removePlugins: 'image, link',
 //        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
     });
-    CKEDITOR.instances.amenity_description.on('change', function () {
-        if (CKEDITOR.instances.resort_description.getData().length > 0) {
-            $('label[for="amenity_description"]').hide();
-        }
-    });
 
 
     $(document).on("click", "#add_time_slot", function () {
@@ -182,21 +177,21 @@ var index = 0;
         var html = "<div class='form-group'>\n\
                 <label class='control-label col-md-2 col-sm-2 col-xs-12'>From</label>\n\
                 <div class='col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control from_timepicker' name='from_time["+index+"]' >"
+                + "<input readonly type='text' class='form-control from_timepicker' name='from_time[" + index + "]' >"
                 + "</div>\n\
             <label class='control-label col-md-1 col-sm-1 col-xs-12'>To</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-12'>"
-                + "<input readonly type='text' class='form-control to_timepicker' name='to_time["+index+"]'>"
+                + "<input readonly type='text' class='form-control to_timepicker' name='to_time[" + index + "]'>"
                 + "</div>"
                 + "<label class='control-label col-md-2 col-sm-2 col-xs-12'>Total People</label>\n\
             <div class = 'col-md-2 col-sm-2 col-xs-10'>"
-                + "<input type='number' class='form-control' name='total_people["+index+"]'>"
+                + "<input type='number' class='form-control' name='total_people[" + index + "]'>"
                 + "</div>"
                 + "<i style='cursor:pointer' class='fa fa-times delete_this_div'></i></div>";
         $("#time_slot_div").append(html);
-        $("input[name='total_people["+index+"]']").rules("add", {required: true,number:true});
-        $("input[name='from_time["+index+"]']").rules("add", {required: true});
-        $("input[name='to_time["+index+"]']").rules("add", {required: true});
+        $("input[name='total_people[" + index + "]']").rules("add", {required: true, number: true});
+        $("input[name='from_time[" + index + "]']").rules("add", {required: true});
+        $("input[name='to_time[" + index + "]']").rules("add", {required: true});
         index++;
     });
 
@@ -232,12 +227,13 @@ var index = 0;
     $("#addAmenityForm").validate({
         ignore: [],
         rules: {
-//            cktext: {
-//                required: function ()
-//                {
-//                    CKEDITOR.instances.cktext.updateElement();
-//                },
-//            },
+            amenity_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
             resort_id: {
                 required: true
             },

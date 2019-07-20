@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="resort_description" id="resort_description" placeholder="Resort Description">{{ old('resort_description') }}</textarea>
                         </div>
@@ -158,44 +158,44 @@
                         </div>
                     </div>
                     <!--<div class="ln_solid"></div>-->
-<!--                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
-                    </div>
-
-                    <div id="room_detail_div">
-                        @if(old('room_no'))
-                        @foreach(old('room_no') as $key => $old_room)
-                        <div class='form-group'>
-                            <label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>
-                            <div class='col-md-2 col-sm-2 col-xs-12'>
-                                <input type='text' class='form-control' name='room_no[]'>
-                            </div>
-                            <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>
-                            <div class = 'col-md-2 col-sm-2 col-xs-11'>
-                                <select class='form-control' name='room_type[]' id='room_type'>
-                                    @if($roomTypes)
-                                    @foreach($roomTypes as $roomType)
-                                    <option value="{{ $roomType->id }}">{{ $roomType->name }}"
-                                        @if(old('room_type')[$key] == $roomType->id)
-                                        {{ "selected" }}
-                                        @endif
-                                        ></option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                            <i style='cursor:pointer' class='fa fa-times delete_this_div'></i>
-                        </div>
-                        @endforeach
-                        @endif
-
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
-                            <button type="button" class="btn btn-primary" id="add_more_room">Add Room</button>
-                        </div>
-                    </div>-->
+                    <!--                    <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Details</label>
+                                        </div>
                     
+                                        <div id="room_detail_div">
+                                            @if(old('room_no'))
+                                            @foreach(old('room_no') as $key => $old_room)
+                                            <div class='form-group'>
+                                                <label class='control-label col-md-2 col-sm-2 col-xs-12'>Room No.</label>
+                                                <div class='col-md-2 col-sm-2 col-xs-12'>
+                                                    <input type='text' class='form-control' name='room_no[]'>
+                                                </div>
+                                                <label class='control-label col-md-3 col-sm-3 col-xs-12'>Room Type</label>
+                                                <div class = 'col-md-2 col-sm-2 col-xs-11'>
+                                                    <select class='form-control' name='room_type[]' id='room_type'>
+                                                        @if($roomTypes)
+                                                        @foreach($roomTypes as $roomType)
+                                                        <option value="{{ $roomType->id }}">{{ $roomType->name }}"
+                                                            @if(old('room_type')[$key] == $roomType->id)
+                                                            {{ "selected" }}
+                                                            @endif
+                                                            ></option>
+                                                        @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                                <i style='cursor:pointer' class='fa fa-times delete_this_div'></i>
+                                            </div>
+                                            @endforeach
+                                            @endif
+                    
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
+                                                <button type="button" class="btn btn-primary" id="add_more_room">Add Room</button>
+                                            </div>
+                                        </div>-->
+
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12 text-center">
@@ -231,11 +231,6 @@ $(document).ready(function () {
         removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
         removePlugins: 'image, link',
 //        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
-    });
-    CKEDITOR.instances.resort_description.on('change', function () {
-        if (CKEDITOR.instances.resort_description.getData().length > 0) {
-            $('label[for="resort_description"]').hide();
-        }
     });
 
 
@@ -321,14 +316,15 @@ $(document).ready(function () {
     $("#addResortForm").validate({
         ignore: [],
         rules: {
-//            cktext: {
-//                required: function ()
-//                {
-//                    CKEDITOR.instances.cktext.updateElement();
-//                },
-//            },
             resort_name: {
                 required: true
+            },
+            resort_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
             },
             contact_no: {
                 required: true,

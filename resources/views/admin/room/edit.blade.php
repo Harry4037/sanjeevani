@@ -71,7 +71,7 @@
                     </div>
                     @endif
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description*</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                             <textarea class="form-control" name="description" id="description" placeholder="Description">{{ $data->description }}</textarea>
                         </div>
@@ -109,6 +109,13 @@ $(document).ready(function () {
             name: {
                 required: true
             },
+            description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            }
         }
     });
 

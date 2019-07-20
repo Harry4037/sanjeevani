@@ -40,13 +40,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Description</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Place Description*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <textarea class="form-control" name="place_description" id="place_description" placeholder="Place Description"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Precautions</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Precautions*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <textarea class="form-control" name="place_precaution" id="place_precaution" placeholder="Place Precaution"></textarea>
                         </div>
@@ -170,11 +170,12 @@ $(document).ready(function () {
         dictDefaultMessage: "Drop or Select multiple images for nearny images."
     };
 
-   jQuery.validator.addMethod("float_number", function(value, element) {
-  return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
-}, "Please provide valid float value");
+    jQuery.validator.addMethod("float_number", function (value, element) {
+        return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
+    }, "Please provide valid float value");
 
     $("#addNearbyForm").validate({
+        ignore: [],
         rules: {
             place_name: {
                 required: true
@@ -183,12 +184,20 @@ $(document).ready(function () {
                 required: true,
                 number: true
             },
-//                place_description: {
-//                    required: true
-//                },
-//                place_precaution: {
-//                    required: true
-//                },
+            place_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
+            place_precaution: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
             address: {
                 required: true
             },
