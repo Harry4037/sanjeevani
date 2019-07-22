@@ -251,6 +251,9 @@ class ActivityController extends Controller {
         }
 
         $userBooking = User::with('userBookingDetail')->find($request->user_id);
+        if ($userBooking->is_active == 0) {
+            return $this->sendInactiveAccountResponse();
+        }
         $amenity = Activity::find($request->activity_id);
         if (!$amenity) {
             return $this->sendErrorResponse("Invalid activity.", (object) []);

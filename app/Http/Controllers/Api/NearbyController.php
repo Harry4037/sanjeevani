@@ -129,7 +129,6 @@ class NearbyController extends Controller {
                                 'id' => 0,
                                 'banner_image_url' => asset('img/image_loader.png')
                             ];
-                            ;
                         }
                         $i++;
                     }

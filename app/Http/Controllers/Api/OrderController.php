@@ -33,15 +33,15 @@ class OrderController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "We will serve your food soon.",
-            "data": {
-                "invoice_id": 1551681813,
-                "total_amount": 53
-            }
-        }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "We will serve your food soon.",
+      "data": {
+      "invoice_id": 1551681813,
+      "total_amount": 53
+      }
+      }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -101,6 +101,9 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("Invalid resort.", (object) []);
             }
             $user = User::with("userBookingDetail")->find($request->user_id);
+            if ($user->is_active == 0) {
+                return $this->sendInactiveAccountResponse();
+            }
             $cartCount = Cart::where(["user_id" => $request->user_id])->count();
             $cartDataArray = [];
             if ($cartCount > 0) {
@@ -135,7 +138,7 @@ class OrderController extends Controller {
                 $mealOrder->status = 1;
                 $mealOrder->item_total_amount = $total;
                 $mealOrder->gst_amount = $gst;
-                $mealOrder->total_amount = $total + number_format(($total * ($gst/100)),0, '.', '');
+                $mealOrder->total_amount = $total + number_format(($total * ($gst / 100)), 0, '.', '');
                 if ($mealOrder->save()) {
                     foreach ($cartDataArray as $cartData) {
                         $mealOrderItem = new MealOrderItem();
@@ -158,7 +161,7 @@ class OrderController extends Controller {
                             ->whereIn("id", $resortUsers->toArray())
                             ->where("device_token", "!=", "")
                             ->pluck("device_token");
-                          
+
                     if (count($staffDeviceTokens) > 0) {
                         $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id, 1);
                     }
@@ -315,40 +318,39 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
             $user = User::with("userBookingDetail")->find($request->user_id);
-             
-            if($user->userBookingDetail == NULL){
+
+            if ($user->userBookingDetail == NULL) {
                 $data['total_amount'] = 0;
                 $data['paid_amount'] = 0;
                 $data['outstanding_amount'] = 0;
                 $data['invoices'] = [];
-                
-            }else{
-            $user->load(['payments', 'mealOrders' => function($query) use($request, $user){
-                    $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])->accepted();
-                }]);
+            } else {
+                $user->load(['payments', 'mealOrders' => function($query) use($request, $user) {
+                        $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])->accepted();
+                    }]);
 
-            $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
-                    ->with([
-                        'orderItems' => function($query) {
-                            $query->select('id', 'meal_item_name', 'quantity', 'price', 'meal_order_id');
-                        }
-                    ])
-                    ->latest()->get();
-            $data['total_amount'] = $user->mealOrders->sum('total_amount');
-            $data['paid_amount'] = $user->payments->where("resort_id", $user->userBookingDetail->resort->id)->sum('amount');
-             $discountPrice = $data['total_amount'];
-            if ($user->discount > 0) {
-                $discountPrice = number_format(($data['total_amount'] - ($data['total_amount'] * ($user->discount / 100))), 0, ".", "");
-            }
-            $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
-            $data['invoices'] = [];
-            if ($invoices) {
-                $data['invoices'] = $invoices;
+                $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
+                                ->with([
+                                    'orderItems' => function($query) {
+                                        $query->select('id', 'meal_item_name', 'quantity', 'price', 'meal_order_id');
+                                    }
+                                ])
+                                ->latest()->get();
+                $data['total_amount'] = $user->mealOrders->sum('total_amount');
+                $data['paid_amount'] = $user->payments->where("resort_id", $user->userBookingDetail->resort->id)->sum('amount');
+                $discountPrice = $data['total_amount'];
+                if ($user->discount > 0) {
+                    $discountPrice = number_format(($data['total_amount'] - ($data['total_amount'] * ($user->discount / 100))), 0, ".", "");
+                }
+                $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
+                $data['invoices'] = [];
+                if ($invoices) {
+                    $data['invoices'] = $invoices;
                 }
             }
             // if ($invoices) {
             //     $data['invoices'] = $invoices;
-                return $this->sendSuccessResponse("invoices list found.", $data);
+            return $this->sendSuccessResponse("invoices list found.", $data);
             // } else {
             //     return $this->sendErrorResponse("invoices not found", (object) []);
             // }
