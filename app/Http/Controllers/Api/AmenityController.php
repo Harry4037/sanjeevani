@@ -132,7 +132,7 @@ class AmenityController extends Controller {
             $response['success'] = false;
             $response['status_code'] = 404;
             $response['message'] = "Anemities not found.";
-            $response['data'] = (object) [];
+            $response['data'] = [];
             return $this->jsonData($response);
         }
     }
