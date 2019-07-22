@@ -226,10 +226,10 @@ class ResortController extends Controller {
                 if ($resortRoomTypes) {
                     foreach ($resortRoomTypes as $key => $resortRoomType) {
                         $roomType = RoomType::find($resortRoomType->room_type_id);
-                        $resortRoomArray[$key]['id'] = $roomType->id;
-                        $resortRoomArray[$key]['name'] = $roomType->name;
-                        $resortRoomArray[$key]['icon'] = $roomType->icon;
-                        $resortRoomArray[$key]['description'] = $roomType->description;
+                        $resortRoomArray[$key]['id'] = $roomType ? $roomType->id : '';
+                        $resortRoomArray[$key]['name'] = $roomType ? $roomType->name : '';
+                        $resortRoomArray[$key]['icon'] = $roomType ? $roomType->icon : '';
+                        $resortRoomArray[$key]['description'] = $roomType ? $roomType->description : '';
                         $roomImages = RoomtypeImage::select('id', 'image_name as banner_image_url')->where("roomtype_id", $resortRoomType->room_type_id)->get();
                         if ($roomImages) {
                             $resortRoomArray[$key]['room_images'] = $roomImages;
