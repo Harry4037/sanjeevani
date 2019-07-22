@@ -163,7 +163,7 @@ class OfferController extends Controller {
 
                 return $this->sendSuccessResponse("offers found", $dataArray);
             } else {
-                return $this->sendErrorResponse("offers not found", (object) []);
+                return $this->sendErrorResponse("offers not found", []);
             }
         } catch (\Exception $e) {
             return $this->administratorResponse();
