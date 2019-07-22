@@ -405,6 +405,17 @@ class ResortController extends Controller {
                         }
                     ])->get();
             if ($resorts) {
+                $resortArray = [];
+                $resorts = $resorts->toArray();
+                foreach ($resorts as $k => $resort) {
+                    $resortArray[$k] = $resort;
+                    if (count($resort['resort_images']) <= 0) {
+                        $resortArray[$k]['resort_images'][0] = [
+                            'id' => 0,
+                            'banner_image_url' => asset('img/image_loader.png')
+                        ];
+                    }
+                }
                 return $this->sendSuccessResponse("resorts found", $resorts);
             } else {
                 return $this->sendSuccessResponse("resorts not found", $resorts);
