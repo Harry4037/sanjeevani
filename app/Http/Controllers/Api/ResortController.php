@@ -243,14 +243,14 @@ class ResortController extends Controller {
                 }
 
                 $resortAmenitiesArray = [];
-                if ($resort->amenities) {
+                if (count($resort->amenities) > 0) {
                     foreach (explode("#", $resort->amenities) as $k => $amenity_id) {
                         $resortAmenitiesArray[$k]['amenity_id'] = $amenity_id;
                     }
                 }
 
                 $resortOtherAmenitiesArray = [];
-                if ($resort->other_amenities) {
+                if (count($resort->other_amenities) > 0) {
                     foreach (explode("#", $resort->other_amenities) as $j => $amenity_name) {
                         $resortOtherAmenitiesArray[$j]['name'] = $amenity_name;
                     }
