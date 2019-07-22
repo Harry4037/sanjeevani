@@ -416,7 +416,7 @@ class ResortController extends Controller {
                         ];
                     }
                 }
-                return $this->sendSuccessResponse("resorts found", $resorts);
+                return $this->sendSuccessResponse("resorts found", $resortArray);
             } else {
                 return $this->sendSuccessResponse("resorts not found", $resorts);
             }
