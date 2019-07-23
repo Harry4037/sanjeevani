@@ -1338,7 +1338,7 @@ class StaffController extends Controller {
             return $this->sendErrorResponse("Resort Id missing", (object) []);
         }
 
-        $roomTypes = RoomType::where("is_active", 1)->get();
+        $roomTypes = RoomType::where(["is_active" => 1, "resort_id" => $request->resort_id])->get();
         if ($roomTypes->count()) {
             $check_in = date("Y-m-d H:s:i", strtotime($request->check_in));
             $check_out = date("Y-m-d H:s:i", strtotime($request->check_out));

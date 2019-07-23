@@ -15,12 +15,12 @@
 
                 <form class="form-horizontal form-label-left" action="{{ route('admin.users.booking-create', $user_id) }}" method="post" id="addBookingForm">
                     @csrf
-<!--                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
-                        </div>
-                    </div>-->
+                    <!--                    <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
+                                            </div>
+                                        </div>-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -65,11 +65,6 @@
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <select class="form-control" name="resort_room_type" id="resort_room_type">
                                 <option value="">Choose option</option>
-                                @if($roomTypes)
-                                @foreach($roomTypes as $roomType)
-                                <option value="{{ $roomType->id }}" @if(old('resort_room_type') == $roomType->id){{ "selected" }}@endif>{{ $roomType->name }}</option>
-                                @endforeach
-                                @endif
                             </select>
                         </div>
                     </div>
@@ -140,7 +135,7 @@
                 minDate: start,
                 locale: {
                     format: 'YYYY/M/DD hh:mm:ss A'
-            }});
+                }});
 
         });
 
@@ -236,6 +231,26 @@
         });
 
         $(document).on("change", "#resort_id", function () {
+            var resort_id = $("#resort_id :selected").val();
+            if (!resort_id) {
+                alert("Please select resort.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/room-type/resort-room-type/' + resort_id,
+                    type: 'get',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        $(".overlay").hide();
+                        $("#resort_room_type").html(res);
+                    }
+                });
+            }
+        });
+
+        $(document).on("change", "#resort_room_id", function () {
             var resort = $("#resort_id :selected").val();
             if (!resort) {
                 alert("Please select resort.")
