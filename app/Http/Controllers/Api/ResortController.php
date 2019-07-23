@@ -211,7 +211,7 @@ class ResortController extends Controller {
                         }
                     ])->with([
                         'resortAmenities' => function($query) {
-                            $query->select('id', 'resort_id', 'name', 'icon');
+                            $query->select('id', 'resort_id', 'name');
                         }
                     ])->with([
                         'resortNearByPlaces' => function($query) {
