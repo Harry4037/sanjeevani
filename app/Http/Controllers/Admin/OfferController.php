@@ -10,6 +10,7 @@ use Validator;
 use App\Models\Resort;
 use App\Models\offer;
 use App\Models\offerImage;
+use Illuminate\Validation\Rule;
 
 class OfferController extends Controller {
 
@@ -67,7 +68,13 @@ class OfferController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'offer_name' => 'bail|required',
+                            'offer_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('offers', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->offer_name, 'resort_id' => $request->resort_id]);
+                                        }),
+                            ],
                             'price' => 'bail|required',
                             'discount' => 'bail|required',
                             'valid_to' => 'bail|required',
@@ -155,7 +162,13 @@ class OfferController extends Controller {
         $amenity = offer::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'offer_name' => 'bail|required',
+                        'offer_name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('offers', 'name')->ignore($request->id)->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->offer_name, 'resort_id' => $request->resort_id]);
+                                    }),
+                        ],
                         'price' => 'bail|required',
                         'discount' => 'bail|required',
                         'valid_to' => 'bail|required',

@@ -14,6 +14,7 @@ use App\Models\HealthcateProgramDay;
 use App\Models\HealthcateProgramImages;
 use App\Models\HealthcareBooking;
 use App\Models\CityMaster;
+use Illuminate\Validation\Rule;
 
 class HealthcareProgramController extends Controller {
 
@@ -71,7 +72,13 @@ class HealthcareProgramController extends Controller {
 
                 $validator = Validator::make($request->all(), [
                             'resort_id' => 'bail|required',
-                            'package_name' => 'bail|required',
+                            'package_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('healthcate_programs', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->resort_id]);
+                                        }),
+                            ],
                             'start_from' => 'bail|required',
                             'end_to' => 'bail|required',
                             'end_to' => 'bail|required',
@@ -171,7 +178,13 @@ class HealthcareProgramController extends Controller {
         $healthcare = HealthcateProgram::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'package_name' => 'bail|required',
+                        'package_name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('healthcate_programs', 'name')->ignore($request->id)->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->package_name, 'resort_id' => $request->resort_id]);
+                                    }),
+                        ],
             ]);
             if ($validator->fails()) {
                 return redirect()->route('admin.healthcare.index')->withErrors($validator)->withInput();
@@ -292,9 +305,9 @@ class HealthcareProgramController extends Controller {
                 if (isset($healthcareBok->userDetail->city_id)) {
                     $cityState = CityMaster::find($healthcareBok->userDetail->city_id);
                     if (isset($healthcareBok->userDetail->address1)) {
-                        $address = $healthcareBok->userDetail->address1. "<br>";
+                        $address = $healthcareBok->userDetail->address1 . "<br>";
                         if (isset($cityState->state->state)) {
-                            $address .= $cityState->city.", ";
+                            $address .= $cityState->city . ", ";
                             $address .= $cityState->state->state;
                         }
                     }

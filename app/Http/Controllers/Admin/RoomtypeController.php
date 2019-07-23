@@ -9,6 +9,7 @@ use App\Models\RoomType;
 use App\Models\Resort;
 use App\Models\RoomtypeImage;
 use Validator;
+use Illuminate\Validation\Rule;
 
 class RoomtypeController extends Controller {
 
@@ -66,7 +67,13 @@ class RoomtypeController extends Controller {
         try {
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'name' => 'bail|required',
+                            'name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('room_types')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->name, 'resort_id' => $request->resort_id]);
+                                        }),
+                            ],
                             'room_icon' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
@@ -150,6 +157,19 @@ class RoomtypeController extends Controller {
         try {
             $data = RoomType::find($id);
             if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('room_types')->ignore($id)->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->name, 'resort_id' => $request->resort_id]);
+                                        }),
+                            ],
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.room.edit', $id)->withErrors($validator)->withInput();
+                }
+                dd("success");
                 $data->resort_id = $request->resort_id;
                 $data->name = $request->name;
                 $data->description = $request->description;

@@ -10,6 +10,7 @@ use App\Models\Resort;
 use App\Models\ServiceQuestionaire;
 use Illuminate\Support\Facades\Storage;
 use Validator;
+use Illuminate\Validation\Rule;
 
 class ServiceController extends Controller {
 
@@ -80,7 +81,13 @@ class ServiceController extends Controller {
         if ($request->isMethod("post")) {
 
             $validator = Validator::make($request->all(), [
-                        'service_name' => 'bail|required',
+                        'service_name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('services', 'name')->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->service_name, 'resort_id' => $request->resort_id]);
+                                    }),
+                        ],
                         'resort_id' => 'bail|required',
                         'service_type' => 'bail|required',
                         'service_icon' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width<500,height<500',
@@ -153,6 +160,22 @@ class ServiceController extends Controller {
 
         $data = Service::find($id);
         if ($request->isMethod("post")) {
+            $validator = Validator::make($request->all(), [
+                        'service_name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('services', 'name')->ignore($id)->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->service_name, 'resort_id' => $request->resort_id]);
+                                    }),
+                        ],
+                        'resort_id' => 'bail|required',
+                        'service_type' => 'bail|required',
+                        'service_icon' => 'bail|required|max:1000|mimes:jpeg,jpg,png|dimensions:width<500,height<500',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('admin.service.edit', $id)->withErrors($validator)->withInput();
+            }
+
             if ($request->hasFile("service_icon")) {
                 $icon_image = $request->file("service_icon");
                 $icon = Storage::disk('public')->put('Service_icon', $icon_image);

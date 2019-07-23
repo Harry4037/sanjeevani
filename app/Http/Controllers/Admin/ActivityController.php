@@ -12,6 +12,7 @@ use App\Models\Activity;
 use App\Models\ActivityImage;
 use App\Models\Resort;
 use App\Models\ActivityTimeSlot;
+use Illuminate\Validation\Rule;
 
 class ActivityController extends Controller {
 
@@ -71,10 +72,16 @@ class ActivityController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'amenity_name' => 'bail|required',
+                            'amenity_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('activities', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->resort_id]);
+                                        }),
+                            ],
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                    return redirect()->route('admin.activity.add')->withErrors($validator)->withInput();
                 }
                 $amenity = new Activity();
 
@@ -170,10 +177,16 @@ class ActivityController extends Controller {
         $amenity = Activity::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'amenity_name' => 'bail|required',
+                        'amenity_name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('activities', 'name')->ignore($request->id)->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->resort_id]);
+                                    }),
+                        ],
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.activity.index')->withErrors($validator)->withInput();
+                return redirect()->route('admin.activity.edit', $request->id)->withErrors($validator)->withInput();
             }
             $amenity->name = $request->amenity_name;
             $amenity->description = $request->amenity_description;

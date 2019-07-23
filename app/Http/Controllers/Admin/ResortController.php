@@ -79,7 +79,7 @@ class ResortController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'resort_name' => 'bail|required',
+                            'resort_name' => 'bail|required|unique:resorts,name',
                             'contact_no' => 'bail|required',
                             'address' => 'bail|required',
                             'pin_code' => 'bail|required|numeric',
@@ -187,6 +187,12 @@ class ResortController extends Controller {
         try {
             $data = $this->resort->find($id);
             if ($request->isMethod("post")) {
+                $validator = Validator::make($request->all(), [
+                            'edit_resort_name' => 'bail|required|unique:resorts,name,' . $id,
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.resort.edit', $id)->withErrors($validator)->withInput();
+                }
 
                 $data->name = $request->edit_resort_name;
                 $data->contact_number = $request->edit_contact_no;
