@@ -830,8 +830,16 @@ class HomeController extends Controller {
             $response['success'] = true;
             $response['status_code'] = 200;
             $response['message'] = "service successfully access.";
+            if (isset($user->id) && ($user->id > 0)) {
+                $user = $user->toArray();
+                if($user['user_health_detail'] == null){
+                   $user['user_health_detail'] =  (object) [];
+                }
+            } else {
+                $user = (object) [];
+            }
             $response['data'] = [
-                "user" => isset($user->id) && ($user->id > 0) ? $user->toArray() : (object) [],
+                "user" => $user,
                 "banners" => $bannerArray,
                 "nearby_attaractions" => $nearbyArray,
                 "best_offers" => $offerArray,
