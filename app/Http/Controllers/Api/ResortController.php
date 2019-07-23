@@ -224,22 +224,24 @@ class ResortController extends Controller {
                 $resortRoomTypes = ResortRoom::select('room_type_id')->where("resort_id", $resort->id)->distinct()->get();
                 $resortRoomArray = [];
                 if ($resortRoomTypes) {
+                    $d = 0;
                     foreach ($resortRoomTypes as $key => $resortRoomType) {
                         $roomType = RoomType::find($resortRoomType->room_type_id);
                         if ($roomType) {
-                            $resortRoomArray[$key]['id'] = $roomType ? $roomType->id : 0;
-                            $resortRoomArray[$key]['name'] = $roomType ? $roomType->name : '';
-                            $resortRoomArray[$key]['icon'] = $roomType ? $roomType->icon : '';
-                            $resortRoomArray[$key]['description'] = $roomType ? $roomType->description : '';
+                            $resortRoomArray[$d]['id'] = $roomType ? $roomType->id : 0;
+                            $resortRoomArray[$d]['name'] = $roomType ? $roomType->name : '';
+                            $resortRoomArray[$d]['icon'] = $roomType ? $roomType->icon : '';
+                            $resortRoomArray[$d]['description'] = $roomType ? $roomType->description : '';
                             $roomImages = RoomtypeImage::select('id', 'image_name as banner_image_url')->where("roomtype_id", $resortRoomType->room_type_id)->get();
                             if ($roomImages) {
-                                $resortRoomArray[$key]['room_images'] = $roomImages;
+                                $resortRoomArray[$d]['room_images'] = $roomImages;
                             } else {
-                                $resortRoomArray[$key]['room_images'] [0] = [
+                                $resortRoomArray[$d]['room_images'] [0] = [
                                     'id' => 0,
                                     'banner_image_url' => asset('img/image_loader.png')
                                 ];
                             }
+                            $d++;
                         }
                     }
                 }
