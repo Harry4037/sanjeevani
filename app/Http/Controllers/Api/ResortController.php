@@ -205,7 +205,7 @@ class ResortController extends Controller {
                 return $this->sendErrorResponse("Resort id missing.", (object) []);
             }
 
-            $resort = Resort::select('id', 'amenities', 'other_amenities', 'name', 'description', 'address_1 as address', 'latitude', 'longitude')->where(["id" => $request->resort_id, "is_active" => 1])->with([
+            $resort = Resort::selectRaw('id, amenities, other_amenities, name, description, address_1 as address, round(latitude,2) as latitude, round(longitude,2) as longitude')->where(["id" => $request->resort_id, "is_active" => 1])->with([
                         'resortImages' => function($query) {
                             $query->select('id', 'image_name as banner_image_url', 'resort_id');
                         }
