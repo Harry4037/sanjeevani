@@ -197,11 +197,11 @@
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <select class="form-control" name="resort_room_type" id="resort_room_type">
                                     <option value="">Choose option</option>
-                                    @if($roomTypes)
+<!--                                    @if($roomTypes)
                                     @foreach($roomTypes as $roomType)
                                     <option value="{{ $roomType->id }}" @if(old('resort_room_type') == $roomType->id){{ "selected" }}@endif>{{ $roomType->name }}</option>
                                     @endforeach
-                                    @endif
+                                    @endif-->
                                 </select>
                             </div>
                         </div>
@@ -447,7 +447,28 @@
             }
         });
 
+
         $(document).on("change", "#resort_id", function () {
+            var resort_id = $("#resort_id :selected").val();
+            if (!resort_id) {
+                alert("Please select resort.")
+                return false;
+            } else {
+                $.ajax({
+                    url: _baseUrl + '/admin/room-type/resort-room-type/' + resort_id,
+                    type: 'get',
+                    beforeSend: function () {
+                        $(".overlay").show();
+                    },
+                    success: function (res) {
+                        $(".overlay").hide();
+                        $("#resort_room_type").html(res);
+                    }
+                });
+            }
+        });
+
+        $(document).on("change", "#resort_room_id", function () {
             var resort = $("#resort_id :selected").val();
             if (!resort) {
                 alert("Please select resort.")
