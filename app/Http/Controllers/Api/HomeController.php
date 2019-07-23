@@ -776,7 +776,7 @@ class HomeController extends Controller {
                     if (count($offer->offerImages) > 0) {
                         $offerArray[$key]['offer_images'] = $offer->offerImages;
                     } else {
-                        $offerArray[$key]['offer_images'] = [
+                        $offerArray[$key]['offer_images'][0] = [
                             'id' => 0,
                             'banner_image_url' => asset('img/image_loader.png')
                         ];
