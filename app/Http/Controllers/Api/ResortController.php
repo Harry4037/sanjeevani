@@ -218,7 +218,7 @@ class ResortController extends Controller {
                             $query->select('id', 'name', 'distance_from_resort', 'resort_id');
                         }
                     ])->first();
-dd($resort->toArray());
+
             if ($resort) {
 
                 $resortRoomTypes = ResortRoom::select('room_type_id')->where("resort_id", $resort->id)->distinct()->get();
