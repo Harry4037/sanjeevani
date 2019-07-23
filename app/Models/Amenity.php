@@ -16,7 +16,7 @@ class Amenity extends Model {
     }
 
     public function getIconAttribute($name) {
-        return $name ? asset('storage/amenity_icon/' . $name) : null;
+        return $name ? asset('storage/amenity_icon/' . $name) : '';
     }
 
     public function resortDetail() {
