@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Validator;
 use App\Models\SOS;
 use App\Models\User;
+use App\Models\Resort;
 
 class SOSController extends Controller {
 
@@ -25,11 +26,12 @@ class SOSController extends Controller {
 
     public function sosList(Request $request) {
         try {
+            $resort = Resort::find($request->get("subadminResort"));
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = SOS::query();
+            $query = SOS::query()->where("resort_name", $resort->name);
             if ($searchKeyword) {
                 $query->where("latitude", "LIKE", "%$searchKeyword%")
                         ->orWhere("longitude", "LIKE", "%$searchKeyword%")

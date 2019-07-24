@@ -67,7 +67,8 @@ class RoomtypeController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('room_types')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                             'room_icon' => 'bail|required',
@@ -153,7 +154,8 @@ class RoomtypeController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('room_types')->ignore($id)->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                 ]);
