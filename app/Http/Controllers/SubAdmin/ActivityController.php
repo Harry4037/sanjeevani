@@ -75,7 +75,8 @@ class ActivityController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('activities', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                 ]);
@@ -177,7 +178,8 @@ class ActivityController extends Controller {
                             'bail',
                             'required',
                             Rule::unique('activities', 'name')->ignore($request->id)->where(function ($query) use($request) {
-                                        return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->get("subadminResort")]);
+                                        return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->get("subadminResort")])
+                                                ->whereNull('deleted_at');
                                     }),
                         ],
             ]);

@@ -83,7 +83,8 @@ class ServiceController extends Controller {
                             'bail',
                             'required',
                             Rule::unique('services', 'name')->where(function ($query) use($request) {
-                                        return $query->where(['name' => $request->service_name, 'resort_id' => $request->get("subadminResort")]);
+                                        return $query->where(['name' => $request->service_name, 'resort_id' => $request->get("subadminResort")])
+                                                ->whereNull('deleted_at');
                                     }),
                         ],
                         'service_type' => 'bail|required',
@@ -160,7 +161,8 @@ class ServiceController extends Controller {
                             'bail',
                             'required',
                             Rule::unique('services', 'name')->ignore($id)->where(function ($query) use($request) {
-                                        return $query->where(['name' => $request->service_name, 'resort_id' => $request->get("subadminResort")]);
+                                        return $query->where(['name' => $request->service_name, 'resort_id' => $request->get("subadminResort")])
+                                                ->whereNull('deleted_at');
                                     }),
                         ],
             ]);

@@ -11,6 +11,7 @@ use App\Models\ResortNearbyPlace;
 use App\Models\NearbyPlaceImage;
 use App\Models\StateMaster;
 use App\Models\CityMaster;
+use Illuminate\Validation\Rule;
 
 class NearbyController extends Controller {
 
@@ -62,7 +63,14 @@ class NearbyController extends Controller {
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
                             'resort_id' => 'bail|required',
-                            'place_name' => 'bail|required',
+                            'place_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('resort_nearby_places', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->place_name, 'resort_id' => $request->resort_id])
+                                                    ->whereNull('deleted_at');
+                                        }),
+                            ],
                             'distance' => 'bail|required',
                             'place_description' => 'bail|required',
                             'place_precaution' => 'bail|required',
@@ -162,6 +170,21 @@ class NearbyController extends Controller {
         try {
             $data = ResortNearbyPlace::find($id);
             if ($request->isMethod("post")) {
+
+                $validator = Validator::make($request->all(), [
+                            'place_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('resort_nearby_places', 'name')->ignore($id)->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->place_name, 'resort_id' => $request->resort_id])
+                                                    ->whereNull('deleted_at');
+                                        }),
+                            ],
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('admin.nearby.add')->withErrors($validator)->withInput();
+                }
+
                 $data->resort_id = $request->resort_id;
                 $data->name = $request->place_name;
                 $data->distance_from_resort = $request->distance;
@@ -219,7 +242,7 @@ class NearbyController extends Controller {
             $nearbyImage = NearbyPlaceImage::select('name as nearby_img')->find($request->record_id);
             @unlink('storage/nearby_images/' . $nearbyImage->nearby_img);
             NearbyPlaceImage::find($request->record_id)->delete();
-           return ['status' => true, "message" => "image deleted."];
+            return ['status' => true, "message" => "image deleted."];
         } catch (\Exception $ex) {
             return ['status' => true, "message" => $ex->getMessage()];
         }

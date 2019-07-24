@@ -72,7 +72,8 @@ class HealthcareProgramController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('healthcate_programs', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                             'start_from' => 'bail|required',
@@ -178,7 +179,8 @@ class HealthcareProgramController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('healthcate_programs', 'name')->ignore($request->id)->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
             ]);

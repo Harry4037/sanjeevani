@@ -72,7 +72,8 @@ class OfferController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('offers', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->offer_name, 'resort_id' => $request->resort_id]);
+                                            return $query->where(['name' => $request->offer_name, 'resort_id' => $request->resort_id])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                             'price' => 'bail|required',
@@ -166,7 +167,8 @@ class OfferController extends Controller {
                             'bail',
                             'required',
                             Rule::unique('offers', 'name')->ignore($request->id)->where(function ($query) use($request) {
-                                        return $query->where(['name' => $request->offer_name, 'resort_id' => $request->resort_id]);
+                                        return $query->where(['name' => $request->offer_name, 'resort_id' => $request->resort_id])
+                                                ->whereNull('deleted_at');
                                     }),
                         ],
                         'price' => 'bail|required',

@@ -76,7 +76,8 @@ class AmenityController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('amenities', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->resort_id]);
+                                            return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->resort_id])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                 ]);
@@ -191,7 +192,8 @@ class AmenityController extends Controller {
                             'bail',
                             'required',
                             Rule::unique('amenities', 'name')->ignore($request->id)->where(function ($query) use($request) {
-                                        return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->resort_id]);
+                                        return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->resort_id])
+                                                ->whereNull('deleted_at');
                                     }),
                         ],
             ]);

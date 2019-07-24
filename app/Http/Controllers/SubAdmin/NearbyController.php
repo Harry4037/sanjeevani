@@ -64,7 +64,8 @@ class NearbyController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('resort_nearby_places', 'name')->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->place_name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->place_name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                             'distance' => 'bail|required',
@@ -170,7 +171,8 @@ class NearbyController extends Controller {
                                 'bail',
                                 'required',
                                 Rule::unique('resort_nearby_places', 'name')->ignore($id)->where(function ($query) use($request) {
-                                            return $query->where(['name' => $request->place_name, 'resort_id' => $request->get("subadminResort")]);
+                                            return $query->where(['name' => $request->place_name, 'resort_id' => $request->get("subadminResort")])
+                                                    ->whereNull('deleted_at');
                                         }),
                             ],
                 ]);

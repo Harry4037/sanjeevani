@@ -61,7 +61,7 @@ class ResortController extends Controller {
         try {
             $data = $this->resort->find($id);
             if ($request->isMethod("post")) {
-
+                
                 // $data->name = $request->edit_resort_name;
                 $data->contact_number = $request->edit_contact_no;
                 $data->description = $request->edit_resort_description;

@@ -14,6 +14,7 @@ use App\Models\StateMaster;
 use App\Models\CityMaster;
 use Validator;
 use App\Models\UserBookingDetail;
+use Illuminate\Validation\Rule;
 
 class ResortController extends Controller {
 
@@ -79,7 +80,14 @@ class ResortController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'resort_name' => 'bail|required|unique:resorts,name',
+                            'resort_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('resorts', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->resort_name])
+                                                            ->whereNull('deleted_at');
+                                        }),
+                            ],
                             'contact_no' => 'bail|required',
                             'address' => 'bail|required',
                             'pin_code' => 'bail|required|numeric',
@@ -188,7 +196,14 @@ class ResortController extends Controller {
             $data = $this->resort->find($id);
             if ($request->isMethod("post")) {
                 $validator = Validator::make($request->all(), [
-                            'edit_resort_name' => 'bail|required|unique:resorts,name,' . $id,
+                            'edit_resort_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('resorts', 'name')->ignore($id)->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->edit_resort_name])
+                                                            ->whereNull('deleted_at');
+                                        }),
+                            ],
                 ]);
                 if ($validator->fails()) {
                     return redirect()->route('admin.resort.edit', $id)->withErrors($validator)->withInput();
