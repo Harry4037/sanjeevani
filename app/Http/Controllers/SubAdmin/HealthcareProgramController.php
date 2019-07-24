@@ -14,6 +14,7 @@ use App\Models\HealthcateProgramDay;
 use App\Models\HealthcateProgramImages;
 use App\Models\HealthcareBooking;
 use App\Models\CityMaster;
+use Illuminate\Validation\Rule;
 
 class HealthcareProgramController extends Controller {
 
@@ -67,14 +68,20 @@ class HealthcareProgramController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'package_name' => 'bail|required',
+                            'package_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('healthcate_programs', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->get("subadminResort")]);
+                                        }),
+                            ],
                             'start_from' => 'bail|required',
                             'end_to' => 'bail|required',
                             'end_to' => 'bail|required',
                             'day_id' => 'bail|required',
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('subadmin.healthcare.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.healthcare.add')->withErrors($validator)->withInput();
                 }
                 $healthcare = new HealthcateProgram();
 
@@ -167,7 +174,13 @@ class HealthcareProgramController extends Controller {
         $healthcare = HealthcateProgram::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'package_name' => 'bail|required',
+                        'package_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('healthcate_programs', 'name')->ignore($request->id)->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->package_name, 'resort_id' => $request->get("subadminResort")]);
+                                        }),
+                            ],
             ]);
             if ($validator->fails()) {
                 return redirect()->route('subadmin.healthcare.index')->withErrors($validator)->withInput();

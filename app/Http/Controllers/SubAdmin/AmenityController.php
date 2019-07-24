@@ -12,6 +12,7 @@ use App\Models\Amenity;
 use App\Models\AmenityImage;
 use App\Models\Resort;
 use App\Models\AmenityTimeSlot;
+use Illuminate\Validation\Rule;
 
 class AmenityController extends Controller {
 
@@ -70,10 +71,16 @@ class AmenityController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'amenity_name' => 'bail|required',
+                            'amenity_name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('amenities', 'name')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->get("subadminResort")]);
+                                        }),
+                            ],
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('subadmin.amenity.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.amenity.add')->withErrors($validator)->withInput();
                 }
                 $amenity = new Amenity();
 
@@ -166,10 +173,16 @@ class AmenityController extends Controller {
         $amenity = Amenity::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'amenity_name' => 'bail|required',
+                        'amenity_name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('amenities', 'name')->ignore($request->id)->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->amenity_name, 'resort_id' => $request->get("subadminResort")]);
+                                    }),
+                        ],
             ]);
             if ($validator->fails()) {
-                return redirect()->route('subadmin.amenity.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.amenity.edit', $request->id)->withErrors($validator)->withInput();
             }
             $amenity->name = $request->amenity_name;
             $amenity->short_description = $request->amenity_short_description;
