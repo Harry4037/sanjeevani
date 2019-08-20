@@ -575,6 +575,7 @@ class UserController extends Controller {
      * @apiParam {String} user_id User id*.
      * @apiParam {String} device_token Device Token*.
      * @apiParam {String} device_type Device Type* (Android or Iphone).
+     * @apiParam {String} device_id Unique Device ID*.
      * 
      * @apiSuccess {String} success true 
      * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 

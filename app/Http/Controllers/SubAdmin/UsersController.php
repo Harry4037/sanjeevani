@@ -234,6 +234,7 @@ class UsersController extends Controller {
                     }
                     if ($userExist->device_token) {
                         $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $userExist->device_token);
+                        $this->generateNotification($userExist->id, "Booking Created", "Your booking created successfully", 5);
                     }
                 }
                 return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
@@ -334,6 +335,11 @@ class UsersController extends Controller {
                                         }
                                     }
                                 }
+                            }
+                            
+                             if ($user->device_token) {
+                                $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
+                                $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
                             }
                         }
 
