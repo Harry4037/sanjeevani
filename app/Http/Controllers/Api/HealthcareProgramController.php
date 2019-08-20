@@ -501,28 +501,40 @@ class HealthcareProgramController extends Controller {
                         ->where("is_cancelled", 1)
                         ->get();
                 $completedArray = [];
-                foreach ($completedPackages as $i => $completedPackage) {
+                $i=0;
+                foreach ($completedPackages as $completedPackage) {
+                    if($completedPackage->packageDetail){
                     $completedArray[$i]["id"] = $completedPackage->packageDetail->id;
                     $completedArray[$i]["name"] = $completedPackage->packageDetail->name;
                     $completedArray[$i]["duration"] = date("d-M-Y", strtotime($completedPackage->check_in)) . " to " . date("d-M-Y", strtotime($completedPackage->check_out));
                     $completedArray[$i]["status"] = "Completed";
+                    $i++;
+                    }
                 }
                 $data['complete'] = $completedArray;
                 $upcomingArray = [];
-                foreach ($upcomingPackages as $i => $upcomingPackage) {
-                    $upcomingArray[$i]["id"] = $upcomingPackage->packageDetail->id;
-                    $upcomingArray[$i]["record_id"] = $upcomingPackage->id;
-                    $upcomingArray[$i]["name"] = $upcomingPackage->packageDetail->name;
-                    $upcomingArray[$i]["duration"] = date("d-M-Y", strtotime($upcomingPackage->check_in)) . " to " . date("d-M-Y", strtotime($upcomingPackage->check_out));
-                    $upcomingArray[$i]["status"] = "Upcoming";
+                $j=0;
+                foreach ($upcomingPackages as $upcomingPackage) {
+                    if($upcomingPackage->packageDetail){
+                    $upcomingArray[$j]["id"] = $upcomingPackage->packageDetail->id;
+                    $upcomingArray[$j]["record_id"] = $upcomingPackage->id;
+                    $upcomingArray[$j]["name"] = $upcomingPackage->packageDetail->name;
+                    $upcomingArray[$j]["duration"] = date("d-M-Y", strtotime($upcomingPackage->check_in)) . " to " . date("d-M-Y", strtotime($upcomingPackage->check_out));
+                    $upcomingArray[$j]["status"] = "Upcoming";
+                    $j++;
+                    }
                 }
                 $data['upcoming'] = $upcomingArray;
                 $cancelledArray = [];
-                foreach ($cancelledPackages as $i => $cancelledPackage) {
-                    $cancelledArray[$i]["id"] = $cancelledPackage->packageDetail->id;
-                    $cancelledArray[$i]["name"] = $cancelledPackage->packageDetail->name;
-                    $cancelledArray[$i]["duration"] = date("d-M-Y", strtotime($cancelledPackage->check_in)) . " to " . date("d-M-Y", strtotime($cancelledPackage->check_out));
-                    $cancelledArray[$i]["status"] = "Cancelled";
+                $k=0;
+                foreach ($cancelledPackages as $cancelledPackage) {
+                    if($cancelledPackage->packageDetail){
+                    $cancelledArray[$k]["id"] = $cancelledPackage->packageDetail->id;
+                    $cancelledArray[$k]["name"] = $cancelledPackage->packageDetail->name;
+                    $cancelledArray[$k]["duration"] = date("d-M-Y", strtotime($cancelledPackage->check_in)) . " to " . date("d-M-Y", strtotime($cancelledPackage->check_out));
+                    $cancelledArray[$k]["status"] = "Cancelled";
+                    $k++;
+                    }
                 }
                 $data['cancel'] = $cancelledArray;
                 $data['term_condition'] = "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>";
