@@ -177,7 +177,7 @@ class Controller extends BaseController {
         return true;
     }
 
-    public function androidBookingPushNotification($title, $message, $token) {
+    public function androidBookingPushNotification($title, $message, $token, $count) {
         //Fro customer
         config(['fcm.http.server_key' => 'AAAAZDeprME:APA91bHyGVMy54RTPTZKyj-gsF5L31IsHP0efkEm4RorsITp-yH2Syh-ftIuuaIu2zm7zZpJZp_CBmY4B33yahx1uZWG570_z6bJ9OxnuX2_Zzh9NFwVbtYKANXRh7SpsQZPq328Y-Jj']);
         config(['fcm.http.sender_id' => '430430596289']);
@@ -191,6 +191,7 @@ class Controller extends BaseController {
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
                 ->setSound('soundn.mp3')
+                ->setBadge($count)
         ;
 
         $dataBuilder = new PayloadDataBuilder();
@@ -200,6 +201,7 @@ class Controller extends BaseController {
             "type" => 5,
             "user_type_id" => 3,
             "sound" => "soundn.mp3",
+             "notification_count" => $count,
         ]);
 
         $option = $optionBuilder->build();

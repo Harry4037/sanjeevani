@@ -231,11 +231,12 @@ class UsersController extends Controller {
                                 }
                             }
                         }
+                        if ($userExist->device_token) {
+                            $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $userExist->device_token, $this->notificationCount($userExist->id));
+                            $this->generateNotification($userExist->id, "Booking Created", "Your booking created successfully", 5);
+                        }
                     }
-                    if ($userExist->device_token) {
-                        $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $userExist->device_token);
-                        $this->generateNotification($userExist->id, "Booking Created", "Your booking created successfully", 5);
-                    }
+                    
                 }
                 return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
             } else {
@@ -338,7 +339,7 @@ class UsersController extends Controller {
                             }
                             
                              if ($user->device_token) {
-                                $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
+                                $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token, $this->notificationCount($user->id));
                                 $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
                             }
                         }
@@ -725,7 +726,7 @@ class UsersController extends Controller {
                     }
                 }
                 if ($user->device_token) {
-                    $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
+                    $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token, $this->notificationCount($user->id));
                     $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
                 }
                 return redirect()->route('subadmin.users.booking', $user_id)->with('status', 'booking created successfully.');
@@ -815,7 +816,7 @@ class UsersController extends Controller {
                     }
                 }
                 if ($user->device_token) {
-                    $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token);
+                    $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token, $this->notificationCount($user->id));
                     $this->generateNotification($user->id, "Booking Updated", $msg, 5);
                 }
                 return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', $msg);
@@ -915,7 +916,7 @@ class UsersController extends Controller {
             if ($user->device_token) {
 //                $msg ="You checkout new checkout date is ".$request->early_checkout;
                 $msg = "Ohh! It seems you checked out early. Your checked out date is " . $request->early_checkout;
-                $this->androidBookingPushNotification("Early Checkout", $msg, $user->device_token);
+                $this->androidBookingPushNotification("Early Checkout", $msg, $user->device_token, $this->notificationCount($user->id));
                 $this->generateNotification($user->id, "Booking Updated", $msg, 7);
             }
             return redirect()->route('subadmin.users.early-checkout', $id)->with('status', 'Checkout date updated.');
