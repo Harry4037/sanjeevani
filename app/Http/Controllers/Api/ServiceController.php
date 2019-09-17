@@ -334,6 +334,9 @@ class ServiceController extends Controller {
             $serviceRequest->request_status_id = 1;
             if ($serviceRequest->save()) {
                 $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+                if($user->device_token){
+                    $this->androidPushNotification(3, "Service Raised", "$service->name request raised by you", $user->device_token, 1, $service->id, $this->notificationCount($user->id));
+                }
                 if ($resortUsers) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1, "is_push_on" => 1])
                             ->where("device_token", "!=", NULL)
