@@ -236,7 +236,6 @@ class UsersController extends Controller {
                             $this->generateNotification($userExist->id, "Booking Created", "Your booking created successfully", 5);
                         }
                     }
-                    
                 }
                 return redirect()->route('subadmin.users.index')->with('status', 'User has been added successfully');
             } else {
@@ -337,8 +336,8 @@ class UsersController extends Controller {
                                     }
                                 }
                             }
-                            
-                             if ($user->device_token) {
+
+                            if ($user->device_token) {
                                 $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token, $this->notificationCount($user->id));
                                 $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
                             }
@@ -376,7 +375,7 @@ class UsersController extends Controller {
             'vendors/iCheck/icheck.min.js',
         ];
 //        $resorts = Resort::where("is_active", 1)->get();
-        $roomTypes = \App\Models\RoomType::where(["is_active"=> 1, "resort_id" => $request->get("subadminResort")])->get();
+        $roomTypes = \App\Models\RoomType::where(["is_active" => 1, "resort_id" => $request->get("subadminResort")])->get();
         $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         return view('subadmin.users.add-user', [
             'js' => $js,
@@ -633,14 +632,17 @@ class UsersController extends Controller {
                     $stat = "<span class='label label-danger'>Cancelled</span>";
                     $action = "";
                 } else {
-                    $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
+                        $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
+                        $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                                . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
+                        $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                                . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                         $action .= '<a href="' . route('subadmin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
                 }
@@ -744,7 +746,7 @@ class UsersController extends Controller {
             'vendors/datatables.net/js/jquery.dataTables.min.js',
         ];
         $resorts = Resort::where(["is_active" => 1])->get();
-        $roomTypes = \App\Models\RoomType::where(["is_active"=> 1, "resort_id" => $request->get("subadminResort")])->get();
+        $roomTypes = \App\Models\RoomType::where(["is_active" => 1, "resort_id" => $request->get("subadminResort")])->get();
         $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         return view('subadmin.users.booking-create', [
             'js' => $js,
@@ -845,7 +847,7 @@ class UsersController extends Controller {
             $flag = false;
         }
         $resorts = Resort::where(["is_active" => 1])->get();
-        $roomTypes = \App\Models\RoomType::where(["is_active"=> 1, "resort_id" => $request->get("subadminResort")])->get();
+        $roomTypes = \App\Models\RoomType::where(["is_active" => 1, "resort_id" => $request->get("subadminResort")])->get();
         $resortRoom = ResortRoom::find($data->resort_room_id);
         $healcarePackages = HealthcateProgram::where(["resort_id" => $request->get("subadminResort"), "is_active" => 1])->get();
         $BookingPeoples = BookingpeopleAccompany::where("booking_id", $data->id)->get();

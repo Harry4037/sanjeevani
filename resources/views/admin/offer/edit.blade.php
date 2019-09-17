@@ -123,12 +123,20 @@ $(document).ready(function () {
 //            }
 //    });
 
+    var currDate = new Date();
+    var editDate = new Date("{{ $amenity->valid_to }}");
+    var minDate = '';
+    if(editDate.getTime() < currDate.getTime()){
+        minDate = editDate;
+    }else{
+        minDate = currDate;
+    }
     $('#valid_to').daterangepicker({
         singleDatePicker: true,
         timePicker: false,
         singleClasses: "picker_1",
         @if (isset($amenity->valid_to))
-//        minDate: new Date(),    
+        minDate: minDate,
         startDate: new Date("{{ $amenity->valid_to }}"),
         @endif
         locale: {

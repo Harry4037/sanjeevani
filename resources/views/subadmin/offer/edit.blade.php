@@ -89,10 +89,20 @@
 <script>
 $(document).ready(function () {
 
+    var currDate = new Date();
+    var editDate = new Date("{{ $amenity->valid_to }}");
+    var minDate = '';
+    if(editDate.getTime() < currDate.getTime()){
+        minDate = editDate;
+    }else{
+        minDate = currDate;
+    }
+    
     $('#valid_to').daterangepicker({
     singleDatePicker: true,
             timePicker: false,
             singleClasses: "picker_1",
+            minDate: minDate,
             @if (isset($amenity->valid_to))
     startDate: new Date("{{ $amenity->valid_to }}"),
             @endif

@@ -588,14 +588,17 @@ class UsersController extends Controller {
                     $stat = "<span class='label label-danger'>Cancelled</span>";
                     $actionBtn = '';
                 } else {
-                    $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
+                        $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
+                        $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
+                        $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                            . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
                         $actionBtn .= '<a href="' . route('admin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
                 }
