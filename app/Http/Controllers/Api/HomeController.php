@@ -696,13 +696,14 @@ class HomeController extends Controller {
                     ])
                     ->with([
                         'userBookingDetail' => function($query) {
-                            $query->selectRaw(DB::raw('id, room_type_id, check_in_pin, check_out_pin, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out_date, check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                            $query->selectRaw(DB::raw('id, room_type_id, check_in_pin, check_out_pin, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%b-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%b-%Y") as check_out_date, check_out, DATE_FORMAT(check_out, "%r") as check_out_time, is_checked_in'));
                         }
                     ])
                     ->first();
             if ($user) {
                 $user['no_of_rooms'] = "1";
             }
+            $user['is_checked_in'] = $user->user_type_id == 4 ? false : isset($user->userBookingDetail->is_checked_in) && ($user->userBookingDetail->is_checked_in == 1) ? true : false;
 
             $notification = Notification::where(["user_id" => $request->user_id, "is_view" => 0])->count();
             $user['notification_count'] = $notification;
