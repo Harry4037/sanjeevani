@@ -156,6 +156,7 @@ class OrderController extends Controller {
                 Cart::where(["user_id" => $request->user_id])->delete();
 
                 $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+                $this->generateNotification($request->user_id, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id ", 4);
                 if ($resortUsers) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_meal_authorise" => 1, "is_push_on" => 1])
                             ->whereIn("id", $resortUsers->toArray())
@@ -166,7 +167,6 @@ class OrderController extends Controller {
                         $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $request->user()->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id, 1);
                     }
                 }
-                $this->generateNotification($request->user_id, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id ", 4);
                 return $this->sendSuccessResponse("We will serve your food soon.", $data);
             } else {
                 Cart::where(["user_id" => $request->user_id])->delete();
