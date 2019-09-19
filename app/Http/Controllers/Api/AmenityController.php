@@ -306,7 +306,6 @@ class AmenityController extends Controller {
                 $bookingRequest->user_id = $request->user_id;
                 $bookingRequest->booking_date = $book_date->format('Y-m-d');
                 $bookingRequest->from = $request->from_time;
-                $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
                     $tokens = [];
                     $l = 0;
@@ -322,7 +321,9 @@ class AmenityController extends Controller {
                         $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by " . $request->user()->user_name . " for " . $book_date->format('d M'), $tokens, 1, $request->amenity_id, 1);
                     }
                     $this->generateNotification($request->user()->id, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), 3);
-
+                    if ($user->device_token) {
+                        $this->androidPushNotification(3, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), $user->device_token, 3, $bookingRequest->id, $this->notificationCount($user->id));
+                    }
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
                 } else {
                     return $this->administratorResponse();
