@@ -739,7 +739,7 @@ class UsersController extends Controller {
             $roomRoom = ResortRoom::find($request->resort_room_id);
             $msg = "";
             if ($data->room_type_name != $roomRoom->room_no) {
-                $msg = "Your room no. updated successfully.";
+                $msg = "Your room number updated successfully.";
             } else {
                 $msg = "Your booking updated successfully.";
             }
