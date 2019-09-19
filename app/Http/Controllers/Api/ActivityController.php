@@ -320,7 +320,9 @@ class ActivityController extends Controller {
 //                        $this->androidPushNotification(2, "Amenity Booked", "$amenity->name booked by " . $request->user()->user_name . " for " . $book_date->format('d M'), $tokens, 1, $request->amenity_id, 1);
 //                    }
                     $this->generateNotification($request->user()->id, "Activity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), 2);
-
+                    if ($request->user()->device_token) {
+                        $this->androidPushNotification(3, "Activity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), $request->user()->device_token, 3, $bookingRequest->id, $this->notificationCount($request->user()->id));
+                    }
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
                 } else {
                     return $this->administratorResponse();
