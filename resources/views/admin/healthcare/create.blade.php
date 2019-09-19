@@ -66,13 +66,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Days*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" id="day_id" name="day_id">
+                            <input value="{{ old('day_id') }}" type="text" class="form-control" name="day_id" id="day_id" placeholder="Days (In number)">
+<!--                            <select class="form-control" id="day_id" name="day_id">
                                 <option value="">Select option</option>
                                 <option value="21">21 days</option>
                                 <option value=14"">14 days</option>
                                 <option value="7">7 days</option>
                                 <option value="3">3 days</option>
-                            </select>
+                            </select>-->
                         </div>
                     </div>
                     <div class="form-group">
@@ -133,22 +134,24 @@ $(document).ready(function () {
     });
 
 
-    $(document).on("change", "#day_id", function () {
-        var days = parseInt($("#day_id :selected").val());
+    $(document).on("keyup", "#day_id", function () {
+        var days = parseInt($("#day_id").val());
         var i;
         $("#days_div").html('');
-        for (i = 0; i < days; i++) {
-            var day_html = '<div class="form-group">'
-                    + '<label class="control-label col-md-3 col-sm-3 col-xs-12">Day ' + (i + 1) + '</label>'
-                    + '<div class="col-md-8 col-sm-8 col-xs-12">'
-                    + '<textarea class="form-control" name="day_description[]" id="day_description_' + i + '" placeholder="Day description"></textarea>'
-                    + '</div>'
-                    + '</div>';
-            $("#days_div").append(day_html);
-            CKEDITOR.replace('day_description_' + i, {
-                removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
-                removePlugins: 'image, link',
-            });
+        if (days > 0) {
+            for (i = 0; i < days; i++) {
+                var day_html = '<div class="form-group">'
+                        + '<label class="control-label col-md-3 col-sm-3 col-xs-12">Day ' + (i + 1) + '</label>'
+                        + '<div class="col-md-8 col-sm-8 col-xs-12">'
+                        + '<textarea class="form-control" name="day_description[]" id="day_description_' + i + '" placeholder="Day description"></textarea>'
+                        + '</div>'
+                        + '</div>';
+                $("#days_div").append(day_html);
+                CKEDITOR.replace('day_description_' + i, {
+                    removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
+                    removePlugins: 'image, link',
+                });
+            }
         }
 
     });
@@ -220,7 +223,8 @@ $(document).ready(function () {
                 required: true
             },
             day_id: {
-                required: true
+                required: true,
+                digits: true
             },
         }
     });
