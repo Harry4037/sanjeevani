@@ -708,7 +708,11 @@ class HomeController extends Controller {
             $notification = Notification::where(["user_id" => $request->user_id, "is_view" => 0])->count();
             $user['notification_count'] = $notification;
 
-            $banners = Banner::where("is_active", 1)->get();
+            if (isset($user->userBookingDetail->resort_id)) {
+                $banners = Banner::where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->get();
+            } else {
+                $banners = Banner::where("is_active", 1)->take(5)->get();
+            }
             $bannerArray = [];
             $i = 0;
             foreach ($banners as $banner) {
@@ -833,8 +837,8 @@ class HomeController extends Controller {
             $response['message'] = "service successfully access.";
             if (isset($user->id) && ($user->id > 0)) {
                 $user = $user->toArray();
-                if($user['user_health_detail'] == null){
-                   $user['user_health_detail'] =  (object) [];
+                if ($user['user_health_detail'] == null) {
+                    $user['user_health_detail'] = (object) [];
                 }
             } else {
                 $user = (object) [];
