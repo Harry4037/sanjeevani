@@ -209,6 +209,7 @@ class UserController extends Controller {
                         $userBookingDetail->save();
                     }
                     $user['is_checked_in'] = true;
+                    Cart::where('user_id',$user->id)->delete();
                     return $this->sendSuccessResponse("User check-in successfully.", $user);
                 } else {
                     return $this->administratorResponse();
