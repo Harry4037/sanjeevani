@@ -334,6 +334,7 @@ class ServiceController extends Controller {
             $serviceRequest->request_status_id = 1;
             if ($serviceRequest->save()) {
                 $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+                $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                 if($user->device_token){
                     $this->androidPushNotification(3, "Service Raised", "$service->name request raised by you", $user->device_token, 1, $service->id, $this->notificationCount($user->id));
                 }
@@ -344,7 +345,6 @@ class ServiceController extends Controller {
                             ->pluck("device_token");
                     if (count($staffDeviceTokens) > 0) {
                         $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# " . $serviceRequest->resort_room_no . " by " . $userDetail->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 0, 1);
-                        $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
                     }
                 }
                 return $this->sendSuccessResponse("Our staff member will contact you soon.", (object) []);
