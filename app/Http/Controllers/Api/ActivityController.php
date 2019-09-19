@@ -127,8 +127,8 @@ class ActivityController extends Controller {
             $response['data'] = $dataArray;
             return $this->jsonData($response);
         } else {
-            $response['success'] = false;
-            $response['status_code'] = 404;
+            $response['success'] = true;
+            $response['status_code'] = 200;
             $response['message'] = "Activities not found.";
             $response['data'] = [];
             return $this->jsonData($response);
