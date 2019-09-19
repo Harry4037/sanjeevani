@@ -30,7 +30,7 @@ class ActivityRequestController extends Controller {
             if ($searchKeyword) {
                 $query->whereHas("userDetail", function($query) use($searchKeyword) {
                             $query->where("user_name", "LIKE", "%$searchKeyword%");
-                        })->orWhere("amenity_name", "LIKE", "%$searchKeyword%")
+                        })->orWhere("activity_name", "LIKE", "%$searchKeyword%")
                         ->orWhere("room_no", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
