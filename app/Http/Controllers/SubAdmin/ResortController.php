@@ -64,6 +64,7 @@ class ResortController extends Controller {
                 
                 // $data->name = $request->edit_resort_name;
                 $data->contact_number = $request->edit_contact_no;
+                $data->cancel_term_condition = $request->cancel_term_condition;
                 $data->description = $request->edit_resort_description;
                 $data->address_1 = $request->edit_address;
                 $data->pincode = $request->edit_pin_code;

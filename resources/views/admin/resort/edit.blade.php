@@ -56,6 +56,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Cancellation Policy*</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <textarea class="form-control" name="cancel_term_condition" id="cancel_term_condition" placeholder="Cancellation Policy">{{ $data->cancel_term_condition }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Address*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" class="form-control" name="edit_address" id="edit_address" placeholder="Address" value="{{ $data->address_1 }}">
@@ -276,6 +282,11 @@ $(document).ready(function () {
         removePlugins: 'image, link',
 //        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
     });
+    CKEDITOR.replace('cancel_term_condition', {
+        removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
+        removePlugins: 'image, link',
+//        removePlugins: 'elementspath,save,image,flash,i frame,link,smiley,tabletools,find,pagebreak,templates,about,maximize,showblocks,newpage,language',
+    });
 
     jQuery.validator.addMethod("float_number", function (value, element) {
         return this.optional(element) || /^[-+]?[0-9]+\.[0-9]+$/.test(value);
@@ -288,6 +299,13 @@ $(document).ready(function () {
                 required: true
             },
             edit_resort_description: {
+                required: function (textarea) {
+                    CKEDITOR.instances[textarea.id].updateElement(); // update textarea
+                    var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags
+                    return editorcontent.length === 0;
+                }
+            },
+            cancel_term_condition: {
                 required: function (textarea) {
                     CKEDITOR.instances[textarea.id].updateElement(); // update textarea
                     var editorcontent = textarea.value.replace(/<[^>]*>/gi, ''); // strip tags

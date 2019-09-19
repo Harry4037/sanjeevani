@@ -18,6 +18,7 @@ class CreateResortsTable extends Migration {
             $table->text('description')->nullable();
             $table->text('amenities')->nullable();
             $table->text('other_amenities')->nullable();
+            $table->text('cancel_term_condition')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('other_contact_number')->nullable();
             $table->string('address_1')->nullable();

@@ -89,6 +89,7 @@ class ResortController extends Controller {
                                         }),
                             ],
                             'contact_no' => 'bail|required',
+                            'cancel_term_condition' => 'bail|required',
                             'address' => 'bail|required',
                             'pin_code' => 'bail|required|numeric',
                             'city' => 'bail|required|numeric',
@@ -101,6 +102,7 @@ class ResortController extends Controller {
                 $resort = $this->resort;
                 $resort->name = $request->resort_name;
                 $resort->contact_number = $request->contact_no;
+                $resort->cancel_term_condition = $request->cancel_term_condition;
                 $resort->description = $request->resort_description;
                 $resort->address_1 = $request->address;
                 $resort->pincode = $request->pin_code;
@@ -211,6 +213,7 @@ class ResortController extends Controller {
 
                 $data->name = $request->edit_resort_name;
                 $data->contact_number = $request->edit_contact_no;
+                $data->cancel_term_condition = $request->cancel_term_condition;
                 $data->description = $request->edit_resort_description;
                 $data->address_1 = $request->edit_address;
                 $data->pincode = $request->edit_pin_code;
