@@ -523,7 +523,7 @@ class HealthcareProgramController extends Controller {
                         $upcomingArray[$j]["name"] = $upcomingPackage->packageDetail->name;
                         $upcomingArray[$j]["duration"] = date("d-M-Y", strtotime($upcomingPackage->check_in)) . " to " . date("d-M-Y", strtotime($upcomingPackage->check_out));
                         $upcomingArray[$j]["status"] = "Upcoming";
-                        $upcomingArray[$j]["term_condition"] = $resort ? $resort->cancel_term_condition : '';
+                        $upcomingArray[$j]["term_condition"] = $resort ? $resort->cancel_term_condition != null ? $resort->cancel_term_condition : '' : '';
                         $j++;
                     }
                 }
