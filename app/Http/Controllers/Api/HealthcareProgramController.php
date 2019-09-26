@@ -11,6 +11,7 @@ use App\Models\HealthcateProgramDay;
 use App\Models\User;
 use App\Models\UserBookingDetail;
 use App\Models\HealthcareBooking;
+use App\Models\Resort;
 
 class HealthcareProgramController extends Controller {
 
@@ -432,25 +433,25 @@ class HealthcareProgramController extends Controller {
       "status_code": 200,
       "message": "Health Package found",
       "data": {
-            "complete": [
-                {
-                "id": 11,
-                "name": "Healthcare Package Reverse Diabetes in 3 Days",
-                "duration": "01-Feb-2019 to 02-Feb-2019",
-                "status": "Completed"
-                }
-                ],
-            "upcoming": [
-                {
-                "id": 11,
-                "record_id": 45,
-                "name": "Healthcare Package Reverse Diabetes in 3 Days",
-                "duration": "01-Apr-2019 to 03-Apr-2019",
-                "status": "Upcoming"
-                }
-                ],
-                "term_condition":"<p>lorem ipsumis the dummy text....."
-            }
+      "complete": [
+      {
+      "id": 11,
+      "name": "Healthcare Package Reverse Diabetes in 3 Days",
+      "duration": "01-Feb-2019 to 02-Feb-2019",
+      "status": "Completed"
+      }
+      ],
+      "upcoming": [
+      {
+      "id": 11,
+      "record_id": 45,
+      "name": "Healthcare Package Reverse Diabetes in 3 Days",
+      "duration": "01-Apr-2019 to 03-Apr-2019",
+      "status": "Upcoming"
+      }
+      ],
+      "term_condition":"<p>lorem ipsumis the dummy text....."
+      }
       }
      * 
      * @apiError UserIdMissing The user id is missing.
@@ -501,39 +502,41 @@ class HealthcareProgramController extends Controller {
                         ->where("is_cancelled", 1)
                         ->get();
                 $completedArray = [];
-                $i=0;
+                $i = 0;
                 foreach ($completedPackages as $completedPackage) {
-                    if($completedPackage->packageDetail){
-                    $completedArray[$i]["id"] = $completedPackage->packageDetail->id;
-                    $completedArray[$i]["name"] = $completedPackage->packageDetail->name;
-                    $completedArray[$i]["duration"] = date("d-M-Y", strtotime($completedPackage->check_in)) . " to " . date("d-M-Y", strtotime($completedPackage->check_out));
-                    $completedArray[$i]["status"] = "Completed";
-                    $i++;
+                    if ($completedPackage->packageDetail) {
+                        $completedArray[$i]["id"] = $completedPackage->packageDetail->id;
+                        $completedArray[$i]["name"] = $completedPackage->packageDetail->name;
+                        $completedArray[$i]["duration"] = date("d-M-Y", strtotime($completedPackage->check_in)) . " to " . date("d-M-Y", strtotime($completedPackage->check_out));
+                        $completedArray[$i]["status"] = "Completed";
+                        $i++;
                     }
                 }
                 $data['complete'] = $completedArray;
                 $upcomingArray = [];
-                $j=0;
+                $j = 0;
                 foreach ($upcomingPackages as $upcomingPackage) {
-                    if($upcomingPackage->packageDetail){
-                    $upcomingArray[$j]["id"] = $upcomingPackage->packageDetail->id;
-                    $upcomingArray[$j]["record_id"] = $upcomingPackage->id;
-                    $upcomingArray[$j]["name"] = $upcomingPackage->packageDetail->name;
-                    $upcomingArray[$j]["duration"] = date("d-M-Y", strtotime($upcomingPackage->check_in)) . " to " . date("d-M-Y", strtotime($upcomingPackage->check_out));
-                    $upcomingArray[$j]["status"] = "Upcoming";
-                    $j++;
+                    if ($upcomingPackage->packageDetail) {
+                        $resort = Resort::find($upcomingPackage->resort_id);
+                        $upcomingArray[$j]["id"] = $upcomingPackage->packageDetail->id;
+                        $upcomingArray[$j]["record_id"] = $upcomingPackage->id;
+                        $upcomingArray[$j]["name"] = $upcomingPackage->packageDetail->name;
+                        $upcomingArray[$j]["duration"] = date("d-M-Y", strtotime($upcomingPackage->check_in)) . " to " . date("d-M-Y", strtotime($upcomingPackage->check_out));
+                        $upcomingArray[$j]["status"] = "Upcoming";
+                        $upcomingArray[$j]["term_condition"] = $resort ? $resort->cancel_term_condition : '';
+                        $j++;
                     }
                 }
                 $data['upcoming'] = $upcomingArray;
                 $cancelledArray = [];
-                $k=0;
+                $k = 0;
                 foreach ($cancelledPackages as $cancelledPackage) {
-                    if($cancelledPackage->packageDetail){
-                    $cancelledArray[$k]["id"] = $cancelledPackage->packageDetail->id;
-                    $cancelledArray[$k]["name"] = $cancelledPackage->packageDetail->name;
-                    $cancelledArray[$k]["duration"] = date("d-M-Y", strtotime($cancelledPackage->check_in)) . " to " . date("d-M-Y", strtotime($cancelledPackage->check_out));
-                    $cancelledArray[$k]["status"] = "Cancelled";
-                    $k++;
+                    if ($cancelledPackage->packageDetail) {
+                        $cancelledArray[$k]["id"] = $cancelledPackage->packageDetail->id;
+                        $cancelledArray[$k]["name"] = $cancelledPackage->packageDetail->name;
+                        $cancelledArray[$k]["duration"] = date("d-M-Y", strtotime($cancelledPackage->check_in)) . " to " . date("d-M-Y", strtotime($cancelledPackage->check_out));
+                        $cancelledArray[$k]["status"] = "Cancelled";
+                        $k++;
                     }
                 }
                 $data['cancel'] = $cancelledArray;
