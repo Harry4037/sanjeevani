@@ -52,13 +52,18 @@
 @section('script')
 <script>
     $(document).ready(function () {
+        jQuery.validator.addMethod("alphanumeric", function (value, element) {
+            return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,20}$/.test(value);
+        }, "Password must be <br> <ul><li>Minimum six character.</li><li>One uppercase letter.</li><li>One lowercase letter.</li><li>One numeric digit.</li><li>One special character.</li></ul>");
+
         $("#profileForm").validate({
             rules: {
                 old_password: {
                     required: true
                 },
                 new_password: {
-                    required: true
+                    required: true,
+                    alphanumeric: true
                 },
                 confirm_password: {
                     required: true,

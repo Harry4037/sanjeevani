@@ -55,11 +55,11 @@ class SubadminController extends Controller {
             $query = User::query();
             $query->where("user_type_id", "=", 5);
             if ($searchKeyword) {
-                $query->where(function($query) use($searchKeyword){
+                $query->where(function($query) use($searchKeyword) {
                     $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%");
                 });
             }
-            
+
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
@@ -241,6 +241,15 @@ class SubadminController extends Controller {
     public function changePassword(Request $request, $id) {
         $user = User::find($id);
         if ($request->isMethod("post")) {
+            $validator = Validator::make($request->all(), [
+                        'new_password' => 'bail|required|regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,20}$/',
+                            ], [
+                        'new_password.regex' => "New password must be minimum six character, One numeric digit, One special character, One uppercase and One lowercase letter."
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('admin.subadmin.change-password')->withErrors($validator);
+            }
+
             if (Hash::check($request->get("old_password"), $user->password)) {
                 $user->password = bcrypt($request->get("new_password"));
                 $user->save();
