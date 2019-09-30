@@ -113,7 +113,7 @@ class Controller extends BaseController {
             }
         } else {
             $notificationBuilder->setBody($message)
-                    ->setSound('soundn.mp3')
+                    ->setSound('default')
                     ->setChannelId('RindexStaff')
                     ->setBadge($userNotificationCount)
                     ->setClickAction("rindex.com.staff.home.MainActivity")
@@ -196,7 +196,7 @@ class Controller extends BaseController {
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($message)
-                ->setSound('soundn.mp3')
+                ->setSound('default')
                 ->setBadge($count)
                 ->setClickAction("com.rindex.customer.CheckIn.CheckInActivity")
         ;

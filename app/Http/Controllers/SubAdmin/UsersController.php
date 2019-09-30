@@ -779,10 +779,13 @@ class UsersController extends Controller {
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
             $msg = "";
+            $flag = FALSE;
             if ($data->room_type_name != $roomRoom->room_no) {
                 $msg = "Your room no. updated successfully.";
+                $flag = TRUE;
             } else {
                 $msg = "Your booking updated successfully.";
+                $flag = FALSE;
             }
 
 //            $data->discount = $request->discount;
@@ -818,8 +821,12 @@ class UsersController extends Controller {
                     }
                 }
                 if ($user->device_token) {
-                    $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token, $this->notificationCount($user->id));
                     $this->generateNotification($user->id, "Booking Updated", $msg, 5);
+                    if ($flag) {
+                        $this->androidPushNotification(3, "Booking Updated", $msg, $user->device_token, 123, 0);
+                    } else {
+                        $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token, $this->notificationCount($user->id));
+                    }
                 }
                 return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', $msg);
             } else {
