@@ -22,6 +22,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <textarea class="form-control" name="description" id="description" placeholder="Description">{{ old('description') }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meal Price*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('meal_price') }}" type="number" class="form-control" name="meal_price" id="meal_price" placeholder="Meal Price">

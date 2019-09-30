@@ -78,6 +78,7 @@ class MealController extends Controller {
                 $meal = new MealItem();
 
                 $meal->resort_id = $request->get("subadminResort");
+                $meal->description = $request->description;
                 $meal->name = $request->meal_name;
                 $meal->meal_type_id = $request->meal_category_id;
                 $meal->category = $request->meal_type;
@@ -148,6 +149,7 @@ class MealController extends Controller {
             }
 
             $data->name = $request->meal_name;
+            $data->description = $request->description;
             $data->meal_type_id = $request->meal_category_id;
             $data->category = $request->meal_type;
             $data->name = $request->meal_name;

@@ -82,6 +82,7 @@ class MealController extends Controller {
                 $meal = new MealItem();
 
                 $meal->name = $request->meal_name;
+                $meal->description = $request->description;
                 $meal->resort_id = $request->resort_id;
                 $meal->meal_type_id = $request->meal_category_id;
                 $meal->category = $request->meal_type;
@@ -154,6 +155,7 @@ class MealController extends Controller {
                 return redirect()->route('admin.meal.index')->withErrors($validator)->withInput();
             }
             $data->resort_id = $request->resort_id;
+            $data->description = $request->description;
             $data->name = $request->meal_name;
             $data->meal_type_id = $request->meal_category_id;
             $data->category = $request->meal_type;

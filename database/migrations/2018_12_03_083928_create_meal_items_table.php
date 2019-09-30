@@ -15,6 +15,7 @@ class CreateMealItemsTable extends Migration {
         Schema::create('meal_items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
+            $table->text('description')->nullable();
             $table->string('image_name')->nullable();
             $table->bigInteger('meal_type_id')->default(0);
             $table->enum('category', ['V', 'N', 'D']);
