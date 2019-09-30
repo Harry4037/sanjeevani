@@ -870,8 +870,9 @@ class UsersController extends Controller {
             if ($user->device_token) {
 //                $msg ="You checkout new checkout date is ".$request->early_checkout;
                 $msg = "Ohh! It seems you checked out early. Your checked out date is " . $request->early_checkout;
-                $this->androidBookingPushNotification("Early Checkout", $msg, $user->device_token, $this->notificationCount($user->id));
                 $this->generateNotification($user->id, "Booking Updated", $msg, 7);
+                $this->androidPushNotification(3, "Early Checkout", $msg, $user->device_token, 123, 0, $this->notificationCount($user->id));
+//                $this->androidBookingPushNotification("Early Checkout", $msg, $user->device_token, $this->notificationCount($user->id));
             }
             return redirect()->route('admin.users.early-checkout', $id)->with('status', 'Checkout date updated.');
         }

@@ -141,6 +141,13 @@ class StaffController extends Controller {
                 return $this->sendErrorResponse("Resort deactivated by admin.", (object) []);
             }
 
+            if ($request->user()->is_push_on == 0) {
+                $data["services"] = [];
+                $data["meal_orders"] = [];
+                $data["amenities"] = [];
+                return $this->sendSuccessResponse("Service request found.", $data);
+            }
+
             //If services & issues is authorized for user
             $serviceArray = [];
             if ($request->user()->is_service_authorise == 1) {
