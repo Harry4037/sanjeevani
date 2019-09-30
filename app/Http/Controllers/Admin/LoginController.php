@@ -158,6 +158,13 @@ class LoginController extends Controller {
 
     public function changePassword(Request $request) {
         if ($request->isMethod("post")) {
+            $validator = Validator::make($request->all(), [
+                        'new_password' => 'bail|required|alpha_num',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('admin.change-password')->withErrors($validator);
+            }
+
             $user = User::find($request->get('record_id'));
             if (Hash::check($request->get("old_password"), $user->password)) {
                 $user->password = bcrypt($request->get("new_password"));
