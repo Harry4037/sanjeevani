@@ -203,7 +203,8 @@ $(document).ready(function () {
                 required: true
             },
             day_id: {
-                required: true
+                required: true,
+                digits: true
             },
         }
     });

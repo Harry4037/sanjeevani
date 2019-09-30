@@ -271,7 +271,8 @@ removeButtons: 'Cut,Copy,Paste,Undo,Redo,Anchor',
                     required: true
                     },
                     day_id: {
-                    required: true
+                    required: true,
+                    digits: true
                     },
             }
     });
