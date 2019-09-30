@@ -109,7 +109,7 @@ class Controller extends BaseController {
             if ($notificationType == 1) {
                 $notificationBuilder->setClickAction("com.rindex.customer.OrdersRequest.OrdersRequestActivity");
             } else {
-                $notificationBuilder->setClickAction("com.rindex.customer.Home.HomeActivity");
+                $notificationBuilder->setClickAction("com.rindex.customer.Notificaton.NotificationActivity");
             }
         } else {
             $notificationBuilder->setBody($message)
