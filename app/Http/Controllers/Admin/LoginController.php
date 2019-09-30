@@ -159,7 +159,9 @@ class LoginController extends Controller {
     public function changePassword(Request $request) {
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'new_password' => 'bail|required|alpha_num',
+                        'new_password' => 'bail|required|regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,20}$/',
+                            ], [
+                        'new_password.regex' => "New password must be minimum six character, One numeric digit, One special character, One uppercase and One lowercase letter."
             ]);
             if ($validator->fails()) {
                 return redirect()->route('admin.change-password')->withErrors($validator);

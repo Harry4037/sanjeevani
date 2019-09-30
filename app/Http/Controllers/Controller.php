@@ -128,7 +128,7 @@ class Controller extends BaseController {
             "record_id" => $recordId,
             "notification_count" => $userNotificationCount,
             "status_type" => $statusType,
-            "sound" => "soundn.mp3",
+            "sound" => "default",
         ]);
 
         $option = $optionBuilder->build();
@@ -207,7 +207,7 @@ class Controller extends BaseController {
             'message' => $message,
             "type" => 5,
             "user_type_id" => 3,
-            "sound" => "soundn.mp3",
+            "sound" => "default",
             "notification_count" => $count,
         ]);
 
