@@ -708,11 +708,21 @@ class HomeController extends Controller {
             $notification = Notification::where(["user_id" => $request->user_id, "is_view" => 0])->count();
             $user['notification_count'] = $notification;
 
-            if (isset($user->userBookingDetail->resort_id)) {
-                $banners = Banner::where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->get();
-            } else {
-                $banners = Banner::where("is_active", 1)->take(5)->get();
+            $resortId = isset($user->userBookingDetail->resort_id) ? $user->userBookingDetail->resort_id : 0;
+            if ($resortId == 0) {
+                $defaultResort = Resort::where("is_default", 1)->first();
+                if ($defaultResort) {
+                    $resortId = $defaultResort->id;
+                } else {
+                    $defaultResort = Resort::query()->first();
+                    $resortId = $defaultResort->id;
+                }
             }
+//            if ($resortId > 0) {
+                $banners = Banner::where(["is_active" => 1, "resort_id" => $resortId])->get();
+//            } else {
+//                $banners = Banner::where("is_active", 1)->take(5)->get();
+//            }
             $bannerArray = [];
             $i = 0;
             foreach ($banners as $banner) {
@@ -721,11 +731,11 @@ class HomeController extends Controller {
                 $i++;
             }
 
-            if (isset($user->userBookingDetail->resort_id)) {
-                $nearby = ResortNearbyPlace::where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->take(5)->latest()->get();
-            } else {
-                $nearby = ResortNearbyPlace::where(["is_active" => 1])->take(5)->latest()->get();
-            }
+//            if (isset($user->userBookingDetail->resort_id)) {
+                $nearby = ResortNearbyPlace::where(["is_active" => 1, "resort_id" => $resortId])->take(5)->latest()->get();
+//            } else {
+//                $nearby = ResortNearbyPlace::where(["is_active" => 1])->take(5)->latest()->get();
+//            }
 
             $nearbyArray = [];
             foreach ($nearby as $k => $near) {
@@ -753,19 +763,19 @@ class HomeController extends Controller {
                 }
             }
 
-            if (isset($user->userBookingDetail->resort_id)) {
-                $offers = offer::where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->with([
+//            if (isset($user->userBookingDetail->resort_id)) {
+                $offers = offer::where(["is_active" => 1, "resort_id" => $resortId])->with([
                             'offerImages' => function($query) {
                                 $query->select('id', 'image_name as banner_image_url', 'offer_id');
                             }
                         ])->take(5)->latest()->get();
-            } else {
-                $offers = offer::where(["is_active" => 1])->with([
-                            'offerImages' => function($query) {
-                                $query->select('id', 'image_name as banner_image_url', 'offer_id');
-                            }
-                        ])->take(5)->latest()->get();
-            }
+//            } else {
+//                $offers = offer::where(["is_active" => 1])->with([
+//                            'offerImages' => function($query) {
+//                                $query->select('id', 'image_name as banner_image_url', 'offer_id');
+//                            }
+//                        ])->take(5)->latest()->get();
+//            }
 
             $offerArray = [];
             if ($offers) {
@@ -789,7 +799,7 @@ class HomeController extends Controller {
                 }
             }
 
-            if (isset($user->userBookingDetail->resort_id)) {
+//            if (isset($user->userBookingDetail->resort_id)) {
 
                 $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))
                                 ->with([
@@ -801,20 +811,20 @@ class HomeController extends Controller {
                                     'healthcareDays' => function($query) {
                                         $query->select('id', 'day', 'description', 'health_program_id');
                                     }
-                                ])->where(["is_active" => 1, "resort_id" => $user->userBookingDetail->resort_id])->take(5)->latest()->get();
-            } else {
-                $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
-                                ->with([
-                                    'healthcareImages' => function($query) {
-                                        $query->select('id', 'image_name as banner_image_url', 'health_program_id');
-                                    }
-                                ])
-                                ->with([
-                                    'healthcareDays' => function($query) {
-                                        $query->select('id', 'day', 'description', 'health_program_id');
-                                    }
-                                ])->take(5)->latest()->get();
-            }
+                                ])->where(["is_active" => 1, "resort_id" => $resortId])->take(5)->latest()->get();
+//            } else {
+//                $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
+//                                ->with([
+//                                    'healthcareImages' => function($query) {
+//                                        $query->select('id', 'image_name as banner_image_url', 'health_program_id');
+//                                    }
+//                                ])
+//                                ->with([
+//                                    'healthcareDays' => function($query) {
+//                                        $query->select('id', 'day', 'description', 'health_program_id');
+//                                    }
+//                                ])->take(5)->latest()->get();
+//            }
 
             $dataHealthArray = [];
             if (count($healthcare) > 0) {
