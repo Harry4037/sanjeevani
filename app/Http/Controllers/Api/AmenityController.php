@@ -94,7 +94,16 @@ class AmenityController extends Controller {
             return $this->jsonData($response);
         }
         if ($request->resort_id == -1) {
-            $amenities = Amenity::select('id', 'name', 'description', 'address')->where(["is_active" => 1, "resort_id" => 1])->with([
+            $resortId = 0;
+            $defaultResort = Resort::where("is_default", 1)->first();
+            if ($defaultResort) {
+                $resortId = $defaultResort->id;
+            } else {
+                $defaultResort = Resort::query()->first();
+                $resortId = $defaultResort->id;
+            }
+
+            $amenities = Amenity::select('id', 'name', 'description', 'address')->where(["is_active" => 1, "resort_id" => $resortId])->with([
                         'amenityImages' => function($query) {
                             $query->select('id', 'image_name as banner_image_url', 'amenity_id');
                         }

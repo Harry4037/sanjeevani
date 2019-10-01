@@ -10,6 +10,7 @@ use App\Models\ActivityTimeSlot;
 use App\Models\ActivityRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Resort;
 
 class ActivityController extends Controller {
 
@@ -92,7 +93,16 @@ class ActivityController extends Controller {
     public function activitiesListing(Request $request) {
 
         if ($request->resort_id == -1) {
-            $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => 1])->with([
+            $resortId = 0;
+            $defaultResort = Resort::where("is_default", 1)->first();
+            if ($defaultResort) {
+                $resortId = $defaultResort->id;
+            } else {
+                $defaultResort = Resort::query()->first();
+                $resortId = $defaultResort->id;
+            }
+
+            $amenities = Activity::select('id', 'name', 'description', 'address', 'latitude', 'longitude')->where(["is_active" => 1, "resort_id" => $resortId])->with([
                         'activityImages' => function($query) {
                             $query->select('id', 'image_name as banner_image_url', 'amenity_id');
                         }

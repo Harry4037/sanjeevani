@@ -667,7 +667,7 @@ class MealController extends Controller {
                             $query->where('resort_id', 1);
                         })->with([
                             'menuItems' => function ($query) use($request) {
-                                $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', 1);
+                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', 1);
                             }
                         ])->get();
             } else {
@@ -675,7 +675,7 @@ class MealController extends Controller {
                             $query->where('resort_id', $request->resort_id);
                         })->with([
                             'menuItems' => function ($query) use($request) {
-                                $query->select('id', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
                             }
                         ])->get();
             }
