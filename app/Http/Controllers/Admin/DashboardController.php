@@ -73,4 +73,33 @@ class DashboardController extends Controller {
         ]);
     }
 
+    public function defaultResort(Request $request) {
+        if ($request->isMethod('post')) {
+            $resort = Resort::find($request->resort_id);
+            if ($resort) {
+                Resort::query()->update(['is_default' => 0]);
+                $resort->is_default = 1;
+                $resort->save();
+                return redirect()->route('admin.resort-list')->with('status', 'Default resort selected.');
+            } else {
+                return redirect()->route('admin.resort-list')->with('error', 'Resort not found.');
+            }
+            dd($request->all());
+        }
+
+        $css = [
+            "vendors/iCheck/skins/flat/green.css",
+        ];
+        $js = [
+            'vendors/iCheck/icheck.min.js',
+        ];
+
+        $resorts = Resort::all();
+        return view('admin.dashboard.default-resort', [
+            "resorts" => $resorts,
+            "js" => $js,
+            "css" => $css
+        ]);
+    }
+
 }

@@ -28,6 +28,7 @@ Route::namespace("Admin")->prefix('admin')->group(function() {
 
 Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(function() {
     Route::match(['get', 'post'], '/test', 'LoginController@test')->name('admin.test');
+    Route::match(['get', 'post'], '/default-resort', 'DashboardController@defaultResort')->name('admin.resort-list');
     Route::match(['get', 'post'], '/profile', 'LoginController@profile')->name('admin.profile');
     Route::match(['get', 'post'], '/change-password', 'LoginController@changePassword')->name('admin.change-password');
     Route::get('/city-list/{id}', 'CommonController@getCityList')->name('admin.city.list');

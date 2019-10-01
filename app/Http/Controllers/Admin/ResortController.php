@@ -344,6 +344,13 @@ class ResortController extends Controller {
 
     public function deleteResort(Request $request) {
         $resort = Resort::find($request->id);
+        if ($resort->is_default == 1) {
+            $resort->delete();
+            $firstResort = Resort::query()->first();
+            $firstResort->is_default = 1;
+            $firstResort->save();
+            return ['status' => true, "message" => "Resort deleted."];
+        }
         if ($resort->delete()) {
             return ['status' => true, "message" => "Resort deleted."];
         } else {

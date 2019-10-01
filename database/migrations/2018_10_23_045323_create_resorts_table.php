@@ -29,6 +29,7 @@ class CreateResortsTable extends Migration {
             $table->float('latitude', 8, 6)->default(0);
             $table->float('longitude', 8, 6)->default(0);
             $table->tinyInteger('is_active')->default(1);
+            $table->tinyInteger('is_default')->default(0);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);
             $table->string('updated_by')->default(1);
