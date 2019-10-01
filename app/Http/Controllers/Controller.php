@@ -102,9 +102,11 @@ class Controller extends BaseController {
         ;
 
         $notificationBuilder = new PayloadNotificationBuilder($title);
+        $sound = '';
         if ($userType == 3) {
+            $sound = 'notificationso.mp3';
             $notificationBuilder->setBody($message)
-                    ->setSound('notificationso.mp3')
+                    ->setSound($sound)
                     ->setBadge($userNotificationCount);
             if ($notificationType == 1) {
                 $notificationBuilder->setClickAction("com.rindex.customer.OrdersRequest.OrdersRequestActivity");
@@ -112,8 +114,9 @@ class Controller extends BaseController {
                 $notificationBuilder->setClickAction("com.rindex.customer.Notificaton.NotificationActivity");
             }
         } else {
+            $sound = 'soundn.mp3';
             $notificationBuilder->setBody($message)
-                    ->setSound('soundn.mp3')
+                    ->setSound($sound)
                     ->setChannelId('RindexStaff')
                     ->setBadge($userNotificationCount)
                     ->setClickAction("rindex.com.staff.home.MainActivity")
@@ -128,7 +131,7 @@ class Controller extends BaseController {
             "record_id" => $recordId,
             "notification_count" => $userNotificationCount,
             "status_type" => $statusType,
-            "sound" => "default",
+            "sound" => $sound,
         ]);
 
         $option = $optionBuilder->build();
