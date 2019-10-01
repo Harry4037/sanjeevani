@@ -44,6 +44,7 @@ class MealController extends Controller {
                         "meal_items": [
                             {
                                 "id": 320,
+                                "description": "dummy,
                                 "category": "N",
                                 "name": "Boiled Egg",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/nRJmJEkN9VsB4zIfMljsdrZMoEg8FZIhLAAbtIT0.jpeg",
@@ -51,6 +52,7 @@ class MealController extends Controller {
                             },
                             {
                                 "id": 319,
+                                "description": "dummy,
                                 "category": "V",
                                 "name": "sandwich",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/sIfdcO4ALhCtuXnjuKUQFUkLgng60aqI19xGb54W.jpeg",
@@ -67,6 +69,7 @@ class MealController extends Controller {
                         "meal_items": [
                             {
                                 "id": 349,
+                                "description": "dummy",
                                 "category": "V",
                                 "name": "PLAIN RICE",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/9nVLxxSxxoIJrzYptXjDh6g9HqwvKEv6kWVwZfOZ.jpeg",
@@ -74,6 +77,7 @@ class MealController extends Controller {
                             },
                             {
                                 "id": 350,
+                                "description": "dummy",
                                 "category": "V",
                                 "name": "kadhai paneer",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/ASBKXtmGAdOx3t6U6CApm5xFol4jD4Z9Ic1KTrYr.png",
@@ -81,6 +85,7 @@ class MealController extends Controller {
                             },
                             {
                                 "id": 351,
+                                "description": "dummy",     * 
                                 "category": "V",
                                 "name": "Mix Veg",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/smHJD5kcICVSGdXwqcUCN1kmRP0NBfGbIETSwI5i.jpeg",
@@ -88,6 +93,7 @@ class MealController extends Controller {
                             },
                             {
                                 "id": 352,
+                                "description": "dummy",
                                 "category": "V",
                                 "name": "plain roti",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/84ijg5Hmk6PzAl9PJjtWn4LDMysDcqbIQjNWKfGT.jpeg",
@@ -95,6 +101,7 @@ class MealController extends Controller {
                             },
                             {
                                 "id": 353,
+                                "description": "dummy",
                                 "category": "V",
                                 "name": "Dal Tadka",
                                 "image_url": "http://127.0.0.1:1234/storage/meal_images/6usfxv12m2LGrsjEZZDzJwFIAJUptpffhLlC6dp2.png",
@@ -643,6 +650,7 @@ class MealController extends Controller {
                     if (count($mealPackageItems) > 0) {
                         foreach ($mealPackageItems as $k => $mealPackageItem) {
                             $packageData[$key]['meal_items'][$k]['id'] = $mealPackageItem->id;
+                            $packageData[$key]['meal_items'][$k]['description'] = $mealPackageItem->description;
                             $packageData[$key]['meal_items'][$k]['category'] = $mealPackageItem->mealItem->category;
                             $packageData[$key]['meal_items'][$k]['name'] = isset($mealPackageItem->mealItem->name) ? $mealPackageItem->mealItem->name : "";
                             $packageData[$key]['meal_items'][$k]['image_url'] = isset($mealPackageItem->mealItem->image_name) ? $mealPackageItem->mealItem->image_name : "";
@@ -680,6 +688,7 @@ class MealController extends Controller {
                         foreach ($mealCategory->menuItems as $j => $mitems) {
                             $userCart = Cart::where(["user_id" => $request->user_id, "meal_item_id" => $mitems->id])->first();
                             $mealCatData[$m]['menu_items'][$j]['id'] = $mitems->id;
+                            $mealCatData[$m]['menu_items'][$j]['description'] = $mitems->description;
                             $mealCatData[$m]['menu_items'][$j]['name'] = $mitems->name;
                             $mealCatData[$m]['menu_items'][$j]['category'] = $mitems->category;
                             $mealCatData[$m]['menu_items'][$j]['banner_image_url'] = $mitems->banner_image_url;
