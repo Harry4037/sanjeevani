@@ -134,7 +134,16 @@ class HealthcareProgramController extends Controller {
         try {
 
             if ($request->resort_id == -1) {
-                $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1])
+                $resortId = 0;
+                $defaultResort = Resort::where("is_default", 1)->first();
+                if ($defaultResort) {
+                    $resortId = $defaultResort->id;
+                } else {
+                    $defaultResort = Resort::query()->first();
+                    $resortId = $defaultResort->id;
+                }
+
+                $healthcare = HealthcateProgram::select(DB::raw('id, name, description, DATE_FORMAT(start_from, "%d-%m-%Y") as start_from, DATE_FORMAT(end_to, "%d-%m-%Y") as end_to'))->where(["is_active" => 1, "resort_id" => $resortId])
                                 ->with([
                                     'healthcareImages' => function($query) {
                                         $query->select('id', 'image_name as banner_image_url', 'health_program_id');

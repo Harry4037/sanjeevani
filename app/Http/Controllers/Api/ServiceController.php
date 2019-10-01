@@ -107,7 +107,16 @@ class ServiceController extends Controller {
     public function serviceListing(Request $request) {
 
         if ($request->resort_id == -1) {
-            $houseKeeping = Service::where(["resort_id" => 1, "type_id" => 1, "is_active" => 1])->get();
+            $resortId = 0;
+            $defaultResort = Resort::where("is_default", 1)->first();
+            if ($defaultResort) {
+                $resortId = $defaultResort->id;
+            } else {
+                $defaultResort = Resort::query()->first();
+                $resortId = $defaultResort->id;
+            }
+
+            $houseKeeping = Service::where(["resort_id" => $resortId, "type_id" => 1, "is_active" => 1])->get();
         } else {
             $houseKeeping = Service::where(["resort_id" => $request->resort_id, "type_id" => 1, "is_active" => 1])->get();
         }
@@ -137,7 +146,16 @@ class ServiceController extends Controller {
         }
 
         if ($request->resort_id == -1) {
-            $issues = Service::where(["resort_id" => 1, "type_id" => 2, "is_active" => 1])->get();
+            $resortId = 0;
+            $defaultResort = Resort::where("is_default", 1)->first();
+            if ($defaultResort) {
+                $resortId = $defaultResort->id;
+            } else {
+                $defaultResort = Resort::query()->first();
+                $resortId = $defaultResort->id;
+            }
+
+            $issues = Service::where(["resort_id" => $resortId, "type_id" => 2, "is_active" => 1])->get();
         } else {
             $issues = Service::where(["resort_id" => $request->resort_id, "type_id" => 2, "is_active" => 1])->get();
         }
@@ -335,7 +353,7 @@ class ServiceController extends Controller {
             if ($serviceRequest->save()) {
                 $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
                 $this->generateNotification($request->user_id, "Service Raised", "$service->name request raised by you", 1);
-                if($user->device_token){
+                if ($user->device_token) {
                     $this->androidPushNotification(3, "Service Raised", "$service->name request raised by you", $user->device_token, 1, $service->id, $this->notificationCount($user->id));
                 }
                 if ($resortUsers) {

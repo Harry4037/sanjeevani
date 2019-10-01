@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\offer;
+use App\Models\Resort;
 
 class OfferController extends Controller {
 
@@ -125,7 +126,16 @@ class OfferController extends Controller {
     public function offerListing(Request $request) {
         try {
             if ($request->resort_id == -1) {
-                $offers = offer::where(["is_active" => 1])->with([
+                $resortId = 0;
+                $defaultResort = Resort::where("is_default", 1)->first();
+                if ($defaultResort) {
+                    $resortId = $defaultResort->id;
+                } else {
+                    $defaultResort = Resort::query()->first();
+                    $resortId = $defaultResort->id;
+                }
+
+                $offers = offer::where(["is_active" => 1, "resort_id" => $resortId])->with([
                             'offerImages' => function($query) {
                                 $query->select('id', 'image_name as banner_image_url', 'offer_id');
                             }

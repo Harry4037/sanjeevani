@@ -10,6 +10,7 @@ use App\Models\AmenityTimeSlot;
 use App\Models\AmenityRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Resort;
 
 class AmenityController extends Controller {
 
