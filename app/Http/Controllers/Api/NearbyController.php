@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ResortNearbyPlace;
 use App\Models\NearbyPlaceImage;
 use App\Models\User;
+use App\Models\Resort;
 
 class NearbyController extends Controller {
 
@@ -103,7 +104,15 @@ class NearbyController extends Controller {
             }
             $user = User::find($request->user_id);
             if ($user->user_type_id == 4) {
-                $nearby = ResortNearbyPlace::where(["is_active" => 1])->get();
+                $resortId = 0;
+                $defaultResort = Resort::where("is_default", 1)->first();
+                if ($defaultResort) {
+                    $resortId = $defaultResort->id;
+                } else {
+                    $defaultResort = Resort::query()->first();
+                    $resortId = $defaultResort->id;
+                }
+                $nearby = ResortNearbyPlace::where(["is_active" => 1, 'resort_id' => $resortId])->get();
                 if ($nearby) {
                     $data['nearby'] = [];
                     $i = 0;
