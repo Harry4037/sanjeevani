@@ -78,13 +78,11 @@ class DashboardController extends Controller {
             $resort = Resort::find($request->resort_id);
             if ($resort) {
                 Resort::query()->update(['is_default' => 0]);
-                $resort->is_default = 1;
-                $resort->save();
+                Resort::where("id", $request->resort_id)->update(['is_default' => 1]);
                 return redirect()->route('admin.resort-list')->with('status', 'Default resort selected.');
             } else {
                 return redirect()->route('admin.resort-list')->with('error', 'Resort not found.');
             }
-            dd($request->all());
         }
 
         $css = [
