@@ -682,7 +682,7 @@ class MealController extends Controller {
                     $resortId = $defaultResort->id;
                 }
 
-                $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+                $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request, $resortId) {
                             $query->where('resort_id', $resortId);
                         })->with([
                             'menuItems' => function ($query) use($request) {
