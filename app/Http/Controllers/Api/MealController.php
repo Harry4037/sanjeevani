@@ -685,8 +685,8 @@ class MealController extends Controller {
                 $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request, $resortId) {
                             $query->where('resort_id', $resortId);
                         })->with([
-                            'menuItems' => function ($query) use($request) {
-                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', 1);
+                            'menuItems' => function ($query) use($request, $resortId) {
+                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $resortId);
                             }
                         ])->get();
             } else {
