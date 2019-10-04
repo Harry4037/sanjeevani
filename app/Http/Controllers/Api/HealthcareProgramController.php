@@ -391,7 +391,7 @@ class HealthcareProgramController extends Controller {
                 $booking = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s"))
                         ->where("check_out", ">=", date("Y-m-d H:i:s"))
                         ->where("user_id", $request->user_id)
-                        ->where("is_cancelled", 0)
+//                        ->where("is_cancelled", 0)
                         ->first();
 
                 if ($booking) {
