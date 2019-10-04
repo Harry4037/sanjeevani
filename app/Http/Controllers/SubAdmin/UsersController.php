@@ -621,7 +621,7 @@ class UsersController extends Controller {
             }
             $data['recordsTotal'] = $query->where("user_id", $user_id)->count();
             $data['recordsFiltered'] = $query->where("user_id", $user_id)->count();
-            $userBookingDetails = $query->selectRaw(DB::raw('id, is_cancelled, resort_room_no, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->get();
+            $userBookingDetails = $query->selectRaw(DB::raw('id, is_cancelled, resort_room_no, resort_id, package_id, source_name, source_id, DATE_FORMAT(check_in, "%d-%m-%Y %r") as check_in, DATE_FORMAT(check_out, "%d-%m-%Y %r") as check_out'))->where("user_id", $user_id)->take($limit)->offset($offset)->latest()->get();
             $bookinDetailArray = [];
             foreach ($userBookingDetails as $i => $userBookingDetail) {
                 $currentDataTime = strtotime(date("d-m-Y H:i:s"));
