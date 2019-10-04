@@ -19,6 +19,7 @@ use App\Models\UserhealthDetail;
 use Validator;
 use App\Models\HealthcateProgram;
 use App\Models\UserMembership;
+use App\Models\Cart;
 
 class UsersController extends Controller {
 
@@ -788,6 +789,9 @@ class UsersController extends Controller {
                 $flag = FALSE;
             }
 
+            if ($request->resort_id != $data->resort_id) {
+                Cart::where("user_id", $data->user_id)->delete();
+            }
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;

@@ -19,6 +19,7 @@ use App\Models\UserhealthDetail;
 use Validator;
 use App\Models\HealthcateProgram;
 use App\Models\UserMembership;
+use App\Models\Cart;
 
 class UsersController extends Controller {
 
@@ -745,6 +746,10 @@ class UsersController extends Controller {
             } else {
                 $msg = "Your booking updated successfully.";
                 $flag = FALSE;
+            }
+
+            if ($request->resort_id != $data->resort_id) {
+                Cart::where("user_id", $data->user_id)->delete();
             }
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
