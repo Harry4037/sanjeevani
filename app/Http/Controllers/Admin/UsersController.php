@@ -578,7 +578,7 @@ class UsersController extends Controller {
 
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
-            $userBookingDetails = $query->get();
+            $userBookingDetails = $query->take($limit)->offset($offset)->latest()->get();
             $bookinDetailArray = [];
             foreach ($userBookingDetails as $i => $userBookingDetail) {
                 $currentDataTime = strtotime(date("d-m-Y H:i:s"));
