@@ -738,15 +738,33 @@ class UsersController extends Controller {
 
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
-            $msg = "";
+            $msg = "Your ";
             $flag = FALSE;
-            if ($data->room_type_name != $roomRoom->room_no) {
-                $msg = "Your room number updated successfully.";
-                $flag = TRUE;
-            } else {
-                $msg = "Your booking updated successfully.";
-                $flag = FALSE;
+            if ($request->booking_source_name != $data->source_name) {
+                $msg .= " source name";
             }
+            if ($request->booking_source_id != $data->source_id) {
+                $msg .= " source ID";
+            }
+            if ($data->room_type_name != $roomRoom->room_no) {
+                $flag = TRUE;
+                $msg .= " room number";
+            }
+            if ($data->package_id != $request->package_id) {
+                $msg .= " room number";
+            }
+
+            $msg .= ' has been updated.';
+
+
+            
+//            if ($data->room_type_name != $roomRoom->room_no) {
+//                $msg = "Your room number updated successfully.";
+//                $flag = TRUE;
+//            } else {
+//                $msg = "Your booking updated successfully.";
+//                $flag = FALSE;
+//            }
 
             if ($request->resort_id != $data->resort_id) {
                 Cart::where("user_id", $data->user_id)->delete();
