@@ -32,15 +32,15 @@ class CartController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "Item added to cart",
-            "data": {
-                "cart_count": 1,
-                "quantity_count": "1"
-            }
-        }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "Item added to cart",
+      "data": {
+      "cart_count": 1,
+      "quantity_count": "1"
+      }
+      }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -143,6 +143,12 @@ class CartController extends Controller {
                         ->orWhere("meal_item_id", $request->meal_item_id);
                     })
                     ->first();
+            $msg = '';
+            if ($request->flag == 1) {
+                $msg = "Item added to cart.";
+            } else {
+                $msg = "Item remover from cart.";
+            }
 
             if ($cart) {
                 if ($request->flag == 1) {
@@ -152,7 +158,7 @@ class CartController extends Controller {
                         $cart->delete();
                         $data['cart_count'] = Cart::where("user_id", $request->user_id)->count();
                         $data['quantity_count'] = 0;
-                        return $this->sendSuccessResponse("Item added to cart", $data);
+                        return $this->sendSuccessResponse($msg, $data);
                     }
                     $cart->quantity = $cart->quantity - $request->quantity;
                 }
@@ -171,7 +177,7 @@ class CartController extends Controller {
             if ($cart->save()) {
                 $data['cart_count'] = Cart::where("user_id", $request->user_id)->count();
                 $data['quantity_count'] = $cart->quantity;
-                return $this->sendSuccessResponse("Item added to cart", $data);
+                return $this->sendSuccessResponse($msg, $data);
             } else {
                 return $this->sendErrorResponse("Something went be wrong, Please try later", (object) []);
             }
@@ -196,30 +202,30 @@ class CartController extends Controller {
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-        {
-            "status": true,
-            "status_code": 200,
-            "message": "my cart list",
-            "data": {
-                "cart_items": [
-                    {
-                        "id": 218,
-                        "type": 1,
-                        "item_id": 69,
-                        "image_url": "http://127.0.0.1:1234/storage/meal_images/nRJmJEkN9VsB4zIfMljsdrZMoEg8FZIhLAAbtIT0.jpeg",
-                        "category": "N",
-                        "item_name": "Boiled Egg",
-                        "item_price": 50,
-                        "quantity": 1
-                    }
-                ],
-                "total_no_item": 1,
-                "item_amount": 50,
-                "gst": "3",
-                "gst_percentage": "5%",
-                "total_amount": "53"
-            }
-        }
+      {
+      "status": true,
+      "status_code": 200,
+      "message": "my cart list",
+      "data": {
+      "cart_items": [
+      {
+      "id": 218,
+      "type": 1,
+      "item_id": 69,
+      "image_url": "http://127.0.0.1:1234/storage/meal_images/nRJmJEkN9VsB4zIfMljsdrZMoEg8FZIhLAAbtIT0.jpeg",
+      "category": "N",
+      "item_name": "Boiled Egg",
+      "item_price": 50,
+      "quantity": 1
+      }
+      ],
+      "total_no_item": 1,
+      "item_amount": 50,
+      "gst": "3",
+      "gst_percentage": "5%",
+      "total_amount": "53"
+      }
+      }
      * 
      * 
      * @apiError UserIdMissing The user id was missing.
@@ -279,9 +285,9 @@ class CartController extends Controller {
                 }
                 $cartDataArray['total_no_item'] = count($cartDataArray['cart_items']);
                 $cartDataArray['item_amount'] = $total;
-                $cartDataArray['gst'] = number_format($total * ($gst/100), 0);
-                $cartDataArray['gst_percentage'] = $gst."%";
-                $cartDataArray['total_amount'] = number_format($total + ($total * ($gst/100)), 0);
+                $cartDataArray['gst'] = number_format($total * ($gst / 100), 0);
+                $cartDataArray['gst_percentage'] = $gst . "%";
+                $cartDataArray['total_amount'] = number_format($total + ($total * ($gst / 100)), 0);
 
                 return $this->sendSuccessResponse("my cart list", $cartDataArray);
             } else {
