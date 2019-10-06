@@ -22,6 +22,7 @@ class OrderRequestController extends Controller {
 
     public function orderRequestList(Request $request) {
         try {
+            $oStatus = $request->o_status;
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
