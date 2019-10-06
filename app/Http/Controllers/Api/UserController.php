@@ -209,7 +209,7 @@ class UserController extends Controller {
                         $userBookingDetail->save();
                     }
                     $user['is_checked_in'] = true;
-                    Cart::where('user_id',$user->id)->delete();
+                    Cart::where('user_id', $user->id)->delete();
                     return $this->sendSuccessResponse("User check-in successfully.", $user);
                 } else {
                     return $this->administratorResponse();
@@ -796,6 +796,47 @@ class UserController extends Controller {
                 $userArray['resort'] = (object) [];
             }
             return $this->sendSuccessResponse("User check In detail", ["checkin_detail" => $userArray]);
+        } catch (Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
+        }
+    }
+
+    /**
+     * @api {get} /api/user-counts User counts
+     * @apiHeader {String} Accept application/json. 
+     * @apiName GetUserCounts
+     * @apiGroup User
+     * 
+     * @apiParam {String} user_id User id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Conts.
+     * @apiSuccess {JSON}   data Array.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *   {
+     *       "status": true,
+     *       "status_code": 200,
+     *       "message": "counts",
+     *       "data": {
+     *           "notification_count": 0
+     *       }
+     *   }
+     * 
+     * 
+     */
+    public function userCounts(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User Id missing.", (object) []);
+            }
+            $notificationCount = $this->notificationCount($request->user_id);
+
+            return $this->sendSuccessResponse("counts", [
+                        'notification_count' => $notificationCount
+            ]);
         } catch (Exception $ex) {
             return $this->sendErrorResponse($ex->getMessage(), (object) []);
         }

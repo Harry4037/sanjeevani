@@ -28,6 +28,8 @@ Route::namespace("Api")->group(function () {
     }
 
 
+    Route::get('user-counts', 'UserController@userCounts');
+
     Route::get('get-checkin-detail', 'UserController@getCheckInDetail');
 
     //City State list
@@ -104,7 +106,7 @@ Route::namespace("Api")->group(function () {
     Route::get('room-type-list', 'StaffController@resortList');
 
     Route::get('search-user', 'StaffController@searchUser');
-    
+
     Route::get('get-bookings', 'StaffController@getUserBookings');
 
     Route::middleware('auth:api')->group(function () {
