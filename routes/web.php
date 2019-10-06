@@ -299,6 +299,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::prefix('order')->group(function() {
         Route::get('/', 'OrderController@index')->name('admin.order.index');
         Route::get('/list', 'OrderController@OrderList')->name('admin.order.list');
+        Route::get('/list/{o_status}', 'OrderController@OrderList')->name('admin.order.list-search');
         Route::match(['get', 'post'], '/view-detail/{id}', 'OrderController@viewDetail')->name('admin.order.view');
     });
     /**
