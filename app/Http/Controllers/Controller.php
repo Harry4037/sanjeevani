@@ -32,6 +32,7 @@ class Controller extends BaseController {
         $booking = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s"))
                 ->where("check_out", ">=", date("Y-m-d H:i:s"))
                 ->where("user_id", $userId)
+                ->where("is_cancelled", 0)
                 ->orderBy("check_out", "ASC")
                 ->first();
         return $booking ? true : false;
