@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\ServiceRequest;
 use App\Models\User;
+use App\Models\Service;
 
 class OrderRequestController extends Controller {
 
