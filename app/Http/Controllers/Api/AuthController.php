@@ -152,8 +152,10 @@ class AuthController extends Controller {
                     $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
                         $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
-                        if ($request->email_id) {
-                            $userExist->email_id = $request->email_id;
+                        if ((strlen($userExist->email_id) > 0) || (strlen($request->email_id) > 0)) {
+                            if (strlen($userExist->email_id) == 0) {
+                                $userExist->email_id = $request->email_id;
+                            }
                             try {
                                 Mail::to($request->email_id)->send(new LoginOtp($OTP));
                             } catch (\Exception $e) {
