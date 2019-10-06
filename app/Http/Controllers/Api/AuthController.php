@@ -153,7 +153,7 @@ class AuthController extends Controller {
                     if ($userExist->save()) {
                         $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
                         if ((strlen($userExist->email_id) > 0) || (strlen($request->email_id) > 0)) {
-                            if (strlen($userExist->email_id) == 0) {
+                            if (strlen($userExist->email_id) == 0 || ($userExist->email_id == Null)) {
                                 $userExist->email_id = $request->email_id;
                             }
                             try {

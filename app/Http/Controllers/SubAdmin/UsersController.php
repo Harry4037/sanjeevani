@@ -793,6 +793,10 @@ class UsersController extends Controller {
             if ($request->booking_source_id != $data->source_id) {
                 $msgArray[] = " source ID";
             }
+            if ($data->resort_id != $request->resort_id) {
+                $flag = TRUE;
+                $msgArray[] = " resort";
+            }
             if ($data->resort_room_id != $request->resort_room_id) {
                 $flag = TRUE;
                 $msgArray[] = " room number";
