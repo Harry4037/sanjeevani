@@ -88,9 +88,9 @@ class OrderRequestController extends Controller {
                 $resortUsers = UserBookingDetail::where("resort_id", $sRequest->resort_id)->pluck("user_id");
                 $user = User::find($sRequest->user_id);
                 $service = Service::withTrashed()->find($sRequest->service_id);
-                $this->generateNotification($user->id, "Service Opened", "Your " . $service->name . " request is opened by admin", 1);
+                $this->generateNotification($user->id, "Service Request", "Your " . $service->name . " request is re-opened by Admin", 1);
                 if ($user->device_token) {
-                    $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is opened by admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
+                    $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is re-opened by Admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
                 }
                 if ($resortUsers) {
                     $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1, "is_push_on" => 1])
