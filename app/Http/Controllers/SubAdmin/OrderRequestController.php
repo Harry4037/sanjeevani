@@ -8,6 +8,7 @@ use Validator;
 use App\Models\ServiceRequest;
 use App\Models\User;
 use App\Models\Service;
+use App\Models\UserBookingDetail;
 
 class OrderRequestController extends Controller {
 
@@ -96,11 +97,22 @@ class OrderRequestController extends Controller {
             $sRequest->staff_comment = "Not resolved";
             $sRequest->save();
             if ($request->seleted_status == 1) {
+                $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
                 $user = User::find($sRequest->user_id);
                 $service = Service::withTrashed()->find($sRequest->service_id);
                 $this->generateNotification($user->id, "Service Opened", "Your " . $service->name . " request is opened by admin", 1);
                 if ($user->device_token) {
                     $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is opened by admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
+                }
+
+                if ($resortUsers) {
+                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_service_authorise" => 1, "is_push_on" => 1])
+                            ->where("device_token", "!=", NULL)
+                            ->whereIn("id", $resortUsers->toArray())
+                            ->pluck("device_token");
+                    if (count($staffDeviceTokens) > 0) {
+                        $this->androidPushNotification(2, "Service Raised", "$service->name request raised from Room# " . $sRequest->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 1, $service->id, 0, 1);
+                    }
                 }
             }
             if ($request->seleted_status == 6) {
