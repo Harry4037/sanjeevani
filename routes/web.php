@@ -158,6 +158,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::prefix('order-request')->group(function() {
         Route::get('/', 'OrderRequestController@index')->name('admin.order-request.index');
         Route::get('/order-request-list', 'OrderRequestController@orderRequestList')->name('admin.order-request.list');
+        Route::get('/order-request-list/{o_status}', 'OrderRequestController@orderRequestList')->name('admin.order-request.list-filter');
         Route::match(['get', 'post'], '/view-detail/{id}', 'OrderRequestController@viewDetail')->name('admin.order-request.view');
     });
 
@@ -444,6 +445,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::prefix('order-request')->group(function() {
         Route::get('/', 'OrderRequestController@index')->name('subadmin.order-request.index');
         Route::get('/order-request-list', 'OrderRequestController@orderRequestList')->name('subadmin.order-request.list');
+        Route::get('/order-request-list/{o_status}', 'OrderRequestController@orderRequestList')->name('subadmin.order-request.list-filter');
         Route::match(['get', 'post'], '/view-detail/{id}', 'OrderRequestController@viewDetail')->name('subadmin.order-request.view');
     });
 

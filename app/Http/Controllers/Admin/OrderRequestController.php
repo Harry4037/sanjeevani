@@ -22,11 +22,15 @@ class OrderRequestController extends Controller {
 
     public function orderRequestList(Request $request) {
         try {
+            $oStatus = $request->o_status;
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
             $query = ServiceRequest::query();
+            if ($oStatus) {
+                $query->where("request_status_id", $oStatus);
+            }
             $query->with([
                 'serviceDetail' => function($query) {
                     $query->withTrashed()->with("serviceTypeDetail")->select('id', 'name', 'type_id');

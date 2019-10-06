@@ -27,6 +27,9 @@ class OrderRequestController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = ServiceRequest::query();
+            if ($oStatus) {
+                $query->where("request_status_id", $oStatus);
+            }
             $query->with([
                 'serviceDetail' => function($query) {
                     $query->withTrashed()->with("serviceTypeDetail")->select('id', 'name', 'type_id');
