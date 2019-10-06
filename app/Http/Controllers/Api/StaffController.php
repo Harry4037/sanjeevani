@@ -1118,7 +1118,7 @@ class StaffController extends Controller {
 
                 $from = Carbon::parse($amenitySlot->from);
                 $to = Carbon::parse($amenitySlot->to);
-                $amenitySlotData[$i]['slot'] = $from->format("H:i") . "-" . $to->format("H:i");
+                $amenitySlotData[$i]['slot'] = $from->format("H:i");
                 if ($amenitiesRequests) {
 
                     foreach ($amenitiesRequests as $j => $amenitiesRequest) {
