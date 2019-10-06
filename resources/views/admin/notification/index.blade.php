@@ -31,7 +31,11 @@
                                 @foreach($users as $key => $user)
                             <div class="col-md-6 col-sm-6 col-xs-6" style="padding-bottom: 4px;">
                                 <input class="flat" type="checkbox" name="notify_user[]" value="{{ $user->id }}"> 
+                                @if(strlen($user->user_name) > 0)
                                 <label>{{ $user->mobile_number.' ('.ucwords($user->user_name).')' }}</label>
+                                @else
+                                <label>{{ $user->mobile_number }}</label>
+                                @endif
                             </div>
 
                             @endforeach
