@@ -332,7 +332,8 @@ class AmenityController extends Controller {
                     }
                     $this->generateNotification($request->user()->id, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), 3);
                     if ($request->user()->device_token) {
-                        $this->androidPushNotification(3, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M'), $request->user()->device_token, 3, $bookingRequest->id, $this->notificationCount($request->user()->id));
+                        $from = Carbon::parse($bookingRequest->from);
+                        $this->androidPushNotification(3, "Amenity Booked", "Your $amenity->name booking is confirmed" . " for " . $book_date->format('d M') . " at " . $from->format("h:i a"), $request->user()->device_token, 3, $bookingRequest->id, $this->notificationCount($request->user()->id));
                     }
                     return $this->sendSuccessResponse("We look forward to serve you.", (object) []);
                 } else {
