@@ -86,6 +86,7 @@ class OrderRequestController extends Controller {
             if ($request->seleted_status == 1) {
                 $user = User::find($sRequest->user_id);
                 $service = Service::withTrashed()->find($sRequest->service_id);
+                $this->generateNotification($user->id, "Service Opened", "Your " . $service->name . " request is opened by admin", 1);
                 if ($user->device_token) {
                     $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is opened by admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
                 }
@@ -93,6 +94,7 @@ class OrderRequestController extends Controller {
             if ($request->seleted_status == 6) {
                 $user = User::find($sRequest->user_id);
                 $service = Service::withTrashed()->find($sRequest->service_id);
+                $this->generateNotification($user->id, "Service Opened", "Your " . $service->name . " request is opened by admin", 1);
                 if ($user->device_token) {
                     $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is closed by admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
                 }
