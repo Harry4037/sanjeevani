@@ -28,6 +28,7 @@
                                     <option value="3">UNDER APPROVAL</option>
                                     <option value="4">COMPLETED</option>
                                     <option value="5">REJECTED</option>
+                                    <option value="6">CLOSED</option>
                                 </select>
                             </th>
                             <th></th>
