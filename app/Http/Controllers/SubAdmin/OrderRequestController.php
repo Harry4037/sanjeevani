@@ -44,13 +44,15 @@ class OrderRequestController extends Controller {
             ]);
             $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
-                $query->whereHas("serviceDetail", function($query) use($searchKeyword) {
-                    $query->whereHas("serviceTypeDetail", function($query) use($searchKeyword) {
-                        $query->where("name", "LIKE", "%$searchKeyword%");
-                    })->orWhere("name", "LIKE", "%$searchKeyword%");
-                })->orWhereHas("userDetail", function($query) use($searchKeyword) {
-                    $query->where("user_name", "LIKE", "%$searchKeyword%");
-                })->orWhere("resort_room_no", "LIKE", "%$searchKeyword%");
+                $query->where(function($query) use($searchKeyword) {
+                    $query->whereHas("serviceDetail", function($query) use($searchKeyword) {
+                        $query->whereHas("serviceTypeDetail", function($query) use($searchKeyword) {
+                            $query->where("name", "LIKE", "%$searchKeyword%");
+                        })->orWhere("name", "LIKE", "%$searchKeyword%");
+                    })->orWhereHas("userDetail", function($query) use($searchKeyword) {
+                        $query->where("user_name", "LIKE", "%$searchKeyword%");
+                    })->orWhere("resort_room_no", "LIKE", "%$searchKeyword%");
+                });
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
