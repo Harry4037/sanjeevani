@@ -738,8 +738,13 @@ class UsersController extends Controller {
 
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
-            $msg = "Your ";
+            $msg = "Your";
             $flag = FALSE;
+            $current_check_in_date = Carbon::parse($data->check_in);
+            $current_check_out_date = Carbon::parse($data->check_out);
+            $check_in_date = Carbon::parse($request->check_in);
+            $check_out_date = Carbon::parse($request->check_out);
+
             $msgArray = [];
             if ($request->booking_source_name != $data->source_name) {
                 $msgArray[] = " source name";
@@ -751,13 +756,17 @@ class UsersController extends Controller {
                 $flag = TRUE;
                 $msgArray[] = " room number";
             }
+            if (!$current_check_in_date->eq($check_in_date)) {
+                $msgArray[] = " check In date";
+            }
+            if (!$current_check_out_date->eq($check_out_date)) {
+                $msgArray[] = " check Out date";
+            }
             if ($data->package_id != $request->package_id) {
                 $msgArray[] = " health packege";
             }
             $msgStr = implode(",", $msgArray);
             $msg .= $msgStr . ' has been updated.';
-
-
 
 //            if ($data->room_type_name != $roomRoom->room_no) {
 //                $msg = "Your room number updated successfully.";
@@ -779,9 +788,9 @@ class UsersController extends Controller {
             $data->resort_room_id = $request->resort_room_id;
             $data->resort_room_no = $roomRoom->room_no;
             $data->room_type_name = $roomType->name;
-            $check_in_date = Carbon::parse($request->check_in);
+
             $data->check_in = $check_in_date->format('Y-m-d H:i:s');
-            $check_out_date = Carbon::parse($request->check_out);
+
             $data->check_out = $check_out_date->format('Y-m-d H:i:s');
 //            $data->check_in_pin = rand(1111, 9999);
 //            $data->check_out_pin = rand(1111, 9999);
@@ -811,7 +820,7 @@ class UsersController extends Controller {
                         $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token, $this->notificationCount($user->id));
                     }
                 }
-                return redirect()->route('admin.users.booking-edit', $data->id)->with('status', $msg);
+                return redirect()->route('admin.users.booking-edit', $data->id)->with('status', "Booking has been updated successfully.");
             } else {
                 return redirect()->route('admin.users.booking-edit', $data->id)->withErrors("Something went be wrong.")->withInput();
             }

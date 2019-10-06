@@ -761,7 +761,7 @@ class UsersController extends Controller {
 
     public function bookingEdit(Request $request, $id) {
         $data = UserBookingDetail::find($id);
-//        dd($data->toArray());
+
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
                         'booking_source_name' => 'bail|required',
@@ -779,19 +779,37 @@ class UsersController extends Controller {
             $user = User::find($data->user_id);
             $roomType = RoomType::find($request->resort_room_type);
             $roomRoom = ResortRoom::find($request->resort_room_id);
-            $msg = "";
+            $msg = "Your";
             $flag = FALSE;
-            if ($data->room_type_name != $roomRoom->room_no) {
-                $msg = "Your room no. updated successfully.";
-                $flag = TRUE;
-            } else {
-                $msg = "Your booking updated successfully.";
-                $flag = FALSE;
-            }
+            $current_check_in_date = Carbon::parse($data->check_in);
+            $current_check_out_date = Carbon::parse($data->check_out);
+            $check_in_date = Carbon::parse($request->check_in);
+            $check_out_date = Carbon::parse($request->check_out);
 
-            if ($request->resort_id != $data->resort_id) {
-                Cart::where("user_id", $data->user_id)->delete();
+            $msgArray = [];
+            if ($request->booking_source_name != $data->source_name) {
+                $msgArray[] = " source name";
             }
+            if ($request->booking_source_id != $data->source_id) {
+                $msgArray[] = " source ID";
+            }
+            if ($data->room_type_name != $roomRoom->room_no) {
+                $flag = TRUE;
+                $msgArray[] = " room number";
+            }
+            if (!$current_check_in_date->eq($check_in_date)) {
+                $msgArray[] = " check In date";
+            }
+            if (!$current_check_out_date->eq($check_out_date)) {
+                $msgArray[] = " check Out date";
+            }
+            if ($data->package_id != $request->package_id) {
+                $msgArray[] = " health packege";
+            }
+            $msgStr = implode(",", $msgArray);
+            $msg .= $msgStr . ' has been updated.';
+
+
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
@@ -832,7 +850,7 @@ class UsersController extends Controller {
                         $this->androidBookingPushNotification("Booking Updated", $msg, $user->device_token, $this->notificationCount($user->id));
                     }
                 }
-                return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', $msg);
+                return redirect()->route('subadmin.users.booking-edit', $data->id)->with('status', "Booking has been updated successfully.");
             } else {
                 return redirect()->route('subadmin.users.booking-edit', $data->id)->withErrors("Something went be wrong.")->withInput();
             }
