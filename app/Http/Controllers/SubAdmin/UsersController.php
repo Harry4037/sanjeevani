@@ -806,8 +806,12 @@ class UsersController extends Controller {
             if ($data->package_id != $request->package_id) {
                 $msgArray[] = " health packege";
             }
-            $msgStr = implode(",", $msgArray);
-            $msg .= $msgStr . ' has been updated.';
+            if (!empty($msgArray)) {
+                $msgStr = implode(",", $msgArray);
+                $msg .= $msgStr . ' has been updated.';
+            } else {
+                $msg = '';
+            }
 
 
 //            $data->discount = $request->discount;
@@ -842,7 +846,7 @@ class UsersController extends Controller {
                         }
                     }
                 }
-                if ($user->device_token) {
+                if ($user->device_token && (strlen($msg) > 0)) {
                     $this->generateNotification($user->id, "Booking Updated", $msg, 5);
                     if ($flag) {
                         $this->androidPushNotification(3, "Booking Updated", $msg, $user->device_token, 123, 0);

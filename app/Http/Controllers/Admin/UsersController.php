@@ -765,13 +765,12 @@ class UsersController extends Controller {
             if ($data->package_id != $request->package_id) {
                 $msgArray[] = " health packege";
             }
-            if (empty($msgArray)) {
+            if (!empty($msgArray)) {
                 $msgStr = implode(",", $msgArray);
                 $msg .= $msgStr . ' has been updated.';
             } else {
                 $msg = '';
             }
-
 
 //            if ($data->room_type_name != $roomRoom->room_no) {
 //                $msg = "Your room number updated successfully.";
