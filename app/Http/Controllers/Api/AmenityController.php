@@ -316,6 +316,7 @@ class AmenityController extends Controller {
                 $bookingRequest->user_id = $request->user_id;
                 $bookingRequest->booking_date = $book_date->format('Y-m-d');
                 $bookingRequest->from = $request->from_time;
+                $bookingRequest->to = $request->to_time;
                 if ($bookingRequest->save()) {
                     $tokens = [];
                     $l = 0;
