@@ -22,7 +22,7 @@ class NotificationController extends Controller {
             'vendors/iCheck/icheck.min.js',
         ];
 
-        $users = User::where("is_active", 1)->where('user_type_id', '!=', 1)->get();
+        $users = User::where("is_active", 1)->where('user_type_id', '=', 3)->get();
         return view('admin.notification.index', [
             'users' => $users,
             'css' => $css,
