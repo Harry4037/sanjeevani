@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\ServiceRequest;
+use App\Models\User;
 
 class OrderRequestController extends Controller {
 
@@ -81,6 +82,21 @@ class OrderRequestController extends Controller {
             $sRequest->request_status_id = $request->seleted_status;
             $sRequest->staff_comment = "Not resolved";
             $sRequest->save();
+            if ($request->seleted_status == 1) {
+                $user = User::find($sRequest->user_id);
+                $service = Service::withTrashed()->find($sRequest->service_id);
+                if ($user->device_token) {
+                    $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is opened by admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
+                }
+            }
+            if ($request->seleted_status == 6) {
+                $user = User::find($sRequest->user_id);
+                $service = Service::withTrashed()->find($sRequest->service_id);
+                if ($user->device_token) {
+                    $this->androidPushNotification(3, "Service Request", "Your " . $service->name . " request is closed by admin", $user->device_token, 1, $sRequest->service_id, $this->notificationCount($user->id));
+                }
+            }
+
             return redirect()->route('admin.order-request.view', $id)->with("status", "Status updated successfully.");
         }
 
