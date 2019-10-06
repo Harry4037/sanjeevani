@@ -19,11 +19,15 @@ class OrderController extends Controller {
 
     public function orderList(Request $request) {
         try {
+            $o_status = $request->o_status;
             $offset = $request->get('start') ? $request->get('start') : 0;
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealOrder::query();
+            if ($o_status) {
+                $query->where("status", $o_status);
+            }
             $query->with([
                 "userDetail" => function($query) {
                     $query->select('id', 'user_name');
@@ -60,7 +64,7 @@ class OrderController extends Controller {
                     $stat = "Completed";
                 } elseif ($mealOrder->status == 5) {
                     $stat = "Rejected";
-                }else {
+                } else {
                     $stat = "Closed";
                 }
                 $dataArray[$key]['user_name'] = isset($mealOrder->userDetail->user_name) ? $mealOrder->userDetail->user_name : "";

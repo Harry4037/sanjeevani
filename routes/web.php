@@ -584,6 +584,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::prefix('order')->group(function() {
         Route::get('/', 'OrderController@index')->name('subadmin.order.index');
         Route::get('/list', 'OrderController@OrderList')->name('subadmin.order.list');
+        Route::get('/list/{o_status}', 'OrderController@OrderList')->name('subadmin.order.list-search');
         Route::match(['get', 'post'], '/view-detail/{id}', 'OrderController@viewDetail')->name('subadmin.order.view');
     });
     /**

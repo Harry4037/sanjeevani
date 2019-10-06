@@ -16,6 +16,24 @@
                 <table id="list" class="table table-striped table-bordered text-center">
                     <thead>
                         <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                <select class="form-control custom_search" id="o_status">
+                                    <option value="">--SELECT OPTION--</option>
+                                    <option value="1">NEW</option>
+                                    <option value="2">ACCEPTED BY STAFF</option>
+                                    <option value="3">UNDER APPROVAL</option>
+                                    <option value="4">COMPLETED</option>
+                                    <option value="5">REJECTED</option>
+                                </select>
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
                             <th>Sr.No.</th>
                             <th>User Name</th>
                             <th>Invoice Id</th>
@@ -35,35 +53,46 @@
 
 @section('script')
 <script>
+
+    var url = site_url + "/order/list";
+    var t = $('#list').DataTable({
+        lengthMenu: [[15, 25, 50], [15, 25, 50]],
+        searching: true,
+        processing: true,
+        serverSide: true,
+        stateSave: true,
+        language: {
+            'loadingRecords': '&nbsp;',
+            'processing': '<i class="fa fa-refresh fa-spin"></i>'
+        },
+        ajax: {
+            url: url,
+            error: function (xhr, error, thrown) {
+                showErrorMessage(error);
+            },
+        },
+        "columns": [
+            {"data": null,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {"data": "user_name", sortable: false},
+            {"data": "invoice_id", sortable: false},
+            {"data": "total_amount", sortable: false},
+            {"data": "status", sortable: false},
+            {"data": "action", sortable: false},
+        ]
+    });
+
     $(document).ready(function () {
-        var t = $('#list').DataTable({
-            lengthMenu: [[15, 25, 50], [15, 25, 50]],
-            searching: true,
-            processing: true,
-            serverSide: true,
-            stateSave: true,
-            language: {
-                'loadingRecords': '&nbsp;',
-                'processing': '<i class="fa fa-refresh fa-spin"></i>'
-            },
-            ajax: {
-                url: _baseUrl + "/sub-admin/order/list",
-                error: function (xhr, error, thrown) {
-                    showErrorMessage(error);
-                },
-            },
-            "columns": [
-                {"data": null,
-                    render: function (data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                },
-                {"data": "user_name", sortable: false},
-                {"data": "invoice_id", sortable: false},
-                {"data": "total_amount", sortable: false},
-                {"data": "status", sortable: false},
-                {"data": "action", sortable: false},
-            ]
+        $(document).on('keyup change clean', '.custom_search', function () {
+            var o_status = $("#o_status").val();
+
+            var new_url = url + "?";
+            new_url += "o_status=" + o_status;
+            var finalUri = new_url;
+            t.ajax.url(finalUri).load();
         });
     });
 </script>
