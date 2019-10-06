@@ -20,7 +20,6 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
                             <th>
                                 <select class="form-control custom_search" id="o_status">
                                     <option value="">--SELECT OPTION--</option>
