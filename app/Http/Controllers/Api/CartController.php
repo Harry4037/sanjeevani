@@ -147,7 +147,7 @@ class CartController extends Controller {
             if ($request->flag == 1) {
                 $msg = "Item added to cart.";
             } else {
-                $msg = "Item remover from cart.";
+                $msg = "Item removed from cart.";
             }
 
             if ($cart) {
@@ -262,7 +262,7 @@ class CartController extends Controller {
             $carts = Cart::where(["user_id" => $request->user_id])
                     ->get();
             $cartDataArray = [];
-            if ($carts) {
+            if ($carts->count() > 0) {
                 $total = 0;
                 $gst = 5;
                 foreach ($carts as $key => $cart) {
