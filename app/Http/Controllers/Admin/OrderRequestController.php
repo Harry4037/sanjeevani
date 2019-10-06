@@ -85,7 +85,7 @@ class OrderRequestController extends Controller {
             $sRequest->staff_comment = "Not resolved";
             $sRequest->save();
             if ($request->seleted_status == 1) {
-                $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
+                $resortUsers = UserBookingDetail::where("resort_id", $sRequest->resort_id)->pluck("user_id");
                 $user = User::find($sRequest->user_id);
                 $service = Service::withTrashed()->find($sRequest->service_id);
                 $this->generateNotification($user->id, "Service Opened", "Your " . $service->name . " request is opened by admin", 1);
