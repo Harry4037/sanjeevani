@@ -740,24 +740,25 @@ class UsersController extends Controller {
             $roomRoom = ResortRoom::find($request->resort_room_id);
             $msg = "Your ";
             $flag = FALSE;
+            $msgArray = [];
             if ($request->booking_source_name != $data->source_name) {
-                $msg .= " source name";
+                $msgArray[] = " source name";
             }
             if ($request->booking_source_id != $data->source_id) {
-                $msg .= " source ID";
+                $msgArray[] = " source ID";
             }
             if ($data->room_type_name != $roomRoom->room_no) {
                 $flag = TRUE;
-                $msg .= " room number";
+                $msgArray[] = " room number";
             }
             if ($data->package_id != $request->package_id) {
-                $msg .= " room number";
+                $msgArray[] = " health packege";
             }
+            $msgStr = implode(",", $msgArray);
+            $msg .= $msgStr . ' has been updated.';
 
-            $msg .= ' has been updated.';
 
 
-            
 //            if ($data->room_type_name != $roomRoom->room_no) {
 //                $msg = "Your room number updated successfully.";
 //                $flag = TRUE;
