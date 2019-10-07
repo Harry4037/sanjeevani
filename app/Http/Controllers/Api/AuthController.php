@@ -607,8 +607,12 @@ class AuthController extends Controller {
     public function logout(Request $request) {
         $user = User::find($request->user()->id);
         if ($user) {
-//            $user->device_token = '';
-            $user->save();
+            if ($user->user_type_id == 2) {
+                $user->device_token = '';
+                $user->device_type = '';
+                $user->device_id = '';
+                $user->save();
+            }
         }
         $request->user()->token()->revoke();
         return $this->sendSuccessResponse("logout successfully", (object) []);
