@@ -109,7 +109,7 @@ class Controller extends BaseController {
             $notificationBuilder->setBody($message)
                     ->setSound($sound)
                     ->setBadge($userNotificationCount);
-            if ($notificationType == 1 || $notificationType == 4) {
+            if ($notificationType == 1 || $notificationType == 2 || $notificationType == 3 || $notificationType == 4) {
                 $notificationBuilder->setClickAction("com.rindex.customer.OrdersRequest.OrdersRequestActivity");
             } else {
                 $notificationBuilder->setClickAction("com.rindex.customer.Notificaton.NotificationActivity");
