@@ -251,7 +251,7 @@ class Controller extends BaseController {
         $check_in = date("Y-m-d H:s:i", strtotime($checkIn));
         $check_out = date("Y-m-d H:s:i", strtotime($checkOut));
         $existingRecord = UserBookingDetail::where("user_id", $user_id)
-//                        ->where("resort_id", $resortId)
+                        ->where("is_cancelled", 0)
                         ->where(function($query) use($check_in, $check_out) {
                             $query->orWhere(function($query) use($check_in) {
                                 $query->where("check_in", "<=", $check_in)
@@ -277,7 +277,7 @@ class Controller extends BaseController {
             $currentDataTime = strtotime(date("d-m-Y H:i:s"));
             $checkInTime = strtotime($userBookingDetail->check_in);
             $checkOutTime = strtotime($userBookingDetail->check_out);
-            
+
             if ($currentDataTime > $checkOutTime) {
                 //
             } elseif ($currentDataTime < $checkInTime) {
