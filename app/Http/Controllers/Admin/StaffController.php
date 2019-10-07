@@ -57,26 +57,35 @@ class StaffController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = $this->user->query();
+            $query->with(['staff' => function($query) {
+                    $query->with('resortDetail');
+                }]);
             $query->where("user_type_id", "=", 2);
             if ($searchKeyword) {
                 $query->where(function($query) use($searchKeyword) {
-                    $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                    $query->whereHas('staff', function($query) use ($searchKeyword) {
+                        $query->whereHas('resortDetail', function($query) use ($searchKeyword) {
+                            $query->where("name", "LIKE", "%$searchKeyword%");
+                        });
+                    })->orWhere(function($query) use($searchKeyword) {
+                        $query->where("first_name", "LIKE", "%$searchKeyword%")->orWhere("email_id", "LIKE", "%$searchKeyword%")->orWhere("mobile_number", "LIKE", "%$searchKeyword%");
+                    });
                 });
             }
 
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
             $users = $query->take($limit)->offset($offset)->latest()->get();
-
+//            dd($users->toArray());
             $i = 0;
             $usersArray = [];
             foreach ($users as $user) {
-                $staffResort = UserBookingDetail::where("user_id", $user->id)->first();
+//                $staffResort = UserBookingDetail::where("user_id", $user->id)->first();
 
                 $usersArray[$i]['name'] = $user->user_name;
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
-                $usersArray[$i]['resort_name'] = isset($staffResort->resort->name) ? $staffResort->resort->name : 'N/A';
+                $usersArray[$i]['resort_name'] = isset($user->staff) ? $user->staff->resort ? $user->staff->resort->name : 'N/A' : 'N/A';
                 $usersArray[$i]['is_push_on'] = $user->is_push_on;
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
