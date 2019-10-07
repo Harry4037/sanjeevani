@@ -16,6 +16,7 @@ use App\Models\HealthcateProgram;
 use App\Models\NearbyPlaceImage;
 use App\Models\HealthcateProgramDay;
 use App\Models\Notification;
+use App\Models\Cart;
 
 class HomeController extends Controller {
 
@@ -51,6 +52,7 @@ class HomeController extends Controller {
       "user_type_id": 3,
       "no_of_rooms": "1",
       "notification_count": 0,
+      "cart_count": 0,
       "user_health_detail": null,
       "user_booking_detail": {
       "id": 43,
@@ -706,6 +708,8 @@ class HomeController extends Controller {
             $user['is_checked_in'] = $user->user_type_id == 4 ? false : isset($user->userBookingDetail->is_checked_in) && ($user->userBookingDetail->is_checked_in == 1) ? true : false;
 
             $notification = Notification::where(["user_id" => $request->user_id, "is_view" => 0])->count();
+            $cartCount = Cart::where(["user_id" => $request->user_id])->count();
+            $user['cart_count'] = $cartCount;
             $user['notification_count'] = $notification;
 
             $resortId = isset($user->userBookingDetail->resort_id) ? $user->userBookingDetail->resort_id : 0;
