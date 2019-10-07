@@ -608,9 +608,9 @@ class AuthController extends Controller {
         $user = User::find($request->user()->id);
         if ($user) {
             if ($user->user_type_id == 2) {
-                $user->device_token = '';
-                $user->device_type = '';
-                $user->device_id = '';
+                $user->device_token = NULL;
+                $user->device_type = NULL;
+                $user->device_id = NULL;
                 $user->save();
             }
         }
