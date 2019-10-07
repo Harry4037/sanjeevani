@@ -161,6 +161,7 @@
             timePicker: true,
             singleClasses: "picker_2",
             startDate: new Date("{{ $data->check_in }}"),
+            minDate: new Date(),
             locale: {
             format: 'YYYY/MM/DD hh:mm:ss A'
             }

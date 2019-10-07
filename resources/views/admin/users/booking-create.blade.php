@@ -122,6 +122,8 @@
         $('#check_in').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
+            startDate: new Date(),
+            minDate: new Date(),
             singleClasses: "picker_2",
             locale: {
                 format: 'YYYY/M/DD hh:mm:ss A'
