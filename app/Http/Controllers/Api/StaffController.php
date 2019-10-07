@@ -1931,8 +1931,12 @@ class StaffController extends Controller {
         }
 
         if ($user->device_token) {
-            $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
             $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
+            if ($this->isCurrentBooking($user->id)) {
+                $this->androidPushNotification(3, "Booking Created", "Your booking created successfully", $user->device_token, 123, 0);
+            } else {
+                $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token);
+            }
         }
 
 //        $this->sendRegistration($user->mobile_number, $user->user_name);
