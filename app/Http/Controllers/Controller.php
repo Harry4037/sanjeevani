@@ -270,4 +270,24 @@ class Controller extends BaseController {
         return count($existingRecord) > 0 ? count($existingRecord) : 0;
     }
 
+    public function isCurrentBooking($userId) {
+        $userBookingDetails = UserBookingDetail::where(["user_id" => $userId, "is_cancelled" => 0])->get();
+
+        foreach ($userBookingDetails as $i => $userBookingDetail) {
+            $currentDataTime = strtotime(date("d-m-Y H:i:s"));
+            $checkInTime = strtotime($userBookingDetail->check_in);
+            $checkOutTime = strtotime($userBookingDetail->check_out);
+            
+            if ($currentDataTime > $checkOutTime) {
+                //
+            } elseif ($currentDataTime < $checkInTime) {
+                //
+            } else {
+                return TRUE;
+                break;
+            }
+        }
+        return FALSE;
+    }
+
 }
