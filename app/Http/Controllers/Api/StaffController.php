@@ -1897,6 +1897,7 @@ class StaffController extends Controller {
             return $this->sendErrorResponse("Booking already exist with these date's.", (object) []);
         }
         $user = User::find($request->user_id);
+        $isCurrentBooking = $this->isCurrentBooking($user->id);
         $roomType = RoomType::find($request->resort_room_type_id);
         $room = ResortRoom::find($request->resort_room_id);
         $userBooking = new UserBookingDetail();
@@ -1932,7 +1933,7 @@ class StaffController extends Controller {
 
         if ($user->device_token) {
             $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
-            if ($this->isCurrentBooking($user->id)) {
+            if ($isCurrentBooking) {
                 $this->androidPushNotification(3, "Booking Created", "Your booking created successfully", $user->device_token, 123, 0);
             } else {
                 $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token, $this->notificationCount($user->id));

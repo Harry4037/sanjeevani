@@ -640,6 +640,7 @@ class UsersController extends Controller {
             }
 
             $user = User::find($user_id);
+            $isCurrentBooking = $this->isCurrentBooking($user->id);
             if (!$user) {
                 return redirect()->route('admin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
             }
@@ -689,7 +690,7 @@ class UsersController extends Controller {
                 }
                 $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
                 if ($user->device_token) {
-                    if ($this->isCurrentBooking($user->id)) {
+                    if ($isCurrentBooking) {
                         $this->androidPushNotification(3, "Booking Created", "Your booking created successfully", $user->device_token, 123, 0);
                     } else {
                         $this->androidBookingPushNotification("Booking Created", "Your booking created successfully", $user->device_token, $this->notificationCount($user->id));
