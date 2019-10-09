@@ -15,6 +15,7 @@ use LaravelFCM\Facades\FCM;
 use App\Models\UserBookingDetail;
 use App\Models\OauthAccessToken;
 use App\Models\User;
+use Carbon\Carbon;
 
 class Controller extends BaseController {
 
@@ -248,8 +249,10 @@ class Controller extends BaseController {
     }
 
     public function checkUserbookingExist($checkIn, $checkOut, $user_id, $resortId) {
-        $check_in = date("Y-m-d H:s:i", strtotime($checkIn));
-        $check_out = date("Y-m-d H:s:i", strtotime($checkOut));
+        $check_in = Carbon::parse($checkIn)->format('Y-m-d H:i:s');
+        $check_out = Carbon::parse($check_out)->format('Y-m-d H:i:s');
+//        $check_in = date("Y-m-d H:s:i", strtotime($checkIn));
+//        $check_out = date("Y-m-d H:s:i", strtotime($checkOut));
         $existingRecord = UserBookingDetail::where("user_id", $user_id)
                         ->where("is_cancelled", 0)
                         ->where(function($query) use($check_in, $check_out) {
