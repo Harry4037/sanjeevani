@@ -174,6 +174,11 @@ class CartController extends Controller {
             $cart->user_id = $request->user_id;
             $cart->meal_package_id = $request->meal_package_id ? $request->meal_package_id : 0;
             $cart->meal_item_id = $request->meal_item_id ? $request->meal_item_id : 0;
+            if($request->type == 1){
+                $cart->resort_id = $mealDetail->resort_id;
+            }else{
+                $cart->resort_id = $mealPackageDetail->resort_id;
+            }
             if ($cart->save()) {
                 $data['cart_count'] = Cart::where("user_id", $request->user_id)->count();
                 $data['quantity_count'] = $cart->quantity;

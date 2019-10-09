@@ -791,9 +791,6 @@ class UsersController extends Controller {
 //                $flag = FALSE;
 //            }
 
-            if ($request->resort_id != $data->resort_id) {
-                Cart::where("user_id", $data->user_id)->delete();
-            }
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
