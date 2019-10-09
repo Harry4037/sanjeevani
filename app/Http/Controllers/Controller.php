@@ -250,7 +250,7 @@ class Controller extends BaseController {
 
     public function checkUserbookingExist($checkIn, $checkOut, $user_id, $resortId) {
         $check_in = Carbon::parse($checkIn)->format('Y-m-d H:i:s');
-        $check_out = Carbon::parse($check_out)->format('Y-m-d H:i:s');
+        $check_out = Carbon::parse($checkOut)->format('Y-m-d H:i:s');
 //        $check_in = date("Y-m-d H:s:i", strtotime($checkIn));
 //        $check_out = date("Y-m-d H:s:i", strtotime($checkOut));
         $existingRecord = UserBookingDetail::where("user_id", $user_id)
