@@ -207,8 +207,12 @@ class UserController extends Controller {
                     if ($userBookingDetail) {
                         $userBookingDetail->is_checked_in = 1;
                         $userBookingDetail->save();
+                        Cart::where("user_id", $userBookingDetail->user_id)->where("resort_id", "!=", $userBookingDetail->resort_id)->delete();
+                    } else {
+                        Cart::where(["user_id" => $userBookingDetail->user_id])->delete();
                     }
                     $user['is_checked_in'] = true;
+                    $user['cart_count'] = Cart::where("user_id", $user->id)->count();
                     Cart::where('user_id', $user->id)->delete();
                     return $this->sendSuccessResponse("User check-in successfully.", $user);
                 } else {
