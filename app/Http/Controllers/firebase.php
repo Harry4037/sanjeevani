@@ -24,8 +24,9 @@ class firebase {
     }
 
     public function login($user) {
+        $user_id = "$user->id";
         $additionalClaims = ['username' => $user->user_name, 'email' => $user->email_id];
-        $customToken = $this->firebase->getAuth()->createCustomToken($user->id, $additionalClaims);
+        $customToken = $this->firebase->getAuth()->createCustomToken($user_id, $additionalClaims);
         return (string) $customToken;
     }
 
