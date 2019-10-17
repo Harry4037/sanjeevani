@@ -682,19 +682,19 @@ class MealController extends Controller {
                     $resortId = $defaultResort->id;
                 }
 
-                $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request, $resortId) {
-                            $query->where('resort_id', $resortId);
+                $mealCategories = Mealtype::select('id', 'name')->where("is_active", 1)->whereHas('menuItems', function($query) use($request, $resortId) {
+                            $query->where(["is_active" => 1, 'resort_id' => $resortId]);
                         })->with([
                             'menuItems' => function ($query) use($request, $resortId) {
-                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $resortId);
+                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where(["is_active" => 1, 'resort_id' => $resortId]);
                             }
                         ])->get();
             } else {
-                $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
-                            $query->where('resort_id', $request->resort_id);
+                $mealCategories = Mealtype::select('id', 'name')->where("is_active", 1)->whereHas('menuItems', function($query) use($request) {
+                            $query->where(["is_active" => 1, 'resort_id' => $request->resort_id]);
                         })->with([
                             'menuItems' => function ($query) use($request) {
-                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where('resort_id', $request->resort_id);
+                                $query->select('id', 'description', 'name', 'category', 'image_name as banner_image_url', 'meal_type_id', 'price')->where(["is_active" => 1, 'resort_id' => $request->resort_id]);
                             }
                         ])->get();
             }
