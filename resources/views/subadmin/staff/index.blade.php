@@ -57,13 +57,13 @@
                 {"data": "mobileno", sortable: false},
                 {"data": "is_push_on", sortable: false,
                     render: function (data, type, row, meta) {
-                        var status = '';
-                        if (row['is_push_on'] == 1) {
-                            status = "<button type='button' class='btn btn-xs btn-round btn-success'>On Duty</button>";
-                        } else {
-                            status = "<button type='button' class='btn btn-xs btn-round btn-danger'>Off Duty</button>";
-                        }
-                        return status;
+//                        var status = '';
+//                        if (row['is_push_on'] == 1) {
+//                            status = "<button type='button' class='btn btn-xs btn-round btn-success'>On Duty</button>";
+//                        } else {
+//                            status = "<button type='button' class='btn btn-xs btn-round btn-danger'>Off Duty</button>";
+//                        }
+                        return row['is_push_on'];
                     }
                 },
 //                {"data": "resort_name"},
@@ -110,6 +110,36 @@
                         setTimeout(function () {
                             $(".msg").fadeOut();
                         }, 5000);
+                    }
+                }
+            });
+
+        });
+
+        $(document).on("click", ".duty_status", function () {
+
+            var record_id = this.id;
+            var th = $(this);
+            var status = th.attr('data-status');
+            var update_status = (status == '1') ? 0 : 1;
+            $.ajax({
+                url: _baseUrl + '/sub-admin/staff/staff-duty-status',
+                type: 'post',
+                data: {status: update_status, record_id: record_id},
+                dataType: 'json',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+
+                    if (res.status)
+                    {
+                        th.attr('data-status', res.data.status);
+                        showSuccessMessage(res.data.message);
+                        $(".overlay").hide();
+                    } else {
+                        showErrorMessage(res.message);
+                        $(".overlay").hide();
                     }
                 }
             });

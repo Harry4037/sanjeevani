@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Validator;
 use App\Models\MealType;
+use App\Models\Resort;
+use Illuminate\Validation\Rule;
 
 class MealcategoryController extends Controller {
 
@@ -28,7 +30,7 @@ class MealcategoryController extends Controller {
             $limit = $request->get('length');
             $searchKeyword = $request->get('search')['value'];
 
-            $query = MealType::query();
+            $query = MealType::query()->with('resort');
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -39,6 +41,7 @@ class MealcategoryController extends Controller {
             $mealtypeArray = [];
             foreach ($mealTypes as $key => $mealType) {
                 $mealtypeArray[$key]['name'] = $mealType->name;
+                $mealtypeArray[$key]['resort_name'] = $mealType->resort ? $mealType->resort->name : '';
                 $checked_status = $mealType->is_active ? "checked" : '';
                 $mealtypeArray[$key]['status'] = "<label class='switch'><input  type='checkbox' class='mealcategory_status' id=" . $mealType->id . " data-status=" . $mealType->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $mealtypeArray[$key]['action'] = '<a href="' . route('admin.meal-category.edit', $mealType->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -58,10 +61,17 @@ class MealcategoryController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'name' => 'bail|required',
+                            'name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('meal_types')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->name, 'resort_id' => $request->resort_id])
+                                                            ->whereNull('deleted_at');
+                                        }),
+                            ],
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('admin.meal-category.index')->withErrors($validator)->withInput();
+                    return redirect()->route('admin.meal-category.add')->withErrors($validator)->withInput();
                 }
 
                 $existMeal = MealType::where(["name" => $request->name])->first();
@@ -71,13 +81,17 @@ class MealcategoryController extends Controller {
                 $mealType = new MealType();
 
                 $mealType->name = $request->name;
+                $mealType->resort_id = $request->resort_id;
                 if ($mealType->save()) {
                     return redirect()->route('admin.meal-category.index')->with('status', 'Meal Category has been added successfully.');
                 } else {
                     return redirect()->route('admin.meal-category.index')->with('error', 'Something went be wrong.');
                 }
             }
-            return view('admin.meal-category.create');
+            $resorts = Resort::where("is_active", 1)->get();
+            return view('admin.meal-category.create', [
+                'resorts' => $resorts
+            ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.meal-category.index')->with('error', $ex->getMessage());
         }
@@ -105,21 +119,30 @@ class MealcategoryController extends Controller {
         $data = MealType::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'name' => 'bail|required',
+                        'name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('meal_types')->ignore($request->id)->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->name, 'resort_id' => $request->resort_id])
+                                                        ->whereNull('deleted_at');
+                                    }),
+                        ],
             ]);
             if ($validator->fails()) {
-                return redirect()->route('admin.meal-category.index')->withErrors($validator)->withInput();
+                return redirect()->route('admin.meal-category.edit', $data->id)->withErrors($validator)->withInput();
             }
             $data->name = $request->name;
+            $data->resort_id = $request->resort_id;
             if ($data->save()) {
                 return redirect()->route('admin.meal-category.index')->with('status', 'Meal category has been updated successfully.');
             } else {
                 return redirect()->route('admin.meal-category.index')->with('error', 'Something went be wrong.');
             }
         }
-
+        $resorts = Resort::where("is_active", 1)->get();
         return view('admin.meal-category.edit', [
             'data' => $data,
+            'resorts' => $resorts,
         ]);
     }
 
@@ -130,6 +153,13 @@ class MealcategoryController extends Controller {
         } else {
             return ['status' => false, "message" => "Something went be wrong."];
         }
+    }
+
+    public function getResortMealCategory(Request $request, $id) {
+        $categories = MealType::where(["is_active" => 1, "resort_id" => $id])->get();
+        return view('admin.meal-category.resort-category', [
+            'categories' => $categories
+        ]);
     }
 
 }

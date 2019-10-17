@@ -111,7 +111,7 @@ class MealpackageController extends Controller {
             $js = [
                 'vendors/iCheck/icheck.min.js',
             ];
-            $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+            $mealCategories = Mealtype::select('id', 'name')->where("resort_id", $request->get("subadminResort"))->whereHas('menuItems', function($query) use($request) {
                         $query->where('resort_id', $request->get("subadminResort"));
                     })->with([
                         'menuItems' => function ($query) use($request) {
@@ -185,7 +185,7 @@ class MealpackageController extends Controller {
                 }
             }
 
-            $mealCategories = Mealtype::select('id', 'name')->whereHas('menuItems', function($query) use($request) {
+            $mealCategories = Mealtype::select('id', 'name')->where("resort_id", $request->get("subadminResort"))->whereHas('menuItems', function($query) use($request) {
                         $query->where('resort_id', $request->get("subadminResort"));
                     })->with([
                         'menuItems' => function ($query) use($request) {

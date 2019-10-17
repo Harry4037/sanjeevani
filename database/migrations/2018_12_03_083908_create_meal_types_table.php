@@ -16,6 +16,7 @@ class CreateMealTypesTable extends Migration {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->tinyInteger('is_active')->default(1);
+            $table->bigInteger('resort_id')->default(0);
             $table->bigInteger('domain_id')->default(0);
             $table->string('created_by')->default(1);
             $table->string('updated_by')->default(1);

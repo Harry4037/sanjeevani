@@ -29,6 +29,7 @@ class MealcategoryController extends Controller {
             $searchKeyword = $request->get('search')['value'];
 
             $query = MealType::query();
+            $query->where("resort_id", $request->get("subadminResort"));
             if ($searchKeyword) {
                 $query->where("name", "LIKE", "%$searchKeyword%");
             }
@@ -70,6 +71,7 @@ class MealcategoryController extends Controller {
                 $mealType = new MealType();
 
                 $mealType->name = $request->name;
+                $mealType->resort_id = $request->get("subadminResort");
                 if ($mealType->save()) {
                     return redirect()->route('subadmin.meal-category.index')->with('status', 'Meal Category has been added successfully.');
                 } else {
@@ -108,6 +110,7 @@ class MealcategoryController extends Controller {
                 return redirect()->route('subadmin.meal-category.index')->withErrors($validator)->withInput();
             }
             $data->name = $request->name;
+//            $data->resort_id = $request->get("subadminResort");
             if ($data->save()) {
                 return redirect()->route('subadmin.meal-category.index')->with('status', 'Meal category has been updated successfully.');
             } else {

@@ -106,7 +106,7 @@ class MealController extends Controller {
                 'vendors/bootstrap-daterangepicker/daterangepicker.js',
                 'vendors/dropzone/dist/dropzone.js',
             ];
-            $mealCategories = MealType::where("is_active", 1)->get();
+            $mealCategories = MealType::where(["is_active" => 1, "resort_id" => $request->get("subadminResort")])->get();
             return view('subadmin.meal.create', [
                 'js' => $js,
                 'css' => $css,
@@ -167,7 +167,7 @@ class MealController extends Controller {
                 return redirect()->route('subadmin.meal.index')->with('error', 'Something went be wrong.');
             }
         }
-        $mealCategories = MealType::where("is_active", 1)->get();
+        $mealCategories = MealType::where(["is_active" => 1, "resort_id" => $request->get("subadminResort")])->get();
         return view('subadmin.meal.edit', [
             'mealCategories' => $mealCategories,
             'data' => $data

@@ -10,10 +10,13 @@ class MealType extends Model {
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    
-    public function menuItems()
-    {
-        return $this->hasMany('App\Models\MealItem','meal_type_id');
+
+    public function menuItems() {
+        return $this->hasMany('App\Models\MealItem', 'meal_type_id');
+    }
+
+    public function resort() {
+        return $this->belongsTo('App\Models\Resort', 'resort_id');
     }
 
 }

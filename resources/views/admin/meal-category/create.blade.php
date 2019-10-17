@@ -15,6 +15,19 @@
                 <form class="form-horizontal form-label-left" action="{{ route('admin.meal-category.add') }}" method="post" id="addMealcategoryForm">
                     @csrf
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Resort*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control" id="resort_id" name="resort_id">
+                                <option value="">Select Option</option>
+                                @if($resorts)
+                                @foreach($resorts as $resort)
+                                <option value="{{ $resort->id }}">{{ $resort->name }}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Category Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <input value="{{ old('name') }}" type="text" class="form-control" name="name" id="name" placeholder="Category Name">

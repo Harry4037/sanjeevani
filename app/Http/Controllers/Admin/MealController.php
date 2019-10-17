@@ -111,12 +111,12 @@ class MealController extends Controller {
                 'vendors/dropzone/dist/dropzone.js',
             ];
             $resorts = Resort::where("is_active", 1)->get();
-            $mealCategories = MealType::where("is_active", 1)->get();
+//            $mealCategories = MealType::where("is_active", 1)->get();
             return view('admin.meal.create', [
                 'js' => $js,
                 'css' => $css,
                 'resorts' => $resorts,
-                'mealCategories' => $mealCategories,
+//                'mealCategories' => $mealCategories,
             ]);
         } catch (\Exception $ex) {
             return redirect()->route('admin.meal.index')->with('error', $ex->getMessage());
@@ -175,7 +175,7 @@ class MealController extends Controller {
             }
         }
         $resorts = Resort::where("is_active", 1)->get();
-        $mealCategories = MealType::where("is_active", 1)->get();
+        $mealCategories = MealType::where(["resort_id" => $data->resort_id, "is_active" => 1])->get();
         return view('admin.meal.edit', [
             'resorts' => $resorts,
             'mealCategories' => $mealCategories,

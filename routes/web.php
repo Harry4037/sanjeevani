@@ -117,6 +117,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::get('/staff-detail/{id}', 'StaffController@viewUser')->name('admin.staff.detail');
         Route::match(['get', 'post'], '/edit/{id}', 'StaffController@editUser')->name('admin.staff.edit');
         Route::post('/amenity-list', 'StaffController@getAmenities')->name('admin.staff.amenity-list');
+        Route::post('/staff-duty-status', 'StaffController@updateUserDutyStatus')->name('admin.staff.duty-status');
     });
     /**
      * Sub-Admin Management
@@ -268,6 +269,7 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
         Route::post('/update-status', 'MealcategoryController@updateStatus')->name('admin.meal-category.status-update');
         Route::match(['get', 'post'], '/edit/{id}', 'MealcategoryController@editMealcategory')->name('admin.meal-category.edit');
         Route::post('/delete', 'MealcategoryController@deleteMealcategory')->name('admin.meal-category.delete');
+        Route::get('/resort-meal-category/{id}', 'MealcategoryController@getResortMealCategory')->name('admin.meal-category.resort');
     });
 
     /**
@@ -417,6 +419,7 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
         Route::get('/staff-detail/{id}', 'StaffController@viewUser')->name('subadmin.staff.detail');
         Route::match(['get', 'post'], '/edit/{id}', 'StaffController@editUser')->name('subadmin.staff.edit');
         Route::post('/amenity-list', 'StaffController@getAmenities')->name('subadmin.staff.amenity-list');
+        Route::post('/staff-duty-status', 'StaffController@updateUserDutyStatus')->name('admin.staff.duty-status');
     });
 
     /**

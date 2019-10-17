@@ -144,6 +144,22 @@
             },
         });
 
+        $(document).on('change', '#resort_id', function () {
+            var resort_id = $("#resort_id :selected").val();
+            $.ajax({
+                url: _baseUrl + '/admin/meal-category/resort-meal-category/' + resort_id,
+                type: 'get',
+                dataType: 'html',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+                    $("#meal_category_id").html(res);
+                    $(".overlay").hide();
+                }
+            });
+        });
+
     });
 </script>
 @endsection

@@ -86,7 +86,8 @@ class StaffController extends Controller {
                 $usersArray[$i]['email'] = $user->email_id;
                 $usersArray[$i]['mobileno'] = $user->mobile_number;
                 $usersArray[$i]['resort_name'] = isset($user->staff) ? $user->staff->resort ? $user->staff->resort->name : 'N/A' : 'N/A';
-                $usersArray[$i]['is_push_on'] = $user->is_push_on;
+                $duty_status = $user->is_push_on ? "checked" : '';
+                $usersArray[$i]['is_push_on'] = "<label class='switch'><input  type='checkbox' class='duty_status' id=" . $user->id . " data-status=" . $user->is_push_on . " " . $duty_status . "><span class='slider round'></span></label>";
                 $checked_status = $user->is_active ? "checked" : '';
                 $usersArray[$i]['status'] = "<label class='switch'><input  type='checkbox' class='user_status' id=" . $user->id . " data-status=" . $user->is_active . " " . $checked_status . "><span class='slider round'></span></label>";
                 $usersArray[$i]['view-deatil'] = '<a class="btn btn-info btn-xs" href="' . route('admin.staff.edit', ['id' => $user->id]) . '"><i class="fa fa-pencil"></i>Edit</a>';
@@ -323,6 +324,24 @@ class StaffController extends Controller {
             }
         } catch (Exception $ex) {
             dd($ex);
+        }
+    }
+
+    public function updateUserDutyStatus(Request $request) {
+        try {
+            if ($request->isMethod('post')) {
+                $user = $this->user->findOrFail($request->record_id);
+                $user->is_push_on = $request->status;
+                if ($user->save()) {
+                    return ['status' => true, 'data' => ["status" => $request->status, "message" => "Duty Status updated successfully"]];
+                } else {
+                    return ['status' => false, "message" => "Something went be wrong."];
+                }
+            } else {
+                return ['status' => false, "message" => "Method not allowed."];
+            }
+        } catch (\Exception $e) {
+            return ['status' => false, "message" => $e->getMessage()];
         }
     }
 

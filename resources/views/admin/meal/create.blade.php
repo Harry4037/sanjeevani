@@ -50,11 +50,6 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control" id="meal_category_id" name="meal_category_id">
                                 <option value="">Select option</option>
-                                @if($mealCategories)
-                                @foreach($mealCategories as $mealCategory)
-                                <option value="{{ $mealCategory->id }}">{{ $mealCategory->name }}</option>
-                                @endforeach
-                                @endif
                             </select>
                         </div>
                     </div>
@@ -127,6 +122,21 @@
             }
         });
 
+        $(document).on('change', '#resort_id', function () {
+            var resort_id = $("#resort_id :selected").val();
+            $.ajax({
+                url: _baseUrl + '/admin/meal-category/resort-meal-category/' + resort_id,
+                type: 'get',
+                dataType: 'html',
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
+                success: function (res) {
+                    $("#meal_category_id").html(res);
+                    $(".overlay").hide();
+                }
+            });
+        });
 
     });
 </script>
