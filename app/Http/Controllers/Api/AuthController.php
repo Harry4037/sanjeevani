@@ -110,7 +110,7 @@ class AuthController extends Controller {
                         return $this->sendInactiveAccountResponse();
                     }
                     $OTP = rand(1000, 9999);
-                    $this->sendOtp($request->mobile_number, $OTP, $key = "GHOZEKphzT/");
+                    $this->sendOtp($request->mobile_number, $OTP, env('SMS_STAFF_KEY', "GHOZEKphzT/"));
 
                     $userExist->otp = $OTP;
                     $userExist->password = bcrypt($OTP);
@@ -134,7 +134,7 @@ class AuthController extends Controller {
                     ]);
                     if ($user->save()) {
 
-                        $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
+                        $this->sendOtp($request->mobile_number, $OTP, env('SMS_CUSTOMER_KEY', "ftG8wwUM+Sm"));
                         if ($request->email_id) {
                             Mail::to($request->email_id)->send(new LoginOtp($OTP));
                         }
@@ -151,7 +151,7 @@ class AuthController extends Controller {
 
                     $userExist->password = bcrypt($OTP);
                     if ($userExist->save()) {
-                        $this->sendOtp($request->mobile_number, $OTP, $key = "ftG8wwUM+Sm");
+                        $this->sendOtp($request->mobile_number, $OTP, env('SMS_CUSTOMER_KEY', "ftG8wwUM+Sm"));
                         if ((strlen($userExist->email_id) > 0) || (strlen($request->email_id) > 0)) {
                             if (strlen($userExist->email_id) == 0 || ($userExist->email_id == "")) {
                                 $userExist->email_id = $request->email_id;
