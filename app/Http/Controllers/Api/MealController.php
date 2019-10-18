@@ -648,9 +648,11 @@ class MealController extends Controller {
                 foreach ($mealPackages as $key => $mealPackage) {
                     $userCartPackage = Cart::where(["user_id" => $request->user_id, "meal_package_id" => $mealPackage->id])->first();
                     $mealPackageItems = MealPackageItem::where(["meal_package_id" => $mealPackage->id])
-                            ->with(["mealItem" => function($query) {
-                                    $query->withTrashed();
-                                }])
+                            ->with(["mealItem"
+//                                => function($query) {
+//                                    $query->withTrashed();
+//                                }
+                                ])
                             ->get();
                     $packageData[$key]['id'] = $mealPackage->id;
                     $packageData[$key]['name'] = $mealPackage->name;
