@@ -59,15 +59,19 @@ class MealcategoryController extends Controller {
             if ($request->isMethod("post")) {
 
                 $validator = Validator::make($request->all(), [
-                            'name' => 'bail|required',
+                            'name' => [
+                                'bail',
+                                'required',
+                                Rule::unique('meal_types')->where(function ($query) use($request) {
+                                            return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")])
+                                                            ->whereNull('deleted_at');
+                                        }),
+                            ],
                 ]);
                 if ($validator->fails()) {
-                    return redirect()->route('subadmin.meal-category.index')->withErrors($validator)->withInput();
+                    return redirect()->route('subadmin.meal-category.add')->withErrors($validator)->withInput();
                 }
-                $existMeal = MealType::where(["name" => $request->name])->first();
-                if ($existMeal) {
-                    return redirect()->route('subadmin.meal-category.add')->with('error', 'Meal category already exist with these details.')->withInput();
-                }
+
                 $mealType = new MealType();
 
                 $mealType->name = $request->name;
@@ -104,10 +108,17 @@ class MealcategoryController extends Controller {
         $data = MealType::find($request->id);
         if ($request->isMethod("post")) {
             $validator = Validator::make($request->all(), [
-                        'name' => 'bail|required',
+                        'name' => [
+                            'bail',
+                            'required',
+                            Rule::unique('meal_types')->where(function ($query) use($request) {
+                                        return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")])
+                                                        ->whereNull('deleted_at');
+                                    }),
+                        ],
             ]);
             if ($validator->fails()) {
-                return redirect()->route('subadmin.meal-category.index')->withErrors($validator)->withInput();
+                return redirect()->route('subadmin.meal-category.edit', $data->id)->withErrors($validator)->withInput();
             }
             $data->name = $request->name;
 //            $data->resort_id = $request->get("subadminResort");

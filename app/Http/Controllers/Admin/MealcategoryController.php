@@ -74,10 +74,6 @@ class MealcategoryController extends Controller {
                     return redirect()->route('admin.meal-category.add')->withErrors($validator)->withInput();
                 }
 
-                $existMeal = MealType::where(["name" => $request->name])->first();
-                if ($existMeal) {
-                    return redirect()->route('admin.meal-category.add')->with('error', 'Meal category already exist with these details.')->withInput();
-                }
                 $mealType = new MealType();
 
                 $mealType->name = $request->name;
