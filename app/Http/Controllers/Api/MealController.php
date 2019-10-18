@@ -652,7 +652,7 @@ class MealController extends Controller {
 //                                => function($query) {
 //                                    $query->withTrashed();
 //                                }
-                                ])
+                            ])
                             ->get();
                     $packageData[$key]['id'] = $mealPackage->id;
                     $packageData[$key]['name'] = $mealPackage->name;
@@ -660,13 +660,17 @@ class MealController extends Controller {
                     $packageData[$key]['price'] = $mealPackage->price;
                     $packageData[$key]['quantity_count'] = isset($userCartPackage->quantity) && $userCartPackage->quantity ? $userCartPackage->quantity : 0;
                     if (count($mealPackageItems) > 0) {
+                        $g = 0;
                         foreach ($mealPackageItems as $k => $mealPackageItem) {
-                            $packageData[$key]['meal_items'][$k]['id'] = $mealPackageItem->id;
-                            $packageData[$key]['meal_items'][$k]['description'] = $mealPackageItem->description;
-                            $packageData[$key]['meal_items'][$k]['category'] = $mealPackageItem->mealItem->category;
-                            $packageData[$key]['meal_items'][$k]['name'] = isset($mealPackageItem->mealItem->name) ? $mealPackageItem->mealItem->name : "";
-                            $packageData[$key]['meal_items'][$k]['image_url'] = isset($mealPackageItem->mealItem->image_name) ? $mealPackageItem->mealItem->image_name : "";
-                            $packageData[$key]['meal_items'][$k]['price'] = isset($mealPackageItem->mealItem->price) ? $mealPackageItem->mealItem->price : "";
+                            if ($mealPackageItem->mealItem) {
+                                $packageData[$key]['meal_items'][$g]['id'] = $mealPackageItem->id;
+                                $packageData[$key]['meal_items'][$g]['description'] = $mealPackageItem->description;
+                                $packageData[$key]['meal_items'][$g]['category'] = $mealPackageItem->mealItem->category;
+                                $packageData[$key]['meal_items'][$g]['name'] = isset($mealPackageItem->mealItem->name) ? $mealPackageItem->mealItem->name : "";
+                                $packageData[$key]['meal_items'][$g]['image_url'] = isset($mealPackageItem->mealItem->image_name) ? $mealPackageItem->mealItem->image_name : "";
+                                $packageData[$key]['meal_items'][$g]['price'] = isset($mealPackageItem->mealItem->price) ? $mealPackageItem->mealItem->price : "";
+                                $g++;
+                            }
                         }
                     } else {
                         $packageData[$key]['meal_items'] = [];
