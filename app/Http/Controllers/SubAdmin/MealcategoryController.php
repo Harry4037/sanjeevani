@@ -112,7 +112,7 @@ class MealcategoryController extends Controller {
                         'name' => [
                             'bail',
                             'required',
-                            Rule::unique('meal_types')->where(function ($query) use($request) {
+                            Rule::unique('meal_types')->ignore($data->id)->where(function ($query) use($request) {
                                         return $query->where(['name' => $request->name, 'resort_id' => $request->get("subadminResort")])
                                                         ->whereNull('deleted_at');
                                     }),
