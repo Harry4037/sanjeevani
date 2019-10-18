@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Validator;
 use App\Models\MealType;
+use Illuminate\Validation\Rule;
 
 class MealcategoryController extends Controller {
 
