@@ -32,7 +32,9 @@ class MealcategoryController extends Controller {
 
             $query = MealType::query()->with('resort');
             if ($searchKeyword) {
-                $query->where("name", "LIKE", "%$searchKeyword%");
+                $query->whereHas("resort", function($query) use($searchKeyword) {
+                    $query->where("name", "LIKE", "%$searchKeyword%");
+                })->orWhere("name", "LIKE", "%$searchKeyword%");
             }
             $data['recordsTotal'] = $query->count();
             $data['recordsFiltered'] = $query->count();
