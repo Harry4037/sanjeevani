@@ -28,6 +28,8 @@ Route::namespace("Api")->group(function () {
     }
 
 
+    Route::get('duty-status', 'StaffController@dutyStatus');
+
     Route::get('user-counts', 'UserController@userCounts');
 
     Route::get('get-checkin-detail', 'UserController@getCheckInDetail');

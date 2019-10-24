@@ -1945,4 +1945,59 @@ class StaffController extends Controller {
         return $this->sendSuccessResponse("User booking created successfully.", (object) []);
     }
 
+    /**
+     * @api {get} /api/duty-status Duty status
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetDutyStatus
+     * @apiGroup Staff Service
+     * 
+     * @apiParam {String} user_id Staff user id(required).
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} status_code (200 => success, 404 => Not found or failed). 
+     * @apiSuccess {String} message Request accepted
+     * @apiSuccess {JSON}   data object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "status": true,
+     *   "status_code": 200,
+     *   "message": "Duty status.",
+     *   "data": {
+     *      "duty_status" : 1
+     *    }
+     * }
+     * 
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *   "status": false,
+     *   "status_code": 404,
+     *   "message": "User id missing.",
+     *   "data": {}
+     * }
+     * 
+     * 
+     */
+    public function dutyStatus(Request $request) {
+        try {
+            if (!$request->user_id) {
+                return $this->sendErrorResponse("User id missing.", (object) []);
+            }
+            $staff = User::find($request->user_id);
+            if ($staff) {
+
+                $data['duty_status'] = $staff->is_push_on;
+                return $this->sendSuccessResponse("Duty status", $data);
+            } else {
+                return $this->sendErrorResponse("User not fount", (object) []);
+            }
+        } catch (\Exception $ex) {
+            return $this->sendErrorResponse($ex->getMessage(), (object) []);
+        }
+    }
+
 }
