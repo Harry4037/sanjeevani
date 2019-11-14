@@ -1145,7 +1145,7 @@ class UsersController extends Controller {
                 $mealOrder->total_amount = $total + number_format(($total * ($gst / 100)), 0, '.', '');
 
                 if ($mealOrder->save()) {
-                    if (count($mealItemIDs) > 0) {
+                    if (!empty($mealItemIDs)) {
                         foreach ($mealItemIDs as $k => $mealItemID) {
                             $meal = MealItem::find($mealItemID);
                             $mealOrderItem = new MealOrderItem();
@@ -1158,7 +1158,7 @@ class UsersController extends Controller {
                             $mealOrderItem->save();
                         }
                     }
-                    if (count($mealPackageIDs) > 0) {
+                    if (!empty($mealPackageIDs)) {
                         foreach ($mealPackageIDs as $j => $mealPackageID) {
                             $mealPackage = MealPackage::find($mealPackageID);
                             $mealOrderItem = new MealOrderItem();
