@@ -1145,28 +1145,31 @@ class UsersController extends Controller {
                 $mealOrder->total_amount = $total + number_format(($total * ($gst / 100)), 0, '.', '');
 
                 if ($mealOrder->save()) {
-                    foreach ($mealItemIDs as $k => $mealItemID) {
-                        $meal = MealItem::find($mealItemID);
-                        $mealOrderItem = new MealOrderItem();
-                        $mealOrderItem->meal_order_id = $mealOrder->id;
-                        $mealOrderItem->meal_item_id = $mealItemID;
-                        $mealOrderItem->item_type = 1;
-                        $mealOrderItem->meal_item_name = $meal->name;
-                        $mealOrderItem->price = $mealItemPrice[$k];
-                        $mealOrderItem->quantity = $mealItemQty[$k];
-                        $mealOrderItem->save();
+                    if (count($mealItemIDs) > 0) {
+                        foreach ($mealItemIDs as $k => $mealItemID) {
+                            $meal = MealItem::find($mealItemID);
+                            $mealOrderItem = new MealOrderItem();
+                            $mealOrderItem->meal_order_id = $mealOrder->id;
+                            $mealOrderItem->meal_item_id = $mealItemID;
+                            $mealOrderItem->item_type = 1;
+                            $mealOrderItem->meal_item_name = $meal->name;
+                            $mealOrderItem->price = $mealItemPrice[$k];
+                            $mealOrderItem->quantity = $mealItemQty[$k];
+                            $mealOrderItem->save();
+                        }
                     }
-
-                    foreach ($mealPackageIDs as $j => $mealPackageID) {
-                        $mealPackage = MealPackage::find($mealPackageID);
-                        $mealOrderItem = new MealOrderItem();
-                        $mealOrderItem->meal_order_id = $mealOrder->id;
-                        $mealOrderItem->meal_item_id = $mealPackageID;
-                        $mealOrderItem->item_type = 2;
-                        $mealOrderItem->meal_item_name = $mealPackage->name;
-                        $mealOrderItem->price = $mealPackagePrice[$j];
-                        $mealOrderItem->quantity = $mealPackageQty[$j];
-                        $mealOrderItem->save();
+                    if (count($mealPackageIDs) > 0) {
+                        foreach ($mealPackageIDs as $j => $mealPackageID) {
+                            $mealPackage = MealPackage::find($mealPackageID);
+                            $mealOrderItem = new MealOrderItem();
+                            $mealOrderItem->meal_order_id = $mealOrder->id;
+                            $mealOrderItem->meal_item_id = $mealPackageID;
+                            $mealOrderItem->item_type = 2;
+                            $mealOrderItem->meal_item_name = $mealPackage->name;
+                            $mealOrderItem->price = $mealPackagePrice[$j];
+                            $mealOrderItem->quantity = $mealPackageQty[$j];
+                            $mealOrderItem->save();
+                        }
                     }
                 }
 
