@@ -97,6 +97,10 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::match(['get', 'post'], '/user/add-user', 'UsersController@addUser')->name('admin.users.add');
     Route::get('/user/detail/{id}', 'UsersController@viewUser')->name('admin.users.detail');
     Route::match(['get', 'post'], '/user/edit/{id}', 'UsersController@editUser')->name('admin.users.edit');
+    Route::match(['get', 'post'], '/user/user-order/{id}', 'UsersController@userOrder')->name('admin.users.user-order');
+    Route::post('/user/user-meal-item', 'UsersController@userMealItem')->name('admin.users.user-meal-item');
+    Route::post('/user/user-meal-package', 'UsersController@userMealPackage')->name('admin.users.user-meal-package');
+    Route::post('/user/user-order-create', 'UsersController@userOrderCreate')->name('admin.users.user-order-create');
 //    Route::get('payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
     Route::match(['get', 'post'], 'payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
     Route::post('pay-outstanding', 'UsersController@payOutstading')->name('admin.users.pay_outstanding');
@@ -408,6 +412,10 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::match(['get', 'post'], 'user-booking-verify/{id}', 'UsersController@verifyBooking')->name('subadmin.users.booking-verify');
     Route::get('user-detail/{mobile_number}', 'UsersController@getUserDetail')->name('subadmin.users.booking-detail');
     Route::match(['get', 'post'], 'user-early-checkout/{id}', 'UsersController@earlyCheckout')->name('subadmin.users.early-checkout');
+    Route::match(['get', 'post'], '/user/user-order/{id}', 'UsersController@userOrder')->name('subadmin.users.user-order');
+    Route::post('/user/user-meal-item', 'UsersController@userMealItem')->name('subadmin.users.user-meal-item');
+    Route::post('/user/user-meal-package', 'UsersController@userMealPackage')->name('subadmin.users.user-meal-package');
+    Route::post('/user/user-order-create', 'UsersController@userOrderCreate')->name('subadmin.users.user-order-create');
     /**
      * Staff Management
      */

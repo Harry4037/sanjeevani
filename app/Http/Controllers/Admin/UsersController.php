@@ -20,6 +20,10 @@ use Validator;
 use App\Models\HealthcateProgram;
 use App\Models\UserMembership;
 use App\Models\Cart;
+use App\Models\MealItem;
+use App\Models\MealPackage;
+use App\Models\MealOrderItem;
+use App\Models\MealOrder;
 
 class UsersController extends Controller {
 
@@ -119,7 +123,8 @@ class UsersController extends Controller {
                     $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
                             . '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                             . '<a href="' . route('admin.users.payments', $user->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-dollar"></i> Payments </a>'
-                            . '<a href="' . route('admin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a>';
+                            . '<a href="' . route('admin.users.booking', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-bed"></i> Bookings </a><br>'
+                            . '<a href="' . route('admin.users.user-order', $user->id) . '" class="btn btn-primary btn-xs"><i class="fa fa-shopping-basket"></i> Create Order </a>';
                 } else {
                     $usersArray[$i]['action'] = '<a class="btn btn-info btn-xs" href="' . route('admin.users.detail', ['id' => $user->id]) . '"><i class="fa fa-eye"></i>View</a>'
                             . '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -688,7 +693,7 @@ class UsersController extends Controller {
                         }
                     }
                 }
-                
+
                 if ($user->device_token) {
                     if ($isCurrentBooking) {
                         $this->generateNotification($user->id, "Booking Created", "Your booking created successfully", 5);
@@ -790,7 +795,6 @@ class UsersController extends Controller {
 //                $msg = "Your booking updated successfully.";
 //                $flag = FALSE;
 //            }
-
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
@@ -935,6 +939,209 @@ class UsersController extends Controller {
             "css" => $css,
             "js" => $js
         ]);
+    }
+
+    public function userOrder(Request $request, $id) {
+
+        $css = [
+            'vendors/select2/dist/css/select2.css',
+        ];
+        $js = [
+            'vendors/select2/dist/js/select2.js',
+        ];
+
+        $user = $this->user->with([
+                    "userBookingDetail" => function($query) {
+                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                    }
+                ])->find($id);
+        if ($user->userBookingDetail) {
+            if ($request->isMethod('post')) {
+                if ((!isset($request->meal_item_id)) && (!isset($request->meal_package_id))) {
+                    return redirect()->route('admin.users.user-order', $user->id)->with('error', 'Please add some meal item.');
+                }
+
+                if (isset($request->meal_item_quantity)) {
+                    foreach ($request->meal_item_quantity as $qty) {
+                        if ($qty == 0) {
+                            return redirect()->route('admin.users.user-order', $user->id)->with('error', 'Quantity should be greater than zero.');
+                        }
+                    }
+                }
+
+                if (isset($request->meal_package_quantity)) {
+                    foreach ($request->meal_package_quantity as $qty) {
+                        if ($qty == 0) {
+                            return redirect()->route('admin.users.user-order', $user->id)->with('error', 'Quantity should be greater than zero.');
+                        }
+                    }
+                }
+
+                $total = 0;
+                $mealItemData = [];
+                if (isset($request->meal_item_id)) {
+                    foreach ($request->meal_item_id as $k => $mealItemID) {
+                        $meal = MealItem::find($mealItemID);
+                        $mealItemData[$k]['id'] = $meal->id;
+                        $mealItemData[$k]['name'] = $meal->name;
+                        $mealItemData[$k]['per_price'] = $meal->price;
+                        $mealItemData[$k]['qty'] = $request->meal_item_quantity[$k];
+                        $mealItemData[$k]['total_price'] = $request->meal_item_quantity[$k] * $meal->price;
+                        $total += $request->meal_item_quantity[$k] * $meal->price;
+                    }
+                }
+                $mealPackageData = [];
+                if (isset($request->meal_package_id)) {
+                    foreach ($request->meal_package_id as $j => $mealPackageID) {
+                        $mealPackage = MealPackage::find($mealPackageID);
+                        $mealPackageData[$j]['id'] = $mealPackage->id;
+                        $mealPackageData[$j]['name'] = $mealPackage->name;
+                        $mealPackageData[$j]['per_price'] = $mealPackage->price;
+                        $mealPackageData[$j]['qty'] = $request->meal_package_quantity[$j];
+                        $mealPackageData[$j]['total_price'] = $request->meal_package_quantity[$j] * $mealPackage->price;
+                        $total += $request->meal_package_quantity[$j] * $mealPackage->price;
+                    }
+                }
+
+                return view('admin.users.user-order-review', [
+                    'user' => $user,
+                    'total' => $total,
+                    'mealItemData' => $mealItemData,
+                    'mealPackageData' => $mealPackageData,
+                    'js' => $js,
+                    'css' => $css,
+                ]);
+            }
+
+//            $mealItems = MealItem::where(["resort_id" => $user->userBookingDetail->resort_id, "is_active" => 1])->get();
+
+            return view('admin.users.user-order', [
+                'user' => $user,
+                'js' => $js,
+                'css' => $css,
+            ]);
+        } else {
+            return redirect()->route('admin.users.index')->with('error', 'You have no any current booking.');
+        }
+    }
+
+    public function userMealItem(Request $request) {
+        $user = $this->user->with([
+                    "userBookingDetail" => function($query) {
+                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                    }
+                ])->find($request->user_id);
+
+        $query = MealItem::query();
+        $query->where(["resort_id" => $user->userBookingDetail->resort_id, "is_active" => 1]);
+        if ($request->meal_item_ids) {
+            $query->whereNotIn('id', array_unique($request->meal_item_ids));
+        }
+        $mealItems = $query->get();
+
+        return view('admin.users.user-meal-item', [
+            'mealItems' => $mealItems,
+        ]);
+    }
+
+    public function userMealPackage(Request $request) {
+        $user = $this->user->with([
+                    "userBookingDetail" => function($query) {
+                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                    }
+                ])->find($request->user_id);
+
+        $query = MealPackage::query();
+        $query->where(["resort_id" => $user->userBookingDetail->resort_id, "is_active" => 1]);
+        if ($request->meal_package_ids) {
+            $query->whereNotIn('id', array_unique($request->meal_package_ids));
+        }
+        $mealPackages = $query->get();
+
+        return view('admin.users.user-meal-package', [
+            'mealPackages' => $mealPackages,
+        ]);
+    }
+
+    public function userOrderCreate(Request $request) {
+        if ($request->isMethod('post')) {
+            $total = $request->meal_total;
+            $userId = $request->user_id;
+
+            $mealItemIDs = $request->meal_item_id;
+            $mealItemQty = $request->meal_item_qty;
+            $mealItemPrice = $request->meal_item_price;
+
+            $mealPackageIDs = $request->meal_package_id;
+            $mealPackageQty = $request->meal_package_qty;
+            $mealPackagePrice = $request->meal_package_price;
+
+            $user = $this->user->with([
+                        "userBookingDetail" => function($query) {
+                            $query->selectRaw(DB::raw('id, room_type_id, room_type_name, resort_room_no, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
+                        }
+                    ])->find($userId);
+
+
+            if ($user->userBookingDetail) {
+                $gst = 5;
+                $mealOrder = new MealOrder();
+                $mealOrder->invoice_id = time();
+                $mealOrder->resort_id = $user->userBookingDetail->resort_id;
+                $mealOrder->user_id = $user->id;
+                $mealOrder->resort_room_type = $user->userBookingDetail ? $user->userBookingDetail->room_type_name : "";
+                $mealOrder->resort_room_no = $user->userBookingDetail ? $user->userBookingDetail->resort_room_no : "";
+                $mealOrder->status = 1;
+                $mealOrder->item_total_amount = $total;
+                $mealOrder->gst_amount = $gst;
+                $mealOrder->total_amount = $total + number_format(($total * ($gst / 100)), 0, '.', '');
+
+                if ($mealOrder->save()) {
+                    foreach ($mealItemIDs as $k => $mealItemID) {
+                        $meal = MealItem::find($mealItemID);
+                        $mealOrderItem = new MealOrderItem();
+                        $mealOrderItem->meal_order_id = $mealOrder->id;
+                        $mealOrderItem->meal_item_id = $mealItemID;
+                        $mealOrderItem->item_type = 1;
+                        $mealOrderItem->meal_item_name = $meal->name;
+                        $mealOrderItem->price = $mealItemPrice[$k];
+                        $mealOrderItem->quantity = $mealItemQty[$k];
+                        $mealOrderItem->save();
+                    }
+
+                    foreach ($mealPackageIDs as $j => $mealPackageID) {
+                        $mealPackage = MealPackage::find($mealPackageID);
+                        $mealOrderItem = new MealOrderItem();
+                        $mealOrderItem->meal_order_id = $mealOrder->id;
+                        $mealOrderItem->meal_item_id = $mealPackageID;
+                        $mealOrderItem->item_type = 2;
+                        $mealOrderItem->meal_item_name = $mealPackage->name;
+                        $mealOrderItem->price = $mealPackagePrice[$j];
+                        $mealOrderItem->quantity = $mealPackageQty[$j];
+                        $mealOrderItem->save();
+                    }
+                }
+
+                $resortUsers = UserBookingDetail::where("resort_id", $mealOrder->resort_id)->pluck("user_id");
+                $this->generateNotification($mealOrder->user_id, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id ", 4);
+                if ($user->device_token) {
+                    $this->androidPushNotification(3, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id", $user->device_token, 4, $mealOrder->id, $this->notificationCount($user->id));
+                }
+                if ($resortUsers) {
+                    $staffDeviceTokens = User::where(["is_active" => 1, "user_type_id" => 2, "is_meal_authorise" => 1, "is_push_on" => 1])
+                            ->whereIn("id", $resortUsers->toArray())
+                            ->where("device_token", "!=", "")
+                            ->pluck("device_token");
+
+                    if (count($staffDeviceTokens) > 0) {
+                        $this->androidPushNotification(2, "Meal Order", "Meal order raised from Room# " . $mealOrder->resort_room_no . " by " . $user->user_name, $staffDeviceTokens->toArray(), 4, $mealOrder->id, 1);
+                    }
+                }
+                return redirect()->route('admin.users.user-order', $user->id)->with('status', 'Order created successfully.');
+            } else {
+                return redirect()->route('admin.users.index')->with('error', 'You have no any current booking.');
+            }
+        }
     }
 
 }
