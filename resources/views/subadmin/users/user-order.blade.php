@@ -64,7 +64,11 @@
                     user_id: "{{$user->id}}",
                     meal_item_ids: meal_item_ids,
                 },
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (response) {
+                    $(".overlay").hide();
                     $("#list tbody").append(response);
                 },
                 error: function () {
@@ -85,7 +89,11 @@
                     user_id: "{{$user->id}}",
                     meal_package_ids: meal_package_ids
                 },
+                beforeSend: function () {
+                    $(".overlay").show();
+                },
                 success: function (response) {
+                    $(".overlay").hide();
                     $("#list tbody").append(response);
                 },
                 error: function () {
@@ -116,6 +124,10 @@
             }
         });
 
+        $(document).on('click', ".delete_tr", function () {
+            var _this = $(this);
+            _this.parent("tr").remove();
+        });
     });
 
     $(".select2").select2({

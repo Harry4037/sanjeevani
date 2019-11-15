@@ -1035,6 +1035,11 @@ class UsersController extends Controller {
                 ])->find($id);
         if ($user->userBookingDetail) {
             if ($request->isMethod('post')) {
+
+                if ($user->is_active == 0) {
+                    return redirect()->route('admin.users.user-order', $user->id)->with('error', 'User accout status is inactive.');
+                }
+
                 if ((!isset($request->meal_item_id)) && (!isset($request->meal_package_id))) {
                     return redirect()->route('subadmin.users.user-order', $user->id)->with('error', 'Please add some meal item.');
                 }
@@ -1055,7 +1060,7 @@ class UsersController extends Controller {
                     }
                 }
 
-                $total = 0;
+                $item_total = 0;
                 $mealItemData = [];
                 if (isset($request->meal_item_id)) {
                     foreach ($request->meal_item_id as $k => $mealItemID) {
@@ -1065,7 +1070,7 @@ class UsersController extends Controller {
                         $mealItemData[$k]['per_price'] = $meal->price;
                         $mealItemData[$k]['qty'] = $request->meal_item_quantity[$k];
                         $mealItemData[$k]['total_price'] = $request->meal_item_quantity[$k] * $meal->price;
-                        $total += $request->meal_item_quantity[$k] * $meal->price;
+                        $item_total += $request->meal_item_quantity[$k] * $meal->price;
                     }
                 }
                 $mealPackageData = [];
@@ -1077,12 +1082,17 @@ class UsersController extends Controller {
                         $mealPackageData[$j]['per_price'] = $mealPackage->price;
                         $mealPackageData[$j]['qty'] = $request->meal_package_quantity[$j];
                         $mealPackageData[$j]['total_price'] = $request->meal_package_quantity[$j] * $mealPackage->price;
-                        $total += $request->meal_package_quantity[$j] * $mealPackage->price;
+                        $item_total += $request->meal_package_quantity[$j] * $mealPackage->price;
                     }
                 }
 
+                $gst = 5;
+                $tax = number_format(($item_total * ($gst / 100)), 0, '.', '');
+                $total = $item_total + (int) $tax;
                 return view('subadmin.users.user-order-review', [
                     'user' => $user,
+                    'item_total' => $item_total,
+                    'tax' => $tax,
                     'total' => $total,
                     'mealItemData' => $mealItemData,
                     'mealPackageData' => $mealPackageData,

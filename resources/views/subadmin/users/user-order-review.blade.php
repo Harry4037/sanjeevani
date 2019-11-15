@@ -72,8 +72,22 @@
                                             <td></td>
                                             <th>Total</th>
                                             <th>
+                                                {{$item_total}}
+                                                <input type="hidden" name="meal_total" value="{{$item_total}}">
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th>Tax</th>
+                                            <th>
+                                                {{$tax}}
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th>Grand Total</th>
+                                            <th>
                                                 {{$total}}
-                                                <input type="hidden" name="meal_total" value="{{$total}}">
                                             </th>
                                         </tr>
                                     </tbody>
