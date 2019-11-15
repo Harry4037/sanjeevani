@@ -663,7 +663,7 @@ class UsersController extends Controller {
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
                         $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                                . '<a href="' . route('subadmin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
+                                . '<a target="_blank" href="' . route('subadmin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
                         $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -672,7 +672,7 @@ class UsersController extends Controller {
                         $stat = "<span class='label label-success'>Current</span>";
                         $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                                 . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>'
-                                . '<a href="' . route('subadmin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
+                                . '<a target="_blank" href="' . route('subadmin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
                         $action .= '<a href="' . route('subadmin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
                 }

@@ -610,7 +610,7 @@ class UsersController extends Controller {
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
                         $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                                . '<a href="' . route('admin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
+                                . '<a target="_blank" href="' . route('admin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
                         $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -619,7 +619,7 @@ class UsersController extends Controller {
                         $stat = "<span class='label label-success'>Current</span>";
                         $actionBtn = '<a href="' . route('admin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
                                 . '<a href="' . route('admin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>'
-                                . '<a href="' . route('admin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
+                                . '<a target="_blank" href="' . route('admin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
                         $actionBtn .= '<a href="' . route('admin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
                 }
