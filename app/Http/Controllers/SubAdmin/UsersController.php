@@ -210,6 +210,9 @@ class UsersController extends Controller {
                     $userBooking = new UserBookingDetail();
                     $userBooking->source_name = $request->booking_source_name;
                     $userBooking->source_id = $request->booking_source_id;
+                    $userBooking->booking_source = $request->booking_source;
+                    $userBooking->booking_amount = $request->booking_amount;
+                    $userBooking->booking_amount_type = $request->booking_amount_type;
                     $userBooking->user_id = $userExist->id;
                     $userBooking->resort_id = $request->get("subadminResort");
                     $userBooking->package_id = $request->package_id;
@@ -314,6 +317,9 @@ class UsersController extends Controller {
                             $userBooking = new UserBookingDetail();
                             $userBooking->source_name = $request->booking_source_name;
                             $userBooking->source_id = $request->booking_source_id;
+                            $userBooking->booking_source = $request->booking_source;
+                            $userBooking->booking_amount = $request->booking_amount;
+                            $userBooking->booking_amount_type = $request->booking_amount_type;
                             $userBooking->user_id = $user->id;
                             $userBooking->resort_id = $request->get("subadminResort");
                             $userBooking->package_id = $request->package_id;
@@ -542,21 +548,27 @@ class UsersController extends Controller {
         }
     }
 
-    public function viewPayments(Request $request, User $user) {
-        $user->load(['payments', 'mealOrders' => function($query) use($request) {
-                $query->where("resort_id", $request->get("subadminResort"))->accepted();
-            }]);
+    public function viewPayments(Request $request, $user) {
+        $user = User::with("userBookingDetail")->find($user);
+        if ($user->userBookingDetail) {
+            $user->load(['payments', 'mealOrders' => function($query) use($request, $user) {
+                    $query->where("resort_id", $request->get("subadminResort"))->where("booking_id", $user->userBookingDetail->id)->accepted();
+                }]);
 
-        $total = $user->mealOrders->sum('total_amount');
-        $paid = $user->payments->where("resort_id", $request->get("subadminResort"))->sum('amount');
+            $total = $user->mealOrders->sum('total_amount');
+            if ($user->userBookingDetail->booking_amount_type == 2) {
+                $total += $user->userBookingDetail->booking_amount;
+            }
+            $paid = $user->payments->where("resort_id", $request->get("subadminResort"))->where("booking_id", $user->userBookingDetail->id)->sum('amount');
 
-        $discountPrice = $total;
-        if ($user->discount > 0) {
-            $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            $discountPrice = $total;
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            }
+            $outstanding = $discountPrice - $paid;
+
+            return view('subadmin.users.payments', compact('user', 'total', 'paid', 'outstanding', 'discountPrice'));
         }
-        $outstanding = $discountPrice - $paid;
-
-        return view('subadmin.users.payments', compact('user', 'total', 'paid', 'outstanding', 'discountPrice'));
     }
 
     public function payOutstading(Request $request) {
@@ -573,14 +585,24 @@ class UsersController extends Controller {
                 return $this->sendErrorResponse($validator->errors()->all()[0], (object) [], 200);
             }
 
-            $user = User::findOrFail($request->user_id);
+            $user = User::with("userBookingDetail")->findOrFail($request->user_id);
+            if ($user->userBookingDetail) {
+                $user->payments()->create([
+                    'amount' => $request->amount,
+                    'resort_id' => $request->get("subadminResort"),
+                    'booking_id' => $user->userBookingDetail->id,
+                ]);
 
-            $user->payments()->create([
-                'amount' => $request->amount,
-                'resort_id' => $request->get("subadminResort"),
-            ]);
-
-            return $this->sendSuccessResponse("Payment Successfull.", (object) []);
+                return $this->sendSuccessResponse("Payment Successfull.", (object) []);
+            } else {
+                return $this->sendErrorResponse("User not having any current booking.", (object) [], 200);
+            }
+//            $user->payments()->create([
+//                'amount' => $request->amount,
+//                'resort_id' => $request->get("subadminResort"),
+//            ]);
+//
+//            return $this->sendSuccessResponse("Payment Successfull.", (object) []);
         } catch (\Exception $e) {
             return $this->sendErrorResponse($e->getMessage(), (object) [], 200);
         }
@@ -640,7 +662,8 @@ class UsersController extends Controller {
                 } else {
                     if ($currentDataTime > $checkOutTime) {
                         $stat = "<span class='label label-primary'>Completed</span>";
-                        $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>';
+                        $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
+                                . '<a href="' . route('subadmin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
                     } elseif ($currentDataTime < $checkInTime) {
                         $stat = "<span class='label label-info'>Upcoming</span>";
                         $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
@@ -648,7 +671,8 @@ class UsersController extends Controller {
                     } else {
                         $stat = "<span class='label label-success'>Current</span>";
                         $action = '<a href="' . route('subadmin.users.booking-edit', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>'
-                                . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>';
+                                . '<a href="' . route('subadmin.users.booking-verify', $userBookingDetail->id) . '" class="btn btn-warning btn-xs"><i class="fa fa-check"></i> Verify</a>'
+                                . '<a href="' . route('subadmin.users.booking-invoice', $userBookingDetail->id) . '" class="btn btn-info btn-xs"><i class="fa fa-print"></i> Generate Invoice </a>';
                         $action .= '<a href="' . route('subadmin.users.early-checkout', $userBookingDetail->id) . '" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Early Checkout</a>';
                     }
                 }
@@ -708,6 +732,9 @@ class UsersController extends Controller {
 //            $UserBookingDetail->discount = $request->discount;
             $UserBookingDetail->source_name = $request->booking_source_name;
             $UserBookingDetail->source_id = $request->booking_source_id;
+            $UserBookingDetail->booking_source = $request->booking_source;
+            $UserBookingDetail->booking_amount = $request->booking_amount;
+            $UserBookingDetail->booking_amount_type = $request->booking_amount_type;
             $UserBookingDetail->user_id = $user->id;
             $UserBookingDetail->resort_id = $request->get("subadminResort");
             $UserBookingDetail->package_id = $request->package_id;
@@ -833,6 +860,9 @@ class UsersController extends Controller {
 //            $data->discount = $request->discount;
             $data->source_name = $request->booking_source_name;
             $data->source_id = $request->booking_source_id;
+            $data->booking_source = $request->booking_source;
+            $data->booking_amount = $request->booking_amount;
+            $data->booking_amount_type = $request->booking_amount_type;
             $data->resort_id = $request->resort_id;
             $data->package_id = $request->package_id;
             $data->room_type_id = $request->resort_room_type;
@@ -1192,6 +1222,81 @@ class UsersController extends Controller {
             } else {
                 return redirect()->route('subadmin.users.index')->with('error', 'You have no any current booking.');
             }
+        }
+    }
+
+    public function generateInvoice(Request $request, $user) {
+        $user = User::with('userBookingDetail')->find($user);
+        if ($user->userBookingDetail) {
+            $user->load(['payments', 'mealOrders' => function($query) use($user) {
+                    $query->where(["user_id" => $user->id, "resort_id" => $user->userBookingDetail->resort_id, "booking_id" => $user->userBookingDetail->id])->accepted();
+                }]);
+
+            $total = $user->mealOrders->sum('total_amount');
+            $paid = $user->payments->where("resort_id", $user->userBookingDetail->resort_id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
+            $discountPrice = $total;
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            }
+            $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
+            $outstanding = $discountPrice - $paid;
+            if ($user->userBookingDetail->booking_amount_type == 2) {
+                $outstanding = ($discountPrice - $paid) + $user->userBookingDetail->booking_amount;
+            }
+
+            $html = view('subadmin.users.invoice-pdf', [
+                'user' => $user,
+                'total' => $total,
+                'paid' => $paid,
+                'discountPrice' => $discountPrice,
+                'outstanding' => $outstanding,
+                'discountAmt' => $discountAmt,
+            ]);
+//            return $html;
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($html);
+            return $pdf->stream();
+        } else {
+            
+        }
+    }
+
+    public function generateBookingInvoice(Request $request, $booking_id) {
+        $bookingDetail = UserBookingDetail::find($booking_id);
+//        dd($bookingDetail->toArray());
+        if ($bookingDetail) {
+            $user = User::find($bookingDetail->user_id);
+            $user->load(['payments', 'mealOrders' => function($query) use($user, $bookingDetail) {
+                    $query->where(["user_id" => $user->id, "resort_id" => $bookingDetail->resort_id, "booking_id" => $bookingDetail->id])->accepted();
+                }]);
+
+            $total = $user->mealOrders->sum('total_amount');
+            $paid = $user->payments->where("resort_id", $bookingDetail->resort_id)->where("booking_id", $bookingDetail->id)->sum('amount');
+            $discountPrice = $total;
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            }
+            $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
+            $outstanding = $discountPrice - $paid;
+            if ($bookingDetail->booking_amount_type == 2) {
+                $outstanding = ($discountPrice - $paid) + $bookingDetail->booking_amount;
+            }
+
+            $html = view('admin.users.booking-invoice-pdf', [
+                'user' => $user,
+                'bookingDetail' => $bookingDetail,
+                'total' => $total,
+                'paid' => $paid,
+                'discountPrice' => $discountPrice,
+                'outstanding' => $outstanding,
+                'discountAmt' => $discountAmt,
+            ]);
+//            return $html;
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($html);
+            return $pdf->stream();
+        } else {
+            
         }
     }
 

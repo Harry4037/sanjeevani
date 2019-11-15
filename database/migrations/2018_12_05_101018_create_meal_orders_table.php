@@ -20,6 +20,7 @@ class CreateMealOrdersTable extends Migration
             $table->string('resort_room_no')->nullable();
             $table->string('invoice_id')->nullable();
             $table->bigInteger('resort_id')->default(0);
+            $table->bigInteger('booking_id')->default(0);
             $table->bigInteger('user_id')->default(0);
             $table->float('item_total_amount')->default(0);
             $table->float('gst_amount')->default(0);

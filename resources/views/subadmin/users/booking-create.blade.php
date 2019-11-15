@@ -15,12 +15,12 @@
 
                 <form class="form-horizontal form-label-left" action="{{ route('subadmin.users.booking-create', $user_id) }}" method="post" id="addBookingForm">
                     @csrf
-<!--                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)</label>
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
-                        </div>
-                    </div>-->
+                    <!--                    <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount (%)</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <input type="number" class="form-control" placeholder="Discount" name="discount" id="discount" value="0">
+                                            </div>
+                                        </div>-->
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source Name*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
@@ -31,6 +31,28 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Source ID*</label>
                         <div class="col-md-6 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id" value="{{ old('booking_source_id') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Source of Booking*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="Source of Booking" name="booking_source" id="booking_source" value="{{ old('booking_source') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Amount*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="Booking Amount" name="booking_amount" id="booking_amount" value="{{ old('booking_amount') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Amount Type*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="booking_amount_type" id="booking_amount_type">
+                                <option value="">Select Option</option>
+                                <option value="1">Prepaid</option>
+                                <option value="2">Outstanding</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -208,6 +230,16 @@
                     required: true
                 },
                 booking_source_id: {
+                    required: true
+                },
+                booking_source: {
+                    required: true
+                },
+                booking_amount: {
+                    required: true,
+                    number: true
+                },
+                booking_amount_type: {
                     required: true
                 },
                 check_in: {

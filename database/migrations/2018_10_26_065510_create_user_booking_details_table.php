@@ -29,6 +29,9 @@ class CreateUserBookingDetailsTable extends Migration {
             $table->datetime('check_out')->nullable();
             $table->integer('check_out_pin')->nullable();
             $table->tinyInteger('is_verified_check_out_pin')->default(0);
+            $table->string('booking_source')->nullable();
+            $table->float('booking_amount')->default(0);
+            $table->tinyInteger('booking_amount_type')->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->tinyInteger('is_checked_in')->default(0);
             $table->tinyInteger('is_cancelled')->default(0);

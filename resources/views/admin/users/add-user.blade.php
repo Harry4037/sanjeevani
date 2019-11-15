@@ -164,6 +164,28 @@
                                 <input type="text" class="form-control" placeholder="Booking Source ID" name="booking_source_id" id="booking_source_id" value="{{ old('booking_source_id') }}">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Source of Booking*</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="Source of Booking" name="booking_source" id="booking_source" value="{{ old('booking_source') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Amount*</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="Booking Amount" name="booking_amount" id="booking_amount" value="{{ old('booking_amount') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Amount Type*</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select class="form-control" name="booking_amount_type" id="booking_amount_type">
+                                    <option value="">Select Option</option>
+                                    <option value="1">Prepaid</option>
+                                    <option value="2">Outstanding</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In*</label>
@@ -197,11 +219,11 @@
                             <div class="col-md-6 col-sm-6 col-xs-6">
                                 <select class="form-control" name="resort_room_type" id="resort_room_type">
                                     <option value="">Choose option</option>
-<!--                                    @if($roomTypes)
-                                    @foreach($roomTypes as $roomType)
-                                    <option value="{{ $roomType->id }}" @if(old('resort_room_type') == $roomType->id){{ "selected" }}@endif>{{ $roomType->name }}</option>
-                                    @endforeach
-                                    @endif-->
+                                    <!--                                    @if($roomTypes)
+                                                                        @foreach($roomTypes as $roomType)
+                                                                        <option value="{{ $roomType->id }}" @if(old('resort_room_type') == $roomType->id){{ "selected" }}@endif>{{ $roomType->name }}</option>
+                                                                        @endforeach
+                                                                        @endif-->
                                 </select>
                             </div>
                         </div>
@@ -538,6 +560,9 @@
         $('#is_booking_details').on('ifChecked', function () {
             $("#booking_source_name").rules("add", {required: true});
             $("#booking_source_id").rules("add", {required: true});
+            $("#booking_source").rules("add", {required: true});
+            $("#booking_amount").rules("add", {required: true});
+            $("#booking_amount_type").rules("add", {required: true});
             $("#check_in").rules("add", {required: true});
             $("#check_out").rules("add", {required: true});
             $("#resort_id").rules("add", {required: true});
@@ -549,6 +574,9 @@
         $('#is_booking_details').on('ifUnchecked', function () {
             $("#booking_source_name").rules("add", "required");
             $("#booking_source_id").rules("add", "required");
+            $("#booking_source").rules("add", "required");
+            $("#booking_amount").rules("add", "required");
+            $("#booking_amount_type").rules("add", "required");
             $("#check_in").rules("add", "required");
             $("#check_out").rules("add", "required");
             $("#resort_id").rules("add", "required");

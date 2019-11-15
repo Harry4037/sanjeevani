@@ -102,6 +102,8 @@ Route::namespace("Admin")->prefix('admin')->middleware(['adminGuest'])->group(fu
     Route::post('/user/user-meal-package', 'UsersController@userMealPackage')->name('admin.users.user-meal-package');
     Route::post('/user/user-order-create', 'UsersController@userOrderCreate')->name('admin.users.user-order-create');
 //    Route::get('payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
+    Route::get('payments-invoice/{user}', 'UsersController@generateInvoice')->name('admin.users.invoice');
+    Route::get('booking-invoice/{booking_id}', 'UsersController@generateBookingInvoice')->name('admin.users.booking-invoice');
     Route::match(['get', 'post'], 'payments/{user}', 'UsersController@viewPayments')->name('admin.users.payments');
     Route::post('pay-outstanding', 'UsersController@payOutstading')->name('admin.users.pay_outstanding');
     Route::get('user-booking/{id}', 'UsersController@booking')->name('admin.users.booking');
@@ -416,6 +418,9 @@ Route::namespace("SubAdmin")->prefix('sub-admin')->middleware(['subadminGuest'])
     Route::post('/user/user-meal-item', 'UsersController@userMealItem')->name('subadmin.users.user-meal-item');
     Route::post('/user/user-meal-package', 'UsersController@userMealPackage')->name('subadmin.users.user-meal-package');
     Route::post('/user/user-order-create', 'UsersController@userOrderCreate')->name('subadmin.users.user-order-create');
+    Route::get('payments-invoice/{user}', 'UsersController@generateInvoice')->name('subadmin.users.invoice');
+    Route::get('booking-invoice/{booking_id}', 'UsersController@generateBookingInvoice')->name('subadmin.users.booking-invoice');
+
     /**
      * Staff Management
      */

@@ -17,6 +17,7 @@ class CreatePaidAmountsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->bigInteger('resort_id');
+            $table->bigInteger('booking_id');
             $table->float('amount',8,2);
             $table->timestamps();
         });

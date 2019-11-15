@@ -34,6 +34,28 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Source of Booking*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="Source of Booking" name="booking_source" id="booking_source" value="{{ $data->booking_source }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Amount*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="Booking Amount" name="booking_amount" id="booking_amount" value="{{ $data->booking_amount }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking Amount Type*</label>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <select class="form-control" name="booking_amount_type" id="booking_amount_type">
+                                <option value="">Select Option</option>
+                                <option value="1" @if($data->booking_amount_type == 1){{'selected'}}@endif>Prepaid</option>
+                                <option value="2" @if($data->booking_amount_type == 2){{'selected'}}@endif>Outstanding</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Check In*</label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <input readonly type="text" class="form-control has-feedback-left" id="check_in" name="check_in" value='@if(!$flag){{ date("Y/m/d h:s:i A", strtotime($data->check_in))}}@endif' >
@@ -245,6 +267,16 @@
                     },
                     booking_source_id: {
                     required: true
+                    },
+                    booking_source: {
+                    required: true
+                    },
+                    booking_amount: {
+                        required: true,
+                        number: true
+                    },
+                    booking_amount_type: {
+                        required: true
                     },
                     check_in: {
                     required: true

@@ -132,6 +132,7 @@ class OrderController extends Controller {
                 $mealOrder = new MealOrder();
                 $mealOrder->invoice_id = time();
                 $mealOrder->resort_id = $request->resort_id;
+                $mealOrder->booking_id = $user->userBookingDetail ? $user->userBookingDetail->id : 0;
                 $mealOrder->user_id = $request->user_id;
                 $mealOrder->resort_room_type = $user->userBookingDetail ? $user->userBookingDetail->room_type_name : "";
                 $mealOrder->resort_room_no = $user->userBookingDetail ? $user->userBookingDetail->resort_room_no : "";
@@ -157,7 +158,7 @@ class OrderController extends Controller {
 
                 $resortUsers = UserBookingDetail::where("resort_id", $request->resort_id)->pluck("user_id");
                 $this->generateNotification($request->user_id, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id ", 4);
-                if($user->device_token){
+                if ($user->device_token) {
                     $this->androidPushNotification(3, "Meal Order", "You ordered meal with invoice# $mealOrder->invoice_id", $user->device_token, 4, $mealOrder->id, $this->notificationCount($user->id));
                 }
                 if ($resortUsers) {
@@ -329,7 +330,7 @@ class OrderController extends Controller {
                 $data['invoices'] = [];
             } else {
                 $user->load(['payments', 'mealOrders' => function($query) use($request, $user) {
-                        $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])->accepted();
+                        $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id, "booking" => $user->userBookingDetail->id])->accepted();
                     }]);
 
                 $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
@@ -340,12 +341,17 @@ class OrderController extends Controller {
                                 ])
                                 ->latest()->get();
                 $data['total_amount'] = $user->mealOrders->sum('total_amount');
-                $data['paid_amount'] = $user->payments->where("resort_id", $user->userBookingDetail->resort->id)->sum('amount');
+                $data['paid_amount'] = $user->payments->where("resort_id", $user->userBookingDetail->resort->id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
                 $discountPrice = $data['total_amount'];
                 if ($user->discount > 0) {
                     $discountPrice = number_format(($data['total_amount'] - ($data['total_amount'] * ($user->discount / 100))), 0, ".", "");
                 }
-                $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
+                if ($user->userBookingDetail->booking_amount_type == 2) {
+                    $data['outstanding_amount'] = ($discountPrice - $data['paid_amount']) + $user->userBookingDetail->booking_amount;
+                } else {
+                    $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
+                }
+
                 $data['invoices'] = [];
                 if ($invoices) {
                     $data['invoices'] = $invoices;

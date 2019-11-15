@@ -73,7 +73,7 @@
                                 <label for="">Discounted Amount</label>
                                 <input readonly type="number" id="discount_amount" name="discount_amount" class="form-control" value="{{ $discountPrice }}">
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="">Amount</label>
                                 <input type="number" id="amount" name="amount" class="form-control">
@@ -81,6 +81,7 @@
 
                             <div class="form-group">
                                 <label for=""></label>
+                                <a target="_blank" href="{{route('admin.users.invoice', $user)}}" class="btn btn-info pull-right">Generate Invoice</a>
                                 <button type="submit" class="btn btn-success pull-right">Pay</button>
                             </div>
                         </form>
@@ -99,40 +100,37 @@
 <script>
     $(document).ready(function () {
     $(document).on("keyup click", "#amount", function(){
-       var amount_n = parseFloat($("#amount").val());
-       if(amount_n < 0){
-           $("#amount").val(0)
-           return false;
-       }else{
-           return true;
-       }
-   });
-   
-   $(document).on("keyup click", "#discount", function(){
-       var discount = parseFloat($("#discount").val());
-       var total_amount = parseFloat($("#total_amount").val());
-       var paid = parseFloat($("#paid").val());
-       if(discount < 0){
-           $("#discount").val(0)
-           return false;
-       }else if(discount <= 100){
-           var dis_price = parseFloat((total_amount - (total_amount * (discount/100))).toFixed(0));
-           var max_limit = dis_price - paid;
-           $("#discount_amount").val(dis_price);
-           $("#total_outstanding_amount").html(max_limit);
-           $("#amount").rules("remove", "max");
-           $("#amount").rules("add", {max: max_limit });
-       }else{
-           return false;
-       }
-   });
-   
+    var amount_n = parseFloat($("#amount").val());
+    if (amount_n < 0){
+    $("#amount").val(0)
+            return false;
+    } else{
+    return true;
+    }
+    });
+    $(document).on("keyup click", "#discount", function(){
+    var discount = parseFloat($("#discount").val());
+    var total_amount = parseFloat($("#total_amount").val());
+    var paid = parseFloat($("#paid").val());
+    if (discount < 0){
+    $("#discount").val(0)
+            return false;
+    } else if (discount <= 100){
+    var dis_price = parseFloat((total_amount - (total_amount * (discount / 100))).toFixed(0));
+    var max_limit = dis_price - paid;
+    $("#discount_amount").val(dis_price);
+    $("#total_outstanding_amount").html(max_limit);
+    $("#amount").rules("remove", "max");
+    $("#amount").rules("add", {max: max_limit });
+    } else{
+    return false;
+    }
+    });
     jQuery.validator.addMethod("lessamount", function (value, element) {
-       var dis_amount = parseFloat($("#discount_amount").val());
-       var paid = parseFloat($("#paid").val());
-        return dis_amount > paid;
+    var dis_amount = parseFloat($("#discount_amount").val());
+    var paid = parseFloat($("#paid").val());
+    return dis_amount > paid;
     }, "Discounted price not less than total paid amount");
-    
     $("#paymentForm").validate({
     ignore: [],
             rules:{
@@ -141,13 +139,13 @@
                     number:true,
                     max:{{$outstanding}},
             },
-            discount: {
-            required: true,
-                    number:true,
-                    min: 0,
-                    max: 100,
-                    lessamount: true
-            },
+                    discount: {
+                    required: true,
+                            number:true,
+                            min: 0,
+                            max: 100,
+                            lessamount: true
+                    },
             },
             messages:{
             amount:{
