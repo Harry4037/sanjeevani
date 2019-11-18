@@ -330,7 +330,7 @@ class OrderController extends Controller {
                 $data['invoices'] = [];
             } else {
                 $user->load(['payments', 'mealOrders' => function($query) use($request, $user) {
-                        $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id, "booking" => $user->userBookingDetail->id])->accepted();
+                        $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id, "booking_id" => $user->userBookingDetail->id])->accepted();
                     }]);
 
                 $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
