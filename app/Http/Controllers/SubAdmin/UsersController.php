@@ -1177,6 +1177,7 @@ class UsersController extends Controller {
                 $mealOrder->invoice_id = time();
                 $mealOrder->resort_id = $request->get("subadminResort");
                 $mealOrder->user_id = $user->id;
+                $mealOrder->booking_id = $user->userBookingDetail ? $user->userBookingDetail->id : 0;
                 $mealOrder->resort_room_type = $user->userBookingDetail ? $user->userBookingDetail->room_type_name : "";
                 $mealOrder->resort_room_no = $user->userBookingDetail ? $user->userBookingDetail->resort_room_no : "";
                 $mealOrder->status = 1;
