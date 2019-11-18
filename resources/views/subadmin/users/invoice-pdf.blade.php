@@ -207,12 +207,19 @@
                         <td>TOTAL</td>
                         <td class="total">{{$total}}</td>
                     </tr>
-                    @if($user->userBookingDetail->booking_amount_type == 2)
+                    @if($bookingDetail->booking_amount_type == 1)
                     <tr>
                         <td></td>
                         <td></td>
                         <td>BOOKING AMOUNT</td>
-                        <td class="total">{{$user->userBookingDetail->booking_amount}}</td>
+                        <td class="total">- {{$bookingDetail->booking_amount}}</td>
+                    </tr>
+                    @else($bookingDetail->booking_amount_type == 2)
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>BOOKING AMOUNT</td>
+                        <td class="total">{{$bookingDetail->booking_amount}}</td>
                     </tr>
                     @endif
                     <tr>
@@ -236,10 +243,10 @@
                     </tr>
                 </tbody>
             </table>
-<!--            <div id="notices">
-                <div>NOTICE:</div>
-                <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
-            </div>-->
+            <!--            <div id="notices">
+                            <div>NOTICE:</div>
+                            <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+                        </div>-->
         </main>
         <footer>
             Invoice was created on a computer and is valid without the signature and seal.

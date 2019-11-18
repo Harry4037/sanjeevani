@@ -207,8 +207,15 @@
                         <td>TOTAL</td>
                         <td class="total">{{$total}}</td>
                     </tr>
-                    @if($user->userBookingDetail->booking_amount_type == 2)
+                    @if($user->userBookingDetail->booking_amount_type == 1)
                     <tr>
+                        <td></td>
+                        <td></td>
+                        <td>BOOKING AMOUNT</td>
+                        <td class="total">- {{$user->userBookingDetail->booking_amount}}</td>
+                    </tr>
+                    @elseif($user->userBookingDetail->booking_amount_type == 2)
+                     <tr>
                         <td></td>
                         <td></td>
                         <td>BOOKING AMOUNT</td>
