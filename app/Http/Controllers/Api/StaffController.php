@@ -1829,6 +1829,9 @@ class StaffController extends Controller {
      * @apiParam {String} resort_room_id Resort room Id*.
      * @apiParam {String} booking_source_name Booking source name*.
      * @apiParam {String} booking_source_id Booking source Id*.
+     * @apiParam {String} booking_source Booking source*.
+     * @apiParam {String} booking_amount Booking amount*.
+     * @apiParam {String} booking_amount_type Booking amount type* (1 => Prepaid, 2 => Outstanding).
      * @apiParam {String} package_id Package Id*.
      * @apiParam {Array} person_name Person name.
      * @apiParam {Array} person_age Person age.
@@ -1886,6 +1889,15 @@ class StaffController extends Controller {
         }
         if (!$request->resort_id) {
             return $this->sendErrorResponse("Resort Id missing", (object) []);
+        }
+        if (!$request->source_booking) {
+            return $this->sendErrorResponse("Source of booking is missing.", (object) []);
+        }
+        if (!$request->booking_amount) {
+            return $this->sendErrorResponse("Booking amount is missing.", (object) []);
+        }
+        if (!$request->booking_amount_type) {
+            return $this->sendErrorResponse("Booking amount type.", (object) []);
         }
 
         $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $request->user_id, $request->resort_id);

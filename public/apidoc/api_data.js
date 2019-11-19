@@ -6150,6 +6150,27 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "booking_source",
+            "description": "<p>Booking source*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_amount",
+            "description": "<p>Booking amount*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_amount_type",
+            "description": "<p>Booking amount type* (1 =&gt; Prepaid, 2 =&gt; Outstanding).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "package_id",
             "description": "<p>Package Id*.</p>"
           },
