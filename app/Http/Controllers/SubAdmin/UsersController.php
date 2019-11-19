@@ -1127,9 +1127,18 @@ class UsersController extends Controller {
         }
         $mealItems = $query->get();
 
-        return view('subadmin.users.user-meal-item', [
+        $html = view('subadmin.users.user-meal-item', [
             'mealItems' => $mealItems,
         ]);
+
+        if ($mealItems->count()) {
+            return $html;
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'msg' => 'No more meal item available.'
+            ]);
+        }
     }
 
     public function userMealPackage(Request $request) {
@@ -1146,9 +1155,18 @@ class UsersController extends Controller {
         }
         $mealPackages = $query->get();
 
-        return view('subadmin.users.user-meal-package', [
+        $html = view('subadmin.users.user-meal-package', [
             'mealPackages' => $mealPackages,
         ]);
+
+        if ($mealPackages->count()) {
+            return $html;
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'msg' => 'No more meal item available.'
+            ]);
+        }
     }
 
     public function userOrderCreate(Request $request) {

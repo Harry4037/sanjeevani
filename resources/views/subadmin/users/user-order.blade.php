@@ -7,8 +7,6 @@
         @include('errors.errors-and-messages')
         <div class="x_panel">
             <div class="x_title">
-                <div style="display: none;" class="alert msg" role="alert">
-                </div>
                 <h2>Meal Order<small>({{$user->user_name}})</small></h2>
                 <div class="pull-right">
                 </div>
@@ -69,7 +67,11 @@
                 },
                 success: function (response) {
                     $(".overlay").hide();
-                    $("#list tbody").append(response);
+                    if (typeof response.status == "undefined") {
+                        $("#list tbody").append(response);
+                    } else {
+                        showErrorMessage(response.msg);
+                    }
                 },
                 error: function () {
                     alert();
@@ -94,7 +96,11 @@
                 },
                 success: function (response) {
                     $(".overlay").hide();
-                    $("#list tbody").append(response);
+                    if (typeof response.status == "undefined") {
+                        $("#list tbody").append(response);
+                    } else {
+                        showErrorMessage(response.msg);
+                    }
                 },
                 error: function () {
                     alert();

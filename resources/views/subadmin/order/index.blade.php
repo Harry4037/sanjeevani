@@ -55,6 +55,12 @@
 <script>
 
     var url = site_url + "/order/list";
+    var o_status = $("#o_status").val();
+
+    var new_url = url + "?";
+    new_url += "o_status=" + o_status;
+    var finalUri = new_url;
+
     var t = $('#list').DataTable({
         lengthMenu: [[15, 25, 50], [15, 25, 50]],
         searching: true,
@@ -66,7 +72,7 @@
             'processing': '<i class="fa fa-refresh fa-spin"></i>'
         },
         ajax: {
-            url: url,
+            url: finalUri,
             error: function (xhr, error, thrown) {
                 showErrorMessage(error);
             },
@@ -87,11 +93,11 @@
 
     $(document).ready(function () {
         $(document).on('keyup change clean', '.custom_search', function () {
-            var o_status = $("#o_status").val();
+            o_status = $("#o_status").val();
 
-            var new_url = url + "?";
+            new_url = url + "?";
             new_url += "o_status=" + o_status;
-            var finalUri = new_url;
+            finalUri = new_url;
             t.ajax.url(finalUri).load();
         });
     });

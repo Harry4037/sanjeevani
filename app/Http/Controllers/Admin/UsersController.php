@@ -1067,9 +1067,18 @@ class UsersController extends Controller {
         }
         $mealItems = $query->get();
 
-        return view('admin.users.user-meal-item', [
+        $html = view('admin.users.user-meal-item', [
             'mealItems' => $mealItems,
         ]);
+
+        if ($mealItems->count()) {
+            return $html;
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'msg' => 'No more meal item available.'
+            ]);
+        }
     }
 
     public function userMealPackage(Request $request) {
@@ -1085,10 +1094,17 @@ class UsersController extends Controller {
             $query->whereNotIn('id', array_unique($request->meal_package_ids));
         }
         $mealPackages = $query->get();
-
-        return view('admin.users.user-meal-package', [
+        $html = view('admin.users.user-meal-package', [
             'mealPackages' => $mealPackages,
         ]);
+        if ($mealPackages->count()) {
+            return $html;
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'msg' => 'No more meal package available.'
+            ]);
+        }
     }
 
     public function userOrderCreate(Request $request) {
