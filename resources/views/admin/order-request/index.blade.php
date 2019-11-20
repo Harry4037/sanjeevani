@@ -59,6 +59,12 @@
 @section('script')
 <script>
     var url = _baseUrl + "/admin/order-request/order-request-list";
+    var o_status = $("#o_status").val();
+
+    var new_url = url + "?";
+    new_url += "o_status=" + o_status;
+    var finalUri = new_url;
+
     var t = $('#list').DataTable({
         lengthMenu: [[10, 25, 50], [10, 25, 50]],
         searching: true,
@@ -69,7 +75,7 @@
             'loadingRecords': '&nbsp;',
             'processing': '<i class="fa fa-refresh fa-spin"></i>'
         },
-        ajax: url,
+        ajax: finalUri,
         "columns": [
             {"data": null,
                 render: function (data, type, row, meta) {
@@ -87,11 +93,11 @@
 
     $(document).ready(function () {
         $(document).on('keyup change clean', '.custom_search', function () {
-            var o_status = $("#o_status").val();
+            o_status = $("#o_status").val();
 
-            var new_url = url + "?";
+            new_url = url + "?";
             new_url += "o_status=" + o_status;
-            var finalUri = new_url;
+            finalUri = new_url;
             t.ajax.url(finalUri).load();
         });
     });
