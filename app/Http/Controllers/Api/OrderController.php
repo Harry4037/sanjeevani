@@ -348,7 +348,7 @@ class OrderController extends Controller {
                                 ->latest()->get();
                 $total_amount = $user->mealOrders->sum('total_amount');
                 if ($user->userBookingDetail->booking_amount_type == 2) {
-                    $data['total_amount'] = $total_amount + $bookingDetail->booking_amount;
+                    $data['total_amount'] = $total_amount + $user->userBookingDetail->booking_amount;
                 } else {
                     $data['total_amount'] = $total_amount;
                 }
