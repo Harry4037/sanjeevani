@@ -537,9 +537,8 @@ class UsersController extends Controller {
             $user = User::with("userBookingDetail")->findOrFail($request->user_id);
             if ($user->userBookingDetail) {
                 if ($request->discount > 0) {
-                    $userBooking = UserBookingDetail::find($user->userBookingDetail->id);
-                    $userBooking->discount = $request->discount;
-                    $userBooking->save();
+                    $user->discount = $request->discount;
+                    $user->save();
                 }
 
                 $user->payments()->create([
@@ -1195,10 +1194,10 @@ class UsersController extends Controller {
             }
             $paid = $user->payments->where("resort_id", $user->userBookingDetail->resort_id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
             $discountPrice = $total;
-            if ($user->userBookingDetail->discount > 0) {
-                $discountPrice = number_format(($total - ($total * ($user->userBookingDetail->discount / 100))), 0, ".", "");
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
             }
-            $discountAmt = number_format(($total * ($user->userBookingDetail->discount / 100)), 0, ".", "");
+            $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
             $outstanding = $discountPrice - $paid;
 //            if ($user->userBookingDetail->booking_amount_type == 2) {
 //                $outstanding = ($discountPrice - $paid) + $user->userBookingDetail->booking_amount;
@@ -1236,10 +1235,10 @@ class UsersController extends Controller {
             }
             $paid = $user->payments->where("resort_id", $bookingDetail->resort_id)->where("booking_id", $bookingDetail->id)->sum('amount');
             $discountPrice = $total;
-            if ($bookingDetail->discount > 0) {
-                $discountPrice = number_format(($total - ($total * ($bookingDetail->discount / 100))), 0, ".", "");
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
             }
-            $discountAmt = number_format(($total * ($bookingDetail->discount / 100)), 0, ".", "");
+            $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
             $outstanding = $discountPrice - $paid;
 
 
