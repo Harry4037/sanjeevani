@@ -37,7 +37,7 @@
                             <div class="count">
                                 {{number_format($paid,0)}}
                             </div>
-                            <h3>Total Paid<small> ({{$user->userBookingDetail->discount}}% discount)</small></h3>
+                            <h3>Total Paid</h3>
                         </div>
                     </div>
 
@@ -67,7 +67,7 @@
                             <input type="hidden" id="paid" name="paid" value="{{$paid}}">
                             <div class="form-group">
                                 <label for="">Discount (%)</label>
-                                <input type="number" id="discount" name="discount" class="form-control" value="{{ $user->userBookingDetail->discount ? $user->userBookingDetail->discount : 0 }}">
+                                <input type="number" id="discount" name="discount" class="form-control" value="{{ $user->discount ? $user->discount : 0 }}">
                             </div>
                             <div class="form-group">
                                 <label for="">Discounted Amount</label>

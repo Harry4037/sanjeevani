@@ -502,8 +502,8 @@ class UsersController extends Controller {
             }
             $paid = $user->payments->where("resort_id", $user->userBookingDetail->resort_id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
             $discountPrice = $total;
-            if ($user->userBookingDetail->discount > 0) {
-                $discountPrice = number_format(($total - ($total * ($user->userBookingDetail->discount / 100))), 0, ".", "");
+            if ($user->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
             }
             $outstanding = $discountPrice - $paid;
 
