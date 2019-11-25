@@ -1915,7 +1915,7 @@ class StaffController extends Controller {
         $userBooking = new UserBookingDetail();
         $userBooking->source_name = $request->booking_source_name;
         $userBooking->source_id = $request->booking_source_id;
-        $userBooking->booking_source = "";
+        $userBooking->booking_source = $request->source_booking;
         $userBooking->booking_amount = $request->booking_amount;
         $userBooking->booking_amount_type = $request->booking_amount_type;
         $userBooking->user_id = $request->user_id;
