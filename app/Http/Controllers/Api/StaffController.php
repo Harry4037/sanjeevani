@@ -1899,10 +1899,11 @@ class StaffController extends Controller {
         if (!$request->booking_amount_type) {
             return $this->sendErrorResponse("Booking amount type.", (object) []);
         }
-        $user = User::find($request->user_id);
-        if ($user->is_push_on == 0) {
+        if ($request->user()->is_push_on == 0) {
             return $this->sendErrorResponse("Your duty status is offline.", (object) []);
         }
+        $user = User::find($request->user_id);
+
         $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $request->user_id, $request->resort_id);
 //        $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
 //                ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
