@@ -587,6 +587,11 @@ class UsersController extends Controller {
 
             $user = User::with("userBookingDetail")->findOrFail($request->user_id);
             if ($user->userBookingDetail) {
+                if ($request->discount > 0) {
+                    $user->discount = $request->discount;
+                    $user->save();
+                }
+
                 $user->payments()->create([
                     'amount' => $request->amount,
                     'resort_id' => $request->get("subadminResort"),
@@ -1262,6 +1267,9 @@ class UsersController extends Controller {
                 }]);
 
             $total = $user->mealOrders->sum('total_amount');
+            if ($user->userBookingDetail->booking_amount_type == 2) {
+                $total += $user->userBookingDetail->booking_amount;
+            }
             $paid = $user->payments->where("resort_id", $user->userBookingDetail->resort_id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
             $discountPrice = $total;
             if ($user->discount > 0) {
@@ -1269,9 +1277,6 @@ class UsersController extends Controller {
             }
             $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
             $outstanding = $discountPrice - $paid;
-            if ($user->userBookingDetail->booking_amount_type == 2) {
-                $outstanding = ($discountPrice - $paid) + $user->userBookingDetail->booking_amount;
-            }
 
             $html = view('subadmin.users.invoice-pdf', [
                 'user' => $user,
@@ -1300,6 +1305,9 @@ class UsersController extends Controller {
                 }]);
 
             $total = $user->mealOrders->sum('total_amount');
+            if ($bookingDetail->booking_amount_type == 2) {
+                $total += $bookingDetail->booking_amount;
+            }
             $paid = $user->payments->where("resort_id", $bookingDetail->resort_id)->where("booking_id", $bookingDetail->id)->sum('amount');
             $discountPrice = $total;
             if ($user->discount > 0) {
@@ -1307,9 +1315,6 @@ class UsersController extends Controller {
             }
             $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
             $outstanding = $discountPrice - $paid;
-            if ($bookingDetail->booking_amount_type == 2) {
-                $outstanding = ($discountPrice - $paid) + $bookingDetail->booking_amount;
-            }
 
             $html = view('admin.users.booking-invoice-pdf', [
                 'user' => $user,
