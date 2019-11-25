@@ -333,7 +333,7 @@ class OrderController extends Controller {
                 $data['paid_amount'] = 0;
                 $data['outstanding_amount'] = 0;
                 $data['invoices'] = [];
-                $data['booking_detail'] = [];
+                $data['booking_detail'] = (object) [];
             } else {
                 $user->load(['payments', 'mealOrders' => function($query) use($request, $user) {
                         $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id, "booking_id" => $user->userBookingDetail->id])->accepted();
@@ -357,7 +357,7 @@ class OrderController extends Controller {
                 } else {
                     $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
                 }
-                
+
                 $data['booking_detail'] = [
                     'booking_amount' => $user->userBookingDetail->booking_amount,
                     'booking_amount_type' => $user->userBookingDetail->booking_amount_type == 1 ? "Prepaid" : "Outstanding",

@@ -122,6 +122,11 @@
                                        {{ "checked" }}
                                        @endif
                                        >Meal Orders
+                                       <input class="flat" type="checkbox" name="is_booking"
+                                       @if($user->is_booking)
+                                       {{ "checked" }}
+                                       @endif
+                                       >Create User Booking
                             <p>
                         </div>
                     </div>

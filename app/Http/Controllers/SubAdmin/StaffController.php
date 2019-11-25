@@ -142,6 +142,9 @@ class StaffController extends Controller {
                     $name = explode(" ", $request->staff_name);
 
                     $user = $this->user;
+                    if ($request->is_booking == "on") {
+                        $user->is_booking = 1;
+                    }
                     if ($request->is_service_authorise == "on") {
                         $user->is_service_authorise = 1;
                     }
@@ -214,6 +217,11 @@ class StaffController extends Controller {
 
                 $name = explode(" ", $request->staff_name);
 
+                if ($request->is_booking == "on") {
+                    $user->is_booking = 1;
+                } else {
+                    $user->is_booking = 0;
+                }
                 if ($request->is_service_authorise == "on") {
                     $user->is_service_authorise = 1;
                 } else {

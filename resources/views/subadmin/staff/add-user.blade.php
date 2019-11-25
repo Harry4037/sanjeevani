@@ -81,6 +81,7 @@
                             <p style="padding: 5px;">
                                 <input class="flat" type="checkbox" name="is_service_authorise">Services & Issues
                                 <input class="flat" type="checkbox" name="is_meal_authorise">Meal Orders
+                                <input class="flat" type="checkbox" name="is_booking">Create User Booking
                             <p>
                         </div>
                     </div>
