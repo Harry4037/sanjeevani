@@ -346,14 +346,16 @@ class OrderController extends Controller {
                                     }
                                 ])
                                 ->latest()->get();
-                $data['total_amount'] = $user->mealOrders->sum('total_amount');
+                $total_amount = $user->mealOrders->sum('total_amount');
                 if ($user->userBookingDetail->booking_amount_type == 2) {
-                    $data['total_amount'] += $data['total_amount'];
+                    $data['total_amount'] = $total_amount + $bookingDetail->booking_amount;
+                } else {
+                    $data['total_amount'] = $total_amount;
                 }
                 $data['paid_amount'] = $user->payments->where("resort_id", $user->userBookingDetail->resort->id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
                 $discountPrice = $data['total_amount'];
-                if ($user->userBookingDetail->discount > 0) {
-                    $discountPrice = number_format(($data['total_amount'] - ($data['total_amount'] * ($user->userBookingDetail->discount / 100))), 0, ".", "");
+                if ($user->discount > 0) {
+                    $discountPrice = number_format(($data['total_amount'] - ($data['total_amount'] * ($user->discount / 100))), 0, ".", "");
                 }
 //                if ($user->userBookingDetail->booking_amount_type == 2) {
 //                    $data['outstanding_amount'] = ($discountPrice - $data['paid_amount']) + $user->userBookingDetail->booking_amount;
