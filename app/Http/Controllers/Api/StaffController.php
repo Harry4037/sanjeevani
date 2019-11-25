@@ -1899,7 +1899,10 @@ class StaffController extends Controller {
         if (!$request->booking_amount_type) {
             return $this->sendErrorResponse("Booking amount type.", (object) []);
         }
-
+        $user = User::find($request->user_id);
+        if ($user->is_push_on == 0) {
+            return $this->sendErrorResponse("Your duty status is offline.", (object) []);
+        }
         $existingBookingCount = $this->checkUserbookingExist($request->check_in, $request->check_out, $request->user_id, $request->resort_id);
 //        $existingRecord = UserBookingDetail::where("check_in", "<=", date("Y-m-d H:i:s", strtotime($request->check_in)))
 //                ->where("check_out", ">=", date("Y-m-d H:i:s", strtotime($request->check_out)))
@@ -1908,7 +1911,7 @@ class StaffController extends Controller {
         if ($existingBookingCount > 0) {
             return $this->sendErrorResponse("Booking already exist with these date's.", (object) []);
         }
-        $user = User::find($request->user_id);
+
         $isCurrentBooking = $this->isCurrentBooking($user->id);
         $roomType = RoomType::find($request->resort_room_type_id);
         $room = ResortRoom::find($request->resort_room_id);
