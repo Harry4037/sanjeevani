@@ -1981,6 +1981,7 @@ class StaffController extends Controller {
      *   "message": "Duty status.",
      *   "data": {
      *      "duty_status" : 1
+     *      "is_booking" : 1
      *    }
      * }
      * 
@@ -2006,6 +2007,7 @@ class StaffController extends Controller {
             if ($staff) {
 
                 $data['duty_status'] = $staff->is_push_on;
+                $data['is_booking'] = $staff->is_booking;
                 return $this->sendSuccessResponse("Duty status", $data);
             } else {
                 return $this->sendErrorResponse("User not fount", (object) []);
