@@ -1899,6 +1899,9 @@ class StaffController extends Controller {
         if (!$request->booking_amount_type) {
             return $this->sendErrorResponse("Booking amount type.", (object) []);
         }
+        if ($request->user()->is_booking == 0) {
+            return $this->sendErrorResponse("You can not create booking. Please contact to admin", (object) []);
+        }
         if ($request->user()->is_push_on == 0) {
             return $this->sendErrorResponse("Your duty status is offline.", (object) []);
         }
