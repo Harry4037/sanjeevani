@@ -232,7 +232,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>DISCOUNT ({{$user->userBookingDetail->discount}}%)</td>
+                        <td>DISCOUNT ({{$user->discount}}%)</td>
                         <td class="total">- {{$discountAmt}}</td>
                     </tr>
                     <tr>
