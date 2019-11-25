@@ -502,8 +502,8 @@ class UsersController extends Controller {
             }
             $paid = $user->payments->where("resort_id", $user->userBookingDetail->resort_id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
             $discountPrice = $total;
-            if ($user->discount > 0) {
-                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            if ($user->userBookingDetail->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->userBookingDetail->discount / 100))), 0, ".", "");
             }
             $outstanding = $discountPrice - $paid;
 
@@ -536,6 +536,12 @@ class UsersController extends Controller {
 
             $user = User::with("userBookingDetail")->findOrFail($request->user_id);
             if ($user->userBookingDetail) {
+                if ($request->discount > 0) {
+                    $userBooking = UserBookingDetail::find($user->userBookingDetail->id);
+                    $userBooking->discount = $request->discount;
+                    $userBooking->save();
+                }
+
                 $user->payments()->create([
                     'amount' => $request->amount,
                     'resort_id' => $request->resort_id,
@@ -971,11 +977,7 @@ class UsersController extends Controller {
             'vendors/select2/dist/js/select2.js',
         ];
 
-        $user = $this->user->with([
-                    "userBookingDetail" => function($query) {
-                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                    }
-                ])->find($id);
+        $user = $this->user->with("userBookingDetail")->find($id);
         if ($user->userBookingDetail) {
             if ($request->isMethod('post')) {
                 if ($user->is_active == 0) {
@@ -1054,11 +1056,7 @@ class UsersController extends Controller {
     }
 
     public function userMealItem(Request $request) {
-        $user = $this->user->with([
-                    "userBookingDetail" => function($query) {
-                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                    }
-                ])->find($request->user_id);
+        $user = $this->user->with("userBookingDetail")->find($request->user_id);
 
         $query = MealItem::query();
         $query->where(["resort_id" => $user->userBookingDetail->resort_id, "is_active" => 1]);
@@ -1082,11 +1080,7 @@ class UsersController extends Controller {
     }
 
     public function userMealPackage(Request $request) {
-        $user = $this->user->with([
-                    "userBookingDetail" => function($query) {
-                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                    }
-                ])->find($request->user_id);
+        $user = $this->user->with("userBookingDetail")->find($request->user_id);
 
         $query = MealPackage::query();
         $query->where(["resort_id" => $user->userBookingDetail->resort_id, "is_active" => 1]);
@@ -1120,11 +1114,7 @@ class UsersController extends Controller {
             $mealPackageQty = $request->meal_package_qty;
             $mealPackagePrice = $request->meal_package_price;
 
-            $user = $this->user->with([
-                        "userBookingDetail" => function($query) {
-                            $query->selectRaw(DB::raw('id, room_type_id, room_type_name, resort_room_no, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                        }
-                    ])->find($userId);
+            $user = $this->user->with("userBookingDetail")->find($userId);
 
 
             if ($user->userBookingDetail) {
@@ -1200,16 +1190,19 @@ class UsersController extends Controller {
                 }]);
 
             $total = $user->mealOrders->sum('total_amount');
+            if ($user->userBookingDetail->booking_amount_type == 2) {
+                $total += $user->userBookingDetail->booking_amount;
+            }
             $paid = $user->payments->where("resort_id", $user->userBookingDetail->resort_id)->where("booking_id", $user->userBookingDetail->id)->sum('amount');
             $discountPrice = $total;
-            if ($user->discount > 0) {
-                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            if ($user->userBookingDetail->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($user->userBookingDetail->discount / 100))), 0, ".", "");
             }
-            $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
+            $discountAmt = number_format(($total * ($user->userBookingDetail->discount / 100)), 0, ".", "");
             $outstanding = $discountPrice - $paid;
-            if ($user->userBookingDetail->booking_amount_type == 2) {
-                $outstanding = ($discountPrice - $paid) + $user->userBookingDetail->booking_amount;
-            }
+//            if ($user->userBookingDetail->booking_amount_type == 2) {
+//                $outstanding = ($discountPrice - $paid) + $user->userBookingDetail->booking_amount;
+//            }
 
             $html = view('admin.users.invoice-pdf', [
                 'user' => $user,
@@ -1238,16 +1231,17 @@ class UsersController extends Controller {
                 }]);
 
             $total = $user->mealOrders->sum('total_amount');
+            if ($bookingDetail->booking_amount_type == 2) {
+                $total += $bookingDetail->booking_amount;
+            }
             $paid = $user->payments->where("resort_id", $bookingDetail->resort_id)->where("booking_id", $bookingDetail->id)->sum('amount');
             $discountPrice = $total;
-            if ($user->discount > 0) {
-                $discountPrice = number_format(($total - ($total * ($user->discount / 100))), 0, ".", "");
+            if ($bookingDetail->discount > 0) {
+                $discountPrice = number_format(($total - ($total * ($bookingDetail->discount / 100))), 0, ".", "");
             }
-            $discountAmt = number_format(($total * ($user->discount / 100)), 0, ".", "");
+            $discountAmt = number_format(($total * ($bookingDetail->discount / 100)), 0, ".", "");
             $outstanding = $discountPrice - $paid;
-            if ($bookingDetail->booking_amount_type == 2) {
-                $outstanding = ($discountPrice - $paid) + $bookingDetail->booking_amount;
-            }
+
 
             $html = view('admin.users.booking-invoice-pdf', [
                 'user' => $user,
