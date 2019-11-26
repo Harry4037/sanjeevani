@@ -1833,6 +1833,11 @@ class StaffController extends Controller {
         } else {
             $bookinDetailArray = [];
         }
+        usort($bookinDetailArray, function($a, $b) {
+            $datetime1 = strtotime($a['check_in']);
+            $datetime2 = strtotime($b['check_in']);
+            return $datetime1 - $datetime2;
+        });
         return $this->sendSuccessResponse("booking list", $bookinDetailArray);
     }
 
