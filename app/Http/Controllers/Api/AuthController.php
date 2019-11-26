@@ -400,7 +400,7 @@ class AuthController extends Controller {
 
             $userArray['id'] = $user->id;
             $userArray['notification_status'] = $user->is_push_on ? true : false;
-            $userArray['is_booking'] = $user->is_booking;
+            $userArray['is_booking'] = $user->is_booking ? $user->is_booking : 0;
             $user['access_token'] = $tokenResult->accessToken;
             $user['token_type'] = "Bearer";
             $userArray['cart_count'] = $cart;

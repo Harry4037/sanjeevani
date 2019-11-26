@@ -2013,8 +2013,8 @@ class StaffController extends Controller {
             $staff = User::find($request->user_id);
             if ($staff) {
 
-                $data['duty_status'] = $staff->is_push_on;
-                $data['is_booking'] = $staff->is_booking;
+                $data['duty_status'] = $staff->is_push_on ? $staff->is_push_on : 0;
+                $data['is_booking'] = $staff->is_booking ? $staff->is_booking : 0;
                 return $this->sendSuccessResponse("Duty status", $data);
             } else {
                 return $this->sendErrorResponse("User not fount", (object) []);
