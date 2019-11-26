@@ -4648,7 +4648,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"status\": true,\n  \"status_code\": 200,\n  \"message\": \"Duty status.\",\n  \"data\": {\n     \"duty_status\" : 1\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"status\": true,\n  \"status_code\": 200,\n  \"message\": \"Duty status.\",\n  \"data\": {\n     \"duty_status\" : 1\n     \"is_booking\" : 1\n   }\n}",
           "type": "json"
         }
       ]
@@ -5879,6 +5879,27 @@ define({ "api": [
             "optional": false,
             "field": "booking_source_id",
             "description": "<p>Booking Source Id*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_source",
+            "description": "<p>Booking source*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_amount",
+            "description": "<p>Booking amount*.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "booking_amount_type",
+            "description": "<p>Booking amount type* (1 =&gt; Prepaid, 2 =&gt; Outstanding).</p>"
           },
           {
             "group": "Parameter",

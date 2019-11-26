@@ -1422,6 +1422,9 @@ class StaffController extends Controller {
      * @apiParam {String} resort_room_id Resort room Id*.
      * @apiParam {String} booking_source_name Booking Source name*.
      * @apiParam {String} booking_source_id Booking Source Id*.
+     * @apiParam {String} booking_source Booking source*.
+     * @apiParam {String} booking_amount Booking amount*.
+     * @apiParam {String} booking_amount_type Booking amount type* (1 => Prepaid, 2 => Outstanding).
      * @apiParam {String} resort_id Resort Id*.
      * @apiParam {String} package_id Package Id*.
      * @apiParam {String} check_in Check In date time*.
@@ -1492,6 +1495,22 @@ class StaffController extends Controller {
         if (!$request->check_out) {
             return $this->sendErrorResponse("Check Out missing", (object) []);
         }
+        if (!$request > booking_source) {
+            return $this->sendErrorResponse("Source of booking is missing.", (object) []);
+        }
+        if (!$request->booking_amount) {
+            return $this->sendErrorResponse("Booking amount is missing.", (object) []);
+        }
+        if (!$request->booking_amount_type) {
+            return $this->sendErrorResponse("Booking amount type.", (object) []);
+        }
+        if ($request->user()->is_booking == 0) {
+            return $this->sendErrorResponse("You can not create booking. Please contact to admin", (object) []);
+        }
+        if ($request->user()->is_push_on == 0) {
+            return $this->sendErrorResponse("Your duty status is offline.", (object) []);
+        }
+
 
         $isExist = User::where(["user_type_id" => 3, "mobile_number" => $request->mobile_number])->get();
         if ($isExist->count()) {
@@ -1551,6 +1570,9 @@ class StaffController extends Controller {
             $userBooking = new UserBookingDetail();
             $userBooking->source_name = $request->booking_source_name;
             $userBooking->source_id = $request->booking_source_id;
+            $userBooking->booking_source = $request->booking_source;
+            $userBooking->booking_amount = $request->booking_amount;
+            $userBooking->booking_amount_type = $request->booking_amount_type;
             $userBooking->user_id = $user->id;
             $userBooking->resort_id = $request->resort_id;
             $userBooking->package_id = $request->package_id;
