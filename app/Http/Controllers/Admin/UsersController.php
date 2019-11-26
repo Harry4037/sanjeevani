@@ -1112,7 +1112,9 @@ class UsersController extends Controller {
             $mealPackageIDs = $request->meal_package_id;
             $mealPackageQty = $request->meal_package_qty;
             $mealPackagePrice = $request->meal_package_price;
-
+            if (!$this->bookBeforeCheckInDate($userId)) {
+                return redirect()->route('admin.users.user-order', $user->id)->with('error', 'Sorry! You can not raised request before checkIn date or after checkout date.');
+            }
             $user = $this->user->with("userBookingDetail")->find($userId);
 
 
