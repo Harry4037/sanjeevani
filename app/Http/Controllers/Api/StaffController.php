@@ -1495,7 +1495,7 @@ class StaffController extends Controller {
         if (!$request->check_out) {
             return $this->sendErrorResponse("Check Out missing", (object) []);
         }
-        if (!$request > booking_source) {
+        if (!$request->booking_source) {
             return $this->sendErrorResponse("Source of booking is missing.", (object) []);
         }
         if (!$request->booking_amount) {
