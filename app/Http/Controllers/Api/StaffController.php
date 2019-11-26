@@ -1836,7 +1836,7 @@ class StaffController extends Controller {
         usort($bookinDetailArray, function($a, $b) {
             $datetime1 = strtotime($a['check_in']);
             $datetime2 = strtotime($b['check_in']);
-            return $datetime1 - $datetime2;
+            return $datetime2 - 1;
         });
         return $this->sendSuccessResponse("booking list", $bookinDetailArray);
     }
