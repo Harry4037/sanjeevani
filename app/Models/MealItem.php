@@ -22,5 +22,9 @@ class MealItem extends Model {
     public function resortDetail() {
         return $this->belongsTo('App\Models\Resort', 'resort_id');
     }
+    
+    public function category() {
+        return $this->belongsTo('App\Models\MealType', 'meal_type_id');
+    }
 
 }

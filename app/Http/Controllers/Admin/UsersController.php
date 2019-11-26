@@ -1057,13 +1057,16 @@ class UsersController extends Controller {
     public function userMealItem(Request $request) {
         $user = $this->user->with("userBookingDetail")->find($request->user_id);
 
-        $query = MealItem::query();
+        $query = MealItem::query()->with('category');
         $query->where(["resort_id" => $user->userBookingDetail->resort_id, "is_active" => 1]);
         if ($request->meal_item_ids) {
             $query->whereNotIn('id', array_unique($request->meal_item_ids));
         }
+        $query->whereHas("category", function($query) {
+            $query->where("is_active", 1);
+        });
         $mealItems = $query->get();
-
+        dd($mealItems->toArray());
         $html = view('admin.users.user-meal-item', [
             'mealItems' => $mealItems,
         ]);

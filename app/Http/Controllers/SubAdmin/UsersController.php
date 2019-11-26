@@ -1125,11 +1125,14 @@ class UsersController extends Controller {
                     }
                 ])->find($request->user_id);
 
-        $query = MealItem::query();
+        $query = MealItem::query()->with('category');
         $query->where(["resort_id" => $request->get("subadminResort"), "is_active" => 1]);
         if ($request->meal_item_ids) {
             $query->whereNotIn('id', array_unique($request->meal_item_ids));
         }
+        $query->whereHas("category", function($query) {
+            $query->where("is_active", 1);
+        });
         $mealItems = $query->get();
 
         $html = view('subadmin.users.user-meal-item', [
