@@ -1186,14 +1186,11 @@ class UsersController extends Controller {
             $mealPackageIDs = $request->meal_package_id;
             $mealPackageQty = $request->meal_package_qty;
             $mealPackagePrice = $request->meal_package_price;
+
+            $user = $this->user->with('userBookingDetail')->find($userId);
             if (!$this->bookBeforeCheckInDate($userId)) {
                 return redirect()->route('subadmin.users.user-order', $user->id)->with('error', 'Sorry! You can not raised request before checkIn date or after checkout date.');
             }
-            $user = $this->user->with([
-                        "userBookingDetail" => function($query) {
-                            $query->selectRaw(DB::raw('id, room_type_id, room_type_name, resort_room_no, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                        }
-                    ])->find($userId);
 
 
             if ($user->userBookingDetail) {
