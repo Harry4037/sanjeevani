@@ -264,6 +264,15 @@
         });
 
 
+        $(document).on("keyup click", "#booking_amount", function () {
+            var amount_n = parseFloat($("#booking_amount").val());
+            if (amount_n < 0) {
+                $("#booking_amount").val(0)
+                return false;
+            } else {
+                return true;
+            }
+        });
     });
 </script>
 @endsection

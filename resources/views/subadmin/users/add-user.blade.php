@@ -301,7 +301,16 @@
 @section('script')
 <script>
     $(document).ready(function () {
-
+        $(document).on("keyup click", "#booking_amount", function () {
+            var amount_n = parseFloat($("#booking_amount").val());
+            if (amount_n < 0) {
+                $("#booking_amount").val(0)
+                return false;
+            } else {
+                return true;
+            }
+        });
+        
     $(document).on("keyup", "#mobile_number", function(){
     var value = $("#mobile_number").val();
     if (value.length == 10){
