@@ -560,6 +560,7 @@
     $("#booking_source_id").rules("add", {required: true});
     $("#booking_source").rules("add", {required: true});
     $("#booking_amount").rules("add", {required: true});
+    $("#booking_amount").rules("add", {number: true});
     $("#booking_amount_type").rules("add", {required: true});
     $("#check_in").rules("add", {required: true});
     $("#check_out").rules("add", {required: true});
@@ -574,6 +575,7 @@
     $("#booking_source_id").rules("add", "required");
     $("#booking_source").rules("add", "required");
     $("#booking_amount").rules("add", "required");
+    $("#booking_amount").rules("add", "number");
     $("#booking_amount_type").rules("add", "required");
     $("#check_in").rules("add", "required");
     $("#check_out").rules("add", "required");
