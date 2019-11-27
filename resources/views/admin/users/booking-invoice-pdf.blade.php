@@ -201,12 +201,17 @@
                     </tr>
                     @endforeach
                     @endif
-
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     @if($bookingDetail->booking_amount_type == 1)
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>BOOKING AMOUNT</td>
+                        <td>BOOKING AMOUNT<small>(Prepaid)</small></td>
                         <td class="total">- {{$bookingDetail->booking_amount}}</td>
                     </tr>
                     <tr>
@@ -219,7 +224,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>BOOKING AMOUNT</td>
+                        <td>BOOKING AMOUNT<small>(Outstanding)</small></td>
                         <td class="total">{{$bookingDetail->booking_amount}}</td>
                     </tr>
                     <tr>
