@@ -1066,7 +1066,6 @@ class UsersController extends Controller {
             $query->where("is_active", 1);
         });
         $mealItems = $query->get();
-        dd($mealItems->toArray());
         $html = view('admin.users.user-meal-item', [
             'mealItems' => $mealItems,
         ]);
