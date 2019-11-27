@@ -1119,19 +1119,15 @@ class UsersController extends Controller {
     }
 
     public function userMealItem(Request $request) {
-        $user = $this->user->with([
-                    "userBookingDetail" => function($query) {
-                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                    }
-                ])->find($request->user_id);
-
+        $user = $this->user->with("userBookingDetail")->find($request->user_id);
+        $resortId = $user->userBookingDetail->resort_id;
         $query = MealItem::query()->with('category');
         $query->where(["resort_id" => $request->get("subadminResort"), "is_active" => 1]);
         if ($request->meal_item_ids) {
             $query->whereNotIn('id', array_unique($request->meal_item_ids));
         }
-        $query->whereHas("category", function($query) {
-            $query->where("is_active", 1);
+        $query->whereHas("category", function($query) use($resortId) {
+            $query->where(["is_active" => 1, "resort_id" => $resortId]);
         });
         $mealItems = $query->get();
 
@@ -1150,11 +1146,7 @@ class UsersController extends Controller {
     }
 
     public function userMealPackage(Request $request) {
-        $user = $this->user->with([
-                    "userBookingDetail" => function($query) {
-                        $query->selectRaw(DB::raw('id, room_type_id, resort_room_id, user_id, source_id as booking_id, source_name, resort_id, package_id, DATE_FORMAT(check_in, "%d-%m-%Y") as check_in, DATE_FORMAT(check_in, "%r") as check_in_time, DATE_FORMAT(check_out, "%d-%m-%Y") as check_out, DATE_FORMAT(check_out, "%r") as check_out_time'));
-                    }
-                ])->find($request->user_id);
+        $user = $this->user->with("userBookingDetail")->find($request->user_id);
 
         $query = MealPackage::query();
         $query->where(["resort_id" => $request->get("subadminResort"), "is_active" => 1]);
