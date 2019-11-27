@@ -205,6 +205,8 @@ class OrderController extends Controller {
      *           "total_amount": 0,
      *           "outstanding_amount": 0,
      *           "paid_amount": 0,
+     *           "discount_price": "0",
+     *           "discount_percentage": 0,
      *           "booking_detail": {
      *               "booking_amount": 1500,
      *               "booking_amount_type": "Outstanding",
@@ -327,7 +329,6 @@ class OrderController extends Controller {
                 return $this->sendErrorResponse("User id missing.", (object) []);
             }
             $user = User::with("userBookingDetail")->find($request->user_id);
-
             if ($user->userBookingDetail == NULL) {
                 $data['total_amount'] = 0;
                 $data['paid_amount'] = 0;
@@ -362,9 +363,9 @@ class OrderController extends Controller {
 //                } else {
                 $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
 //                }
-                $data['discount_price'] = $discountPrice;
+                $data['discount_price'] = number_format(($data['total_amount'] * ($user->discount / 100)), 0, ".", "");
                 $data['discount_percentage'] = $user->discount;
-                
+
                 $data['booking_detail'] = [
                     'booking_amount' => $user->userBookingDetail->booking_amount,
                     'booking_amount_type' => $user->userBookingDetail->booking_amount_type == 1 ? "Prepaid" : "Outstanding",
@@ -383,7 +384,6 @@ class OrderController extends Controller {
             //     return $this->sendErrorResponse("invoices not found", (object) []);
             // }
         } catch (\Exception $ex) {
-
             return $this->administratorResponse();
         }
     }
