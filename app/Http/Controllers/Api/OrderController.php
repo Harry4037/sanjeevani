@@ -362,7 +362,9 @@ class OrderController extends Controller {
 //                } else {
                 $data['outstanding_amount'] = $discountPrice - $data['paid_amount'];
 //                }
-
+                $data['discount_price'] = $discountPrice;
+                $data['discount_percentage'] = $user->discount;
+                
                 $data['booking_detail'] = [
                     'booking_amount' => $user->userBookingDetail->booking_amount,
                     'booking_amount_type' => $user->userBookingDetail->booking_amount_type == 1 ? "Prepaid" : "Outstanding",
