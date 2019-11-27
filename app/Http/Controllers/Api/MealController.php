@@ -688,7 +688,7 @@ class MealController extends Controller {
                     $resortId = $defaultResort->id;
                 }
 
-                $mealCategories = Mealtype::select('id', 'name')->where("is_active", 1)->whereHas('menuItems', function($query) use($request, $resortId) {
+                $mealCategories = Mealtype::select('id', 'name')->where(["is_active" => 1, "resort_id" => $resortId])->whereHas('menuItems', function($query) use($request, $resortId) {
                             $query->where(["is_active" => 1, 'resort_id' => $resortId]);
                         })->with([
                             'menuItems' => function ($query) use($request, $resortId) {
@@ -696,7 +696,7 @@ class MealController extends Controller {
                             }
                         ])->get();
             } else {
-                $mealCategories = Mealtype::select('id', 'name')->where("is_active", 1)->whereHas('menuItems', function($query) use($request) {
+                $mealCategories = Mealtype::select('id', 'name')->where(["is_active" => 1, "resort_id" => $request->resort_id])->whereHas('menuItems', function($query) use($request) {
                             $query->where(["is_active" => 1, 'resort_id' => $request->resort_id]);
                         })->with([
                             'menuItems' => function ($query) use($request) {
