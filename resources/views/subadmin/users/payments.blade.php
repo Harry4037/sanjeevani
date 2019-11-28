@@ -9,6 +9,10 @@
             <div class="x_title">
                 <div style="display: none;" class="alert msg" role="alert"></div>
                 <h2>{{$user->first_name}}'s Payment</h2>
+                <div class="pull-right">
+                    <a target="_blank" href="{{route('subadmin.users.invoice', $user)}}" class="btn btn-info pull-right">Generate Invoice</a>
+                    <a class="btn btn-info" href="{{ route('subadmin.users.index') }}">Back</a>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -76,7 +80,6 @@
 
                             <div class="form-group">
                                 <label for=""></label>
-                                <a target="_blank" href="{{route('subadmin.users.invoice', $user)}}" class="btn btn-info pull-right">Generate Invoice</a>
                                 <button type="submit" class="btn btn-success pull-right">Pay</button>
                             </div>
                         </form>

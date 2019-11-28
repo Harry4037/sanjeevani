@@ -204,12 +204,6 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>TOTAL</td>
-                        <td class="total">{{$total}}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -220,12 +214,24 @@
                         <td>BOOKING AMOUNT<small>(Prepaid)</small></td>
                         <td class="total">- {{$user->userBookingDetail->booking_amount}}</td>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>TOTAL</td>
+                        <td class="total">{{$total}}</td>
+                    </tr>
                     @else($user->userBookingDetail->booking_amount_type == 2)
                     <tr>
                         <td></td>
                         <td></td>
                         <td>BOOKING AMOUNT<small>(Outstanding)</small></td>
                         <td class="total">{{$user->userBookingDetail->booking_amount}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>TOTAL</td>
+                        <td class="total">{{$total}}</td>
                     </tr>
                     @endif
                     <tr>
