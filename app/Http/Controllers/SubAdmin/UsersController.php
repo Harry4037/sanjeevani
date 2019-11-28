@@ -1042,7 +1042,7 @@ class UsersController extends Controller {
             if ($request->isMethod('post')) {
 
                 if ($user->is_active == 0) {
-                    return redirect()->route('admin.users.user-order', $user->id)->with('error', 'User accout status is inactive.');
+                    return redirect()->route('subadmin.users.user-order', $user->id)->with('error', 'User accout status is inactive.');
                 }
 
                 if ((!isset($request->meal_item_id)) && (!isset($request->meal_package_id))) {
