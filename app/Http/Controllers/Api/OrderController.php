@@ -216,6 +216,8 @@ class OrderController extends Controller {
      *               {
      *                   "id": 5,
      *                   "invoice_id": "1544009535",
+     *                   "status": "Completed",
+     *                   "status_id": 4,
      *                   "item_total_amount": 1175,
      *                   "gst_amount": 0,
      *                   "total_amount": 1175,
@@ -247,6 +249,8 @@ class OrderController extends Controller {
      *               {
      *                   "id": 6,
      *                   "invoice_id": "1544009626",
+     *                   "status": "Completed",
+     *                   "status_id": 4,
      *                   "item_total_amount": 1175,
      *                   "gst_amount": 0,
      *                   "total_amount": 1175,
@@ -278,6 +282,8 @@ class OrderController extends Controller {
      *               {
      *                   "id": 7,
      *                   "invoice_id": "1544009691",
+     *                   "status": "Completed",
+     *                   "status_id": 4,
      *                   "item_total_amount": 1175,
      *                   "gst_amount": 0,
      *                   "total_amount": 1175,
@@ -340,7 +346,7 @@ class OrderController extends Controller {
                         $query->where(["resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id, "booking_id" => $user->userBookingDetail->id])->accepted();
                     }]);
 
-                $invoices = MealOrder::selectRaw(DB::raw('id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["booking_id" => $user->userBookingDetail->id, "resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
+                $invoices = MealOrder::selectRaw(DB::raw('id, (CASE WHEN status="1" THEN "Pending" WHEN status="2" THEN "Accepted" WHEN status="3" THEN "Your approval needed" WHEN status="4" THEN "Completed" ELSE "Failed" END) as status, status as status_id, invoice_id, item_total_amount, gst_amount as gst_percentage, (total_amount - item_total_amount) as gst_amount, total_amount, DATE_FORMAT(created_at, "%d-%m-%Y") as created_on'))->where(["booking_id" => $user->userBookingDetail->id, "resort_id" => $user->userBookingDetail->resort->id, "user_id" => $request->user_id])
                                 ->with([
                                     'orderItems' => function($query) {
                                         $query->select('id', 'meal_item_name', 'quantity', 'price', 'meal_order_id');
