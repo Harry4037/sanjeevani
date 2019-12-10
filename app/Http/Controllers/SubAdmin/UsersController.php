@@ -717,7 +717,7 @@ class UsersController extends Controller {
             }
 
             $user = User::find($user_id);
-            $isCurrentBooking = $this->isCurrentBooking($user->id);
+            $isCurrentBooking = $this->isCurrentBooking($request->check_in);
             if (!$user) {
                 return redirect()->route('subadmin.users.booking-create', $user_id)->withErrors("user not found.")->withInput();
             }
