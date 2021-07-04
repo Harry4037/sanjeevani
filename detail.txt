@@ -1,0 +1,148 @@
+For creating api doc
+====================
+
+apidoc -i app/Http/Controllers/Api/ -o /home/flexsin/Desktop/appdoc
+
+vps server
+----------
+rohit
+3=VyEtxt04IU
+Sharma@9206
+
+
+mysql
+-----
+https://148.72.207.90:2087/cpsess6958247390/3rdparty/phpMyAdmin/index.php
+
+167595420
+Sharma@9206
+
+
+
+    /**
+     * @api {get} /api/logout Logout User
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName GetLogoutUser
+     * @apiGroup Auth
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String}  message Success message
+     * @apiSuccess {JSON}  data blank array.
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *
+     * {
+     *   "status": true,
+     *   "message": "User successfully logged out.",
+     *   "data": {}
+     * }
+     * 
+     */
+    public function logout(Request $request) {
+        $request->user()->token()->revoke();
+        return response()->json([
+                    'success' => true,
+                    'message' => 'User successfully logged out.',
+                    'data' => (object) []
+        ]);
+    }
+
+    public function forgetPassword() {
+        if (!$request->email_id) {
+            $response['success'] = false;
+            $response['message'] = "Email id missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        if (!$request->user_type) {
+            $response['success'] = false;
+            $response['message'] = "User type missing.";
+            $response['data'] = [];
+            return $this->jsonData($response);
+        }
+        $response['success'] = true;
+        $response['message'] = "Link send successfully. please check your email.";
+        $response['data'] = [];
+    }
+
+    /**
+     * @api {post} /api/service-request-accept Service Request Accept
+     * @apiHeader {String} Authorization Users unique access-token.
+     * @apiHeader {String} Accept application/json.
+     * @apiName PostServicerequestaccept
+     * @apiGroup Services
+     * 
+     * @apiParam {String} request_id Service Request id*.
+     * @apiParam {String} user_id Staff user id*.
+     * 
+     * @apiSuccess {String} success true 
+     * @apiSuccess {String} message Request accepted
+     * @apiSuccess {JSON}   data blank object.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+      {
+      "status": true,
+      "message": "Request accepted.",
+      "data":{}
+     * 
+     * 
+     * @apiError RequestIdMissing The request id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "Request id missing.",
+     *  "data": {}
+     * }
+     * 
+     * @apiError UserIdMissing The user id was missing.
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *  "status": false,
+     *  "message": "User id missing.",
+     *  "data": {}
+     * }
+     * 
+     * 
+     */
+    public function requestAccept(Request $request) {
+        if (!$request->request_id) {
+            $response['success'] = false;
+            $response['message'] = "Request id missing.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+        if (!$request->user_id) {
+            $response['success'] = false;
+            $response['message'] = "User id missing.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+
+        $service = Service::find($request->request_id);
+        if ($service) {
+            $service->request_status_id = 2;
+            $service->accepted_by_id = $request->user_id;
+            if ($service->save()) {
+                $response['success'] = true;
+                $response['message'] = "Request accepted.";
+                $response['data'] = (object) [];
+                return $this->jsonData($response);
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Something went be wrong.";
+                $response['data'] = (object) [];
+                return $this->jsonData($response);
+            }
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Invalid requestng.";
+            $response['data'] = (object) [];
+            return $this->jsonData($response);
+        }
+    }
+
+DB::raw("id, fasting, bp, insullin_dependency, (CASE WHEN (is_diabeties = '1') THEN 'yes' ELSE 'no' END) as diabeties, (CASE WHEN (is_ppa = '1') THEN 'yes' ELSE 'no' END) as ppa, (CASE WHEN (hba_1c = '1') THEN 'yes' ELSE 'no' END) as hba_1c")
